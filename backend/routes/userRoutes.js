@@ -1,4 +1,6 @@
 const express = require("express");
+const bcrypt = require("bcrypt");
+const userModel = require("../models/userModel");
 const router = express.Router();
 
 router.get("/", async (req, res) => {
@@ -22,6 +24,38 @@ router.post("/", (req, res) => {
 router.delete("/:id", (req, res) => {
   const userId = req.params.id;
   res.json({ message: `User with ID ${userId} deleted` });
+});
+
+router.post("/login", (req, res) => {
+  const { email, password } = req.body;
+
+  userModel.findUserByEmail(email, (err, results) => {
+    if (err) {
+      return res.status(500).send("Server error!");
+    }
+    const id = results[0].ID;
+
+    userModel.findUserPasswordByID(id, (err, results) => {
+      if (results.length > 0) {
+        const user = results[0];
+
+        bcrypt.compare(password, user.Haslo, (error, isMatch) => {
+          if (error) {
+            return res.status(500).send("Server error!");
+          }
+
+          if (isMatch) {
+            // Możesz tu utworzyć token JWT lub sesję, jeśli chcesz
+            res.status(200).send("User logged in!");
+          } else {
+            res.status(401).send("Password is incorrect!");
+          }
+        });
+      } else {
+        res.status(404).send("User not found!");
+      }
+    });
+  });
 });
 
 module.exports = router;

@@ -1,4 +1,4 @@
-const db = require("../db");
+const queryDatabase = require("../db/index");
 
 const getUsers = async () => {
   try {
@@ -9,9 +9,17 @@ const getUsers = async () => {
   }
 };
 
+const findUserByEmail = (email, callback) => {
+  queryDatabase("SELECT * FROM Pracownicy WHERE Mail = ?", [email], callback);
+};
+const findUserPasswordByID = (id, callback) => {
+  queryDatabase("SELECT * FROM Login WHERE Pracownik_ID = ?", [id], callback);
+};
+
 // Inne funkcje dotyczące operacji na użytkownikach...
 
 module.exports = {
   getUsers,
-  // Eksportuj inne funkcje...
+  findUserByEmail,
+  findUserPasswordByID,
 };
