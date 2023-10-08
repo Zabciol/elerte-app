@@ -4,11 +4,16 @@
   "description": "Aplikacja zarządzająca ECP firmy Elerte",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js",
+    "migrate": "node migrations/passwordCoding.js"
   },
   "author": "Jan Zaborowicz",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.18.2"
+    "bcrypt": "^5.1.1",
+    "express": "^4.18.2",
+    "mysql": "^2.18.1",
+    "mysql2": "^3.6.1"
   }
 }
