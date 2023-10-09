@@ -4,7 +4,7 @@ import logo from "../../../assets/logo.png";
 import LoginInput from "./LoginInput";
 import { loginApi } from "../../../api/authApi.js";
 
-const LoginPanel = () => {
+const LoginPanel = (props) => {
   const submit = async (email, password) => {
     console.log(email);
     console.log(password);
@@ -13,6 +13,7 @@ const LoginPanel = () => {
       localStorage.setItem("userToken", data.user);
       console.log("Zalogowano");
       console.log(data.user);
+      props.setIsLogged(true);
     } catch (error) {
       console.log(error.message || "Login failed. Please try again.");
     }

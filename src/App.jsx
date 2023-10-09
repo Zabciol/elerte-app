@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import LoginPanel from "./components/transitions/Login/LoginPanel";
+import Home from "./components/layout/Home";
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 
@@ -18,7 +19,11 @@ function App() {
   console.log(user);
   return (
     <div className='App'>
-      <LoginPanel />
+      {isLoggedIn ? (
+        <Home setIsLogged={setIsLogged} />
+      ) : (
+        <LoginPanel setIsLogged={setIsLogged} />
+      )}
     </div>
   );
 }
