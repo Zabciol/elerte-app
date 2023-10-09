@@ -34,6 +34,7 @@ router.post("/login", (req, res) => {
       return res.status(500).send("Server error!");
     }
     const id = results[0].ID;
+    const userData = results[0];
 
     userModel.findUserPasswordByID(id, (err, results) => {
       if (results.length > 0) {
@@ -46,7 +47,9 @@ router.post("/login", (req, res) => {
 
           if (isMatch) {
             // Możesz tu utworzyć token JWT lub sesję, jeśli chcesz
-            res.status(200).send("User logged in!");
+            res
+              .status(200)
+              .send({ message: "User logged in!", user: userData });
           } else {
             res.status(401).send("Password is incorrect!");
           }

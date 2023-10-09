@@ -10,8 +10,9 @@ const LoginPanel = () => {
     console.log(password);
     try {
       const data = await loginApi(email, password);
-      localStorage.setItem("userToken", data.token);
-      // Tutaj możesz np. przekierować użytkownika do innego widoku lub odświeżyć komponenty
+      localStorage.setItem("userToken", data.user);
+      console.log("Zalogowano");
+      console.log(data.user);
     } catch (error) {
       console.log(error.message || "Login failed. Please try again.");
     }

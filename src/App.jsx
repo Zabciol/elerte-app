@@ -6,7 +6,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 function App() {
   const [isLoggedIn, setIsLogged] = useState(false);
   const [user, setUser] = useState({});
-  const token = JSON.parse(localStorage.getItem("userToken"));
+  const token = localStorage.getItem("userToken");
 
   useEffect(() => {
     if (token) {
@@ -16,7 +16,11 @@ function App() {
   }, []);
 
   console.log(user);
-  return <div className='App'>{isLoggedIn ? <LoginPanel /> : <div></div>}</div>;
+  return (
+    <div className='App'>
+      <LoginPanel />
+    </div>
+  );
 }
 
 export default App;
