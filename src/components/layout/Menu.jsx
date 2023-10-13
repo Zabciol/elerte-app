@@ -22,6 +22,8 @@ const Menu = (props) => {
     setToggle(!toggle);
   };
 
+  const filteredNav_items = nav_items.filter((item) => item !== props.page);
+
   return (
     <Navbar expand='lg' expanded={toggle}>
       <Container fluid>
@@ -47,8 +49,8 @@ const Menu = (props) => {
             className='closeBtn'
             onClick={togleNav}></Offcanvas.Header>
           <Offcanvas.Body className='white' onClick={togleNav}>
-            <Nav className='justify-content-end flex-grow-1 pe-3'>
-              {nav_items.map((item) => (
+            <Nav className='justify-content-end pe-3'>
+              {filteredNav_items.map((item) => (
                 <Nav.Link
                   onClick={() => {
                     onClickMenuItem(item);
@@ -57,15 +59,7 @@ const Menu = (props) => {
                 </Nav.Link>
               ))}
             </Nav>
-            <Form className='d-flex'>
-              <Form.Control
-                type='search'
-                placeholder='Search'
-                className='me-2'
-                aria-label='Search'
-              />
-              <Button variant='dark'>Search</Button>
-            </Form>
+            {props.menuItems}
           </Offcanvas.Body>
         </Navbar.Offcanvas>
       </Container>
