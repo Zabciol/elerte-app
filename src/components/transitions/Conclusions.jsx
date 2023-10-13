@@ -1,6 +1,11 @@
-import React from "react";
+import React, { useEffect } from "react";
 
-const Conclusions = () => {
+const Conclusions = (props) => {
+  const menuItems = <></>;
+
+  useEffect(() => {
+    props.setMenuItems(menuItems);
+  });
   return <div>Conclusions</div>;
 };
 

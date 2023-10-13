@@ -1,6 +1,11 @@
-import React from "react";
+import React, { useEffect } from "react";
 
-const Employees = () => {
+const Employees = (props) => {
+  const menuItems = <></>;
+
+  useEffect(() => {
+    props.setMenuItems(menuItems);
+  });
   return <div>Employees</div>;
 };
 

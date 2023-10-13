@@ -10,14 +10,27 @@ import Conclusions from "../transitions/Conclusions";
 const PageHandler = (props) => {
   const [page, setPage] = useState("Home");
   const [menuItems, setMenuItems] = useState();
+  const date = new Date();
+  const year = date.getFullYear();
+  const month = (date.getMonth() + 1).toString().padStart(2, "0");
+  const todayYearMonth = `${year}-${month}`;
 
   const componentMap = {
     Home: <Home user={props.user} page={page} setMenuItems={setMenuItems} />,
-    ECP: <ECP user={props.user} page={page} />,
-    Pracownicy: <Employees user={props.user} page={page} />,
-    Wnioski: <Conclusions user={props.user} page={page} />,
+    ECP: <ECP user={props.user} page={page} setMenuItems={setMenuItems} />,
+    Pracownicy: (
+      <Employees user={props.user} page={page} setMenuItems={setMenuItems} />
+    ),
+    Wnioski: (
+      <Conclusions user={props.user} page={page} setMenuItems={setMenuItems} />
+    ),
     Kalendarz: (
-      <Calender user={props.user} page={page} setMenuItems={setMenuItems} />
+      <Calender
+        user={props.user}
+        page={page}
+        setMenuItems={setMenuItems}
+        date={todayYearMonth}
+      />
     ),
   };
   return (

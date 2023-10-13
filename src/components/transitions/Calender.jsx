@@ -1,7 +1,11 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Form from "react-bootstrap/Form";
 
 const Calender = (props) => {
+  const [date, setDate] = useState(props.date);
+  const changeDate = (event) => {
+    setDate(event.target.value);
+  };
   const menuItems = (
     <>
       <Form
@@ -11,9 +15,10 @@ const Calender = (props) => {
         }}>
         <Form.Control
           type='month'
-          placeholder='Search'
+          value={date}
           className='me-2'
           aria-label='Miesiąc'
+          onChange={changeDate}
         />
       </Form>
     </>
