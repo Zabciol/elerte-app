@@ -28,6 +28,7 @@ router.delete("/:id", (req, res) => {
 
 router.post("/login", (req, res) => {
   const { email, password } = req.body;
+  console.log("Próba zalogowania");
 
   userModel.findUserByEmail(email, (err, results) => {
     if (err) {

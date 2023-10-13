@@ -5,7 +5,7 @@ const Home = (props) => {
 
   useEffect(() => {
     props.setMenuItems(menuItems);
-  });
+  }, []);
   return <div>Home</div>;
 };
 

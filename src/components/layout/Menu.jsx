@@ -48,7 +48,11 @@ const Menu = (props) => {
             closeButton
             className='closeBtn'
             onClick={togleNav}></Offcanvas.Header>
-          <Offcanvas.Body className='white' onClick={togleNav}>
+          <Offcanvas.Body
+            className='white'
+            onClick={() => {
+              setToggle(false);
+            }}>
             <Nav className='justify-content-end pe-3'>
               {filteredNav_items.map((item) => (
                 <Nav.Link
@@ -58,8 +62,8 @@ const Menu = (props) => {
                   {item}
                 </Nav.Link>
               ))}
+              {props.menuItems}
             </Nav>
-            {props.menuItems}
           </Offcanvas.Body>
         </Navbar.Offcanvas>
       </Container>

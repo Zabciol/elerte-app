@@ -10,7 +10,6 @@ const Calender = (props) => {
   const menuItems = (
     <>
       <Form
-        className='menu-item'
         onClick={(event) => {
           event.stopPropagation();
         }}>

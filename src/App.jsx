@@ -11,6 +11,7 @@ function App() {
 
   const logout = () => {
     setIsLogged(false);
+    localStorage.removeItem("userTokenElerteApp");
   };
   useEffect(() => {
     if (token) {

@@ -14,11 +14,10 @@
   width: 40px;
 }
 .navbar-nav {
-  margin-top: 50px;
   align-items: center;
 }
 .nav-link {
-  margin: 20px 0;
+  margin: 20px 10px;
 }
 .menu-item {
   max-width: 50%;
@@ -26,5 +25,4 @@
 .offcanvas-body {
   display: flex;
   flex-direction: column;
-  align-items: center;
 }

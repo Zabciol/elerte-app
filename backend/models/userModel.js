@@ -1,5 +1,4 @@
 const { queryDatabase } = require("../db");
-console.log("Query DB Function: ", queryDatabase);
 
 const getUsers = async () => {
   try {

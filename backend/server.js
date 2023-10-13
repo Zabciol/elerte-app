@@ -1,8 +1,10 @@
 const express = require("express");
 const userRoutes = require("./routes/userRoutes");
+const employeesRoutes = require("./routes/employeesRoutes");
 const cors = require("cors");
 const app = express();
 const PORT = process.env.PORT || 5001;
+const config = require("./config");
 
 app.use(
   cors({
@@ -12,7 +14,8 @@ app.use(
 );
 app.use(express.json());
 app.use("/users", userRoutes);
+app.use("/employees", employeesRoutes);
 
-app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
+app.listen(config.port, () => {
+  console.log(`Server is running on http://localhost:${config.port}`);
 });
