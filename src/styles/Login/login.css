@@ -22,3 +22,12 @@ img {
   right: 0;
   height: 45px;
 }
+
+@media (max-width: 450px) {
+  .LoginPanel {
+    width: 300px;
+  }
+  img {
+    height: 80px;
+  }
+}

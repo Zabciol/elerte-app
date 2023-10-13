@@ -10,9 +10,9 @@ const LoginPanel = (props) => {
     console.log(password);
     try {
       const data = await loginApi(email, password);
-      localStorage.setItem("userToken", data.user);
+      localStorage.setItem("userTokenElerteApp", JSON.stringify(data.user));
       console.log("Zalogowano");
-      console.log(data.user);
+      props.setUser(data.user);
       props.setIsLogged(true);
     } catch (error) {
       console.log(error.message || "Login failed. Please try again.");
