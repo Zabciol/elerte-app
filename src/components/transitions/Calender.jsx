@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import Form from "react-bootstrap/Form";
+import Variables from "../common/Variables";
 
 const Calender = (props) => {
-  const [date, setDate] = useState(props.date);
+  const [date, setDate] = useState(Variables.dateYearMonth);
   const changeDate = (event) => {
     setDate(event.target.value);
   };
