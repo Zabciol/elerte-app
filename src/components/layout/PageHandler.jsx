@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import "../../styles/Home/home.css";
 import Menu from "./Menu";
 import Home from "../transitions/Home.jsx";
-import ECP from "../transitions/ECP.jsx";
+import ECP from "../transitions/ECP/ECP.jsx";
 import Employees from "../transitions/Employees";
 import Calender from "../transitions/Calender";
 import Conclusions from "../transitions/Conclusions";
@@ -19,7 +19,13 @@ const PageHandler = (props) => {
   };
 
   const componentMap = {
-    Home: <Home user={props.user} setMenuItems={setMenuItems} />,
+    Home: (
+      <Home
+        user={props.user}
+        setMenuItems={setMenuItems}
+        logout={props.logout}
+      />
+    ),
     ECP: (
       <ECP
         user={props.user}
@@ -38,12 +44,7 @@ const PageHandler = (props) => {
 
   return (
     <div className='homeCard'>
-      <Menu
-        logout={props.logout}
-        setPage={setPage}
-        page={page}
-        menuItems={menuItems}
-      />
+      <Menu setPage={setPage} page={page} menuItems={menuItems} />
       <div className='interface'>{componentMap[page] || null}</div>
     </div>
   );

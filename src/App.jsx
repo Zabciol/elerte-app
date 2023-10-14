@@ -22,7 +22,7 @@ function App() {
 
   console.log(user);
   return (
-    <div className='App'>
+    <div className='App' data-bs-theme='light'>
       {isLoggedIn ? (
         <PageHandler logout={logout} user={user} />
       ) : (

@@ -57,12 +57,6 @@ const Menu = (props) => {
                 </Nav.Link>
               ))}
               {props.menuItems}
-              <Nav.Link
-                onClick={() => {
-                  props.logout();
-                }}>
-                Wyloguj
-              </Nav.Link>
             </Nav>
           </Offcanvas.Body>
         </Navbar.Offcanvas>

@@ -1,7 +1,18 @@
 import React, { useEffect } from "react";
-
+import Nav from "react-bootstrap/Nav";
 const Home = (props) => {
-  const menuItems = <></>;
+  const menuItems = (
+    <>
+      <Nav>
+        <Nav.Link
+          onClick={() => {
+            props.logout();
+          }}>
+          Wyloguj
+        </Nav.Link>
+      </Nav>
+    </>
+  );
 
   useEffect(() => {
     props.setMenuItems(menuItems);

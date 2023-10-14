@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
 import NavDropdown from "react-bootstrap/NavDropdown";
 import Form from "react-bootstrap/Form";
-import Variables from "../common/Variables";
+import Variables from "../../common/Variables";
+import ECPList from "./ECPList";
+import "./../../../styles/ECP.css";
 
 const MenuItems = ({ date, setDate, dzial, dzialy, setDzial }) => {
   return (
@@ -48,7 +50,7 @@ const ECP = (props) => {
   const changeDate = (event) => {
     setDate(event.target.value);
   };
-
+  console.log(dzialy);
   useEffect(() => {
     props.setMenuItems(
       <MenuItems
@@ -61,7 +63,11 @@ const ECP = (props) => {
     );
   }, [dzial, date]);
 
-  return <div>ECP</div>;
+  return (
+    <div>
+      <ECPList subordinates={props.subordinates} dzial={dzial} />
+    </div>
+  );
 };
 
 export default ECP;
