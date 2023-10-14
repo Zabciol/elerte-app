@@ -11,12 +11,12 @@ const getUsers = async () => {
 
 const findUserByEmail = (email, callback) => {
   queryDatabase("SELECT * FROM Pracownicy WHERE Mail = ?", [email], callback);
-  console.log("Funkcja 1");
+
   console.log(callback);
 };
 const findUserPasswordByID = (id, callback) => {
   queryDatabase("SELECT * FROM Login WHERE Pracownik_ID = ?", [id], callback);
-  console.log("Funkcja 2");
+
   console.log(callback);
 };
 

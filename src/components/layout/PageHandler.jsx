@@ -6,10 +6,18 @@ import ECP from "../transitions/ECP.jsx";
 import Employees from "../transitions/Employees";
 import Calender from "../transitions/Calender";
 import Conclusions from "../transitions/Conclusions";
+import { subordinatesApi } from "../../api/employeesApi";
 
 const PageHandler = (props) => {
   const [page, setPage] = useState("Home");
   const [menuItems, setMenuItems] = useState();
+  const [subordinates, setSubordinatesApi] = useState();
+
+  const getSubordinates = async () => {
+    const data = await subordinatesApi(props.user.ID);
+    console.log(props.user.ID);
+    console.log(data);
+  };
 
   const componentMap = {
     Home: <Home user={props.user} setMenuItems={setMenuItems} />,
@@ -18,6 +26,11 @@ const PageHandler = (props) => {
     Wnioski: <Conclusions user={props.user} setMenuItems={setMenuItems} />,
     Kalendarz: <Calender user={props.user} setMenuItems={setMenuItems} />,
   };
+
+  useEffect(() => {
+    getSubordinates();
+  }, []);
+
   return (
     <div className='homeCard'>
       <Menu

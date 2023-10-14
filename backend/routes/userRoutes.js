@@ -33,7 +33,6 @@ router.post("/login", (req, res) => {
           }
 
           if (isMatch) {
-            // Możesz tu utworzyć token JWT lub sesję, jeśli chcesz
             res
               .status(200)
               .send({ message: "User logged in!", user: userData });

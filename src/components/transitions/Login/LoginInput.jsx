@@ -25,14 +25,11 @@ const LoginInput = (props) => {
   const submit = () => {
     props.submit(mail, password);
   };
-
-  // Funkcja przełączająca stan akordeonu
   const toggleAccordion = () => {
     setOpenAccordion(!openAccordion);
   };
 
   useEffect(() => {
-    // Jeśli hasło jest puste, zwiń akordeon
     if (password === "") {
       setOpenAccordion(false);
       setShowToggle(true);
