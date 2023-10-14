@@ -20,7 +20,13 @@ const PageHandler = (props) => {
 
   const componentMap = {
     Home: <Home user={props.user} setMenuItems={setMenuItems} />,
-    ECP: <ECP user={props.user} setMenuItems={setMenuItems} />,
+    ECP: (
+      <ECP
+        user={props.user}
+        setMenuItems={setMenuItems}
+        subordinates={subordinates}
+      />
+    ),
     Pracownicy: <Employees user={props.user} setMenuItems={setMenuItems} />,
     Wnioski: <Conclusions user={props.user} setMenuItems={setMenuItems} />,
     Kalendarz: <Calender user={props.user} setMenuItems={setMenuItems} />,

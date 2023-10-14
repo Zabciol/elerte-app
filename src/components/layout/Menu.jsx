@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Button from "react-bootstrap/Button";
 import Container from "react-bootstrap/Container";
 import Form from "react-bootstrap/Form";
@@ -7,6 +7,7 @@ import Navbar from "react-bootstrap/Navbar";
 import NavDropdown from "react-bootstrap/NavDropdown";
 import Offcanvas from "react-bootstrap/Offcanvas";
 import logout from "../../assets/logout-btn.png";
+import logo from "../../assets/logo.png";
 import "../../styles/Home/menu.css";
 
 const Menu = (props) => {
@@ -22,18 +23,11 @@ const Menu = (props) => {
     setToggle(!toggle);
   };
 
-  const filteredNav_items = nav_items.filter((item) => item !== props.page);
-
   return (
     <Navbar expand='lg' expanded={toggle}>
       <Container fluid>
         <Navbar.Brand href='#'>
-          <img
-            src={logout}
-            onClick={() => {
-              props.logout();
-            }}
-            className='logout'></img>
+          <img src={logo} className='logo'></img>
         </Navbar.Brand>
         <Navbar.Toggle
           aria-controls={`offcanvasNavbar-expand-lg`}
@@ -54,7 +48,7 @@ const Menu = (props) => {
               setToggle(false);
             }}>
             <Nav className='justify-content-end pe-3'>
-              {filteredNav_items.map((item) => (
+              {nav_items.map((item) => (
                 <Nav.Link
                   onClick={() => {
                     onClickMenuItem(item);
@@ -63,6 +57,12 @@ const Menu = (props) => {
                 </Nav.Link>
               ))}
               {props.menuItems}
+              <Nav.Link
+                onClick={() => {
+                  props.logout();
+                }}>
+                Wyloguj
+              </Nav.Link>
             </Nav>
           </Offcanvas.Body>
         </Navbar.Offcanvas>

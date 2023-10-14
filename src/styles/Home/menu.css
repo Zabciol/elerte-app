@@ -1,4 +1,4 @@
-.logout {
+.logo {
   height: 40px;
   padding: 0;
 }
@@ -22,7 +22,20 @@
 .menu-item {
   max-width: 50%;
 }
+.dropdown {
+  text-align: center;
+}
+.navbar-nav .dropdown-menu {
+  position: static;
+  text-align: center;
+}
 .offcanvas-body {
   display: flex;
   flex-direction: column;
+}
+@media (min-width: 992px) {
+  .navbar-expand-lg .navbar-nav {
+    flex-direction: row;
+    height: 50px;
+  }
 }
