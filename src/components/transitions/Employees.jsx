@@ -5,7 +5,7 @@ const Employees = (props) => {
 
   useEffect(() => {
     props.setMenuItems(menuItems);
-  });
+  }, []);
   return <div>Employees</div>;
 };
 

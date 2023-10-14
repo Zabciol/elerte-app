@@ -5,7 +5,7 @@ const Conclusions = (props) => {
 
   useEffect(() => {
     props.setMenuItems(menuItems);
-  });
+  }, []);
   return <div>Conclusions</div>;
 };
 

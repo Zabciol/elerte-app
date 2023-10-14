@@ -1,8 +1,8 @@
 .homeCard {
   position: fixed;
   left: 50%;
-  top: 20%;
-  transform: translate(-50%, -20%);
+  top: 10%;
+  transform: translate(-50%, -10%);
   background-color: #9d9d9d;
   box-shadow: 0px 0px 10px 5px black;
   height: 400px;

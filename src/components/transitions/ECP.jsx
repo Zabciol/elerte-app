@@ -5,7 +5,7 @@ const ECP = (props) => {
 
   useEffect(() => {
     props.setMenuItems(menuItems);
-  });
+  }, []);
   return <div>ECP</div>;
 };
 

@@ -6,7 +6,11 @@ const Home = (props) => {
   useEffect(() => {
     props.setMenuItems(menuItems);
   }, []);
-  return <div>Home</div>;
+  return (
+    <div>
+      <h3>Witaj {props.user.Imie}</h3>
+    </div>
+  );
 };
 
 export default Home;

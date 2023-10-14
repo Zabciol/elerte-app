@@ -10,7 +10,13 @@ const getUsers = async () => {
 };
 
 const findUserByEmail = (email, callback) => {
-  queryDatabase("SELECT * FROM Pracownicy WHERE Mail = ?", [email], callback);
+  queryDatabase(
+    "SELECT Pracownicy.ID, Imie, Nazwisko, Mail, Dzialy.Nazwa AS `Dzial`FROM Pracownicy" +
+      " LEFT JOIN Stanowisko ON Pracownicy.Stanowisko_ID = Stanowisko.ID" +
+      " LEFT JOIN Dzialy ON Stanowisko.Dzial_ID = Dzialy.ID  WHERE Mail = ?",
+    [email],
+    callback
+  );
 
   console.log(callback);
 };

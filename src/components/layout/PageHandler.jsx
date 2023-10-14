@@ -11,12 +11,11 @@ import { subordinatesApi } from "../../api/employeesApi";
 const PageHandler = (props) => {
   const [page, setPage] = useState("Home");
   const [menuItems, setMenuItems] = useState();
-  const [subordinates, setSubordinatesApi] = useState();
+  const [subordinates, setSubordinates] = useState();
 
   const getSubordinates = async () => {
     const data = await subordinatesApi(props.user.ID);
-    console.log(props.user.ID);
-    console.log(data);
+    setSubordinates(data.data);
   };
 
   const componentMap = {

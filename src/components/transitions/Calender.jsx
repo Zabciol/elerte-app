@@ -26,7 +26,7 @@ const Calender = (props) => {
 
   useEffect(() => {
     props.setMenuItems(menuItems);
-  });
+  }, []);
   return <div>Calender</div>;
 };
 
