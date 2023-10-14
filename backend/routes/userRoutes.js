@@ -12,20 +12,6 @@ router.get("/", async (req, res) => {
   }
 });
 
-router.get("/:id", (req, res) => {
-  const userId = req.params.id;
-  res.json({ message: `Return user with ID ${userId}` });
-});
-
-router.post("/", (req, res) => {
-  res.json({ message: "User added" });
-});
-
-router.delete("/:id", (req, res) => {
-  const userId = req.params.id;
-  res.json({ message: `User with ID ${userId} deleted` });
-});
-
 router.post("/login", (req, res) => {
   const { email, password } = req.body;
   console.log("Próba zalogowania");
