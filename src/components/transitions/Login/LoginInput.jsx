@@ -37,7 +37,7 @@ const LoginInput = (props) => {
   }, [password]);
 
   return (
-    <Accordion activeKey={openAccordion ? "0" : null}>
+    <Accordion activeKey={openAccordion ? "0" : null} data-bs-theme='light'>
       <FloatingLabel
         controlId='floatingInput'
         label='Adres email'

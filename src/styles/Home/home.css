@@ -3,16 +3,17 @@
   left: 50%;
   top: 5%;
   transform: translate(-50%, 0%);
-  background-color: #cecece;
+  background-color: #9d9d9d;
   box-shadow: 0px 0px 10px 5px black;
   min-height: 400px;
-
   width: 90%;
   max-width: 800px;
   border-radius: 10px;
+  overflow: hidden;
 }
 
 .interface {
+  margin-top: 70px;
   padding: 10px;
   height: 80%;
   width: 100%;

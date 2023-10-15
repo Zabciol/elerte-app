@@ -47,11 +47,14 @@ const ECPList = (props) => {
     getReasons();
   }, []);
 
-  console.log(employeesECP);
+  useEffect(() => {
+    setEmployeesECP([]);
+  }, [props.dzial]);
   return (
-    <Accordion>
+    <Accordion className='ECP'>
       {filteredSubordinates.map((employee) => (
         <ECPListItem
+          key={employee.ID}
           employee={employee}
           addToECP={addToECP}
           reasons={reasons}

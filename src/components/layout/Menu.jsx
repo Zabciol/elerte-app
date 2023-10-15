@@ -19,51 +19,54 @@ const Menu = (props) => {
   };
 
   return (
-    <nav className='menu'>
-      <img src={logo} className='logo'></img>
-      <>
-        <div className='menuToggle' onClick={handleShow}>
-          <span></span>
-          <span></span>
-          <span></span>
-        </div>
-        <Offcanvas
-          show={show}
-          onHide={handleClose}
-          placement='end'
-          data-bs-theme='dark'>
-          <Offcanvas.Header closeButton>
-            <Offcanvas.Title>
-              <NavDropdown
-                title={props.user.Imie + " " + props.user.Nazwisko}
-                id='basic-nav-dropdown'>
-                <NavDropdown.Item>Zmień hasło</NavDropdown.Item>
-                <NavDropdown.Divider />
-                <NavDropdown.Item
-                  onClick={() => {
-                    props.logout();
-                  }}>
-                  Wyloguj
-                </NavDropdown.Item>
-              </NavDropdown>
-            </Offcanvas.Title>
-          </Offcanvas.Header>
-          <Offcanvas.Body>
-            <Nav className='justify-content-center'>
-              {nav_items.map((item) => (
-                <Nav.Link
-                  onClick={() => {
-                    onClickMenuItem(item);
-                  }}>
-                  {item}
-                </Nav.Link>
-              ))}
-              {props.menuItems}
-            </Nav>
-          </Offcanvas.Body>
-        </Offcanvas>
-      </>
-    </nav>
+    <>
+      <div className='background-logo'></div>
+      <nav className='menu'>
+        <img src={logo} className='logo'></img>
+        <>
+          <div className='menuToggle' onClick={handleShow}>
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+          <Offcanvas
+            show={show}
+            onHide={handleClose}
+            placement='end'
+            data-bs-theme='dark'>
+            <Offcanvas.Header closeButton>
+              <Offcanvas.Title>
+                <NavDropdown
+                  title={props.user.Imie + " " + props.user.Nazwisko}
+                  id='basic-nav-dropdown'>
+                  <NavDropdown.Item>Zmień hasło</NavDropdown.Item>
+                  <NavDropdown.Divider />
+                  <NavDropdown.Item
+                    onClick={() => {
+                      props.logout();
+                    }}>
+                    Wyloguj
+                  </NavDropdown.Item>
+                </NavDropdown>
+              </Offcanvas.Title>
+            </Offcanvas.Header>
+            <Offcanvas.Body>
+              <Nav className='justify-content-center'>
+                {nav_items.map((item) => (
+                  <Nav.Link
+                    onClick={() => {
+                      onClickMenuItem(item);
+                    }}>
+                    {item}
+                  </Nav.Link>
+                ))}
+                {props.menuItems}
+              </Nav>
+            </Offcanvas.Body>
+          </Offcanvas>
+        </>
+      </nav>
+    </>
   );
 };
 

@@ -1,3 +1,8 @@
+.ECP {
+  overflow-y: scroll;
+  max-height: 500px;
+  border-radius: 10px;
+}
 .list-group-item {
   position: static !important;
 }
@@ -5,20 +10,24 @@
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
+  flex-wrap: wrap;
   width: 100%;
   height: 60px;
 }
+
 .ECP-input__reason {
   display: flex;
   flex-direction: row;
   justify-content: space-around;
-  width: 60%;
+  height: 60px;
 }
 .ECP-input__time {
   display: flex;
   flex-direction: row;
   justify-content: space-around;
-  width: 40%;
+}
+.ECP-input__time > div {
+  margin: 0 5px;
 }
 .person {
   display: flex;
@@ -30,7 +39,16 @@
 .badge {
   height: 100%;
 }
-.accordion {
-  overflow-y: scroll;
-  max-height: 500px;
+
+.ecp-accordion {
+  height: 100px;
+}
+
+@media (max-width: 718px) {
+  .ecp-accordion {
+    height: 130px;
+  }
+  .ECP-input__reason {
+    height: 40px;
+  }
 }

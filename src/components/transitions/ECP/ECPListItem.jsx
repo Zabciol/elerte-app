@@ -5,11 +5,9 @@ import calculateHoursWorked from "./scripts";
 import ECPInput from "./ECPInput";
 
 const ECPListItem = ({ employee, addToECP, reasons }) => {
-  console.log(employee);
   const { ID, Imie, Nazwisko, Stanowisko, Od, Do } = employee;
   const properHours = calculateHoursWorked(Od, Do);
   const [hours, setHours] = useState(properHours);
-  console.log(hours);
   return (
     <Accordion.Item eventKey={ID}>
       <Accordion.Header>
@@ -21,7 +19,7 @@ const ECPListItem = ({ employee, addToECP, reasons }) => {
           <Badge>{hours}</Badge>
         </div>
       </Accordion.Header>
-      <Accordion.Body>
+      <Accordion.Body className='ecp-accordion'>
         <ECPInput
           employee={employee}
           addToECP={addToECP}

@@ -23,6 +23,7 @@ const ECPInput = (props) => {
   useEffect(() => {
     const newHours = calculateHoursWorked(Od, Do);
     setHours(newHours);
+    props.setHours(newHours);
   }, [Od, Do]);
 
   useEffect(() => {
@@ -47,7 +48,6 @@ const ECPInput = (props) => {
 
   return (
     <div className='ECP-input'>
-      <Badge>{hours}</Badge>
       <div className='ECP-input__time'>
         <FloatingLabel
           controlId='floatingInput'
