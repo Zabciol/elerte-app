@@ -1,3 +1,27 @@
+.menu {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 10px;
+}
+.menuToggle {
+  cursor: pointer;
+  padding: 10px;
+}
+
+.menuToggle span {
+  display: block;
+  width: 37px;
+  height: 4px;
+  margin-bottom: 7px;
+  position: relative;
+
+  background: #000000;
+  border-radius: 3px;
+
+  z-index: 1;
+}
+
 .logo {
   height: 40px;
   padding: 0;
@@ -13,14 +37,23 @@
   right: 10px;
   width: 40px;
 }
-.navbar-nav {
+.nav {
+  display: flex;
+  flex-direction: column;
   align-items: center;
 }
+
 .nav-link {
-  margin: 20px 10px;
+  margin: 10px 10px;
+  color: white !important;
 }
 .menu-item {
   max-width: 50%;
+}
+.menu-select {
+  border: none;
+  background-color: transparent;
+  padding: 10px;
 }
 .dropdown {
   text-align: center;
@@ -33,6 +66,13 @@
 .offcanvas-body {
   display: flex;
   flex-direction: column;
+}
+@media (max-width: 500px) {
+  .offcanvas.show:not(.hiding),
+  .offcanvas.showing {
+    width: 80%;
+    min-width: 280px;
+  }
 }
 @media (min-width: 992px) {
   .navbar-expand-lg .navbar-nav {

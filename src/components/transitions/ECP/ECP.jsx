@@ -8,12 +8,7 @@ import "./../../../styles/ECP.css";
 const MenuItems = ({ date, setDate, dzial, dzialy, setDzial }) => {
   return (
     <>
-      <NavDropdown
-        title={dzial}
-        onClick={(event) => {
-          event.stopPropagation();
-        }}
-        id='basic-nav-dropdown'>
+      <NavDropdown title={dzial} id='basic-nav-dropdown'>
         {dzialy.map((item) => (
           <NavDropdown.Item key={item} onClick={() => setDzial(item)}>
             {item}
@@ -25,18 +20,11 @@ const MenuItems = ({ date, setDate, dzial, dzialy, setDzial }) => {
           Każdy
         </NavDropdown.Item>
       </NavDropdown>
-      <Form
-        onClick={(event) => {
-          event.stopPropagation();
-        }}>
-        <Form.Control
-          type='date'
-          value={date}
-          className='me-2'
-          aria-label='Miesiąc'
-          onChange={setDate}
-        />
-      </Form>
+      <input
+        type='date'
+        value={date}
+        onChange={setDate}
+        className='menu-select'></input>
     </>
   );
 };
