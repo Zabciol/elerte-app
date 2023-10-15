@@ -10,10 +10,10 @@ const ECPList = (props) => {
   const [employeesECP, setEmployeesECP] = useState([]);
   const [reasons, setReasons] = useState([]);
 
-  var filteredSubordinates = props.subordinates.filter(
-    (employee) => employee.Dzial === props.dzial
-  );
-  if (props.dzial === "Kazdy") filteredSubordinates = props.subordinates;
+  var filteredSubordinates =
+    props.dzial === "Kazdy"
+      ? props.subordinates
+      : props.subordinates.filter((employee) => employee.Dzial === props.dzial);
 
   const addToECP = (newItem) => {
     setEmployeesECP((prevECP) => {
@@ -22,10 +22,8 @@ const ECPList = (props) => {
       );
 
       if (index === -1) {
-        // Element o takim ID nie istnieje - dodaj nowy element do tablicy
         return [...prevECP, newItem];
       } else {
-        // Element o takim ID istnieje - zamień istniejący element na nowy
         return [
           ...prevECP.slice(0, index),
           newItem,

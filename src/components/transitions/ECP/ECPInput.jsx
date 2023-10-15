@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { Badge } from "react-bootstrap";
 import FloatingLabel from "react-bootstrap/FloatingLabel";
 import Form from "react-bootstrap/Form";
 import calculateHoursWorked from "./scripts";
@@ -14,12 +13,7 @@ const ECPInput = (props) => {
   const [hours, setHours] = useState(properHours);
   const [reason, setReason] = useState(null);
 
-  const changeOd = (event) => {
-    setOd(event.target.value);
-  };
-  const changeDo = (event) => {
-    setDo(event.target.value);
-  };
+  const changeValue = (setter) => (event) => setter(event.target.value);
 
   const changeReason = (event) => {
     setReason(event.target.value);
@@ -58,10 +52,10 @@ const ECPInput = (props) => {
           controlId='floatingInput'
           label='Od godz:'
           className='mb-2'>
-          <Form.Control type='time' value={Od} onChange={changeOd} />
+          <Form.Control type='time' value={Od} onChange={changeValue(setOd)} />
         </FloatingLabel>
         <FloatingLabel controlId='floatingPassword' label='Do godz:'>
-          <Form.Control type='time' value={Do} onChange={changeDo} />
+          <Form.Control type='time' value={Do} onChange={changeValue(setDo)} />
         </FloatingLabel>
       </div>
       {hours < properHours && props.reasons ? (
