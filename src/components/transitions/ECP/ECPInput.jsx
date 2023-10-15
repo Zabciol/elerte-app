@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import FloatingLabel from "react-bootstrap/FloatingLabel";
 import Form from "react-bootstrap/Form";
 import calculateHoursWorked from "./scripts";
+import Badge from "react-bootstrap/Badge";
 
 const ECPInput = (props) => {
   const properHours = calculateHoursWorked(
@@ -21,7 +22,6 @@ const ECPInput = (props) => {
 
   useEffect(() => {
     const newHours = calculateHoursWorked(Od, Do);
-    props.setHours(newHours);
     setHours(newHours);
   }, [Od, Do]);
 
@@ -47,6 +47,7 @@ const ECPInput = (props) => {
 
   return (
     <div className='ECP-input'>
+      <Badge>{hours}</Badge>
       <div className='ECP-input__time'>
         <FloatingLabel
           controlId='floatingInput'
