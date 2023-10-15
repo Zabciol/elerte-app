@@ -36,9 +36,6 @@ const Menu = (props) => {
             <Offcanvas.Title>
               <NavDropdown
                 title={props.user.Imie + " " + props.user.Nazwisko}
-                onClick={(event) => {
-                  event.stopPropagation();
-                }}
                 id='basic-nav-dropdown'>
                 <NavDropdown.Item>Zmień hasło</NavDropdown.Item>
                 <NavDropdown.Divider />

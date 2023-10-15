@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Badge } from "react-bootstrap";
 import FloatingLabel from "react-bootstrap/FloatingLabel";
 import Form from "react-bootstrap/Form";
+import calculateHoursWorked from "./scripts";
 
 const ECPInput = (props) => {
   const properHours = calculateHoursWorked(
@@ -20,23 +21,9 @@ const ECPInput = (props) => {
     setDo(event.target.value);
   };
 
-  function calculateHoursWorked(start, end) {
-    const [startHour, startMinutes] = start.split(":").map(Number);
-    const [endHour, endMinutes] = end.split(":").map(Number);
-
-    const startDate = new Date(0, 0, 0, startHour, startMinutes);
-    const endDate = new Date(0, 0, 0, endHour, endMinutes);
-
-    let diff = endDate.getTime() - startDate.getTime();
-
-    if (diff < 0) {
-      diff += 24 * 60 * 60 * 1000;
-    }
-
-    const hours = diff / (1000 * 60 * 60);
-
-    return hours;
-  }
+  const changeReason = (event) => {
+    setReason(event.target.value);
+  };
 
   useEffect(() => {
     const newHours = calculateHoursWorked(Od, Do);
@@ -58,21 +45,36 @@ const ECPInput = (props) => {
 
   useEffect(() => {
     if (hours < properHours) {
-      setReason(1);
+      setReason("1");
+    } else {
+      setReason(null);
     }
   }, [hours]);
 
   return (
     <div className='ECP-input'>
-      <FloatingLabel
-        controlId='floatingInput'
-        label='Od godz:'
-        className='mb-2'>
-        <Form.Control type='time' value={Od} onChange={changeOd} />
-      </FloatingLabel>
-      <FloatingLabel controlId='floatingPassword' label='Do godz:'>
-        <Form.Control type='time' value={Do} onChange={changeDo} />
-      </FloatingLabel>
+      <div className='ECP-input__time'>
+        <FloatingLabel
+          controlId='floatingInput'
+          label='Od godz:'
+          className='mb-2'>
+          <Form.Control type='time' value={Od} onChange={changeOd} />
+        </FloatingLabel>
+        <FloatingLabel controlId='floatingPassword' label='Do godz:'>
+          <Form.Control type='time' value={Do} onChange={changeDo} />
+        </FloatingLabel>
+      </div>
+      {hours < properHours && props.reasons ? (
+        <div className='ECP-input__reason'>
+          <Form.Select onChange={changeReason}>
+            {props.reasons.map((reason) => (
+              <option key={reason.ID} value={reason.ID}>
+                {reason.Nazwa}
+              </option>
+            ))}
+          </Form.Select>
+        </div>
+      ) : null}
     </div>
   );
 };

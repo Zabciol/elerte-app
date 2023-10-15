@@ -2,11 +2,15 @@ import Badge from "react-bootstrap/Badge";
 import ListGroup from "react-bootstrap/ListGroup";
 import ECPInput from "./ECPInput";
 import Accordion from "react-bootstrap/Accordion";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import calculateHoursWorked from "./scripts";
 
 const ECPListItem = (props) => {
-  const [hours, setHours] = useState(8);
   const employee = props.employee;
+  const [hours, setHours] = useState(
+    calculateHoursWorked(employee.Od, employee.Do)
+  );
+
   return (
     <Accordion.Item eventKey={employee.ID}>
       <Accordion.Header>
@@ -24,7 +28,9 @@ const ECPListItem = (props) => {
         <ECPInput
           employee={employee}
           addToECP={props.addToECP}
-          setHours={setHours}></ECPInput>
+          hours={hours}
+          setHours={setHours}
+          reasons={props.reasons}></ECPInput>
       </Accordion.Body>
     </Accordion.Item>
   );

@@ -38,7 +38,6 @@ const ECP = (props) => {
   const changeDate = (event) => {
     setDate(event.target.value);
   };
-  console.log(dzialy);
   useEffect(() => {
     props.setMenuItems(
       <MenuItems
