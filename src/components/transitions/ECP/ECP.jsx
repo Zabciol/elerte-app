@@ -52,9 +52,9 @@ const ECP = (props) => {
   }, [dzial, date]);
 
   return (
-    <div>
+    <>
       <ECPList subordinates={props.subordinates} dzial={dzial} />
-    </div>
+    </>
   );
 };
 

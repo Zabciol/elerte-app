@@ -1,3 +1,21 @@
 .list-group-item {
   position: static !important;
 }
+.ECP-input {
+  display: flex;
+  flex-direction: row;
+}
+.person {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+  margin: 0 10px;
+}
+.badge {
+  height: 100%;
+}
+.accordion {
+  overflow-y: scroll;
+  max-height: 500px;
+}
