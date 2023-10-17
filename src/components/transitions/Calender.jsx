@@ -4,18 +4,13 @@ import Variables from "../common/Variables";
 
 const MenuItems = ({ date, setDate }) => {
   return (
-    <Form
-      onClick={(event) => {
-        event.stopPropagation();
-      }}>
-      <Form.Control
-        type='month'
-        value={date}
-        className='me-2'
-        aria-label='Miesiąc'
-        onChange={setDate}
-      />
-    </Form>
+    <Form.Control
+      type='month'
+      value={date}
+      className='me-2'
+      aria-label='Miesiąc'
+      onChange={setDate}
+    />
   );
 };
 

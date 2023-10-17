@@ -3,8 +3,8 @@ import Button from "react-bootstrap/Button";
 import Offcanvas from "react-bootstrap/Offcanvas";
 import NavDropdown from "react-bootstrap/NavDropdown";
 import Nav from "react-bootstrap/Nav";
-import logo from "../../assets/logo.png";
-import "../../styles/Home/menu.css";
+import logo from "../../../assets/logo.png";
+import "../../../styles/Home/menu.css";
 
 const Menu = (props) => {
   const [show, setShow] = useState(false);

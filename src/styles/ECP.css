@@ -1,7 +1,6 @@
 .ECP {
   overflow-y: scroll;
   max-height: 500px;
-  border-radius: 10px;
 }
 .list-group-item {
   position: static !important;

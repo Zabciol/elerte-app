@@ -5,8 +5,10 @@ import ECP from "../transitions/ECP/ECP.jsx";
 import Employees from "../transitions/Employees";
 import Calender from "../transitions/Calender";
 import Conclusions from "../transitions/Conclusions";
+import Container from "react-bootstrap/Container";
 import { subordinatesApi } from "../../api/employeesApi";
-import Menu from "./Menu";
+import Menu from "./Menu/Menu";
+import MenuNew from "./Menu/MenuNew";
 
 const PageHandler = (props) => {
   const [page, setPage] = useState("Home");
@@ -37,15 +39,15 @@ const PageHandler = (props) => {
   }, []);
 
   return (
-    <div className='homeCard'>
-      <Menu
+    <Container expand='lg' data-bs-theme='dark' className='home--Card'>
+      <MenuNew
         setPage={setPage}
         page={page}
         menuItems={menuItems}
         user={props.user}
-        logout={props.logout}></Menu>
+        logout={props.logout}></MenuNew>
       <div className='interface'>{componentMap[page] || null}</div>
-    </div>
+    </Container>
   );
 };
 

@@ -1,14 +1,15 @@
 .menu {
-  position: absolute;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  padding: 10px;
+  padding: 15px !important;
   border-radius: 10px;
-  backdrop-filter: blur(30px);
-  width: 100%;
+  z-index: 200000;
 }
-
+.dropdown-menu {
+  z-index: 3000;
+}
+.background {
+  background-color: transparent !important;
+  backdrop-filter: blur(30px) !important;
+}
 .menuToggle {
   cursor: pointer;
   padding: 10px;
@@ -39,57 +40,11 @@
   background-color: #cdcdcd;
   border-radius: 10px;
 }
-.offcanvas {
-  backdrop-filter: blur(20px) !important;
-  background-color: rgba(255, 255, 255, 0) !important;
-  flex-direction: column;
-}
-.closeBtn {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  width: 40px;
-}
-.nav {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.nav-link {
-  margin: 10px 10px;
-  color: white !important;
-}
-.menu-item {
-  max-width: 50%;
-}
 .menu-select {
-  border: none;
-  background-color: transparent;
-  padding: 10px;
-}
-.dropdown {
-  text-align: center;
-}
-.navbar-nav .dropdown-menu {
-  position: static;
-  text-align: center;
-  z-index: 10000;
-}
-.offcanvas-body {
-  display: flex;
-  flex-direction: column;
+  width: 200px !important;
 }
 @media (max-width: 500px) {
-  .offcanvas.show:not(.hiding),
-  .offcanvas.showing {
-    width: 80%;
-    min-width: 280px;
-  }
-}
-@media (min-width: 992px) {
-  .navbar-expand-lg .navbar-nav {
-    flex-direction: row;
-    height: 50px;
+  .offcanvas {
+    width: 70% !important;
   }
 }

@@ -20,11 +20,13 @@ const MenuItems = ({ date, setDate, dzial, dzialy, setDzial }) => {
           Każdy
         </NavDropdown.Item>
       </NavDropdown>
-      <input
+
+      <Form.Control
         type='date'
         value={date}
         onChange={setDate}
-        className='menu-select'></input>
+        className='menu-select'
+      />
     </>
   );
 };
