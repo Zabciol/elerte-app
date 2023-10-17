@@ -39,7 +39,7 @@ const PageHandler = (props) => {
   }, []);
 
   return (
-    <Container expand='lg' data-bs-theme='dark' className='home--Card'>
+    <Container expand='lg' data-bs-theme='dark'>
       <MenuNew
         setPage={setPage}
         page={page}
