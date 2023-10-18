@@ -14,10 +14,10 @@ const MenuItems = (props) => {
     console.log(item);
     props.setPage(item);
   };
-  console.log(props.MenuItems);
+
   return (
     <Offcanvas.Body>
-      <Nav className='justify-content-start flex-grow-1 pe-3'>
+      <Nav className='justify-content-start flex-grow-1 pe-3 '>
         {!props.show ? (
           <NavDropdown
             title={props.user.Imie + " " + props.user.Nazwisko}

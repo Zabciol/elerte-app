@@ -19,7 +19,7 @@ const LoginPanel = (props) => {
     }
   };
   return (
-    <div className='LoginPanel'>
+    <div className='LoginPanel' data-bs-theme='light'>
       <img src={logo} alt='logo' />
       <div className='LoginPanel-form'>
         <LoginInput submit={submit} />

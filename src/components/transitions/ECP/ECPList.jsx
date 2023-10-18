@@ -7,31 +7,12 @@ import ECPListItem from "./ECPListItem";
 import { reasonsApi } from "../../../api/reasonsApi";
 
 const ECPList = (props) => {
-  const [employeesECP, setEmployeesECP] = useState([]);
   const [reasons, setReasons] = useState([]);
 
   var filteredSubordinates =
     props.dzial === "Kazdy"
       ? props.subordinates
       : props.subordinates.filter((employee) => employee.Dzial === props.dzial);
-
-  const addToECP = (newItem) => {
-    setEmployeesECP((prevECP) => {
-      const index = prevECP.findIndex(
-        (item) => item.employee === newItem.employee
-      );
-
-      if (index === -1) {
-        return [...prevECP, newItem];
-      } else {
-        return [
-          ...prevECP.slice(0, index),
-          newItem,
-          ...prevECP.slice(index + 1),
-        ];
-      }
-    });
-  };
 
   const getReasons = async () => {
     try {
@@ -47,17 +28,15 @@ const ECPList = (props) => {
     getReasons();
   }, []);
 
-  useEffect(() => {
-    setEmployeesECP([]);
-  }, [props.dzial]);
   return (
     <Accordion className='ECP'>
       {filteredSubordinates.map((employee) => (
         <ECPListItem
           key={employee.ID}
           employee={employee}
-          addToECP={addToECP}
+          addToECP={props.addToECP}
           reasons={reasons}
+          employeesECP={props.employeesECP}
         />
       ))}
     </Accordion>

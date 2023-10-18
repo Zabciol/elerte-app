@@ -7,7 +7,6 @@ import Calender from "../transitions/Calender";
 import Conclusions from "../transitions/Conclusions";
 import Container from "react-bootstrap/Container";
 import { subordinatesApi } from "../../api/employeesApi";
-import Menu from "./Menu/Menu";
 import MenuNew from "./Menu/MenuNew";
 
 const PageHandler = (props) => {
@@ -39,7 +38,7 @@ const PageHandler = (props) => {
   }, []);
 
   return (
-    <Container expand='lg' data-bs-theme='dark'>
+    <Container expand='lg'>
       <MenuNew
         setPage={setPage}
         page={page}

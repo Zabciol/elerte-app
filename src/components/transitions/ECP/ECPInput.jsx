@@ -34,7 +34,7 @@ const ECPInput = (props) => {
       iloscGodzin: calculateHoursWorked(Od, Do),
       powod: reason,
     };
-    console.log(ecp);
+
     props.addToECP(ecp);
   }, [hours, reason]);
 
@@ -45,6 +45,17 @@ const ECPInput = (props) => {
       setReason(null);
     }
   }, [hours]);
+
+  useEffect(() => {
+    const ecp = {
+      employee: props.employee.ID,
+      odGodz: Od,
+      doGodz: Do,
+      iloscGodzin: calculateHoursWorked(Od, Do),
+      powod: reason,
+    };
+    props.addToECP(ecp);
+  }, []);
 
   return (
     <div className='ECP-input'>

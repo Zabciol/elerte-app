@@ -4,12 +4,14 @@
   width: 100%;
   border-radius: 10px;
   background-color: #2b3035;
+  background-color: var(--bs-body-bg) !important;
+  color: var(--bs-body-color) !important;
   backdrop-filter: blur(100px);
 }
 .controls {
   display: flex;
   flex-direction: row;
-  justify-content: flex-end;
+  justify-content: space-between;
   flex-wrap: wrap;
   margin: 10px;
 }

@@ -1,20 +1,20 @@
 import React, { useState } from "react";
-import Button from "react-bootstrap/Button";
 import Container from "react-bootstrap/Container";
 import Form from "react-bootstrap/Form";
-import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import NavDropdown from "react-bootstrap/NavDropdown";
 import Offcanvas from "react-bootstrap/Offcanvas";
 import logo from "../../../assets/logo.png";
 import MenuItems from "./MenuItems";
+import MenuHeader from "./MenuHeader";
+import "../../../styles/Home/menu.css";
 
 const MenuNew = (props) => {
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   return (
-    <Navbar expand='xl' className='bg-body-tertiary mb-3 menu'>
+    <Navbar expand='xl' className='bg-body-tertiary mb-3 menu '>
       <Container fluid>
         <Navbar.Brand href='#'>
           <img src={logo} className='logo'></img>
@@ -29,24 +29,8 @@ const MenuNew = (props) => {
           id={`offcanvasNavbar-expand-lg`}
           aria-labelledby={`offcanvasNavbarLabel-expand-lg`}
           placement='end'
-          data-bs-theme='dark'
-          className='background'>
-          <Offcanvas.Header closeButton>
-            <Offcanvas.Title id={`offcanvasNavbarLabel-expand-lg`}>
-              <NavDropdown
-                title={props.user.Imie + " " + props.user.Nazwisko}
-                id='basic-nav-dropdown'>
-                <NavDropdown.Item>Zmień hasło</NavDropdown.Item>
-                <NavDropdown.Divider />
-                <NavDropdown.Item
-                  onClick={() => {
-                    props.logout();
-                  }}>
-                  Wyloguj
-                </NavDropdown.Item>
-              </NavDropdown>
-            </Offcanvas.Title>
-          </Offcanvas.Header>
+          className='background text-white'>
+          <MenuHeader logout={props.logout} user={props.user}></MenuHeader>
           <MenuItems
             setPage={props.setPage}
             show={show}

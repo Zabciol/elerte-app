@@ -8,6 +8,7 @@ function App() {
   const [isLoggedIn, setIsLogged] = useState(false);
   const [user, setUser] = useState({});
   const token = JSON.parse(localStorage.getItem("userTokenElerteApp"));
+  const darkTheme = JSON.parse(localStorage.getItem("DarkTheme"));
 
   const logout = () => {
     setIsLogged(false);
@@ -18,11 +19,19 @@ function App() {
       setIsLogged(true);
       setUser(token);
     }
+    const html = document.documentElement;
+    if (darkTheme) {
+      html.setAttribute("data-bs-theme", "dark");
+      html.setAttribute("data-theme", "dark");
+    } else {
+      html.setAttribute("data-bs-theme", "light");
+      html.setAttribute("data-theme", "light");
+    }
   }, []);
 
   console.log(user);
   return (
-    <div className='App' data-bs-theme='light'>
+    <div className='App'>
       {isLoggedIn ? (
         <PageHandler logout={logout} user={user} />
       ) : (

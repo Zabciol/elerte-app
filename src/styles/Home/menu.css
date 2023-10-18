@@ -1,10 +1,6 @@
 .menu {
   padding: 15px !important;
   border-radius: 10px;
-  z-index: 2000;
-}
-.offcanvas {
-  z-index: 3000 !important;
 }
 
 .background {
