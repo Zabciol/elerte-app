@@ -4,29 +4,29 @@ import ListGroup from "react-bootstrap/ListGroup";
 import ECPInput from "./ECPInput";
 import Accordion from "react-bootstrap/Accordion";
 import ECPListItem from "./ECPListItem";
-import { reasonsApi } from "../../../api/reasonsApi";
 
 const ECPList = (props) => {
-  const [reasons, setReasons] = useState([]);
+  const filteredSubordinates = props.subordinates.filter(
+    (employee) => employee.Dzial === props.dzial
+  );
 
-  var filteredSubordinates =
-    props.dzial === "Kazdy"
-      ? props.subordinates
-      : props.subordinates.filter((employee) => employee.Dzial === props.dzial);
+  const addToECP = (newItem) => {
+    props.setEmployeesECP((prevECP) => {
+      const index = prevECP.findIndex(
+        (item) => item.employee === newItem.employee
+      );
 
-  const getReasons = async () => {
-    try {
-      const data = await reasonsApi();
-      console.log(data.message);
-      setReasons(data.data);
-    } catch (error) {
-      console.log(error.message || "Login failed. Please try again.");
-    }
+      if (index === -1) {
+        return [...prevECP, newItem];
+      } else {
+        return [
+          ...prevECP.slice(0, index),
+          newItem,
+          ...prevECP.slice(index + 1),
+        ];
+      }
+    });
   };
-
-  useEffect(() => {
-    getReasons();
-  }, []);
 
   return (
     <Accordion className='ECP'>
@@ -34,8 +34,8 @@ const ECPList = (props) => {
         <ECPListItem
           key={employee.ID}
           employee={employee}
-          addToECP={props.addToECP}
-          reasons={reasons}
+          addToECP={addToECP}
+          reasons={props.reasons}
           employeesECP={props.employeesECP}
         />
       ))}

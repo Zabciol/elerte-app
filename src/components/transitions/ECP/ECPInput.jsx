@@ -46,17 +46,6 @@ const ECPInput = (props) => {
     }
   }, [hours]);
 
-  useEffect(() => {
-    const ecp = {
-      employee: props.employee.ID,
-      odGodz: Od,
-      doGodz: Do,
-      iloscGodzin: calculateHoursWorked(Od, Do),
-      powod: reason,
-    };
-    props.addToECP(ecp);
-  }, []);
-
   return (
     <div className='ECP-input'>
       <div className='ECP-input__time'>

@@ -3,6 +3,7 @@ import NavDropdown from "react-bootstrap/NavDropdown";
 import Form from "react-bootstrap/Form";
 import LoadingButton from "../../common/LoadingBtn";
 import { getDateYearMonthDay } from "../../common/Variables";
+import { reasonsApi } from "../../../api/reasonsApi";
 import ECPList from "./ECPList";
 import "./../../../styles/ECP.css";
 
@@ -15,11 +16,6 @@ const MenuItems = ({ date, setDate, dzial, dzialy, setDzial }) => {
             {item}
           </NavDropdown.Item>
         ))}
-
-        <NavDropdown.Divider />
-        <NavDropdown.Item onClick={() => setDzial("Kazdy")}>
-          Każdy
-        </NavDropdown.Item>
       </NavDropdown>
 
       <Form.Control
@@ -34,10 +30,9 @@ const MenuItems = ({ date, setDate, dzial, dzialy, setDzial }) => {
 
 const ECP = (props) => {
   const [employeesECP, setEmployeesECP] = useState([]);
-  var dzialy = props.subordinates.map((item) => item.Dzial);
-  dzialy = Array.from(new Set(dzialy));
-  const [dzial, setDzial] = useState(dzialy[0]);
-  console.log(dzial);
+  const [reasons, setReasons] = useState([]);
+  const [dzialy, setDzialy] = useState([]);
+  const [dzial, setDzial] = useState("");
   const [date, setDate] = useState(getDateYearMonthDay());
   const changeDate = (event) => {
     setDate(event.target.value);
@@ -47,26 +42,14 @@ const ECP = (props) => {
     console.log(employeesECP);
   };
 
-  const addToECP = (newItem) => {
-    setEmployeesECP((prevECP) => {
-      const index = prevECP.findIndex(
-        (item) => item.employee === newItem.employee
-      );
-
-      if (index === -1) {
-        return [...prevECP, newItem];
-      } else {
-        const existingItem = prevECP[index];
-        if (JSON.stringify(existingItem) === JSON.stringify(newItem)) {
-          return prevECP; // jeśli element nie zmienił się, zwróć poprzedni stan
-        }
-        return [
-          ...prevECP.slice(0, index),
-          newItem,
-          ...prevECP.slice(index + 1),
-        ];
-      }
-    });
+  const getReasons = async () => {
+    try {
+      const data = await reasonsApi();
+      console.log(data.message);
+      setReasons(data.data);
+    } catch (error) {
+      console.log(error.message || "Login failed. Please try again.");
+    }
   };
 
   useEffect(() => {
@@ -86,6 +69,17 @@ const ECP = (props) => {
   }, [employeesECP]);
 
   useEffect(() => {
+    var dzialy = props.subordinates.map((item) => item.Dzial);
+    dzialy = Array.from(new Set(dzialy));
+    setDzialy(dzialy);
+    setDzial(dzialy[0]);
+    getReasons();
+  }, []);
+  useEffect(() => {
+    console.log(employeesECP);
+  }, [employeesECP]);
+
+  useEffect(() => {
     setEmployeesECP([]);
   }, [dzial]);
 
@@ -99,8 +93,8 @@ const ECP = (props) => {
         subordinates={props.subordinates}
         dzial={dzial}
         setEmployeesECP={setEmployeesECP}
-        addToECP={addToECP}
         employeesECP={employeesECP}
+        reasons={reasons}
       />
     </>
   );
