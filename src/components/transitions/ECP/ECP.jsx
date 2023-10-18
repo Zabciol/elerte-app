@@ -84,7 +84,7 @@ const ECP = (props) => {
         <LoadingButton
           action={updateOrCreateECP}
           data={employeesECP}
-          buttonText='Zapisz do serwera'></LoadingButton>
+          buttonText='Zapisz'></LoadingButton>
       </div>
       <ECPList
         subordinates={props.subordinates}

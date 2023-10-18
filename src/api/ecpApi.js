@@ -6,7 +6,19 @@ const API_URL = `http://localhost:${Variables.port}/ecp`;
 export const updateOrCreateECP = async (data) => {
   try {
     const response = await axios.post(`${API_URL}/updateOrCreate`, data);
-    return response;
+    return response.data;
+  } catch (error) {
+    console.error("Error during API call:", error);
+    throw error;
+  }
+};
+export const checkECPForEmployeeOnDate = async (employeeId, date) => {
+  try {
+    const response = await axios.get(
+      `${API_URL}/checkECP/${employeeId}/${date}`
+    );
+
+    return response.data;
   } catch (error) {
     console.error("Error during API call:", error);
     throw error;

@@ -13,4 +13,18 @@ router.post("/updateOrCreate", async (req, res) => {
   }
 });
 
+router.get("/checkECP/:employeeId/:date", async (req, res) => {
+  try {
+    const { employeeId, date } = req.params;
+    const result = await ecpModel.checkECPForEmployeeOnDate(employeeId, date);
+    if (result) {
+      res.status(200).json(result);
+    } else {
+      res.status(200).json(result || null);
+    }
+  } catch (error) {
+    res.status(500).json({ message: "Internal server error." });
+  }
+});
+
 module.exports = router;

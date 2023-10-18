@@ -3,6 +3,7 @@ import FloatingLabel from "react-bootstrap/FloatingLabel";
 import Form from "react-bootstrap/Form";
 import calculateHoursWorked from "./scripts";
 import Badge from "react-bootstrap/Badge";
+import { checkECPForEmployeeOnDate } from "../../../api/ecpApi";
 
 const ECPInput = (props) => {
   const properHours = calculateHoursWorked(
@@ -18,6 +19,30 @@ const ECPInput = (props) => {
 
   const changeReason = (event) => {
     setReason(event.target.value);
+  };
+
+  const checkECP = async () => {
+    console.log("sprawdzam dane:");
+    try {
+      const data = await checkECPForEmployeeOnDate(
+        props.employee.ID,
+        props.date
+      );
+      if (data) {
+        console.log(data);
+        setOd(data.Od_godz);
+        setDo(data.Do_godz);
+        setHours(data.IloscGodzin);
+        setReason(data.Powod_ID);
+      } else {
+        setOd(props.employee.Od);
+        setDo(props.employee.Do);
+        setHours(properHours);
+        setReason(null);
+      }
+    } catch (error) {
+      console.error("Błąd podczas sprawdzania ECP:", error.message);
+    }
   };
 
   useEffect(() => {
@@ -46,6 +71,10 @@ const ECPInput = (props) => {
       setReason(null);
     }
   }, [hours]);
+
+  useEffect(() => {
+    checkECP();
+  }, [props.date]);
 
   return (
     <div className='ECP-input'>

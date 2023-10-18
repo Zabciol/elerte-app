@@ -1,5 +1,6 @@
 const db = require("../db");
 const { queryDatabase } = require("../db");
+
 const queryDatabaseAsync = (query, params) => {
   return new Promise((resolve, reject) => {
     queryDatabase(query, params, (error, results) => {
@@ -75,5 +76,23 @@ exports.updateOrCreate = async (records) => {
   } catch (error) {
     console.error("Error in updateOrCreate function:", error);
     throw new Error("Nie udało się przetworzyć żądania ECP");
+  }
+};
+
+exports.checkECPForEmployeeOnDate = async (employeeId, date) => {
+  try {
+    const results = await queryDatabaseAsync(
+      "SELECT * FROM ECP WHERE Data = ? AND Pracownik_ID = ?",
+      [date, employeeId]
+    );
+
+    if (results.length > 0) {
+      return results[0];
+    } else {
+      return null;
+    }
+  } catch (error) {
+    console.error("Error in checkECPForEmployeeOnDate function:", error);
+    throw new Error("Nie udało się sprawdzić ECP dla danego pracownika i daty");
   }
 };

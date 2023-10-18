@@ -36,7 +36,7 @@ function LoadingButton({ action, data, buttonText, ...props }) {
       <PopUp
         show={showPopUp}
         setShow={setShowPopUp}
-        title={"Wynik operacji"}
+        title={"Powiadomienie"}
         message={responseMessage}></PopUp>
     </>
   );
