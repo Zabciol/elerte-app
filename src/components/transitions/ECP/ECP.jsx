@@ -65,19 +65,12 @@ const ECP = (props) => {
   }, [dzial, date]);
 
   useEffect(() => {
-    console.log(employeesECP);
-  }, [employeesECP]);
-
-  useEffect(() => {
     var dzialy = props.subordinates.map((item) => item.Dzial);
     dzialy = Array.from(new Set(dzialy));
     setDzialy(dzialy);
     setDzial(dzialy[0]);
     getReasons();
   }, []);
-  useEffect(() => {
-    console.log(employeesECP);
-  }, [employeesECP]);
 
   useEffect(() => {
     setEmployeesECP([]);
