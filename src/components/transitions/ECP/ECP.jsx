@@ -82,7 +82,6 @@ const ECP = (props) => {
       <div className='controls'>
         <h4>Lista ECP</h4>
         <LoadingButton
-          onClick={save}
           action={updateOrCreateECP}
           data={employeesECP}
           buttonText='Zapisz do serwera'></LoadingButton>

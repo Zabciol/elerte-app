@@ -37,7 +37,7 @@ const ECPInput = (props) => {
     };
 
     props.addToECP(ecp);
-  }, [hours, reason]);
+  }, [hours, reason, props.date]);
 
   useEffect(() => {
     if (hours < properHours) {

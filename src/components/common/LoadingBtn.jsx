@@ -8,6 +8,8 @@ function LoadingButton({ action, data, buttonText, ...props }) {
   const [responseMessage, setResponseMessage] = useState("");
 
   const handleClick = async () => {
+    console.log("KLIK");
+    console.log(data);
     setLoading(true);
     try {
       const response = await action(data);
