@@ -15,6 +15,13 @@ const ECPInput = (props) => {
   const [hours, setHours] = useState(properHours);
   const [reason, setReason] = useState(null);
 
+  const setAllStates = (Od, Do, hours, reason) => {
+    setOd(Od);
+    setDo(Do);
+    setHours(hours);
+    setReason(reason);
+  };
+
   const changeValue = (setter) => (event) => setter(event.target.value);
 
   const changeReason = (event) => {
@@ -29,16 +36,14 @@ const ECPInput = (props) => {
         props.date
       );
       if (data) {
-        console.log(data);
-        setOd(data.Od_godz);
-        setDo(data.Do_godz);
-        setHours(data.IloscGodzin);
-        setReason(data.Powod_ID);
+        setAllStates(
+          data.Od_godz,
+          data.Do_godz,
+          data.IloscGodzin,
+          data.Powod_ID
+        );
       } else {
-        setOd(props.employee.Od);
-        setDo(props.employee.Do);
-        setHours(properHours);
-        setReason(null);
+        setAllStates(props.employee.Od, props.employee.Do, properHours, null);
       }
     } catch (error) {
       console.error("Błąd podczas sprawdzania ECP:", error.message);

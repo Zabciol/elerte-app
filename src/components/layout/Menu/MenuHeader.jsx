@@ -37,6 +37,7 @@ const MenuHeader = (props) => {
                 id='custom-switch'
                 label='Ciemny motyw'
                 onClick={handleSwitchClick}
+                onChange={() => {}}
               />{" "}
             </Form>
           </NavDropdown.Item>
