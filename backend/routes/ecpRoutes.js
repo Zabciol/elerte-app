@@ -1,22 +1,15 @@
 const express = require("express");
-const ECP = require("../models/ecpModel");
-
 const router = express.Router();
+const ecpModel = require("../models/ecpModel");
 
 router.post("/updateOrCreate", async (req, res) => {
+  console.log("Api ecp");
   try {
-    const { data, ...values } = req.body;
-
-    const exists = await ECP.checkIfExists(data);
-    if (exists) {
-      await ECP.update(data, values);
-      return res.send("Record updated");
-    } else {
-      await ECP.insert(req.body);
-      return res.send("Record inserted");
-    }
-  } catch (error) {
-    res.status(500).send("Server error");
+    const data = req.body;
+    const result = await ecpModel.updateOrCreate(data);
+    res.send(result);
+  } catch (err) {
+    res.status(500).send(err);
   }
 });
 

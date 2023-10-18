@@ -6,6 +6,7 @@ import { getDateYearMonthDay } from "../../common/Variables";
 import { reasonsApi } from "../../../api/reasonsApi";
 import ECPList from "./ECPList";
 import "./../../../styles/ECP.css";
+import { updateOrCreateECP } from "../../../api/ecpApi";
 
 const MenuItems = ({ date, setDate, dzial, dzialy, setDzial }) => {
   return (
@@ -80,7 +81,11 @@ const ECP = (props) => {
     <>
       <div className='controls'>
         <h4>Lista ECP</h4>
-        <LoadingButton onClick={save}></LoadingButton>
+        <LoadingButton
+          onClick={save}
+          action={updateOrCreateECP}
+          data={employeesECP}
+          buttonText='Zapisz do serwera'></LoadingButton>
       </div>
       <ECPList
         subordinates={props.subordinates}
@@ -88,6 +93,7 @@ const ECP = (props) => {
         setEmployeesECP={setEmployeesECP}
         employeesECP={employeesECP}
         reasons={reasons}
+        date={date}
       />
     </>
   );

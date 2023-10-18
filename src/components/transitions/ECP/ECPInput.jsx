@@ -33,6 +33,7 @@ const ECPInput = (props) => {
       doGodz: Do,
       iloscGodzin: calculateHoursWorked(Od, Do),
       powod: reason,
+      data: props.date,
     };
 
     props.addToECP(ecp);

@@ -4,7 +4,14 @@ import Badge from "react-bootstrap/Badge";
 import calculateHoursWorked from "./scripts";
 import ECPInput from "./ECPInput";
 
-const ECPListItem = ({ employee, addToECP, reasons, employeesECP, dzial }) => {
+const ECPListItem = ({
+  employee,
+  addToECP,
+  reasons,
+  employeesECP,
+  dzial,
+  date,
+}) => {
   const { ID, Imie, Nazwisko, Stanowisko, Od, Do } = employee;
   const properHours = calculateHoursWorked(Od, Do);
   const [hours, setHours] = useState(properHours);
@@ -26,7 +33,7 @@ const ECPListItem = ({ employee, addToECP, reasons, employeesECP, dzial }) => {
           hours={hours}
           setHours={setHours}
           reasons={reasons}
-          employeesECP={employeesECP}
+          date={date}
         />
       </Accordion.Body>
     </Accordion.Item>

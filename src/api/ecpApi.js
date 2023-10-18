@@ -3,11 +3,15 @@ import Variables from "../components/common/Variables";
 
 const API_URL = `http://localhost:${Variables.port}/ecp`;
 
-export const inputEcpApi = async (ecp) => {
+export const updateOrCreateECP = async (data) => {
   try {
-    const response = await axios.post(`${API_URL}/updateOrCreate`, { ecp });
-    return response.data;
+    const response = await axios.post(
+      `http://localhost:${Variables.port}/ecp`,
+      data
+    );
+    return response;
   } catch (error) {
-    throw error.response ? error.response.data : new Error("API not available");
+    console.error("Error during API call:", error);
+    throw error;
   }
 };

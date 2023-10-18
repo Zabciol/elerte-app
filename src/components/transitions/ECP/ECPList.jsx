@@ -36,7 +36,7 @@ const ECPList = (props) => {
           employee={employee}
           addToECP={addToECP}
           reasons={props.reasons}
-          employeesECP={props.employeesECP}
+          date={props.date}
         />
       ))}
     </Accordion>

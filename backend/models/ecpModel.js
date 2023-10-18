@@ -1,33 +1,64 @@
-const db = require("../database");
+const db = require("../db");
 
-module.exports = {
-  checkIfExists: (data) => {
-    return new Promise((resolve, reject) => {
-      const query = "SELECT COUNT(*) AS count FROM twoja_tabela WHERE data = ?";
-      db.query(query, [data], (err, results) => {
-        if (err) reject(err);
-        resolve(results[0].count > 0);
-      });
-    });
-  },
+exports.updateOrCreate = async (records) => {
+  // Pobierz istniejące rekordy
+  const existingRecords = await db.query(
+    "SELECT Data, Pracownik_ID FROM ECP WHERE Data IN (?) AND Pracownik_ID IN (?)",
+    [records.map((r) => r.data), records.map((r) => r.employee)]
+  );
 
-  update: (data, values) => {
-    return new Promise((resolve, reject) => {
-      const query = "UPDATE twoja_tabela SET ? WHERE data = ?";
-      db.query(query, [values, data], (err, result) => {
-        if (err) reject(err);
-        resolve(result);
-      });
-    });
-  },
+  const toUpdate = [];
+  const toInsert = [];
 
-  insert: (values) => {
-    return new Promise((resolve, reject) => {
-      const query = "INSERT INTO twoja_tabela SET ?";
-      db.query(query, values, (err, result) => {
-        if (err) reject(err);
-        resolve(result);
-      });
-    });
-  },
+  for (const record of records) {
+    const found = existingRecords.some(
+      (er) => er.Data === record.data && er.Pracownik_ID === record.employee
+    );
+    if (found) {
+      toUpdate.push(record);
+    } else {
+      toInsert.push(record);
+    }
+  }
+
+  // Aktualizuj istniejące rekordy
+  if (toUpdate.length > 0) {
+    await Promise.all(
+      toUpdate.map(async (record) => {
+        await db.query(
+          "UPDATE ECP SET Od_godz = ?, Do_godz = ?, IloscGodzin = ?, Powod_ID = ? WHERE Data = ? AND Pracownik_ID = ?",
+          [
+            record.odGodz,
+            record.doGodz,
+            record.iloscGodzin,
+            record.powod,
+            record.data,
+            record.employee,
+          ]
+        );
+      })
+    );
+  }
+
+  // Wstaw nowe rekordy
+  if (toInsert.length > 0) {
+    const insertData = toInsert.map((record) => [
+      record.data,
+      record.odGodz,
+      record.doGodz,
+      record.employee,
+      record.powod,
+      record.iloscGodzin,
+    ]);
+    await db.query(
+      "INSERT INTO ECP (Data, Od_godz, Do_godz, Pracownik_ID, Powod_ID, IloscGodzin) VALUES ?",
+      [insertData]
+    );
+  }
+
+  return {
+    updated: toUpdate.length,
+    inserted: toInsert.length,
+    message: "Poprawnie wysłano ECP",
+  };
 };
