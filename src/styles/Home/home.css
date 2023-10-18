@@ -2,4 +2,17 @@
   padding: 10px;
   height: 80%;
   width: 100%;
+  border-radius: 10px;
+  background-color: #2b3035;
+  backdrop-filter: blur(100px);
+}
+.controls {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  margin: 10px;
+}
+.controls > {
+  margin: 10px;
 }

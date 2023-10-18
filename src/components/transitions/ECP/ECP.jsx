@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import NavDropdown from "react-bootstrap/NavDropdown";
 import Form from "react-bootstrap/Form";
-import Variables from "../../common/Variables";
+import LoadingButton from "../../common/LoadingBtn";
+import { getDateYearMonthDay } from "../../common/Variables";
 import ECPList from "./ECPList";
 import "./../../../styles/ECP.css";
 
@@ -36,7 +37,7 @@ const ECP = (props) => {
   dzialy = Array.from(new Set(dzialy));
 
   const [dzial, setDzial] = useState(dzialy[0]);
-  const [date, setDate] = useState(Variables.dateYearMonthDay);
+  const [date, setDate] = useState(getDateYearMonthDay());
   const changeDate = (event) => {
     setDate(event.target.value);
   };
@@ -54,6 +55,9 @@ const ECP = (props) => {
 
   return (
     <>
+      <div className='controls'>
+        <LoadingButton></LoadingButton>
+      </div>
       <ECPList subordinates={props.subordinates} dzial={dzial} />
     </>
   );

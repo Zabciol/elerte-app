@@ -20,6 +20,15 @@
 .menu-select {
   width: 200px !important;
 }
+hr.solid {
+  border-top: 3px solid #bbb;
+}
+.navbar-nav > div,
+.navbar-nav > a,
+.navbar-nav > input,
+.navbar-nav > select {
+  margin: 5px 0 !important;
+}
 @media (max-width: 500px) {
   .offcanvas {
     width: 70% !important;

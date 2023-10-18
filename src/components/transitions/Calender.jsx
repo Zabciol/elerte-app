@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Form from "react-bootstrap/Form";
 import Variables from "../common/Variables";
+import { getDateYearMonth } from "../common/Variables";
 
 const MenuItems = ({ date, setDate }) => {
   return (
@@ -15,7 +16,7 @@ const MenuItems = ({ date, setDate }) => {
 };
 
 const Calender = (props) => {
-  const [date, setDate] = useState(Variables.dateYearMonth);
+  const [date, setDate] = useState(getDateYearMonth());
   const changeDate = (event) => {
     setDate(event.target.value);
   };

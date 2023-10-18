@@ -36,6 +36,7 @@ const MenuItems = (props) => {
           <Nav.Link onClick={() => onClickMenuItem(item)}>{item}</Nav.Link>
         ))}
       </Nav>
+      <hr className='solid' />
       <Nav>{props.menuItems}</Nav>
     </Offcanvas.Body>
   );
