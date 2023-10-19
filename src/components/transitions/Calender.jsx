@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Form from "react-bootstrap/Form";
-import Variables from "../common/Variables";
-import { getDateYearMonth } from "../common/Variables";
+import Variables from "../common/CommonFunctions";
+import { getDateYearMonth } from "../common/CommonFunctions";
 
 const MenuItems = ({ date, setDate }) => {
   return (

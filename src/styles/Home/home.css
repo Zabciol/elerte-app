@@ -1,4 +1,6 @@
 .interface {
+  position: relative;
+  z-index: 0;
   padding: 10px;
   height: 80%;
   width: 100%;

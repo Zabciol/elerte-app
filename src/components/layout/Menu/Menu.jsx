@@ -1,18 +1,25 @@
 import React, { useState } from "react";
 import Container from "react-bootstrap/Container";
-import Form from "react-bootstrap/Form";
 import Navbar from "react-bootstrap/Navbar";
-import NavDropdown from "react-bootstrap/NavDropdown";
-import Offcanvas from "react-bootstrap/Offcanvas";
 import logo from "../../../assets/logo.png";
 import MenuItems from "./MenuItems";
 import MenuHeader from "./MenuHeader";
+import { setDarkThemeForApp } from "../../common/CommonFunctions";
 import "../../../styles/Home/menu.css";
 
-const MenuNew = (props) => {
+const Menu = (props) => {
+  const [darkMode, setDarkMode] = useState(
+    JSON.parse(localStorage.getItem("DarkTheme"))
+  );
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+  const handleSwitchTheme = (event) => {
+    event.stopPropagation();
+    const dark = !darkMode;
+    setDarkMode(dark);
+    setDarkThemeForApp(dark);
+  };
   return (
     <Navbar expand='xl' className='bg-body-tertiary mb-3 menu '>
       <Container fluid>
@@ -30,12 +37,19 @@ const MenuNew = (props) => {
           aria-labelledby={`offcanvasNavbarLabel-expand-lg`}
           placement='end'
           className='background text-white'>
-          <MenuHeader logout={props.logout} user={props.user}></MenuHeader>
+          <MenuHeader
+            logout={props.logout}
+            user={props.user}
+            darkMode={darkMode}
+            handleSwitchTheme={handleSwitchTheme}></MenuHeader>
           <MenuItems
+            logout={props.logout}
             setPage={props.setPage}
             show={show}
             user={props.user}
             menuItems={props.menuItems}
+            darkMode={darkMode}
+            handleSwitchTheme={handleSwitchTheme}
           />
         </Navbar.Offcanvas>
       </Container>
@@ -43,4 +57,4 @@ const MenuNew = (props) => {
   );
 };
 
-export default MenuNew;
+export default Menu;

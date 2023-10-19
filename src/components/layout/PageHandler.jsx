@@ -7,7 +7,7 @@ import Calender from "../transitions/Calender";
 import Conclusions from "../transitions/Conclusions";
 import Container from "react-bootstrap/Container";
 import { subordinatesApi } from "../../api/employeesApi";
-import MenuNew from "./Menu/MenuNew";
+import Menu from "./Menu/Menu";
 
 const PageHandler = (props) => {
   const [page, setPage] = useState("Home");
@@ -39,12 +39,12 @@ const PageHandler = (props) => {
 
   return (
     <Container expand='lg'>
-      <MenuNew
+      <Menu
         setPage={setPage}
         page={page}
         menuItems={menuItems}
         user={props.user}
-        logout={props.logout}></MenuNew>
+        logout={props.logout}></Menu>
       <div className='interface'>{componentMap[page] || null}</div>
     </Container>
   );

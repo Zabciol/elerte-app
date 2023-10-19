@@ -1,5 +1,5 @@
 import axios from "axios";
-import Variables from "../components/common/Variables";
+import Variables from "../components/common/CommonFunctions";
 
 const API_URL = `http://localhost:${Variables.port}/employees`;
 

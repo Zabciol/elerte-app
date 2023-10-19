@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import NavDropdown from "react-bootstrap/NavDropdown";
 import Dropdown from "react-bootstrap/NavDropdown";
 import Form from "react-bootstrap/Form";
-import { getDateYearMonthDay } from "../../common/Variables";
+import { getDateYearMonthDay } from "../../common/CommonFunctions";
 import ECPList from "./ECPList";
 import "./../../../styles/ECP.css";
 import { GetDataProvider, useGetData } from "./ECPDataContext";

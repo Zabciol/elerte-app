@@ -1,9 +1,6 @@
 import React from "react";
-import Button from "react-bootstrap/Button";
-import Container from "react-bootstrap/Container";
 import Form from "react-bootstrap/Form";
 import Nav from "react-bootstrap/Nav";
-import Navbar from "react-bootstrap/Navbar";
 import NavDropdown from "react-bootstrap/NavDropdown";
 import Offcanvas from "react-bootstrap/Offcanvas";
 
@@ -22,6 +19,18 @@ const MenuItems = (props) => {
           <NavDropdown
             title={props.user.Imie + " " + props.user.Nazwisko}
             id='basic-nav-dropdown'>
+            <NavDropdown.Item>
+              <Form onClick={(event) => event.preventDefault()}>
+                <Form.Check // prettier-ignore
+                  checked={props.darkMode}
+                  type='switch'
+                  id='custom-switch'
+                  label='Ciemny motyw'
+                  onClick={props.handleSwitchTheme}
+                  onChange={() => {}}
+                />{" "}
+              </Form>
+            </NavDropdown.Item>
             <NavDropdown.Item>Zmień hasło</NavDropdown.Item>
             <NavDropdown.Divider />
             <NavDropdown.Item
