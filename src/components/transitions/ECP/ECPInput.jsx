@@ -26,12 +26,7 @@ const ECPInput = (props) => {
 
   const changeValue = (setter) => (event) => setter(event.target.value);
 
-  const changeReason = (event) => {
-    setReason(event.target.value);
-  };
-
   const checkECP = async () => {
-    console.log("sprawdzam dane:");
     try {
       const data = await checkECPForEmployeeOnDate(
         props.employee.ID,
@@ -104,7 +99,7 @@ const ECPInput = (props) => {
       </div>
       {hours < properHours && props.reasons ? (
         <div className='ECP-input__reason'>
-          <Form.Select onChange={changeReason}>
+          <Form.Select onChange={changeValue(setReason)}>
             {props.reasons.map((reason) => (
               <option key={reason.ID} value={reason.ID}>
                 {reason.Nazwa}

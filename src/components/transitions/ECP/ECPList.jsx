@@ -1,45 +1,66 @@
 import React, { useEffect, useState } from "react";
-import Badge from "react-bootstrap/Badge";
-import ListGroup from "react-bootstrap/ListGroup";
-import ECPInput from "./ECPInput";
 import Accordion from "react-bootstrap/Accordion";
 import ECPListItem from "./ECPListItem";
+import { reasonsApi } from "../../../api/reasonsApi";
+import LoadingButton from "../../common/LoadingBtn";
+import { SentECPToDatabase } from "../../../api/ecpApi";
+import { GetDataProvider, useGetData } from "./ECPDataContext";
 
 const ECPList = (props) => {
-  const filteredSubordinates = props.subordinates.filter(
-    (employee) => employee.Dzial === props.dzial
-  );
+  const [employeesECP, setEmployeesECP] = useState([]);
+  const [reasons, setReasons] = useState([]);
+  const filteredSubordinates =
+    props.dzial === "Każdy"
+      ? props.subordinates
+      : props.subordinates.filter((employee) => employee.Dzial === props.dzial);
 
-  const addToECP = (newItem) => {
-    props.setEmployeesECP((prevECP) => {
-      const index = prevECP.findIndex(
-        (item) => item.employee === newItem.employee
+  const getReasons = async () => {
+    try {
+      const data = await reasonsApi();
+      setReasons(data.data);
+    } catch (error) {
+      console.log(
+        error.message || "Nie udało się uzyskać powodów nieobecności"
       );
+    }
+  };
+  useEffect(() => {
+    getReasons();
+  }, []);
 
-      if (index === -1) {
-        return [...prevECP, newItem];
-      } else {
-        return [
-          ...prevECP.slice(0, index),
-          newItem,
-          ...prevECP.slice(index + 1),
-        ];
-      }
-    });
+  const { collectors, collectAll } = useGetData();
+
+  const gatherDataAndSave = async () => {
+    const allData = collectAll();
+    setEmployeesECP(allData);
+    console.log(allData);
+    try {
+      const response = await SentECPToDatabase(allData);
+      return response;
+    } catch (error) {
+      throw error;
+    }
   };
 
   return (
-    <Accordion className='ECP'>
-      {filteredSubordinates.map((employee) => (
-        <ECPListItem
-          key={employee.ID}
-          employee={employee}
-          addToECP={addToECP}
-          reasons={props.reasons}
-          date={props.date}
-        />
-      ))}
-    </Accordion>
+    <>
+      <div className='controls'>
+        <h4>Lista ECP</h4>
+        <LoadingButton
+          action={gatherDataAndSave}
+          buttonText='Zapisz'></LoadingButton>
+      </div>
+      <Accordion className='ECP'>
+        {filteredSubordinates.map((employee) => (
+          <ECPListItem
+            key={employee.ID}
+            employee={employee}
+            reasons={reasons}
+            date={props.date}
+          />
+        ))}
+      </Accordion>
+    </>
   );
 };
 

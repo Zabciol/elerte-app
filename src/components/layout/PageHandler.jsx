@@ -8,7 +8,6 @@ import Conclusions from "../transitions/Conclusions";
 import Container from "react-bootstrap/Container";
 import { subordinatesApi } from "../../api/employeesApi";
 import MenuNew from "./Menu/MenuNew";
-import { GetDataProvider, useGetData } from "../transitions/ECP/ECPDataContext";
 
 const PageHandler = (props) => {
   const [page, setPage] = useState("Home");
@@ -23,13 +22,11 @@ const PageHandler = (props) => {
   const componentMap = {
     Home: <Home user={props.user} setMenuItems={setMenuItems}></Home>,
     ECP: (
-      <GetDataProvider>
-        <ECP
-          user={props.user}
-          setMenuItems={setMenuItems}
-          subordinates={subordinates}
-        />
-      </GetDataProvider>
+      <ECP
+        user={props.user}
+        setMenuItems={setMenuItems}
+        subordinates={subordinates}
+      />
     ),
     Pracownicy: <Employees user={props.user} setMenuItems={setMenuItems} />,
     Wnioski: <Conclusions user={props.user} setMenuItems={setMenuItems} />,
