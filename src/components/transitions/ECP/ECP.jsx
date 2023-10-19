@@ -7,6 +7,7 @@ import { reasonsApi } from "../../../api/reasonsApi";
 import ECPList from "./ECPList";
 import "./../../../styles/ECP.css";
 import { updateOrCreateECP } from "../../../api/ecpApi";
+import { GetDataProvider, useGetData } from "./ECPDataContext";
 
 const MenuItems = ({ date, setDate, dzial, dzialy, setDzial }) => {
   return (
@@ -39,8 +40,20 @@ const ECP = (props) => {
     setDate(event.target.value);
   };
 
-  const save = () => {
-    console.log(employeesECP);
+  const { collectors, collectAll } = useGetData();
+
+  const gatherDataAndSave = async () => {
+    const allData = collectAll();
+    setEmployeesECP(allData);
+    console.log(allData);
+    try {
+      const response = await updateOrCreateECP(allData);
+      console.log("Data saved successfully!");
+      return response; // return the response
+    } catch (error) {
+      console.error("Error saving data:", error);
+      throw error; // throw the error so it can be caught by the catch block in LoadingButton
+    }
   };
 
   const getReasons = async () => {
@@ -73,24 +86,18 @@ const ECP = (props) => {
     getReasons();
   }, []);
 
-  useEffect(() => {
-    setEmployeesECP([]);
-  }, [dzial]);
-
   return (
     <>
       <div className='controls'>
         <h4>Lista ECP</h4>
         <LoadingButton
-          action={updateOrCreateECP}
-          data={employeesECP}
+          action={gatherDataAndSave}
           buttonText='Zapisz'></LoadingButton>
       </div>
       <ECPList
         subordinates={props.subordinates}
         dzial={dzial}
         setEmployeesECP={setEmployeesECP}
-        employeesECP={employeesECP}
         reasons={reasons}
         date={date}
       />

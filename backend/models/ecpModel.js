@@ -40,12 +40,12 @@ exports.updateOrCreate = async (records) => {
           await queryDatabaseAsync(
             "UPDATE ECP SET Od_godz = ?, Do_godz = ?, IloscGodzin = ?, Powod_ID = ? WHERE Data = ? AND Pracownik_ID = ?",
             [
-              record.odGodz,
-              record.doGodz,
-              record.iloscGodzin,
-              record.powod,
-              record.data,
-              record.employee,
+              record.Od_Godz,
+              record.Do_Godz,
+              record.hours,
+              record.reason,
+              record.date,
+              record.employeeID,
             ]
           );
         })
@@ -54,12 +54,12 @@ exports.updateOrCreate = async (records) => {
 
     if (toInsert.length > 0) {
       const insertData = toInsert.map((record) => [
-        record.data,
-        record.odGodz,
-        record.doGodz,
-        record.employee,
-        record.powod,
-        record.iloscGodzin,
+        record.date,
+        record.Od_Godz,
+        record.Do_Godz,
+        record.employeeID,
+        record.reason,
+        record.hours,
       ]);
       await queryDatabaseAsync(
         "INSERT INTO ECP (Data, Od_godz, Do_godz, Pracownik_ID, Powod_ID, IloscGodzin) VALUES ?",

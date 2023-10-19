@@ -4,8 +4,10 @@ import Form from "react-bootstrap/Form";
 import calculateHoursWorked from "./scripts";
 import Badge from "react-bootstrap/Badge";
 import { checkECPForEmployeeOnDate } from "../../../api/ecpApi";
+import { useGetData } from "./ECPDataContext";
 
 const ECPInput = (props) => {
+  const { addCollector, removeCollector } = useGetData();
   const properHours = calculateHoursWorked(
     props.employee.Od,
     props.employee.Do
@@ -57,17 +59,23 @@ const ECPInput = (props) => {
   }, [Od, Do]);
 
   useEffect(() => {
-    const ecp = {
-      employee: props.employee.ID,
-      odGodz: Od,
-      doGodz: Do,
-      iloscGodzin: calculateHoursWorked(Od, Do),
-      powod: reason,
-      data: props.date,
-    };
+    const collector = () => ({
+      employeeID: props.employee.ID,
+      Od_Godz: Od,
+      Do_Godz: Do,
+      hours: hours,
+      reason: reason,
+      date: props.date,
+    });
 
-    props.addToECP(ecp);
-  }, [hours, reason, props.date]);
+    // Register the collector
+    addCollector(collector);
+
+    // Unregister on cleanup
+    return () => {
+      removeCollector(collector);
+    };
+  }, [hours, reason]);
 
   useEffect(() => {
     if (hours < properHours) {
