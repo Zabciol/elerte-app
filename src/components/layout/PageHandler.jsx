@@ -28,7 +28,13 @@ const PageHandler = (props) => {
         subordinates={subordinates}
       />
     ),
-    Pracownicy: <Employees user={props.user} setMenuItems={setMenuItems} />,
+    Pracownicy: (
+      <Employees
+        user={props.user}
+        setMenuItems={setMenuItems}
+        subordinates={subordinates}
+      />
+    ),
     Wnioski: <Conclusions user={props.user} setMenuItems={setMenuItems} />,
     Kalendarz: <Calender user={props.user} setMenuItems={setMenuItems} />,
   };
