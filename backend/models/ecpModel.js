@@ -61,8 +61,6 @@ const insertRecordsInDB = async (toInsert, date, editDate, editUser) => {
 
 exports.SentECPToDatabase = async (records) => {
   const { ecpList, date, editDate, editUser } = records;
-  console.log("Model:");
-  console.log(records);
   try {
     const existingRecords = await findExistingRecords(ecpList, date);
     const toUpdate = [];

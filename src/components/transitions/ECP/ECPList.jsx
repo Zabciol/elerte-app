@@ -6,6 +6,8 @@ import LoadingButton from "../../common/LoadingBtn";
 import { SentECPToDatabase } from "../../../api/ecpApi";
 import { useGetData } from "./ECPDataContext";
 import { getCurrentDateTime } from "../../common/CommonFunctions";
+import Employees from "../Employees";
+
 const ECPList = ({ user, subordinates, dzial, date }) => {
   const [reasons, setReasons] = useState([]);
   const { collectAll } = useGetData();
@@ -46,7 +48,6 @@ const ECPList = ({ user, subordinates, dzial, date }) => {
       throw error;
     }
   };
-
   return (
     <>
       <div className='controls'>
@@ -56,14 +57,12 @@ const ECPList = ({ user, subordinates, dzial, date }) => {
           buttonText='Zapisz'></LoadingButton>
       </div>
       <Accordion className='ECP'>
-        {filteredSubordinates.map((employee) => (
+        {filteredSubordinates.map((employee) => {
           <ECPListItem
-            key={employee.ID}
             employee={employee}
             reasons={reasons}
-            date={date}
-          />
-        ))}
+            date={date}></ECPListItem>;
+        })}
       </Accordion>
     </>
   );

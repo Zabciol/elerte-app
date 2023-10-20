@@ -3,10 +3,8 @@ const router = express.Router();
 const ecpModel = require("../models/ecpModel");
 
 router.post("/SentECPToDatabase", async (req, res) => {
-  console.log("Api ecp");
   try {
     const data = req.body;
-    console.log(data);
     const result = await ecpModel.SentECPToDatabase(data);
     res.send(result);
   } catch (err) {
