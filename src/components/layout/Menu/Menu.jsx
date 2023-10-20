@@ -41,7 +41,8 @@ const Menu = (props) => {
             logout={props.logout}
             user={props.user}
             darkMode={darkMode}
-            handleSwitchTheme={handleSwitchTheme}></MenuHeader>
+            handleSwitchTheme={handleSwitchTheme}
+          />
           <MenuItems
             logout={props.logout}
             setPage={props.setPage}

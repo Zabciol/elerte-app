@@ -26,6 +26,7 @@ const ECPListItem = ({ employee, reasons, date }) => {
           setHours={setHours}
           reasons={reasons}
           date={date}
+          properHours={properHours}
         />
       </Accordion.Body>
     </Accordion.Item>

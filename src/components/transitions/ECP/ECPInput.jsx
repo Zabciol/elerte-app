@@ -7,14 +7,10 @@ import { checkECPForEmployeeOnDate } from "../../../api/ecpApi";
 import { useGetData } from "./ECPDataContext";
 
 const ECPInput = (props) => {
+  const { employee, hours, setHours, reasons, date, properHours } = props;
   const { addCollector, removeCollector } = useGetData();
-  const properHours = calculateHoursWorked(
-    props.employee.Od,
-    props.employee.Do
-  );
-  const [Od, setOd] = useState(props.employee.Od);
-  const [Do, setDo] = useState(props.employee.Do);
-  const [hours, setHours] = useState(properHours);
+  const [Od, setOd] = useState(employee.Od);
+  const [Do, setDo] = useState(employee.Do);
   const [reason, setReason] = useState(null);
 
   const setAllStates = (Od, Do, hours, reason) => {
@@ -28,10 +24,7 @@ const ECPInput = (props) => {
 
   const checkECP = async () => {
     try {
-      const data = await checkECPForEmployeeOnDate(
-        props.employee.ID,
-        props.date
-      );
+      const data = await checkECPForEmployeeOnDate(employee.ID, date);
       if (data) {
         setAllStates(
           data.Od_godz,
@@ -40,7 +33,7 @@ const ECPInput = (props) => {
           data.Powod_ID
         );
       } else {
-        setAllStates(props.employee.Od, props.employee.Do, properHours, null);
+        setAllStates(employee.Od, employee.Do, properHours, null);
       }
     } catch (error) {
       console.error("Błąd podczas sprawdzania ECP:", error.message);
@@ -50,17 +43,16 @@ const ECPInput = (props) => {
   useEffect(() => {
     const newHours = calculateHoursWorked(Od, Do);
     setHours(newHours);
-    props.setHours(newHours);
   }, [Od, Do]);
 
   useEffect(() => {
     const collector = () => ({
-      employeeID: props.employee.ID,
+      employeeID: employee.ID,
       Od_Godz: Od,
       Do_Godz: Do,
       hours: hours,
       reason: reason,
-      date: props.date,
+      date: date,
     });
 
     // Register the collector
@@ -82,7 +74,7 @@ const ECPInput = (props) => {
 
   useEffect(() => {
     checkECP();
-  }, [props.date]);
+  }, [date]);
 
   return (
     <div className='ECP-input'>
@@ -97,10 +89,10 @@ const ECPInput = (props) => {
           <Form.Control type='time' value={Do} onChange={changeValue(setDo)} />
         </FloatingLabel>
       </div>
-      {hours < properHours && props.reasons ? (
+      {hours < properHours && reasons ? (
         <div className='ECP-input__reason'>
           <Form.Select onChange={changeValue(setReason)}>
-            {props.reasons.map((reason) => (
+            {reasons.map((reason) => (
               <option key={reason.ID} value={reason.ID}>
                 {reason.Nazwa}
               </option>

@@ -2,10 +2,10 @@ import React, { useState, useEffect } from "react";
 import NavDropdown from "react-bootstrap/NavDropdown";
 import Dropdown from "react-bootstrap/NavDropdown";
 import Form from "react-bootstrap/Form";
-import { getDateYearMonthDay } from "../../common/CommonFunctions";
+import { getCurrentDateYearMonthDay } from "../../common/CommonFunctions";
 import ECPList from "./ECPList";
 import "./../../../styles/ECP.css";
-import { GetDataProvider, useGetData } from "./ECPDataContext";
+import { GetDataProvider } from "./ECPDataContext";
 
 const MenuItems = ({ date, setDate, dzial, dzialy, setDzial }) => {
   return (
@@ -32,17 +32,16 @@ const MenuItems = ({ date, setDate, dzial, dzialy, setDzial }) => {
   );
 };
 
-const ECP = (props) => {
-  const [reasons, setReasons] = useState([]);
-  const [dzialy, setDzialy] = useState([]);
-  const [dzial, setDzial] = useState("");
-  const [date, setDate] = useState(getDateYearMonthDay());
+const ECP = ({ user, setMenuItems, subordinates }) => {
+  const dzialy = Array.from(new Set(subordinates.map((item) => item.Dzial)));
+  const [dzial, setDzial] = useState(dzialy[0]);
+  const [date, setDate] = useState(getCurrentDateYearMonthDay());
   const changeDate = (event) => {
     setDate(event.target.value);
   };
 
   useEffect(() => {
-    props.setMenuItems(
+    setMenuItems(
       <MenuItems
         dzial={dzial}
         dzialy={dzialy}
@@ -53,19 +52,12 @@ const ECP = (props) => {
     );
   }, [dzial, date]);
 
-  useEffect(() => {
-    var dzialy = props.subordinates.map((item) => item.Dzial);
-    dzialy = Array.from(new Set(dzialy));
-    setDzialy(dzialy);
-    setDzial(dzialy[0]);
-  }, []);
-
   return (
     <GetDataProvider>
       <ECPList
-        subordinates={props.subordinates}
+        user={user}
+        subordinates={subordinates}
         dzial={dzial}
-        reasons={reasons}
         date={date}
       />
     </GetDataProvider>
