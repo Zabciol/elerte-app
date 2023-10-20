@@ -1,6 +1,4 @@
 import React, { useEffect, useState } from "react";
-import Accordion from "react-bootstrap/Accordion";
-import Badge from "react-bootstrap/Badge";
 import calculateHoursWorked from "./scripts";
 import ECPInput from "./ECPInput";
 import UserCard from "../../common/UserCard";
@@ -10,7 +8,7 @@ const ECPListItem = ({ employee, reasons, date }) => {
   const properHours = calculateHoursWorked(Od, Do);
   const [hours, setHours] = useState(properHours);
   return (
-    <UserCard key={employee.ID} employee={employee} hours={hours}>
+    <UserCard key={employee.ID} employee={employee} inf={hours}>
       <ECPInput
         employee={employee}
         hours={hours}

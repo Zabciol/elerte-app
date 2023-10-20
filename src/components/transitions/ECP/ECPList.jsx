@@ -57,12 +57,12 @@ const ECPList = ({ user, subordinates, dzial, date }) => {
           buttonText='Zapisz'></LoadingButton>
       </div>
       <Accordion className='ECP'>
-        {filteredSubordinates.map((employee) => {
+        {filteredSubordinates.map((employee) => (
           <ECPListItem
             employee={employee}
             reasons={reasons}
-            date={date}></ECPListItem>;
-        })}
+            date={date}></ECPListItem>
+        ))}
       </Accordion>
     </>
   );

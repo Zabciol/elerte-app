@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Accordion from "react-bootstrap/Accordion";
 import Badge from "react-bootstrap/Badge";
 
-const UserCard = ({ employee, reasons, date, children, hours }) => {
+const UserCard = ({ employee, reasons, date, children, inf }) => {
   const { ID, Imie, Nazwisko, Stanowisko, Od, Do } = employee;
   return (
     <Accordion.Item eventKey={ID}>
@@ -12,7 +12,7 @@ const UserCard = ({ employee, reasons, date, children, hours }) => {
             <div className='fw-bold'>{`${Imie} ${Nazwisko}`}</div>
             {Stanowisko}
           </div>
-          <Badge>{hours}</Badge>
+          <Badge>{inf}</Badge>
         </div>
       </Accordion.Header>
       <Accordion.Body className='ecp-accordion'>{children}</Accordion.Body>
