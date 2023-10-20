@@ -3,6 +3,7 @@ import Accordion from "react-bootstrap/Accordion";
 import Badge from "react-bootstrap/Badge";
 
 const UserCard = ({ employee, reasons, date, children, inf }) => {
+  console.log("Render UserCard");
   const { ID, Imie, Nazwisko, Stanowisko, Od, Do } = employee;
   return (
     <Accordion.Item eventKey={ID}>

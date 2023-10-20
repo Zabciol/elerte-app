@@ -12,3 +12,18 @@ export const subordinatesApi = async (id) => {
     throw error.response ? error.response.data : new Error("API not available");
   }
 };
+export const getHoursWorked = async (employeeId, month) => {
+  try {
+    const response = await axios.get(`${API_URL}/worked-hours-by-employee`, {
+      params: {
+        employeeId: employeeId,
+        month: month,
+      },
+    });
+
+    return response.data;
+  } catch (error) {
+    console.error("Błąd podczas pobierania danych z serwera:", error);
+    throw error;
+  }
+};

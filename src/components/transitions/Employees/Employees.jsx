@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
-import NavDropdown from "react-bootstrap/NavDropdown";
-import Dropdown from "react-bootstrap/NavDropdown";
 import { SelectDzial } from "../../layout/Menu/MenuForms";
+import Tab from "react-bootstrap/Tab";
+import Tabs from "react-bootstrap/Tabs";
+import EmployeesList from "./EmployeesList";
 
 const MenuItems = ({ dzial, dzialy, setDzial }) => {
   return (
@@ -19,7 +20,26 @@ const Employees = ({ user, setMenuItems, subordinates }) => {
       <MenuItems dzial={dzial} dzialy={dzialy} setDzial={setDzial} />
     );
   }, []);
-  return <div>Employees</div>;
+
+  const [key, setKey] = useState("Lista");
+
+  return (
+    <Tabs
+      id='controlled-tab-example'
+      activeKey={key}
+      onSelect={(k) => setKey(k)}
+      className='mb-3'>
+      <Tab eventKey='Lista' title='Lista'>
+        <EmployeesList subordinates={subordinates} dzial={dzial} user={user} />
+      </Tab>
+      <Tab eventKey='Nowy' title='Nowy'>
+        Tab content for Profile
+      </Tab>
+      <Tab eventKey='contact' title='Contact' disabled>
+        Tab content for Contact
+      </Tab>
+    </Tabs>
+  );
 };
 
 export default Employees;

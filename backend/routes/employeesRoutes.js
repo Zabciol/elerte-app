@@ -32,4 +32,28 @@ async function getSubordinatesRecursively(id) {
   return subordinates;
 }
 
+router.get("/worked-hours-by-employee", async (req, res) => {
+  try {
+    const employeeId = req.query.employeeId;
+    const month = req.query.month;
+
+    if (!employeeId || !month) {
+      return res
+        .status(400)
+        .send("Brak wymaganych parametrów: employeeId lub month.");
+    }
+
+    const result = await employeesModel.getWorkedHoursByEmployee(
+      employeeId,
+      month
+    );
+    res.json(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Wystąpił błąd podczas pobierania danych.");
+  }
+});
+
+module.exports = router;
+
 module.exports = router;
