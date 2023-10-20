@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import "../../styles/Home/home.css";
 import Home from "../transitions/Home.jsx";
 import ECP from "../transitions/ECP/ECP.jsx";
-import Employees from "../transitions/Employees";
+import Employees from "../transitions/Employees/Employees";
 import Calender from "../transitions/Calender";
 import Conclusions from "../transitions/Conclusions";
 import Container from "react-bootstrap/Container";
@@ -42,9 +42,10 @@ const PageHandler = (props) => {
       <Menu
         setPage={setPage}
         page={page}
-        menuItems={menuItems}
         user={props.user}
-        logout={props.logout}></Menu>
+        logout={props.logout}>
+        {menuItems}
+      </Menu>
       <div className='interface'>{componentMap[page] || null}</div>
     </Container>
   );

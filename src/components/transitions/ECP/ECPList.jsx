@@ -6,7 +6,6 @@ import LoadingButton from "../../common/LoadingBtn";
 import { SentECPToDatabase } from "../../../api/ecpApi";
 import { useGetData } from "./ECPDataContext";
 import { getCurrentDateTime } from "../../common/CommonFunctions";
-import Employees from "../Employees";
 
 const ECPList = ({ user, subordinates, dzial, date }) => {
   const [reasons, setReasons] = useState([]);
@@ -58,10 +57,7 @@ const ECPList = ({ user, subordinates, dzial, date }) => {
       </div>
       <Accordion className='ECP'>
         {filteredSubordinates.map((employee) => (
-          <ECPListItem
-            employee={employee}
-            reasons={reasons}
-            date={date}></ECPListItem>
+          <ECPListItem employee={employee} reasons={reasons} date={date} />
         ))}
       </Accordion>
     </>

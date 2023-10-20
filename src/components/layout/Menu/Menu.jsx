@@ -7,7 +7,7 @@ import MenuHeader from "./MenuHeader";
 import { setDarkThemeForApp } from "../../common/CommonFunctions";
 import "../../../styles/Home/menu.css";
 
-const Menu = (props) => {
+const Menu = ({ logout, user, setPage, children }) => {
   const [darkMode, setDarkMode] = useState(
     JSON.parse(localStorage.getItem("DarkTheme"))
   );
@@ -38,20 +38,20 @@ const Menu = (props) => {
           placement='end'
           className='background text-white'>
           <MenuHeader
-            logout={props.logout}
-            user={props.user}
+            logout={logout}
+            user={user}
             darkMode={darkMode}
             handleSwitchTheme={handleSwitchTheme}
           />
           <MenuItems
-            logout={props.logout}
-            setPage={props.setPage}
+            logout={logout}
+            setPage={setPage}
             show={show}
-            user={props.user}
-            menuItems={props.menuItems}
+            user={user}
             darkMode={darkMode}
-            handleSwitchTheme={handleSwitchTheme}
-          />
+            handleSwitchTheme={handleSwitchTheme}>
+            {children}
+          </MenuItems>
         </Navbar.Offcanvas>
       </Container>
     </Navbar>
