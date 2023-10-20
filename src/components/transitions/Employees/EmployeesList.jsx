@@ -1,7 +1,7 @@
 import React from "react";
 import Accordion from "react-bootstrap/Accordion";
 import EmployeeListItem from "./EmployeeListItem";
-const EmployeesList = ({ subordinates, dzial, user }) => {
+const EmployeesList = ({ subordinates, dzial, user, date }) => {
   const filteredSubordinates =
     dzial === "Każdy"
       ? subordinates
@@ -11,7 +11,7 @@ const EmployeesList = ({ subordinates, dzial, user }) => {
     <>
       <Accordion className='ECP'>
         {filteredSubordinates.map((employee) => (
-          <EmployeeListItem employee={employee} />
+          <EmployeeListItem employee={employee} date={date} />
         ))}
       </Accordion>
     </>

@@ -2,12 +2,20 @@ import React, { useState, useEffect } from "react";
 import { SelectDzial } from "../../layout/Menu/MenuForms";
 import Tab from "react-bootstrap/Tab";
 import Tabs from "react-bootstrap/Tabs";
+import Form from "react-bootstrap/Form";
 import EmployeesList from "./EmployeesList";
+import { getCurrentDateYearMonth } from "../../common/CommonFunctions";
 
-const MenuItems = ({ dzial, dzialy, setDzial }) => {
+const MenuItems = ({ dzial, dzialy, setDzial, date, setDate }) => {
   return (
     <>
       <SelectDzial dzial={dzial} dzialy={dzialy} setDzial={setDzial} />
+      <Form.Control
+        type='month'
+        value={date}
+        onChange={setDate}
+        className='menu-select'
+      />
     </>
   );
 };
@@ -15,11 +23,22 @@ const MenuItems = ({ dzial, dzialy, setDzial }) => {
 const Employees = ({ user, setMenuItems, subordinates }) => {
   const dzialy = Array.from(new Set(subordinates.map((item) => item.Dzial)));
   const [dzial, setDzial] = useState(dzialy[0]);
+  const [date, setDate] = useState(getCurrentDateYearMonth());
+
+  const changeDate = (event) => {
+    setDate(event.target.value);
+  };
   useEffect(() => {
     setMenuItems(
-      <MenuItems dzial={dzial} dzialy={dzialy} setDzial={setDzial} />
+      <MenuItems
+        dzial={dzial}
+        dzialy={dzialy}
+        setDzial={setDzial}
+        date={date}
+        setDate={changeDate}
+      />
     );
-  }, []);
+  }, [dzial, date]);
 
   const [key, setKey] = useState("Lista");
 
@@ -30,7 +49,12 @@ const Employees = ({ user, setMenuItems, subordinates }) => {
       onSelect={(k) => setKey(k)}
       className='mb-3'>
       <Tab eventKey='Lista' title='Lista'>
-        <EmployeesList subordinates={subordinates} dzial={dzial} user={user} />
+        <EmployeesList
+          subordinates={subordinates}
+          dzial={dzial}
+          user={user}
+          date={date}
+        />
       </Tab>
       <Tab eventKey='Nowy' title='Nowy'>
         Tab content for Profile

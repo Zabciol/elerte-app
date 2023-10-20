@@ -1,24 +1,22 @@
 import React, { useState } from "react";
 import UserCard from "../../common/UserCard";
 import { useEffect } from "react";
-import { getCurrentDateYearMonth } from "../../common/CommonFunctions";
 import { getHoursWorked } from "../../../api/employeesApi";
 
-const EmployeeListItem = ({ employee }) => {
+const EmployeeListItem = ({ employee, date }) => {
   const [workedHours, setWorkedHours] = useState("");
 
   const getWorkedHours = async () => {
-    const response = await getHoursWorked(
-      employee.ID,
-      getCurrentDateYearMonth()
-    );
+    const response = await getHoursWorked(employee.ID, date);
     console.log(response);
-    setWorkedHours(response[0].SumaGodzin);
+    if (response.length) {
+      setWorkedHours(response[0].SumaGodzin);
+    } else setWorkedHours(0);
   };
 
   useEffect(() => {
     getWorkedHours();
-  }, []);
+  }, [date]);
   return (
     <UserCard
       key={employee.ID}
