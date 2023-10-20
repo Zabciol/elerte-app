@@ -4,6 +4,8 @@ import Variables from "../components/common/CommonFunctions";
 const API_URL = `http://localhost:${Variables.port}/ecp`;
 
 export const SentECPToDatabase = async (data) => {
+  console.log("W api:");
+  console.log(data);
   try {
     const response = await axios.post(`${API_URL}/SentECPToDatabase`, data);
     return response.data;

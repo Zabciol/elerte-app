@@ -6,6 +6,7 @@ router.post("/SentECPToDatabase", async (req, res) => {
   console.log("Api ecp");
   try {
     const data = req.body;
+    console.log(data);
     const result = await ecpModel.SentECPToDatabase(data);
     res.send(result);
   } catch (err) {

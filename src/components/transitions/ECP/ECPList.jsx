@@ -33,13 +33,14 @@ const ECPList = ({ user, subordinates, dzial, date }) => {
     const allData = collectAll();
     console.log(allData);
     const newAllData = {
-      ecp: allData,
+      ecpList: allData,
+      date: date,
       editDate: getCurrentDateTime(),
       editUser: user.ID,
     };
     console.log(newAllData);
     try {
-      const response = await SentECPToDatabase(allData);
+      const response = await SentECPToDatabase(newAllData);
       return response;
     } catch (error) {
       throw error;

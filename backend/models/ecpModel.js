@@ -20,50 +20,57 @@ const getRecordsByDateAndEmployeeId = async (date, employeeIds) => {
   );
 };
 
-const findExistingRecords = async (records) => {
-  const date = records[0].date;
+const findExistingRecords = async (records, date) => {
+  //const date = records[0].date;
   const employeeIds = records.map((r) => r.employeeID);
   return await getRecordsByDateAndEmployeeId(date, employeeIds);
 };
 
-const updateRecordInDB = async (record) => {
+const updateRecordInDB = async (record, date, editDate, editUser) => {
   return await queryDatabaseAsync(
-    "UPDATE ECP SET Od_godz = ?, Do_godz = ?, IloscGodzin = ?, Powod_ID = ? WHERE Data = ? AND Pracownik_ID = ?",
+    "UPDATE ECP SET Od_godz = ?, Do_godz = ?, IloscGodzin = ?, Powod_ID = ?, DataZapisu = ?, ID_Edytora = ? WHERE Data = ? AND Pracownik_ID = ?",
     [
       record.Od_Godz,
       record.Do_Godz,
       record.hours,
       record.reason,
-      record.date,
+      editDate,
+      editUser,
+      date,
       record.employeeID,
     ]
   );
 };
 
-const insertRecordsInDB = async (toInsert) => {
+const insertRecordsInDB = async (toInsert, date, editDate, editUser) => {
   const insertData = toInsert.map((record) => [
-    record.date,
+    date,
     record.Od_Godz,
     record.Do_Godz,
     record.employeeID,
     record.reason,
     record.hours,
+    editDate,
+    editUser,
   ]);
   return await queryDatabaseAsync(
-    "INSERT INTO ECP (Data, Od_godz, Do_godz, Pracownik_ID, Powod_ID, IloscGodzin) VALUES ?",
+    "INSERT INTO ECP (Data, Od_godz, Do_godz, Pracownik_ID, Powod_ID, IloscGodzin, DataZapisu, ID_Edytora) VALUES ?",
     [insertData]
   );
 };
 
 exports.SentECPToDatabase = async (records) => {
+  const { ecpList, date, editDate, editUser } = records;
+  console.log("Model:");
+  console.log(records);
   try {
-    const existingRecords = await findExistingRecords(records);
+    const existingRecords = await findExistingRecords(ecpList, date);
     const toUpdate = [];
     const toInsert = [];
 
-    for (const record of records) {
+    for (const record of ecpList) {
       const found = existingRecords.some(
-        (er) => er.Data === record.date && er.Pracownik_ID === record.employeeID
+        (er) => er.Data === date && er.Pracownik_ID === record.employeeID
       );
       if (found) {
         toUpdate.push(record);
@@ -73,11 +80,15 @@ exports.SentECPToDatabase = async (records) => {
     }
 
     if (toUpdate.length > 0) {
-      await Promise.all(toUpdate.map(updateRecordInDB));
+      await Promise.all(
+        toUpdate.map((record) =>
+          updateRecordInDB(record, date, editDate, editUser)
+        )
+      );
     }
 
     if (toInsert.length > 0) {
-      await insertRecordsInDB(toInsert);
+      await insertRecordsInDB(toInsert, date, editDate, editUser);
     }
 
     console.log("Zaktualizowane pola: " + toUpdate.length);
