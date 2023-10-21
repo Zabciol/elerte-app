@@ -5,6 +5,7 @@ import Tabs from "react-bootstrap/Tabs";
 import Form from "react-bootstrap/Form";
 import EmployeesList from "./EmployeesList";
 import EmployeeInf from "./EmployeeInf";
+import NewEmployee from "./NewEmployee/NewEmployee";
 import { getCurrentDateYearMonth } from "../../common/CommonFunctions";
 
 const MenuItems = ({ dzial, dzialy, setDzial, date, setDate }) => {
@@ -58,11 +59,11 @@ const Employees = ({ user, setMenuItems, subordinates }) => {
           <EmployeeInf />
         </EmployeesList>
       </Tab>
-      <Tab eventKey='Nowy' title='Nowy'>
-        Tab content for Profile
-      </Tab>
-      <Tab eventKey='contact' title='Contact' disabled>
+      <Tab eventKey='Urlopy' title='Urlopy'>
         Tab content for Contact
+      </Tab>
+      <Tab eventKey='Nowy' title='Nowy'>
+        <NewEmployee />
       </Tab>
     </Tabs>
   );

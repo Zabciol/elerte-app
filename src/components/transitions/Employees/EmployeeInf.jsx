@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { getInf } from "../../../api/employeesApi";
+import "../../../styles/Employee.css";
 
 const EmployeeInf = (props) => {
   const [inf, setInf] = useState();
@@ -13,7 +14,30 @@ const EmployeeInf = (props) => {
     getInformation();
   }, []);
   console.log(inf);
-  return <div>{inf ? <>{inf.Imie}</> : <>Brak danych</>}</div>;
+  return (
+    <>
+      {inf ? (
+        <div className='employee-inf'>
+          <p>
+            Mail: <i>{inf.Mail}</i>
+          </p>
+          <p>
+            Nr telefonu: <i>{inf.NrTelefonu}</i>
+          </p>
+          <p>
+            Przełożony:{" "}
+            <i>
+              {inf.PrzelozonyImie} {inf.PrzelozonyNazwisko}
+            </i>
+          </p>
+          <p></p>
+          <p></p>
+        </div>
+      ) : (
+        <>Brak danych</>
+      )}
+    </>
+  );
 };
 
 export default EmployeeInf;
