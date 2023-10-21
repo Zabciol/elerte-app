@@ -55,8 +55,7 @@ const Employees = ({ user, setMenuItems, subordinates }) => {
           dzial={dzial}
           user={user}
           date={date}>
-          {" "}
-          <EmployeeInf someProp='value' />
+          <EmployeeInf />
         </EmployeesList>
       </Tab>
       <Tab eventKey='Nowy' title='Nowy'>

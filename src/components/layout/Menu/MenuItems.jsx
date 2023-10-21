@@ -45,7 +45,9 @@ const MenuItems = (props) => {
           </NavDropdown>
         ) : null}
         {nav_items.map((item) => (
-          <Nav.Link onClick={() => onClickMenuItem(item)}>{item}</Nav.Link>
+          <Nav.Link key={item} onClick={() => onClickMenuItem(item)}>
+            {item}
+          </Nav.Link>
         ))}
       </Nav>
       <hr className='solid' />

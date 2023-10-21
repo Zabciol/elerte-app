@@ -57,7 +57,12 @@ const ECPList = ({ user, subordinates, dzial, date }) => {
       </div>
       <Accordion className='ECP'>
         {filteredSubordinates.map((employee) => (
-          <ECPListItem employee={employee} reasons={reasons} date={date} />
+          <ECPListItem
+            employee={employee}
+            reasons={reasons}
+            date={date}
+            key={employee.ID}
+          />
         ))}
       </Accordion>
     </>

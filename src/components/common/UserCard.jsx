@@ -16,7 +16,7 @@ const UserCard = (props) => {
           <Badge>{inf}</Badge>
         </div>
       </Accordion.Header>
-      <Accordion.Body className='ecp-accordion'>{children}</Accordion.Body>
+      <Accordion.Body>{children}</Accordion.Body>
     </Accordion.Item>
   );
 };

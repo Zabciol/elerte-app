@@ -12,7 +12,7 @@ const EmployeesList = (props) => {
   return (
     <Accordion className='ECP'>
       {filteredSubordinates.map((employee) => (
-        <EmployeeListItem employee={employee} date={date}>
+        <EmployeeListItem employee={employee} date={date} key={employee.ID}>
           {React.Children.map(children, (child) => {
             if (React.isValidElement(child)) {
               return React.cloneElement(child, {

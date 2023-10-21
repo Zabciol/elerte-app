@@ -13,10 +13,10 @@ const ECPInput = (props) => {
   const [reason, setReason] = useState(null);
 
   const setAllStates = (Od, Do, hours, reason) => {
+    setReason(reason);
     setOd(Od);
     setDo(Do);
     setHours(hours);
-    setReason(reason);
   };
 
   const changeValue = (setter) => (event) => setter(event.target.value);
@@ -41,6 +41,11 @@ const ECPInput = (props) => {
 
   useEffect(() => {
     const newHours = calculateHoursWorked(Od, Do);
+    if (newHours < properHours && reason === null) {
+      setReason(1);
+    } else {
+      setReason(null);
+    }
     setHours(newHours);
   }, [Od, Do]);
 
@@ -52,23 +57,11 @@ const ECPInput = (props) => {
       hours: hours,
       reason: reason,
     });
-
-    // Register the collector
     addCollector(collector);
-
-    // Unregister on cleanup
     return () => {
       removeCollector(collector);
     };
   }, [hours, reason]);
-
-  useEffect(() => {
-    if (hours < properHours) {
-      setReason("1");
-    } else {
-      setReason(null);
-    }
-  }, [hours]);
 
   useEffect(() => {
     checkECP();
@@ -87,9 +80,9 @@ const ECPInput = (props) => {
           <Form.Control type='time' value={Do} onChange={changeValue(setDo)} />
         </FloatingLabel>
       </div>
-      {hours < properHours && reasons ? (
+      {reason && reasons ? (
         <div className='ECP-input__reason'>
-          <Form.Select onChange={changeValue(setReason)}>
+          <Form.Select onChange={changeValue(setReason)} value={reason}>
             {reasons.map((reason) => (
               <option key={reason.ID} value={reason.ID}>
                 {reason.Nazwa}

@@ -5,18 +5,15 @@ const EmployeeInf = (props) => {
   const [inf, setInf] = useState();
   const getInformation = async () => {
     const response = await getInf(props.employee.ID);
-    console.log(response);
     if (response.length) {
-      console.log(response);
-      //setInf(response);
+      setInf(response[0]);
     } else setInf(null);
   };
   useEffect(() => {
-    console.log(props);
     getInformation();
   }, []);
   console.log(inf);
-  return <div>EmployeeInf</div>;
+  return <div>{inf ? <>{inf.Imie}</> : <>Brak danych</>}</div>;
 };
 
 export default EmployeeInf;
