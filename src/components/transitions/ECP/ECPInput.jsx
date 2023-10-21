@@ -51,7 +51,6 @@ const ECPInput = (props) => {
       Do_Godz: Do,
       hours: hours,
       reason: reason,
-      date: date,
     });
 
     // Register the collector

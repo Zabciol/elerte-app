@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import React, { Children, useState } from "react";
 import UserCard from "../../common/UserCard";
 import { useEffect } from "react";
 import { getHoursWorked } from "../../../api/employeesApi";
 
-const EmployeeListItem = ({ employee, date }) => {
+const EmployeeListItem = ({ employee, date, children }) => {
   const [workedHours, setWorkedHours] = useState("");
 
   const getWorkedHours = async () => {
@@ -18,10 +18,9 @@ const EmployeeListItem = ({ employee, date }) => {
     getWorkedHours();
   }, [date]);
   return (
-    <UserCard
-      key={employee.ID}
-      employee={employee}
-      inf={workedHours}></UserCard>
+    <UserCard key={employee.ID} employee={employee} inf={workedHours}>
+      {children}
+    </UserCard>
   );
 };
 

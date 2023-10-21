@@ -2,7 +2,8 @@ import React, { useEffect, useState } from "react";
 import Accordion from "react-bootstrap/Accordion";
 import Badge from "react-bootstrap/Badge";
 
-const UserCard = ({ employee, reasons, date, children, inf }) => {
+const UserCard = (props) => {
+  const { employee, reasons, date, children, inf } = props;
   const { ID, Imie, Nazwisko, Stanowisko, Od, Do } = employee;
   return (
     <Accordion.Item eventKey={ID}>
