@@ -27,3 +27,17 @@ export const getHoursWorked = async (employeeId, month) => {
     throw error;
   }
 };
+export const getInf = async (employeeId) => {
+  try {
+    const response = await axios.get(`${API_URL}/inf`, {
+      params: {
+        employeeId: employeeId,
+      },
+    });
+
+    return response.data;
+  } catch (error) {
+    console.error("Błąd podczas pobierania danych z serwera:", error);
+    throw error;
+  }
+};

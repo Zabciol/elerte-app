@@ -16,8 +16,7 @@ const EmployeesList = (props) => {
           {React.Children.map(children, (child) => {
             if (React.isValidElement(child)) {
               return React.cloneElement(child, {
-                additionalProp: "value",
-                anotherAdditionalProp: "anotherValue",
+                employee: employee,
               });
             }
             return child;

@@ -53,6 +53,23 @@ router.get("/worked-hours-by-employee", async (req, res) => {
     res.status(500).send("Wystąpił błąd podczas pobierania danych.");
   }
 });
+router.get("/inf", async (req, res) => {
+  try {
+    const employeeId = req.query.employeeId;
+
+    if (!employeeId) {
+      return res
+        .status(400)
+        .send("Brak wymaganych parametrów: employeeId lub month.");
+    }
+
+    const result = await employeesModel.getEmployeeInf(employeeId);
+    res.json(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Wystąpił błąd podczas pobierania danych.");
+  }
+});
 
 module.exports = router;
 
