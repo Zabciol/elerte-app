@@ -34,7 +34,6 @@ router.get("/", async (req, res) => {
 router.get("/supervisors", async (req, res) => {
   try {
     const result = await employeesModel.getSupervisors();
-    console.log(result);
     res.json(result);
   } catch (error) {
     console.error(error);

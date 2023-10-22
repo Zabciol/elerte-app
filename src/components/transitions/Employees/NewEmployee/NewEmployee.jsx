@@ -2,12 +2,14 @@ import React, { useEffect, useState } from "react";
 import FormInput from "./FormInput";
 import { supervisorsApi } from "../../../../api/employeesApi";
 import { departmentsApi } from "../../../../api/departmentsApi";
+import { positionApi } from "../../../../api/positionApi";
 
 const NewEmployee = () => {
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState({});
-  const [supervisors, setSupervisors] = useState([]);
-  const [departments, setDepartments] = useState([]);
+  const [supervisors, setSupervisors] = useState();
+  const [departments, setDepartments] = useState();
+  const [positions, setPositions] = useState();
 
   const stepsData = [
     {
@@ -41,7 +43,7 @@ const NewEmployee = () => {
           type: "select",
           label: "Stanowisko",
           name: "stanowisko",
-          options: ["Stanowisko1", "Stanowisko2"],
+          options: positions,
         },
       ],
       buttonLabel: "Zapisz",
@@ -64,15 +66,33 @@ const NewEmployee = () => {
     console.log(formData);
   };
 
-  const getData = async () => {
+  const getSupervisors = async () => {
     const supervisors = await supervisorsApi();
     console.log(supervisors);
     setSupervisors(supervisors);
+  };
 
+  const getDepartments = async () => {
     const departments = await departmentsApi();
     console.log(departments);
     setDepartments(departments);
   };
+
+  const getPositions = async (id) => {
+    const positions = await positionApi(id);
+    console.log(positions);
+    setPositions(positions);
+  };
+
+  const getData = () => {
+    getSupervisors();
+    getDepartments();
+    getPositions(1);
+  };
+
+  useEffect(() => {
+    if (formData.dzial) getPositions(formData.dzial);
+  }, [formData.dzial]);
 
   useEffect(() => {
     getData();
