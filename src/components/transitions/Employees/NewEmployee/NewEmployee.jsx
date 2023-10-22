@@ -6,7 +6,14 @@ import { positionApi } from "../../../../api/positionApi";
 
 const NewEmployee = () => {
   const [step, setStep] = useState(1);
-  const [formData, setFormData] = useState({});
+  const [formData, setFormData] = useState({
+    imie: "",
+    nazwisko: "",
+    email: "",
+    nrTelefonu: "",
+    dzial: "",
+    stanowisko: "",
+  });
   const [supervisors, setSupervisors] = useState();
   const [departments, setDepartments] = useState();
   const [positions, setPositions] = useState();
@@ -68,19 +75,16 @@ const NewEmployee = () => {
 
   const getSupervisors = async () => {
     const supervisors = await supervisorsApi();
-    console.log(supervisors);
     setSupervisors(supervisors);
   };
 
   const getDepartments = async () => {
     const departments = await departmentsApi();
-    console.log(departments);
     setDepartments(departments);
   };
 
   const getPositions = async (id) => {
     const positions = await positionApi(id);
-    console.log(positions);
     setPositions(positions);
   };
 

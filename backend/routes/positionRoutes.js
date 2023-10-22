@@ -5,7 +5,6 @@ const positionModel = require("./../models/positionModel");
 router.get("/", async (req, res) => {
   try {
     const Dzial_ID = req.query.Dzial_ID;
-    console.log("Odebrane id: " + Dzial_ID);
 
     if (!Dzial_ID) {
       return res.status(400).send("Brak wymaganych parametrów: Dzial_ID");

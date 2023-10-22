@@ -13,7 +13,6 @@ const EmployeeInf = (props) => {
   useEffect(() => {
     getInformation();
   }, []);
-  console.log(inf);
   return (
     <>
       {inf ? (
