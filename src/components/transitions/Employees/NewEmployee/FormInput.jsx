@@ -27,7 +27,7 @@ const FormInput = ({ stepData, handleChange, values, handleNext }) => {
             aria-label='Default select example'
             key={field.label}
             onChange={handleChange(field.name)}
-            value={field.options[0].ID}>
+            value={values[field.name]}>
             {field.options.map((option) => (
               <option key={option.ID} value={option.ID}>
                 {option.Nazwa}

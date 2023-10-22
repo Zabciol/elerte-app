@@ -8,6 +8,7 @@ const reasonsRouter = require("./reasonsRoutes");
 const ecpRouter = require("./ecpRoutes");
 const departmentsRouter = require("./departmentsRoutes");
 const positionRouter = require("./positionRoutes");
+const workingTimeRouter = require("./workingTimeRoutes");
 
 // Use additional routers
 router.use("/users", usersRouter);
@@ -16,5 +17,6 @@ router.use("/reasons", reasonsRouter);
 router.use("/ecp", ecpRouter);
 router.use("/departments", departmentsRouter);
 router.use("/position", positionRouter);
+router.use("/workingtime", workingTimeRouter);
 
 module.exports = router;
