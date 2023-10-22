@@ -12,7 +12,19 @@ export const subordinatesApi = async (id) => {
     throw error.response ? error.response.data : new Error("API not available");
   }
 };
-export const getHoursWorked = async (employeeId, month) => {
+
+export const supervisorsApi = async () => {
+  console.log("Uzyskuje przełozonych");
+  try {
+    const response = await axios.get(`${API_URL}/supervisors`, {});
+    return response.data;
+  } catch (error) {
+    console.error("Błąd podczas pobierania danych z serwera:", error);
+    throw error;
+  }
+};
+
+export const hoursWorkedApi = async (employeeId, month) => {
   try {
     const response = await axios.get(`${API_URL}/worked-hours-by-employee`, {
       params: {
@@ -27,7 +39,7 @@ export const getHoursWorked = async (employeeId, month) => {
     throw error;
   }
 };
-export const getInf = async (employeeId) => {
+export const infApi = async (employeeId) => {
   try {
     const response = await axios.get(`${API_URL}/inf`, {
       params: {

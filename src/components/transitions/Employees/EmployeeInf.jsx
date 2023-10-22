@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { getInf } from "../../../api/employeesApi";
+import { infApi } from "../../../api/employeesApi";
 import "../../../styles/Employee.css";
 
 const EmployeeInf = (props) => {
   const [inf, setInf] = useState();
   const getInformation = async () => {
-    const response = await getInf(props.employee.ID);
+    const response = await infApi(props.employee.ID);
     if (response.length) {
       setInf(response[0]);
     } else setInf(null);

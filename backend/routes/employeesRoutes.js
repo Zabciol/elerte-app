@@ -3,14 +3,6 @@ const bcrypt = require("bcrypt");
 const employeesModel = require("../models/employeesModel");
 const router = express.Router();
 
-router.get("/", async (req, res) => {
-  const { id } = req.query;
-  console.log(id);
-  console.log("Próba uzyskania danych podwładnych");
-  const subordinates = await getSubordinatesRecursively(id);
-  res.status(200).send({ message: "Subordinates found!", data: subordinates });
-});
-
 async function getSubordinatesRecursively(id) {
   const subordinates = [];
   const results = await new Promise((resolve, reject) => {
@@ -31,6 +23,24 @@ async function getSubordinatesRecursively(id) {
 
   return subordinates;
 }
+router.get("/", async (req, res) => {
+  const { id } = req.query;
+  console.log(id);
+  console.log("Próba uzyskania danych podwładnych");
+  const subordinates = await getSubordinatesRecursively(id);
+  res.status(200).send({ message: "Subordinates found!", data: subordinates });
+});
+
+router.get("/supervisors", async (req, res) => {
+  try {
+    const result = await employeesModel.getSupervisors();
+    console.log(result);
+    res.json(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Wystąpił błąd podczas pobierania danych.");
+  }
+});
 
 router.get("/worked-hours-by-employee", async (req, res) => {
   try {
@@ -70,7 +80,5 @@ router.get("/inf", async (req, res) => {
     res.status(500).send("Wystąpił błąd podczas pobierania danych.");
   }
 });
-
-module.exports = router;
 
 module.exports = router;

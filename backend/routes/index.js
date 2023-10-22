@@ -6,11 +6,13 @@ const usersRouter = require("./userRoutes");
 const employeesRouter = require("./employeesRoutes");
 const reasonsRouter = require("./reasonsRoutes");
 const ecpRouter = require("./ecpRoutes");
+const departmentsRouter = require("./departmentsRoutes");
 
 // Use additional routers
 router.use("/users", usersRouter);
 router.use("/employees", employeesRouter);
 router.use("/reasons", reasonsRouter);
 router.use("/ecp", ecpRouter);
+router.use("/departments", departmentsRouter);
 
 module.exports = router;

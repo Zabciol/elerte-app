@@ -9,7 +9,22 @@ const getSubordinates = (id, callback) => {
     [id],
     callback
   );
-  console.log("Wysłano zapytanie do bazy");
+};
+
+const getSupervisors = () => {
+  return new Promise((resolve, reject) => {
+    const query =
+      "SELECT Pracownicy.ID, Imie, Nazwisko, Dzialy.Nazwa FROM Pracownicy LEFT JOIN Hierarchia ON Pracownicy.ID = Hierarchia.Przelozony_ID " +
+      "LEFT JOIN Stanowisko ON Pracownicy.Stanowisko_ID = Stanowisko.ID LEFT JOIN Dzialy ON Stanowisko.Dzial_ID = Dzialy.ID " +
+      "GROUP BY Hierarchia.Przelozony_ID";
+    queryDatabase(query, [], (error, results) => {
+      if (error) {
+        reject(error);
+        return;
+      }
+      resolve(results);
+    });
+  });
 };
 
 const getWorkedHoursByEmployee = (employeeId, month) => {
@@ -49,4 +64,5 @@ module.exports = {
   getSubordinates,
   getWorkedHoursByEmployee,
   getEmployeeInf,
+  getSupervisors,
 };

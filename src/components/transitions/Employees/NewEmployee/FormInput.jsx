@@ -5,7 +5,7 @@ import Form from "react-bootstrap/Form";
 import Dropdown from "react-bootstrap/Dropdown";
 import DropdownButton from "react-bootstrap/DropdownButton";
 
-const FormStep = ({ stepData, handleChange, values, handleNext }) => {
+const FormInput = ({ stepData, handleChange, values, handleNext }) => {
   return (
     <div>
       {stepData.fields.map((field) =>
@@ -28,8 +28,8 @@ const FormStep = ({ stepData, handleChange, values, handleNext }) => {
             onChange={handleChange(field.name)}
             value={values[field.name]}>
             {field.options.map((option) => (
-              <option key={option} value={option}>
-                {option}
+              <option key={option.ID} value={option.ID}>
+                {option.Nazwa}
               </option>
             ))}
           </Form.Select>
@@ -45,4 +45,4 @@ const FormStep = ({ stepData, handleChange, values, handleNext }) => {
   );
 };
 
-export default FormStep;
+export default FormInput;

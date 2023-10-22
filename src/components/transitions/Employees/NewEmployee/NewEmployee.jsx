@@ -1,16 +1,13 @@
-import React, { useState } from "react";
-import FormStep from "./FormStep";
+import React, { useEffect, useState } from "react";
+import FormInput from "./FormInput";
+import { supervisorsApi } from "../../../../api/employeesApi";
+import { departmentsApi } from "../../../../api/departmentsApi";
 
 const NewEmployee = () => {
   const [step, setStep] = useState(1);
-  const [formData, setFormData] = useState({
-    imie: "",
-    nazwisko: "",
-    email: "",
-    nrTelefonu: "",
-    dzial: "",
-    stanowisko: "",
-  });
+  const [formData, setFormData] = useState({});
+  const [supervisors, setSupervisors] = useState([]);
+  const [departments, setDepartments] = useState([]);
 
   const stepsData = [
     {
@@ -38,7 +35,7 @@ const NewEmployee = () => {
           type: "select",
           label: "Dział",
           name: "dzial",
-          options: ["Dział1", "Dział2"],
+          options: departments,
         },
         {
           type: "select",
@@ -67,9 +64,23 @@ const NewEmployee = () => {
     console.log(formData);
   };
 
+  const getData = async () => {
+    const supervisors = await supervisorsApi();
+    console.log(supervisors);
+    setSupervisors(supervisors);
+
+    const departments = await departmentsApi();
+    console.log(departments);
+    setDepartments(departments);
+  };
+
+  useEffect(() => {
+    getData();
+  }, []);
+
   return (
     <>
-      <FormStep
+      <FormInput
         stepData={currentStepData}
         handleChange={handleChange}
         values={formData}

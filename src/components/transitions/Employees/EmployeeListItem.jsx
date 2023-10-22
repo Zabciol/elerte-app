@@ -1,13 +1,13 @@
 import React, { Children, useState } from "react";
 import UserCard from "../../common/UserCard";
 import { useEffect } from "react";
-import { getHoursWorked } from "../../../api/employeesApi";
+import { hoursWorkedApi } from "../../../api/employeesApi";
 
 const EmployeeListItem = ({ employee, date, children }) => {
   const [workedHours, setWorkedHours] = useState("");
 
   const getWorkedHours = async () => {
-    const response = await getHoursWorked(employee.ID, date);
+    const response = await hoursWorkedApi(employee.ID, date);
     console.log(response);
     if (response.length) {
       setWorkedHours(response[0].SumaGodzin);

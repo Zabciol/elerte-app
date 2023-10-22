@@ -3,8 +3,6 @@ const reasonsModel = require("../models/reasonsModel");
 const router = express.Router();
 
 router.get("/", (req, res) => {
-  console.log("Próba uzyskania przyczyn nieobecnosci");
-
   reasonsModel.getReasons((err, reasons) => {
     if (err) {
       console.error(err);
