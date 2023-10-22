@@ -4,7 +4,7 @@ import NewEmployeeSupervisor from "./NewEmployeeSupervisor";
 import ConfirmPupUp from "../../../common/ConfirmPopUp";
 
 const NewEmployee = () => {
-  const [NewEmployee, setNewEmployee] = useState({});
+  const [newEmployee, setNewEmployee] = useState({});
   const [stage, setStage] = useState(1);
   const [showPopUp, setShowPopUp] = useState(false);
 
@@ -26,7 +26,12 @@ const NewEmployee = () => {
           setNewEmployee={setNewEmployee}
         />
       ) : null}
-
+      {stage === 2 ? (
+        <NewEmployeeSupervisor
+          setNewEmployee={setNewEmployee}
+          newEmployee={newEmployee}
+        />
+      ) : null}
       <ConfirmPupUp
         show={showPopUp}
         decline={decline}
@@ -36,8 +41,6 @@ const NewEmployee = () => {
         declineText={"Nie"}
         confirmText={"Tak"}
       />
-
-      {stage === 2 ? <NewEmployeeSupervisor /> : null}
     </>
   );
 };
