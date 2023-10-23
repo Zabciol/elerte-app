@@ -15,7 +15,6 @@ const NewEmployee = (props) => {
   };
   const confirm = () => {
     setStage(2);
-
     setShowPopUp(false);
   };
   const addToDB = () => {
@@ -35,7 +34,6 @@ const NewEmployee = (props) => {
         <NewEmployeeSubordinates
           subordinates={subordinates}
           setSubordinates={setSubordinates}
-          newEmployee={newEmployee}
           dzial={props.dzial}
           action={addToDB}
         />
