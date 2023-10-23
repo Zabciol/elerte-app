@@ -63,7 +63,7 @@ const Employees = ({ user, setMenuItems, subordinates }) => {
         Tab content for Contact
       </Tab>
       <Tab eventKey='Nowy' title='Nowy'>
-        <NewEmployee />
+        <NewEmployee dzial={dzial} />
       </Tab>
     </Tabs>
   );

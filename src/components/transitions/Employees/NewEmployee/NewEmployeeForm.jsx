@@ -9,10 +9,10 @@ import PopUp from "../../../common/PopUp";
 const NewEmployeeForm = (props) => {
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState({
-    imie: "",
-    nazwisko: "",
+    name: "",
+    lastname: "",
     email: "",
-    nrTelefonu: "",
+    telephoneNumber: "",
   });
 
   const [supervisors, setSupervisors] = useState();
@@ -24,8 +24,8 @@ const NewEmployeeForm = (props) => {
   const stepsData = [
     {
       fields: [
-        { type: "input", label: "Imię", name: "imie" },
-        { type: "input", label: "Nazwisko", name: "nazwisko" },
+        { type: "input", label: "Imię", name: "name" },
+        { type: "input", label: "Nazwisko", name: "lastname" },
       ],
       buttonLabel: "Następny",
     },
@@ -35,7 +35,7 @@ const NewEmployeeForm = (props) => {
         {
           type: "input",
           label: "Nr telefonu",
-          name: "nrTelefonu",
+          name: "telephoneNumber",
           inputType: "tel",
         },
       ],
@@ -46,23 +46,30 @@ const NewEmployeeForm = (props) => {
         {
           type: "select",
           label: "Dział",
-          name: "dzial",
+          name: "department",
           options: departments,
           value: formData.dzial,
         },
         {
           type: "select",
           label: "Stanowisko",
-          name: "stanowisko",
+          name: "position",
           options: positions,
           value: formData.stanowisko,
         },
         {
           type: "select",
           label: "Wymiar pracy",
-          name: "wymiarPracy",
+          name: "workingTime",
           options: workingTime,
           value: formData.wymiarPracy,
+        },
+        {
+          type: "select",
+          label: "Przelozony",
+          name: "supervisor",
+          options: supervisors,
+          value: formData.przelozony,
         },
       ],
       buttonLabel: "Zapisz",
@@ -104,11 +111,28 @@ const NewEmployeeForm = (props) => {
     }));
     setFormData((prevData) => ({
       ...prevData,
-      wymiarPracy: data[0].ID,
+      workingTime: data[0].ID,
     }));
 
     console.log(transformedData);
     setWorkingTime(transformedData);
+  };
+
+  const getSuperVisors = async () => {
+    const data = await supervisorsApi();
+    console.log(data);
+
+    const transformedData = data.map((item) => ({
+      ID: item.ID,
+      Nazwa: item.Imie + " " + item.Nazwisko + " - " + item.Nazwa,
+    }));
+    setFormData((prevData) => ({
+      ...prevData,
+      supervisor: data[0].ID,
+    }));
+
+    console.log(transformedData);
+    setSupervisors(transformedData);
   };
 
   const getFromApi = async (name, apiFuncion, setState, value) => {
@@ -120,20 +144,20 @@ const NewEmployeeForm = (props) => {
       ...prevData,
       [name]: data[0].ID,
     }));
-
+    console.log(data);
     setState(data);
   };
 
   const getData = () => {
-    //getFromApi(supervisorsApi, setSupervisors);
-    getFromApi("dzial", departmentsApi, setDepartments);
-    getFromApi("stanowisko", positionApi, setPositions, 1);
+    getSuperVisors();
+    getFromApi("department", departmentsApi, setDepartments);
+    getFromApi("position", positionApi, setPositions, 1);
     getWorkingTime();
   };
 
   useEffect(() => {
     if (formData.dzial)
-      getFromApi("stanowisko", positionApi, setPositions, formData.dzial);
+      getFromApi("position", positionApi, setPositions, formData.dzial);
   }, [formData.dzial]);
 
   useEffect(() => {

@@ -22,18 +22,22 @@ const FormInput = ({ stepData, handleChange, values, handleNext }) => {
             />
           </FloatingLabel>
         ) : (
-          <Form.Select
-            size='lg'
-            aria-label='Default select example'
-            key={field.label}
-            onChange={handleChange(field.name)}
-            value={values[field.name]}>
-            {field.options.map((option) => (
-              <option key={option.ID} value={option.ID}>
-                {option.Nazwa}
-              </option>
-            ))}
-          </Form.Select>
+          <>
+            <FloatingLabel label={field.label} key={field.label}>
+              <Form.Select
+                size='lg'
+                aria-label='Default select example'
+                className='new-employee-select'
+                onChange={handleChange(field.name)}
+                value={values[field.name]}>
+                {field.options.map((option) => (
+                  <option key={option.ID} value={option.ID}>
+                    {option.Nazwa}
+                  </option>
+                ))}
+              </Form.Select>
+            </FloatingLabel>
+          </>
         )
       )}
       <Button

@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 import NewEmployeeForm from "./NewEmployeeForm";
-import NewEmployeeSupervisor from "./NewEmployeeSupervisor";
+import NewEmployeeSubordinates from "./NewEmployeeSubordinates;
 import ConfirmPupUp from "../../../common/ConfirmPopUp";
 
-const NewEmployee = () => {
+const NewEmployee = (props) => {
   const [newEmployee, setNewEmployee] = useState({});
   const [stage, setStage] = useState(1);
   const [showPopUp, setShowPopUp] = useState(false);
-
+  const [supervisor, setSupervisor] = useState(false);
   const decline = () => {
     console.log("Odrzucono popup");
     addToDB();
@@ -15,6 +15,7 @@ const NewEmployee = () => {
   };
   const confirm = () => {
     setStage(2);
+    setSupervisor(true);
     setShowPopUp(false);
   };
   const addToDB = () => {};
@@ -27,9 +28,10 @@ const NewEmployee = () => {
         />
       ) : null}
       {stage === 2 ? (
-        <NewEmployeeSupervisor
+        <NewEmployeeSubordinates
           setNewEmployee={setNewEmployee}
           newEmployee={newEmployee}
+          dzial={props.dzial}
         />
       ) : null}
       <ConfirmPupUp

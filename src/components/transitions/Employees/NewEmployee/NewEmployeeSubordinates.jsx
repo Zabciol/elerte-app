@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const NewEmployeeSupervisor = () => {
+const NewEmployeeSubordinates = (props) => {
   const [isSupervisor, setIsSupervisor] = useState(false);
   const [selectedSubordinates, setSelectedSubordinates] = useState([]);
 
@@ -38,4 +38,4 @@ const NewEmployeeSupervisor = () => {
   );
 };
 
-export default NewEmployeeSupervisor;
+export default NewEmployeeSubordinates;
