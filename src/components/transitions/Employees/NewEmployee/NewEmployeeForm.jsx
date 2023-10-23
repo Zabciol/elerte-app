@@ -48,28 +48,28 @@ const NewEmployeeForm = (props) => {
           label: "Dział",
           name: "department",
           options: departments,
-          value: formData.dzial,
+          value: formData.department,
         },
         {
           type: "select",
           label: "Stanowisko",
           name: "position",
           options: positions,
-          value: formData.stanowisko,
+          value: formData.position,
         },
         {
           type: "select",
           label: "Wymiar pracy",
           name: "workingTime",
           options: workingTime,
-          value: formData.wymiarPracy,
+          value: formData.workingTime,
         },
         {
           type: "select",
           label: "Przelozony",
           name: "supervisor",
           options: supervisors,
-          value: formData.przelozony,
+          value: formData.supervisor,
         },
       ],
       buttonLabel: "Zapisz",
@@ -156,9 +156,9 @@ const NewEmployeeForm = (props) => {
   };
 
   useEffect(() => {
-    if (formData.dzial)
-      getFromApi("position", positionApi, setPositions, formData.dzial);
-  }, [formData.dzial]);
+    if (formData.department)
+      getFromApi("position", positionApi, setPositions, formData.department);
+  }, [formData.department]);
 
   useEffect(() => {
     getData();

@@ -20,3 +20,7 @@
 .controls > {
   margin: 10px;
 }
+.scroll {
+  overflow-y: scroll;
+  max-height: 500px;
+}

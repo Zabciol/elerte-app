@@ -1,24 +1,28 @@
 import React, { useState } from "react";
 import NewEmployeeForm from "./NewEmployeeForm";
-import NewEmployeeSubordinates from "./NewEmployeeSubordinates;
+import NewEmployeeSubordinates from "./NewEmployeeSubordinates";
 import ConfirmPupUp from "../../../common/ConfirmPopUp";
+import Spinner from "react-bootstrap/Spinner";
 
 const NewEmployee = (props) => {
   const [newEmployee, setNewEmployee] = useState({});
   const [stage, setStage] = useState(1);
   const [showPopUp, setShowPopUp] = useState(false);
-  const [supervisor, setSupervisor] = useState(false);
+  const [subordinates, setSubordinates] = useState([]);
   const decline = () => {
-    console.log("Odrzucono popup");
-    addToDB();
     setShowPopUp(false);
+    addToDB();
   };
   const confirm = () => {
     setStage(2);
-    setSupervisor(true);
+
     setShowPopUp(false);
   };
-  const addToDB = () => {};
+  const addToDB = () => {
+    console.log(newEmployee);
+    console.log(subordinates);
+    setStage(3);
+  };
   return (
     <>
       {stage === 1 ? (
@@ -29,11 +33,14 @@ const NewEmployee = (props) => {
       ) : null}
       {stage === 2 ? (
         <NewEmployeeSubordinates
-          setNewEmployee={setNewEmployee}
+          subordinates={subordinates}
+          setSubordinates={setSubordinates}
           newEmployee={newEmployee}
           dzial={props.dzial}
+          action={addToDB}
         />
       ) : null}
+      {stage === 3 ? <Spinner animation='border' /> : null}
       <ConfirmPupUp
         show={showPopUp}
         decline={decline}

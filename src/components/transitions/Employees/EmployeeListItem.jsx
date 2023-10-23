@@ -8,7 +8,6 @@ const EmployeeListItem = ({ employee, date, children }) => {
 
   const getWorkedHours = async () => {
     const response = await hoursWorkedApi(employee.ID, date);
-    console.log(response);
     if (response.length) {
       setWorkedHours(response[0].SumaGodzin);
     } else setWorkedHours(0);

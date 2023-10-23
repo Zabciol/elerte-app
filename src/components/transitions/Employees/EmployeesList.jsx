@@ -10,7 +10,7 @@ const EmployeesList = (props) => {
       : subordinates.filter((employee) => employee.Dzial === dzial);
 
   return (
-    <Accordion className='ECP'>
+    <Accordion className='scroll'>
       {filteredSubordinates.map((employee) => (
         <EmployeeListItem employee={employee} date={date} key={employee.ID}>
           {React.Children.map(children, (child) => {

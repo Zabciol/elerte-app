@@ -59,10 +59,25 @@ const getEmployeeInf = (employeeId) => {
     });
   });
 };
+const getAllEmployees = () => {
+  return new Promise((resolve, reject) => {
+    const query =
+      "SELECT Pracownicy.ID, Imie, Nazwisko , Dzialy.Nazwa AS `Dzial` FROM Pracownicy LEFT JOIN Stanowisko ON Pracownicy.Stanowisko_ID = Stanowisko.ID LEFT JOIN Dzialy ON Stanowisko.Dzial_ID = Dzialy.ID";
+
+    queryDatabase(query, [], (error, results) => {
+      if (error) {
+        reject(error);
+        return;
+      }
+      resolve(results);
+    });
+  });
+};
 
 module.exports = {
   getSubordinates,
   getWorkedHoursByEmployee,
   getEmployeeInf,
   getSupervisors,
+  getAllEmployees,
 };
