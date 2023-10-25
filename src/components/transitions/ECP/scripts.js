@@ -1,4 +1,8 @@
 function calculateHoursWorked(start, end) {
+  if (!start || !end) {
+    return 0;
+  }
+
   const [startHour, startMinutes] = start.split(":").map(Number);
   const [endHour, endMinutes] = end.split(":").map(Number);
 

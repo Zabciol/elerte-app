@@ -14,7 +14,6 @@ export const subordinatesApi = async (id) => {
 };
 
 export const supervisorsApi = async () => {
-  console.log("Uzyskuje przełozonych");
   try {
     const response = await axios.get(`${API_URL}/supervisors`, {});
     return response.data;
