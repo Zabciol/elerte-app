@@ -25,5 +25,23 @@ router.get("/checkECP/:employeeId/:date", async (req, res) => {
     res.status(500).json({ message: "Internal server error." });
   }
 });
+router.get("/absence", async (req, res) => {
+  console.log("w router:");
+  try {
+    const date = req.query.date;
+    const employeesID = req.query.employeesID;
+    console.log(date);
+    console.log(employeesID);
+    if (!date) {
+      return res.status(400).send("Brak wymaganych parametrów: data");
+    }
+
+    const result = await ecpModel.getAbsencesForMonth(date, employeesID);
+    res.json(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Wystąpił błąd podczas pobierania danych.");
+  }
+});
 
 module.exports = router;

@@ -3,7 +3,7 @@ import "../../styles/Home/home.css";
 import Home from "../transitions/Home.jsx";
 import ECP from "../transitions/ECP/ECP.jsx";
 import Employees from "../transitions/Employees/Employees";
-import Calender from "../transitions/Calender";
+import Calender from "../transitions/Calender/Calender";
 import Conclusions from "../transitions/Conclusions";
 import Container from "react-bootstrap/Container";
 import { subordinatesApi } from "../../api/employeesApi";
@@ -35,8 +35,20 @@ const PageHandler = (props) => {
         subordinates={subordinates}
       />
     ),
-    Wnioski: <Conclusions user={props.user} setMenuItems={setMenuItems} />,
-    Kalendarz: <Calender user={props.user} setMenuItems={setMenuItems} />,
+    Wnioski: (
+      <Conclusions
+        user={props.user}
+        setMenuItems={setMenuItems}
+        subordinates={subordinates}
+      />
+    ),
+    Kalendarz: (
+      <Calender
+        user={props.user}
+        setMenuItems={setMenuItems}
+        subordinates={subordinates}
+      />
+    ),
   };
 
   useEffect(() => {

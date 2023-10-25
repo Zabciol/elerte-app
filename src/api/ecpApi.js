@@ -24,3 +24,18 @@ export const checkECPForEmployeeOnDate = async (employeeId, date) => {
     throw error;
   }
 };
+
+export const getECPAbsence = async (data, employeesID) => {
+  try {
+    const response = await axios.get(`${API_URL}/absence`, {
+      params: {
+        date: data,
+        employeesID: employeesID,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error during API call:", error);
+    throw error;
+  }
+};

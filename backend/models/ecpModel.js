@@ -59,7 +59,7 @@ const insertRecordsInDB = async (toInsert, date, editDate, editUser) => {
   );
 };
 
-exports.SentECPToDatabase = async (records) => {
+const SentECPToDatabase = async (records) => {
   const { ecpList, date, editDate, editUser } = records;
   try {
     const existingRecords = await findExistingRecords(ecpList, date);
@@ -102,7 +102,7 @@ exports.SentECPToDatabase = async (records) => {
   }
 };
 
-exports.checkECPForEmployeeOnDate = async (employeeId, date) => {
+const checkECPForEmployeeOnDate = async (employeeId, date) => {
   try {
     const results = await getRecordsByDateAndEmployeeId(date, [employeeId]);
     if (results.length > 0) {
@@ -114,4 +114,32 @@ exports.checkECPForEmployeeOnDate = async (employeeId, date) => {
     console.error("Error in checkECPForEmployeeOnDate function:", error);
     throw new Error("Nie udało się sprawdzić ECP dla danego pracownika i daty");
   }
+};
+
+const getAbsencesForMonth = (date, employeesID) => {
+  console.log("w modelu");
+  const [year, month] = date.split("-");
+  return new Promise((resolve, reject) => {
+    const query =
+      "SELECT Pracownicy.ID, Imie, Nazwisko, IloscGodzin, PowodyNieobecnosci.Nazwa, `Data` " +
+      "FROM ECP LEFT JOIN Pracownicy ON Pracownicy.ID = ECP.Pracownik_ID " +
+      "LEFT JOIN PowodyNieobecnosci ON PowodyNieobecnosci.ID = ECP.Powod_ID " +
+      "WHERE IloscGodzin < 8 " +
+      "AND YEAR(Data) = ? " +
+      "AND MONTH(Data) = ? AND Pracownik_ID in (?)";
+
+    queryDatabase(query, [year, month, employeesID], (error, results) => {
+      if (error) {
+        reject(error);
+      } else {
+        resolve(results);
+      }
+    });
+  });
+};
+
+module.exports = {
+  SentECPToDatabase,
+  checkECPForEmployeeOnDate,
+  getAbsencesForMonth,
 };
