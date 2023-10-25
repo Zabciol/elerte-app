@@ -62,6 +62,8 @@ const ECPInput = (props) => {
         );
         if (data.IloscGodzin === 0) {
           setChecked(true);
+        } else {
+          setChecked(false);
         }
       } else {
         setStartData(employee.Od, employee.Do, properHours, null);

@@ -31,7 +31,6 @@ const ECPList = ({ user, subordinates, dzial, date }) => {
 
   const gatherDataAndSave = async () => {
     const allData = collectAll();
-    console.log(allData);
     const newAllData = {
       ecpList: allData,
       date: date,
