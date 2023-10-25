@@ -88,5 +88,14 @@ router.get("/all", async (req, res) => {
     res.status(500).send("Wystąpił błąd podczas pobierania danych.");
   }
 });
+router.post("/add", async (req, res) => {
+  try {
+    const employee = req.body;
+    const result = await employeesModel.addNewEmployee(employee);
+    res.send(result);
+  } catch (err) {
+    res.status(500).send(err);
+  }
+});
 
 module.exports = router;

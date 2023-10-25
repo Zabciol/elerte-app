@@ -6,7 +6,7 @@ const API_URL = `http://localhost:${Variables.port}/employees`;
 export const subordinatesApi = async (id) => {
   try {
     const response = await axios.get(API_URL, { params: { id } });
-    console.log(response.data);
+
     return response.data;
   } catch (error) {
     throw error.response ? error.response.data : new Error("API not available");
@@ -59,6 +59,16 @@ export const allEmployees = async () => {
     return response.data;
   } catch (error) {
     console.error("Błąd podczas pobierania danych z serwera:", error);
+    throw error;
+  }
+};
+
+export const addEmployee = async (data) => {
+  try {
+    const response = await axios.post(`${API_URL}/add`, data);
+    return response.data;
+  } catch (error) {
+    console.error("Error during API call:", error);
     throw error;
   }
 };

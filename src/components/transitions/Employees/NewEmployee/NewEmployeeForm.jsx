@@ -103,8 +103,6 @@ const NewEmployeeForm = (props) => {
 
   const getWorkingTime = async () => {
     const data = await workingTimeApi();
-    console.log(data);
-
     const transformedData = data.map((item) => ({
       ID: item.ID,
       Nazwa: item.Od + " - " + item.Do,
@@ -114,14 +112,11 @@ const NewEmployeeForm = (props) => {
       workingTime: data[0].ID,
     }));
 
-    console.log(transformedData);
     setWorkingTime(transformedData);
   };
 
   const getSuperVisors = async () => {
     const data = await supervisorsApi();
-    console.log(data);
-
     const transformedData = data.map((item) => ({
       ID: item.ID,
       Nazwa: item.Imie + " " + item.Nazwisko + " - " + item.Nazwa,
@@ -131,7 +126,6 @@ const NewEmployeeForm = (props) => {
       supervisor: data[0].ID,
     }));
 
-    console.log(transformedData);
     setSupervisors(transformedData);
   };
 
@@ -144,7 +138,6 @@ const NewEmployeeForm = (props) => {
       ...prevData,
       [name]: data[0].ID,
     }));
-    console.log(data);
     setState(data);
   };
 

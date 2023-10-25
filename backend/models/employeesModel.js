@@ -74,10 +74,65 @@ const getAllEmployees = () => {
   });
 };
 
+const addEmployee = async (employee) => {
+  return new Promise((resolve, reject) => {
+    const query = "INSERT INTO Pracownicy SET ?";
+    queryDatabase(query, employee, (err, result) => {
+      if (err) reject(err);
+      resolve(result.insertId);
+    });
+  });
+};
+
+const addToHierarchy = async (supervisorID, suburdinateID) => {
+  return new Promise((resolve, reject) => {
+    const query =
+      "INSERT INTO Hierarchia (Przelozony_ID, Podwladny_ID) VALUES (?, ?)";
+    queryDatabase(query, [supervisorID, suburdinateID], (err) => {
+      if (err) reject(err);
+      resolve();
+    });
+  });
+};
+
+const addNewEmployee = async (data) => {
+  try {
+    const pracownikID = await addEmployee({
+      Imie: data.name,
+      Nazwisko: data.lastname,
+      Mail: data.email,
+      NrTelefonu: data.telephoneNumber,
+      Stanowisko_ID: data.position,
+      WymiarPracy_ID: data.workingTime,
+    });
+
+    if (data.supervisor) {
+      await addToHierarchy(data.supervisor, pracownikID);
+      console.log("Dodano przełoonego uzytkownika");
+    }
+
+    if (data.subordinates && data.subordinates.length) {
+      for (let subID of data.subordinates) {
+        await addToHierarchy(pracownikID, subID);
+      }
+      console.log("dodano podwladnych uzytkownika");
+    }
+
+    return { success: true, message: "Wszystko dodane poprawnie" };
+  } catch (error) {
+    console.error("Wystąpił błąd:", error);
+    return {
+      success: false,
+      message: "Wystąpił błąd podczas dodawania pracownika i zależności.",
+    };
+  }
+};
+
 module.exports = {
   getSubordinates,
   getWorkedHoursByEmployee,
   getEmployeeInf,
   getSupervisors,
   getAllEmployees,
+  addNewEmployee,
 };
