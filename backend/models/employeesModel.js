@@ -1,4 +1,5 @@
 const { queryDatabase } = require("../db");
+const bcrypt = require("bcrypt");
 
 const getSubordinates = (id, callback) => {
   queryDatabase(
@@ -95,6 +96,20 @@ const addToHierarchy = async (supervisorID, suburdinateID) => {
   });
 };
 
+const addPassword = async (idPracownika) => {
+  try {
+    const plainPassword = "a";
+    const hashedPassword = await bcrypt.hash(plainPassword, 10);
+    const query = "INSERT INTO Login (Haslo, Pracownik_ID) VALUES (?,?)";
+    queryDatabase(query, [hashedPassword, idPracownika], (error, results) => {
+      if (error) throw error;
+      console.log("Hasło dodano pomyślnie!");
+    });
+  } catch (error) {
+    console.error("Wystąpił błąd podczas zapisywania hasła:", error);
+  }
+};
+
 const addNewEmployee = async (data) => {
   try {
     const pracownikID = await addEmployee({
@@ -106,6 +121,8 @@ const addNewEmployee = async (data) => {
       WymiarPracy_ID: data.workingTime,
     });
 
+    addPassword(pracownikID);
+
     if (data.supervisor) {
       await addToHierarchy(data.supervisor, pracownikID);
       console.log("Dodano przełoonego uzytkownika");
@@ -116,6 +133,12 @@ const addNewEmployee = async (data) => {
         await addToHierarchy(pracownikID, subID);
       }
       console.log("dodano podwladnych uzytkownika");
+    }
+    if (
+      data.isManager &&
+      (!data.subordinates || data.subordinates.length === 0)
+    ) {
+      await addToHierarchy(pracownikID, null);
     }
 
     return { success: true, message: "Wszystko dodane poprawnie" };

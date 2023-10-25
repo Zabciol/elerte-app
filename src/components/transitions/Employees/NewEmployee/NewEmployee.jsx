@@ -16,11 +16,13 @@ const NewEmployee = (props) => {
 
   const decline = () => {
     setShowConfirmPopUp(false);
+    setNewEmployee({ ...newEmployee, isManager: false });
     addToDB();
   };
   const confirm = () => {
     setStage(2);
     setShowConfirmPopUp(false);
+    setNewEmployee({ ...newEmployee, isManager: true });
   };
   const addToDB = async () => {
     setStage(3);

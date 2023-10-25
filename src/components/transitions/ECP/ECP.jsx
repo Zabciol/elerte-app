@@ -24,6 +24,7 @@ const ECP = ({ user, setMenuItems, subordinates }) => {
   const dzialy = Array.from(new Set(subordinates.map((item) => item.Dzial)));
   const [dzial, setDzial] = useState(dzialy[0]);
   const [date, setDate] = useState(getCurrentDateYearMonthDay());
+
   const changeDate = (event) => {
     setDate(event.target.value);
   };
@@ -44,7 +45,7 @@ const ECP = ({ user, setMenuItems, subordinates }) => {
     <GetDataProvider>
       <ECPList
         user={user}
-        subordinates={subordinates}
+        subordinates={[user, ...subordinates]}
         dzial={dzial}
         date={date}
       />

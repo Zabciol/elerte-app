@@ -65,7 +65,8 @@ const Employees = ({ user, setMenuItems, subordinates }) => {
       <Tab
         eventKey='Nowy'
         title='Nowy'
-        disabled={user.Dzial === "Księgowość" ? false : true}>
+        //</Tabs>disabled={user.Dzial === "Księgowość" ? false : true}
+      >
         <NewEmployee dzial={dzial} />
       </Tab>
     </Tabs>

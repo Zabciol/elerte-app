@@ -23,9 +23,11 @@ router.post("/login", (req, res) => {
     const id = results[0].ID;
     const userData = results[0];
 
+    console.log(userData);
     userModel.findUserPasswordByID(id, (err, results) => {
       if (results.length > 0) {
         const user = results[0];
+        console.log(user);
 
         bcrypt.compare(password, user.Haslo, (error, isMatch) => {
           if (error) {
@@ -33,6 +35,7 @@ router.post("/login", (req, res) => {
           }
 
           if (isMatch) {
+            console.log("Zalogowano");
             res
               .status(200)
               .send({ message: "User logged in!", user: userData });
