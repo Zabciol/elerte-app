@@ -118,20 +118,21 @@ const checkECPForEmployeeOnDate = async (employeeId, date) => {
 
 const getAbsencesForMonth = (date, employeesID) => {
   console.log("w modelu");
+  console.log(employeesID);
   const [year, month] = date.split("-");
   return new Promise((resolve, reject) => {
     const query =
-      "SELECT Pracownicy.ID, Imie, Nazwisko, IloscGodzin, PowodyNieobecnosci.Nazwa, `Data` " +
-      "FROM ECP LEFT JOIN Pracownicy ON Pracownicy.ID = ECP.Pracownik_ID " +
-      "LEFT JOIN PowodyNieobecnosci ON PowodyNieobecnosci.ID = ECP.Powod_ID " +
-      "WHERE IloscGodzin < 8 " +
-      "AND YEAR(Data) = ? " +
-      "AND MONTH(Data) = ? AND Pracownik_ID in (?)";
+      "SELECT Pracownicy.ID, Imie, Nazwisko, IloscGodzin, ECP.Od_godz, ECP.Do_godz, WymiarPracy.Od AS `WymiarOd`, WymiarPracy.`Do` AS `WymiarDo`, " +
+      "PowodyNieobecnosci.Nazwa AS `Powod`, `Data` FROM ECP LEFT JOIN Pracownicy ON Pracownicy.ID = ECP.Pracownik_ID " +
+      "LEFT JOIN PowodyNieobecnosci ON PowodyNieobecnosci.ID = ECP.Powod_ID LEFT JOIN WymiarPracy ON WymiarPracy.ID = Pracownicy.WymiarPracy_ID " +
+      "WHERE Pracownicy.ID in (?) AND YEAR(Data) = ? " +
+      "AND MONTH(Data) = ?";
 
-    queryDatabase(query, [year, month, employeesID], (error, results) => {
+    queryDatabase(query, [employeesID, year, month], (error, results) => {
       if (error) {
         reject(error);
       } else {
+        console.log(results);
         resolve(results);
       }
     });
