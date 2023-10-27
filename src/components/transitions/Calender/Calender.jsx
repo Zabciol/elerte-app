@@ -4,6 +4,7 @@ import Variables from "../../common/CommonFunctions";
 import generujEventy from "./getEvents";
 import { getCurrentDateYearMonth } from "../../common/CommonFunctions";
 import { getECP } from "../../../api/ecpApi";
+import FullCalender from "./FullCalender";
 
 const MenuItems = ({ date, setDate }) => {
   return (
@@ -47,7 +48,7 @@ const Calender = (props) => {
       <MenuItems date={date} setDate={changeDate}></MenuItems>
     );
   }, [date]);
-  return <div>Calender</div>;
+  return <FullCalender events={events}></FullCalender>;
 };
 
 export default Calender;
