@@ -25,9 +25,9 @@ export const checkECPForEmployeeOnDate = async (employeeId, date) => {
   }
 };
 
-export const getECPAbsence = async (data, employeesID) => {
+export const getECP = async (data, employeesID) => {
   try {
-    const response = await axios.get(`${API_URL}/absence`, {
+    const response = await axios.get(`${API_URL}/ecp`, {
       params: {
         date: data,
         employeesID: employeesID,

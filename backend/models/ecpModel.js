@@ -116,9 +116,7 @@ const checkECPForEmployeeOnDate = async (employeeId, date) => {
   }
 };
 
-const getAbsencesForMonth = (date, employeesID) => {
-  console.log("w modelu");
-  console.log(employeesID);
+const getECPForMonth = (date, employeesID) => {
   const [year, month] = date.split("-");
   return new Promise((resolve, reject) => {
     const query =
@@ -132,7 +130,6 @@ const getAbsencesForMonth = (date, employeesID) => {
       if (error) {
         reject(error);
       } else {
-        console.log(results);
         resolve(results);
       }
     });
@@ -142,5 +139,5 @@ const getAbsencesForMonth = (date, employeesID) => {
 module.exports = {
   SentECPToDatabase,
   checkECPForEmployeeOnDate,
-  getAbsencesForMonth,
+  getECPForMonth,
 };

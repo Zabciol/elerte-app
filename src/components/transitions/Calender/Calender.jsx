@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from "react";
 import Form from "react-bootstrap/Form";
 import Variables from "../../common/CommonFunctions";
-//import analyzeAttendance from "./analyzeAttendance";
 import generujEventy from "./getEvents";
 import { getCurrentDateYearMonth } from "../../common/CommonFunctions";
-import { getECPAbsence } from "../../../api/ecpApi";
+import { getECP } from "../../../api/ecpApi";
 
 const MenuItems = ({ date, setDate }) => {
   return (
@@ -27,8 +26,7 @@ const Calender = (props) => {
   };
 
   const getAbsence = async (employeesID) => {
-    const data = await getECPAbsence(date, employeesID);
-    console.log(data);
+    const data = await getECP(date, employeesID);
     var preEvents = [];
     for (let pracownik of data) {
       let events = await generujEventy(pracownik);
@@ -39,8 +37,7 @@ const Calender = (props) => {
   };
 
   useEffect(() => {
-    const employeesID = props.subordinates.map((employee) => employee.ID);
-    console.log(employeesID);
+    const employeesID = props.subordinates.map((employee) => employee.ID); // dodać filtrowanie poprzez dzial
     const data = getAbsence(employeesID);
     setEvents(data);
   }, []);
