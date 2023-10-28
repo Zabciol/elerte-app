@@ -1,11 +1,36 @@
 .fc-direction-ltr .fc-daygrid-more-link {
   position: absolute;
-  top: -80%;
+  top: -100%;
   width: 100%;
-  height: 150%;
+  height: 200%;
   display: flex;
   justify-content: end;
   align-items: end;
-  padding: 5% 20%;
+  padding: 20% 20%;
   text-decoration: none;
 }
+
+.fc-dayGridMonth-view {
+  padding: 5px;
+}
+
+.fc-col-header-cell-cushion {
+  text-decoration: none;
+}
+.fc-scroller {
+  border-right: none !important;
+}
+tbody,
+td,
+tfoot {
+  border-color: inherit !important;
+  border-style: dotted !important;
+  border-width: 1px !important;
+}
+.fc-daygrid-day-number {
+  text-decoration: none;
+} /*
+.fa-chevron-left:before {
+  font-family: "FontAwesome" !important;
+  content: "\f053" !important;  kod Unicode dla fa-chevron-left 
+}*/
