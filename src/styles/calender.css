@@ -29,8 +29,10 @@ tfoot {
 }
 .fc-daygrid-day-number {
   text-decoration: none;
-} /*
-.fa-chevron-left:before {
-  font-family: "FontAwesome" !important;
-  content: "\f053" !important;  kod Unicode dla fa-chevron-left 
-}*/
+}
+
+@media (max-width: 425px) {
+  .fc .fc-toolbar {
+    display: block;
+  }
+}

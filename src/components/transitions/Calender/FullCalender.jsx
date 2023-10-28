@@ -1,14 +1,11 @@
-import React, { useState, useRef, useEffect } from "react";
-import ReactDOMServer from "react-dom/server";
-
+import React, { useState, useRef } from "react";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import bootstrapPlugin from "@fullcalendar/bootstrap";
 import "../../../styles/calender.css";
-import { plLocale } from "@fullcalendar/core/locales/pl";
+import plLocale from "@fullcalendar/core/locales/pl";
 import interactionPlugin from "@fullcalendar/interaction";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
 import { faInfo } from "@fortawesome/free-solid-svg-icons";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 
@@ -57,29 +54,9 @@ const FullCalender = (props) => {
       </>
     );
   };
-  const handleDateClick = (info) => {
-    // Uzyskanie instancji kalendarza
-    const calendarApi = calendarRef.current.getApi();
-
-    // Wyszukaj segment dnia, który ma więcej niż jedno wydarzenie
-    const dayEl = Array.from(
-      calendarApi.el.querySelectorAll("[data-date]")
-    ).find((el) => el.getAttribute("data-date") === info.dateStr);
-
-    if (dayEl) {
-      // Wyszukaj link "+x more"
-      const moreLink = dayEl.querySelector(".fc-more");
-
-      // Jeśli link istnieje, symuluj kliknięcie w niego
-      if (moreLink) {
-        moreLink.click();
-      }
-    }
-  };
-
   return (
     <FullCalendar
-      locale='pl'
+      locale={plLocale}
       plugins={[dayGridPlugin, interactionPlugin, bootstrapPlugin]}
       themeSystem='bootstrap'
       initialView='dayGridMonth'
@@ -98,7 +75,6 @@ const FullCalender = (props) => {
       moreLinkContent={() => <FontAwesomeIcon icon={faInfo} size='lg' />}
       ref={calendarRef}
       datesSet={handleDateChange}
-      dateClick={handleDateClick}
     />
   );
 };
