@@ -33,14 +33,17 @@ const Calender = (props) => {
       let events = await generujEventy(pracownik);
       preEvents.push(...events);
     }
-    console.log(preEvents);
+    //setEvents(preEvents);
+    //console.log(preEvents);
     return preEvents;
   };
-
-  useEffect(() => {
-    const employeesID = props.subordinates.map((employee) => employee.ID); // dodać filtrowanie poprzez dzial
-    const data = getAbsence(employeesID);
+  const fetchData = async () => {
+    const employeesID = props.subordinates.map((employee) => employee.ID);
+    const data = await getAbsence(employeesID);
     setEvents(data);
+  };
+  useEffect(() => {
+    fetchData();
   }, []);
 
   useEffect(() => {
@@ -48,7 +51,7 @@ const Calender = (props) => {
       <MenuItems date={date} setDate={changeDate}></MenuItems>
     );
   }, [date]);
-  return <FullCalender events={events}></FullCalender>;
+  return <FullCalender events={events} setDate={setDate}></FullCalender>;
 };
 
 export default Calender;

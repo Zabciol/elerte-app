@@ -1,0 +1,11 @@
+.fc-direction-ltr .fc-daygrid-more-link {
+  position: absolute;
+  top: -80%;
+  width: 100%;
+  height: 150%;
+  display: flex;
+  justify-content: end;
+  align-items: end;
+  padding: 5% 20%;
+  text-decoration: none;
+}
