@@ -97,5 +97,15 @@ router.post("/add", async (req, res) => {
     res.status(500).send(err);
   }
 });
+router.get("/mySupervisors", async (req, res) => {
+  try {
+    const myID = req.query.myID;
+    const result = await employeesModel.getSupervisorByMyID(myID);
+    res.json(result.data);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Wystąpił błąd podczas pobierania danych.");
+  }
+});
 
 module.exports = router;

@@ -4,8 +4,8 @@ import Home from "../transitions/Home.jsx";
 import ECP from "../transitions/ECP/ECP.jsx";
 import Employees from "../transitions/Employees/Employees";
 import Calender from "../transitions/Calender/Calender";
-import Conclusions from "../transitions/Conclusions";
 import Container from "react-bootstrap/Container";
+import Requests from "../transitions/Requests/Requests";
 import { subordinatesApi } from "../../api/employeesApi";
 import Menu from "./Menu/Menu";
 
@@ -36,7 +36,7 @@ const PageHandler = (props) => {
       />
     ),
     Wnioski: (
-      <Conclusions
+      <Requests
         user={props.user}
         setMenuItems={setMenuItems}
         subordinates={subordinates}

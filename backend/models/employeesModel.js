@@ -151,6 +151,44 @@ const addNewEmployee = async (data) => {
   }
 };
 
+const getMySupervisor = async (id) => {
+  return new Promise((resolve, reject) => {
+    const query =
+      "SELECT Imie,Nazwisko,Mail, Przelozony_ID FROM Hierarchia LEFT JOIN Pracownicy ON Pracownicy.ID = Hierarchia.Przelozony_ID WHERE Podwladny_ID = ?";
+    queryDatabase(query, [id], (err, results) => {
+      if (err) {
+        reject(err);
+        return;
+      }
+      resolve(results[0] ? results[0] : null);
+    });
+  });
+};
+
+const getSupervisorByMyID = async (id) => {
+  try {
+    var tabIDs = [];
+    var currID = id;
+
+    while (currID !== null) {
+      const supervisor = await getMySupervisor(currID);
+      currID = supervisor.Przelozony_ID;
+      if (currID !== null) tabIDs.push(supervisor);
+    }
+    return {
+      success: true,
+      data: tabIDs,
+      message: "Sukces",
+    };
+  } catch (error) {
+    console.error("Wystąpił błąd:", error);
+    return {
+      success: false,
+      message: "Wystąpił błąd podczas dodawania pracownika i zależności.",
+    };
+  }
+};
+
 module.exports = {
   getSubordinates,
   getWorkedHoursByEmployee,
@@ -158,4 +196,5 @@ module.exports = {
   getSupervisors,
   getAllEmployees,
   addNewEmployee,
+  getSupervisorByMyID,
 };
