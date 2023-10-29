@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import Form from "react-bootstrap/Form";
 import InputGroup from "react-bootstrap/InputGroup";
-import LoadingButton from "../../common/LoadingBtn";
+
 import { newRequestApi } from "../../../api/requestsApi";
 import { getNextWorkDay } from "../../common/CommonFunctions";
 
@@ -11,10 +11,14 @@ const RequestMail = ({
   reason,
   reasons,
   setReason,
+  setStartDate,
+  setMessage,
+  setEndDate,
   readOnly,
   message,
   startDate,
   endDate,
+  children,
 }) => {
   const textareaRef = useRef(null);
   const startDateRef = useRef(null);
@@ -40,15 +44,16 @@ const RequestMail = ({
     }
   };
 
-  const handleStartDateChange = () => {
-    const startDate = new Date(startDateRef.current.value);
-    const endDate = new Date(endDateRef.current.value);
+  const handleStartDateChange = (e) => {
+    const startDateValue = new Date(e.target.value);
+    const endDateValue = new Date(endDate);
 
-    if (endDate <= startDate) {
-      const newEndDate = new Date(startDate);
+    if (endDateValue <= startDateValue) {
+      const newEndDate = new Date(startDateValue);
       newEndDate.setDate(newEndDate.getDate() + 1);
-      endDateRef.current.value = newEndDate.toISOString().split("T")[0];
+      setEndDate(newEndDate.toISOString().split("T")[0]);
     }
+    setStartDate(e.target.value);
   };
 
   useEffect(() => {
@@ -57,12 +62,12 @@ const RequestMail = ({
       const dayAfter = new Date(nextWorkDay);
       dayAfter.setDate(dayAfter.getDate() + 1);
 
-      startDateRef.current.value = nextWorkDay.toISOString().split("T")[0];
-      endDateRef.current.value = dayAfter.toISOString().split("T")[0];
+      setStartDate(nextWorkDay.toISOString().split("T")[0]);
+      setEndDate(dayAfter.toISOString().split("T")[0]);
     } else {
-      textareaRef.current.value = message;
-      startDateRef.current.value = startDate;
-      endDateRef.current.value = endDate;
+      //textareaRef.current.value = message;
+      //startDateRef.current.value = startDate;
+      //endDateRef.current.value = endDate;
     }
   }, [sender, reciver]);
 
@@ -91,7 +96,9 @@ const RequestMail = ({
           <Form.Control
             as='textarea'
             rows={3}
-            ref={textareaRef}
+            //ref={textareaRef}
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
             readOnly={readOnly}
           />
         </Form.Group>
@@ -102,7 +109,8 @@ const RequestMail = ({
           <Form.Control
             aria-label='Text input with dropdown button'
             type='date'
-            ref={startDateRef}
+            //ref={startDateRef}
+            value={startDate}
             onChange={handleStartDateChange}
             readOnly={readOnly}
           />
@@ -112,7 +120,8 @@ const RequestMail = ({
           <Form.Control
             aria-label='Text input with dropdown button'
             type='date'
-            ref={endDateRef}
+            //ref={endDateRef}
+            value={endDate}
             readOnly={readOnly}
           />
         </InputGroup>
@@ -120,16 +129,17 @@ const RequestMail = ({
       <div className='request-bottom-form'>
         <Form.Select
           aria-label='Default select example'
-          onChange={setReason}
+          value={reason.Nazwa}
+          onChange={(e) => setReason(e.target.value)}
           className='request-select'
           readOnly={readOnly}>
           {reasons.map((item, index) => (
-            <option value={index} key={index}>
+            <option value={item} key={index}>
               {item.Nazwa}
             </option>
           ))}
         </Form.Select>
-        <LoadingButton action={sentRequest} buttonText={"Wyslij"} />
+        {children}
       </div>
     </div>
   );

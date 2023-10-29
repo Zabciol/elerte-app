@@ -2,11 +2,17 @@ import React, { useState, useEffect } from "react";
 import Spinner from "react-bootstrap/Spinner";
 import { reasonsApi } from "../../../api/reasonsApi";
 import { mySupervisorAPI } from "../../../api/employeesApi";
+import { newRequestApi } from "../../../api/requestsApi";
 import RequestMail from "./RequestMail";
+import LoadingButton from "../../common/LoadingBtn";
+
 const NewRequest = ({ user }) => {
   const [mySupervisor, setMySupervisor] = useState();
   const [reasons, setReasons] = useState([]);
   const [reason, setReason] = useState(null);
+  const [message, setMessage] = useState("");
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
   const [loading, setLoading] = useState(true);
   const getMySupervisor = async () => {
     setLoading(true);
@@ -33,6 +39,26 @@ const NewRequest = ({ user }) => {
     setReason(selectedReason);
   };
 
+  const sentRequest = async () => {
+    const request = {
+      senderID: user.ID,
+      reciverID: mySupervisor.ID,
+      message: message,
+      reasonID: reason.ID,
+      dataOd: startDate,
+      dataDo: endDate,
+    };
+
+    console.log("Sending");
+    console.log(request);
+    try {
+      const response = await newRequestApi(request);
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  };
+
   useEffect(() => {
     getMySupervisor();
     getReasons();
@@ -45,9 +71,16 @@ const NewRequest = ({ user }) => {
           reciver={mySupervisor}
           reasons={reasons}
           reason={reason}
-          setReason={changeReason}
+          setReason={setReason}
           readOnly={false}
-        />
+          message={message}
+          setMessage={setMessage}
+          startDate={startDate}
+          setStartDate={setStartDate}
+          endDate={endDate}
+          setEndDate={setEndDate}>
+          <LoadingButton action={sentRequest} buttonText={"Wyslij"} />
+        </RequestMail>
       ) : (
         <div>
           <p>Trwa ładowanie</p>
