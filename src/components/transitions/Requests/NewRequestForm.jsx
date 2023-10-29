@@ -4,10 +4,25 @@ import InputGroup from "react-bootstrap/InputGroup";
 import Dropdown from "react-bootstrap/Dropdown";
 import DropdownButton from "react-bootstrap/DropdownButton";
 import { reasonsApi } from "../../../api/reasonsApi";
-import Button from "react-bootstrap/Button";
+import LoadingButton from "../../common/LoadingBtn";
 
 const NewRequestForm = ({ user, mySupervisor, reason, reasons, setReason }) => {
   const textareaRef = useRef(null);
+
+  const sentRequest = async () => {
+    const request = {
+      senderID: user.ID,
+      reciverID: mySupervisor.ID,
+      message: textareaRef.current.value,
+      reasonID: reason.ID,
+    };
+
+    console.log("Sending");
+    console.log(request);
+
+    return { message: "Wysłano wniosek" };
+  };
+
   return (
     <div className='request'>
       <InputGroup className='mb-3'>
@@ -37,6 +52,7 @@ const NewRequestForm = ({ user, mySupervisor, reason, reasons, setReason }) => {
         <Form.Select
           aria-label='Default select example'
           onChange={setReason}
+          value={reason}
           className='request-select'>
           {reasons.map((item, index) => (
             <option value={index} key={index}>
@@ -44,7 +60,7 @@ const NewRequestForm = ({ user, mySupervisor, reason, reasons, setReason }) => {
             </option>
           ))}
         </Form.Select>
-        <Button variant='primary'>Primary</Button>{" "}
+        <LoadingButton action={sentRequest} buttonText={"Wyslij"} />
       </div>
     </div>
   );

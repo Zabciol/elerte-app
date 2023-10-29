@@ -21,6 +21,7 @@ const NewRequest = ({ user }) => {
       const data = await reasonsApi();
       console.log(data.data);
       setReasons(data.data);
+      setReason(data.data[0]);
     } catch (error) {
       console.log(
         error.message || "Nie udało się uzyskać powodów nieobecności"
