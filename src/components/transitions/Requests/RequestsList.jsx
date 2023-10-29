@@ -26,7 +26,7 @@ const RequestsList = ({ requests, setRequest, setRequests }) => {
         {requests.map((request) => (
           <ListGroup.Item
             as='li'
-            className='d-flex justify-content-between align-items-start'
+            className='d-flex justify-content-between align-items-start requests-manage_list-item'
             onClick={() => handleChangeRequest(request)}>
             <div className='ms-2 me-auto'>
               <div className='fw-bold'>
@@ -35,7 +35,10 @@ const RequestsList = ({ requests, setRequest, setRequests }) => {
               {request.Data_Od + " / " + request.Data_Do}
             </div>
             {request.Wyswietlone === "nie" ? (
-              <Badge bg='primary' pill>
+              <Badge
+                bg='primary'
+                pill
+                className='requests-manage_list-item_badge'>
                 New
               </Badge>
             ) : null}

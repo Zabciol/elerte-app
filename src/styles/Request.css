@@ -36,3 +36,14 @@
   border-radius: var(--bs-border-radius);
   */
 }
+.requests-manage_list-item {
+  position: relative !important;
+}
+.requests-manage_list-item_badge {
+  backdrop-filter: blur(2px);
+  position: absolute;
+  height: 20px;
+  right: 5px;
+  top: 5px;
+  --bs-bg-opacity: 0.5 !important;
+}
