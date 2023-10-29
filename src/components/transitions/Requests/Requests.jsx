@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import NewRequest from "./NewRequest";
+import ManageRequests from "./ManageRequests";
 import Tab from "react-bootstrap/Tab";
 import Tabs from "react-bootstrap/Tabs";
 const Requests = ({ user }) => {
   return (
     <Tabs defaultActiveKey='box' id='uncontrolled-tab-example' className='mb-3'>
       <Tab eventKey='box' title='Skrzynka'>
-        Lista wniosków
+        <ManageRequests user={user} />
       </Tab>
       <Tab
         eventKey='new'

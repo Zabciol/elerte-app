@@ -1,20 +1,9 @@
 const db = require("../db");
 const { queryDatabase } = require("../db");
-
-const queryDatabaseAsync = (query, params) => {
-  return new Promise((resolve, reject) => {
-    queryDatabase(query, params, (error, results) => {
-      if (error) {
-        reject(error);
-      } else {
-        resolve(results);
-      }
-    });
-  });
-};
+const { queryDatabasePromise } = require("../db");
 
 const getRecordsByDateAndEmployeeId = async (date, employeeIds) => {
-  return await queryDatabaseAsync(
+  return await queryDatabasePromise(
     "SELECT * FROM ECP WHERE Data = ? AND Pracownik_ID IN (?)",
     [date, employeeIds]
   );
@@ -27,7 +16,7 @@ const findExistingRecords = async (records, date) => {
 };
 
 const updateRecordInDB = async (record, date, editDate, editUser) => {
-  return await queryDatabaseAsync(
+  return await queryDatabasePromise(
     "UPDATE ECP SET Od_godz = ?, Do_godz = ?, IloscGodzin = ?, Powod_ID = ?, DataZapisu = ?, ID_Edytora = ? WHERE Data = ? AND Pracownik_ID = ?",
     [
       record.Od_Godz,
@@ -53,7 +42,7 @@ const insertRecordsInDB = async (toInsert, date, editDate, editUser) => {
     editDate,
     editUser,
   ]);
-  return await queryDatabaseAsync(
+  return await queryDatabasePromise(
     "INSERT INTO ECP (Data, Od_godz, Do_godz, Pracownik_ID, Powod_ID, IloscGodzin, DataZapisu, ID_Edytora) VALUES ?",
     [insertData]
   );

@@ -13,3 +13,16 @@ export const newRequestApi = async (data) => {
     throw error;
   }
 };
+export const getRequestsApi = async (myID) => {
+  try {
+    const response = await axios.get(`${API_URL}/get`, {
+      params: {
+        myID: myID,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error during API call:", error);
+    throw error;
+  }
+};

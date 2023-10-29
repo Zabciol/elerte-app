@@ -12,14 +12,12 @@ const NewRequest = ({ user }) => {
   const getMySupervisor = async () => {
     setLoading(true);
     const data = await mySupervisorAPI(user.ID);
-    console.log(data);
     setMySupervisor(data);
     setLoading(false);
   };
   const getReasons = async () => {
     try {
       const data = await reasonsApi();
-      console.log(data.data);
       setReasons(data.data);
       setReason(data.data[0]);
     } catch (error) {
