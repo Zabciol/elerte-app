@@ -5,15 +5,25 @@ import LoadingButton from "../../common/LoadingBtn";
 import { newRequestApi } from "../../../api/requestsApi";
 import { getNextWorkDay } from "../../common/CommonFunctions";
 
-const NewRequestForm = ({ user, mySupervisor, reason, reasons, setReason }) => {
-  const textareaRef = useRef(null);
-  const startDateRef = useRef(null);
-  const endDateRef = useRef(null);
+const RequestMail = ({
+  sender,
+  reciver,
+  reason,
+  reasons,
+  setReason,
+  readOnly,
+  message,
+  startDate,
+  endDate,
+}) => {
+  const textareaRef = useRef(message);
+  const startDateRef = useRef(startDate);
+  const endDateRef = useRef(endDate);
 
   const sentRequest = async () => {
     const request = {
-      senderID: user.ID,
-      reciverID: mySupervisor.ID,
+      senderID: sender.ID,
+      reciverID: reciver.ID,
       message: textareaRef.current.value,
       reasonID: reason.ID,
       dataOd: startDateRef.current.value,
@@ -42,12 +52,14 @@ const NewRequestForm = ({ user, mySupervisor, reason, reasons, setReason }) => {
   };
 
   useEffect(() => {
-    const nextWorkDay = getNextWorkDay();
-    const dayAfter = new Date(nextWorkDay);
-    dayAfter.setDate(dayAfter.getDate() + 1);
+    if (readOnly === false) {
+      const nextWorkDay = getNextWorkDay();
+      const dayAfter = new Date(nextWorkDay);
+      dayAfter.setDate(dayAfter.getDate() + 1);
 
-    startDateRef.current.value = nextWorkDay.toISOString().split("T")[0];
-    endDateRef.current.value = dayAfter.toISOString().split("T")[0];
+      startDateRef.current.value = nextWorkDay.toISOString().split("T")[0];
+      endDateRef.current.value = dayAfter.toISOString().split("T")[0];
+    }
   }, []);
 
   return (
@@ -55,7 +67,7 @@ const NewRequestForm = ({ user, mySupervisor, reason, reasons, setReason }) => {
       <InputGroup className='mb-3'>
         <InputGroup.Text id='basic-addon1'>Od:</InputGroup.Text>
         <Form.Control
-          value={user.Mail}
+          value={sender.Mail}
           aria-label='Username'
           aria-describedby='basic-addon1'
           readOnly={true}
@@ -65,14 +77,19 @@ const NewRequestForm = ({ user, mySupervisor, reason, reasons, setReason }) => {
         <InputGroup.Text id='basic-addon1'>Do:</InputGroup.Text>
         <Form.Control
           aria-label='Text input with dropdown button'
-          value={mySupervisor.Mail}
+          value={reciver.Mail}
           readOnly={true}
         />
       </InputGroup>
       <Form>
         <Form.Group className='mb-3' controlId='exampleForm.ControlTextarea1'>
           <Form.Label>Wiadomość</Form.Label>
-          <Form.Control as='textarea' rows={3} ref={textareaRef} />
+          <Form.Control
+            as='textarea'
+            rows={3}
+            ref={textareaRef}
+            readOnly={readOnly}
+          />
         </Form.Group>
       </Form>
       <div className='request-dates'>
@@ -83,6 +100,7 @@ const NewRequestForm = ({ user, mySupervisor, reason, reasons, setReason }) => {
             type='date'
             ref={startDateRef}
             onChange={handleStartDateChange}
+            readOnly={readOnly}
           />
         </InputGroup>
         <InputGroup className='mb-3 request-date'>
@@ -91,6 +109,7 @@ const NewRequestForm = ({ user, mySupervisor, reason, reasons, setReason }) => {
             aria-label='Text input with dropdown button'
             type='date'
             ref={endDateRef}
+            readOnly={readOnly}
           />
         </InputGroup>
       </div>
@@ -98,7 +117,8 @@ const NewRequestForm = ({ user, mySupervisor, reason, reasons, setReason }) => {
         <Form.Select
           aria-label='Default select example'
           onChange={setReason}
-          className='request-select'>
+          className='request-select'
+          readOnly={readOnly}>
           {reasons.map((item, index) => (
             <option value={index} key={index}>
               {item.Nazwa}
@@ -111,4 +131,4 @@ const NewRequestForm = ({ user, mySupervisor, reason, reasons, setReason }) => {
   );
 };
 
-export default NewRequestForm;
+export default RequestMail;

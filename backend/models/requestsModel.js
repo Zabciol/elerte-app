@@ -27,7 +27,7 @@ const getRequests = async (id) => {
   try {
     const query =
       "SELECT Wnioski.ID, Wnioski.Odbiorca_ID, Wnioski.Nadawca_ID, Pracownicy.Imie, Pracownicy.Nazwisko, " +
-      "Pracownicy.Mail, Wnioski.Powod_ID, PowodyNieobecnosci.Nazwa, Wnioski.Data_Od, Wnioski.Data_Do, Wnioski.`Status` " +
+      "Pracownicy.Mail, Wnioski.Powod_ID, PowodyNieobecnosci.Nazwa, Wnioski.Data_Od, Wnioski.Data_Do, Wnioski.`Status`, Wnioski.Wiadomosc " +
       "FROM Wnioski " +
       "LEFT JOIN Pracownicy ON Pracownicy.ID = Wnioski.Nadawca_ID " +
       "LEFT JOIN PowodyNieobecnosci ON PowodyNieobecnosci.ID = Wnioski.Powod_ID " +

@@ -2,8 +2,7 @@ import React, { useState, useEffect } from "react";
 import Spinner from "react-bootstrap/Spinner";
 import { reasonsApi } from "../../../api/reasonsApi";
 import { mySupervisorAPI } from "../../../api/employeesApi";
-import NewRequestForm from "./NewRequestForm";
-import "../../../styles/Request.css";
+import RequestMail from "./RequestMail";
 const NewRequest = ({ user }) => {
   const [mySupervisor, setMySupervisor] = useState();
   const [reasons, setReasons] = useState([]);
@@ -41,12 +40,13 @@ const NewRequest = ({ user }) => {
   return (
     <>
       {!loading && mySupervisor ? (
-        <NewRequestForm
-          user={user}
-          mySupervisor={mySupervisor}
+        <RequestMail
+          sender={user}
+          reciver={mySupervisor}
           reasons={reasons}
           reason={reason}
           setReason={changeReason}
+          readOnly={false}
         />
       ) : (
         <div>
