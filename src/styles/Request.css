@@ -19,3 +19,7 @@
   max-width: 200px;
   margin-right: 10px;
 }
+.requests-manage_list {
+  max-width: 300px;
+  text-align: left;
+}

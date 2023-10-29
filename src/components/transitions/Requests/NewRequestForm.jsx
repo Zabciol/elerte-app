@@ -4,6 +4,7 @@ import InputGroup from "react-bootstrap/InputGroup";
 import LoadingButton from "../../common/LoadingBtn";
 import { newRequestApi } from "../../../api/requestsApi";
 import { getNextWorkDay } from "../../common/CommonFunctions";
+import RequestFormBase from "./RequestFormBase";
 
 const NewRequestForm = ({ user, mySupervisor, reason, reasons, setReason }) => {
   const textareaRef = useRef(null);

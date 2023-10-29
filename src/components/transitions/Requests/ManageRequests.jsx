@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { getRequestsApi } from "../../../api/requestsApi";
+import RequestsList from "./RequestsList";
 
 const ManageRequests = ({ user }) => {
   const [request, setRequests] = useState([]);
@@ -12,7 +13,11 @@ const ManageRequests = ({ user }) => {
   useEffect(() => {
     getRequests();
   }, []);
-  return <div>ManageRequests</div>;
+  return (
+    <div className='requests-manage'>
+      <RequestsList requests={request} />
+    </div>
+  );
 };
 
 export default ManageRequests;
