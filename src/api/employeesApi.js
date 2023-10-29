@@ -72,9 +72,9 @@ export const addEmployee = async (data) => {
   }
 };
 
-export const mySupervisorsAPI = async (myID) => {
+export const mySupervisorAPI = async (myID) => {
   try {
-    const response = await axios.get(`${API_URL}/mySupervisors`, {
+    const response = await axios.get(`${API_URL}/mySupervisor`, {
       params: {
         myID: myID,
       },

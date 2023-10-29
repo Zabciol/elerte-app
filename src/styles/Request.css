@@ -1,0 +1,12 @@
+.request {
+  text-align: left;
+}
+.request-bottom-form {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+}
+.request-select {
+  max-width: 400px;
+  margin-right: 10px;
+}

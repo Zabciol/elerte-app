@@ -1,19 +1,63 @@
 import React, { useState, useEffect } from "react";
-import { mySupervisorsAPI } from "../../../api/employeesApi";
-const NewRequest = (props) => {
-  const [mySupervisors, setMySupervisors] = useState([]);
+import Spinner from "react-bootstrap/Spinner";
+import { reasonsApi } from "../../../api/reasonsApi";
+import { mySupervisorAPI } from "../../../api/employeesApi";
+import NewRequestForm from "./NewRequestForm";
+import "../../../styles/Request.css";
+const NewRequest = ({ user }) => {
   const [mySupervisor, setMySupervisor] = useState();
-  const getMySupervisors = async () => {
-    const data = await mySupervisorsAPI(props.user.ID);
+  const [reasons, setReasons] = useState([]);
+  const [reason, setReason] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const getMySupervisor = async () => {
+    setLoading(true);
+    const data = await mySupervisorAPI(user.ID);
     console.log(data);
-    setMySupervisors(data);
-    setMySupervisor(data[0]);
+    setMySupervisor(data);
+    setLoading(false);
+  };
+  const getReasons = async () => {
+    try {
+      const data = await reasonsApi();
+      console.log(data.data);
+      setReasons(data.data);
+    } catch (error) {
+      console.log(
+        error.message || "Nie udało się uzyskać powodów nieobecności"
+      );
+    }
+  };
+
+  const changeReason = (e) => {
+    const index = e.target.value;
+    const selectedReason = reasons[index];
+    setReason(selectedReason);
   };
 
   useEffect(() => {
-    getMySupervisors();
+    getMySupervisor();
+    getReasons();
   }, []);
-  return <div>NewRequest</div>;
+  return (
+    <>
+      {!loading && mySupervisor ? (
+        <NewRequestForm
+          user={user}
+          mySupervisor={mySupervisor}
+          reasons={reasons}
+          reason={reason}
+          setReason={changeReason}
+        />
+      ) : (
+        <div>
+          <p>Trwa ładowanie</p>
+          <Spinner animation='border' role='status'>
+            <span className='visually-hidden'>Loading...</span>
+          </Spinner>
+        </div>
+      )}
+    </>
+  );
 };
 
 export default NewRequest;

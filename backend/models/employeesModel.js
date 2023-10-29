@@ -158,35 +158,14 @@ const getMySupervisor = async (id) => {
     queryDatabase(query, [id], (err, results) => {
       if (err) {
         reject(err);
-        return;
+        return {
+          success: false,
+          message: "Wystąpił błąd podczas dodawania pracownika i zależności.",
+        };
       }
       resolve(results[0] ? results[0] : null);
     });
   });
-};
-
-const getSupervisorByMyID = async (id) => {
-  try {
-    var tabIDs = [];
-    var currID = id;
-
-    while (currID !== null) {
-      const supervisor = await getMySupervisor(currID);
-      currID = supervisor.Przelozony_ID;
-      if (currID !== null) tabIDs.push(supervisor);
-    }
-    return {
-      success: true,
-      data: tabIDs,
-      message: "Sukces",
-    };
-  } catch (error) {
-    console.error("Wystąpił błąd:", error);
-    return {
-      success: false,
-      message: "Wystąpił błąd podczas dodawania pracownika i zależności.",
-    };
-  }
 };
 
 module.exports = {
@@ -196,5 +175,5 @@ module.exports = {
   getSupervisors,
   getAllEmployees,
   addNewEmployee,
-  getSupervisorByMyID,
+  getMySupervisor,
 };
