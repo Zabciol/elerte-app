@@ -21,5 +21,15 @@ router.get("/get", async (req, res) => {
     res.status(500).send("Wystąpił błąd podczas pobierania danych.");
   }
 });
+router.put("/updateView", async (req, res) => {
+  try {
+    const ID = req.query.ID;
+    const result = await requestModel.updateRequestsView(ID);
+    res.json(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Wystąpił błąd podczas aktualizacji danych.");
+  }
+});
 
 module.exports = router;

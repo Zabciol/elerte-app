@@ -33,7 +33,11 @@ const ManageRequests = ({ user }) => {
   }, []);
   return (
     <div className='requests-manage'>
-      <RequestsList requests={requests} setRequest={setRequest} />
+      <RequestsList
+        requests={requests}
+        setRequest={setRequest}
+        setRequests={setRequests}
+      />
       <div className='requests-manage-mail'>
         {request !== null ? (
           <RequestMail

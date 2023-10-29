@@ -26,3 +26,16 @@ export const getRequestsApi = async (myID) => {
     throw error;
   }
 };
+export const updateRequestsView = async (id) => {
+  try {
+    const response = await axios.put(`${API_URL}/updateView`, {
+      params: {
+        ID: id,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error during API call:", error);
+    throw error;
+  }
+};
