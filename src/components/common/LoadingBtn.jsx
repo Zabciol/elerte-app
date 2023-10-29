@@ -25,6 +25,7 @@ function LoadingButton({ action, data, buttonText, ...props }) {
   return (
     <>
       <Button
+        className='loading-btn'
         variant='primary'
         disabled={isLoading}
         onClick={!isLoading ? handleClick : null}

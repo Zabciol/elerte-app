@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { getRequestsApi } from "../../../api/requestsApi";
 import RequestsList from "./RequestsList";
 import RequestMail from "./RequestMail";
+import LoadingButton from "../../common/LoadingBtn";
 
 const ManageRequests = ({ user }) => {
   const [requests, setRequests] = useState([]);
@@ -49,7 +50,10 @@ const ManageRequests = ({ user }) => {
             startDate={request.Data_Od}
             endDate={request.Data_Do}
             message={request.Wiadomosc}
-          />
+            setRequest={setRequest}>
+            <LoadingButton action={() => {}} buttonText={"Odrzuć"} />
+            <LoadingButton action={() => {}} buttonText={"Zaakceptuj"} />
+          </RequestMail>
         ) : (
           <p>Proszę wybrać</p>
         )}

@@ -1,6 +1,12 @@
 .request {
   text-align: left;
 }
+.request_close-btn {
+  position: absolute;
+  z-index: 20;
+  right: 20px;
+  top: 15px;
+}
 .request-bottom-form {
   display: flex;
   width: 100%;
@@ -40,8 +46,10 @@
   position: relative !important;
 }
 .requests-manage_list-item_badge {
-  backdrop-filter: blur(2px);
   position: absolute;
+}
+.badge {
+  backdrop-filter: blur(2px);
   height: 20px;
   right: 5px;
   top: 5px;

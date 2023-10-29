@@ -1,10 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import ListGroup from "react-bootstrap/ListGroup";
 import Badge from "react-bootstrap/Badge";
 import { updateRequestsView } from "../../../api/requestsApi";
 
 const RequestsList = ({ requests, setRequest, setRequests }) => {
-  console.log(requests);
   const handleChangeRequest = async (request) => {
     if (request.Wyswietlone === "nie") {
       console.log("Tu się zmieni status czy wyświetlone");
@@ -17,14 +16,18 @@ const RequestsList = ({ requests, setRequest, setRequests }) => {
         return item;
       });
       setRequests(newRequests);
-      setRequest(request);
     }
+    setRequest((prevRequest) =>
+      prevRequest && prevRequest.ID === request.ID ? null : request
+    );
   };
+
   return (
     <div className='requests-manage_list'>
       <ListGroup>
         {requests.map((request) => (
           <ListGroup.Item
+            key={request.ID}
             as='li'
             className='d-flex justify-content-between align-items-start requests-manage_list-item'
             onClick={() => handleChangeRequest(request)}>
