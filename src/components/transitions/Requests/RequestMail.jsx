@@ -5,49 +5,26 @@ import InputGroup from "react-bootstrap/InputGroup";
 import { newRequestApi } from "../../../api/requestsApi";
 import { getNextWorkDay } from "../../common/CommonFunctions";
 
-const RequestMail = ({
-  sender,
-  reciver,
-  reason,
-  reasons,
-  setReason,
-  setStartDate,
-  setMessage,
-  setEndDate,
-  readOnly,
-  message,
-  startDate,
-  endDate,
-  children,
-}) => {
-  const textareaRef = useRef(null);
-  const startDateRef = useRef(null);
-  const endDateRef = useRef(null);
-
-  const sentRequest = async () => {
-    const request = {
-      senderID: sender.ID,
-      reciverID: reciver.ID,
-      message: textareaRef.current.value,
-      reasonID: reason.ID,
-      dataOd: startDateRef.current.value,
-      dataDo: endDateRef.current.value,
-    };
-
-    console.log("Sending");
-    console.log(request);
-    try {
-      const response = await newRequestApi(request);
-      return response;
-    } catch (error) {
-      throw error;
-    }
-  };
+const RequestMail = (props) => {
+  const {
+    sender,
+    reciver,
+    reason,
+    reasons,
+    setReason,
+    setStartDate,
+    setMessage,
+    setEndDate,
+    readOnly,
+    message,
+    startDate,
+    endDate,
+    children,
+  } = props;
 
   const handleStartDateChange = (e) => {
     const startDateValue = new Date(e.target.value);
     const endDateValue = new Date(endDate);
-
     if (endDateValue <= startDateValue) {
       const newEndDate = new Date(startDateValue);
       newEndDate.setDate(newEndDate.getDate() + 1);
@@ -64,10 +41,6 @@ const RequestMail = ({
 
       setStartDate(nextWorkDay.toISOString().split("T")[0]);
       setEndDate(dayAfter.toISOString().split("T")[0]);
-    } else {
-      //textareaRef.current.value = message;
-      //startDateRef.current.value = startDate;
-      //endDateRef.current.value = endDate;
     }
   }, [sender, reciver]);
 
@@ -96,7 +69,6 @@ const RequestMail = ({
           <Form.Control
             as='textarea'
             rows={3}
-            //ref={textareaRef}
             value={message}
             onChange={(e) => setMessage(e.target.value)}
             readOnly={readOnly}
@@ -109,7 +81,6 @@ const RequestMail = ({
           <Form.Control
             aria-label='Text input with dropdown button'
             type='date'
-            //ref={startDateRef}
             value={startDate}
             onChange={handleStartDateChange}
             readOnly={readOnly}
@@ -120,7 +91,6 @@ const RequestMail = ({
           <Form.Control
             aria-label='Text input with dropdown button'
             type='date'
-            //ref={endDateRef}
             value={endDate}
             readOnly={readOnly}
           />

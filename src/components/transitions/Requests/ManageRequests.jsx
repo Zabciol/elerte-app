@@ -7,7 +7,7 @@ const ManageRequests = ({ user }) => {
   const [requests, setRequests] = useState([]);
   const [request, setRequest] = useState(null);
   const [sender, setSender] = useState({});
-  const [reason, setReason] = useState();
+  const [reason, setReason] = useState({ Nazwa: "" });
   const getRequests = async () => {
     const data = await getRequestsApi(user.ID);
     console.log(data.message);
@@ -22,7 +22,7 @@ const ManageRequests = ({ user }) => {
         Nazwisko: request.Nazwisko,
         Mail: request.Mail,
       };
-      const reason = [request.Powod];
+      const reason = { Nazwa: request.Powod };
       setSender(person);
       setReason(reason);
     }
@@ -40,7 +40,8 @@ const ManageRequests = ({ user }) => {
             sender={sender}
             reciver={user}
             readOnly={true}
-            reasons={[request]}
+            reason={reason}
+            reasons={[reason]}
             startDate={request.Data_Od}
             endDate={request.Data_Do}
             message={request.Wiadomosc}
