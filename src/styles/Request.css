@@ -19,7 +19,20 @@
   max-width: 200px;
   margin-right: 10px;
 }
+.requests-manage {
+  display: flex;
+  flex-direction: row;
+}
 .requests-manage_list {
   max-width: 300px;
   text-align: left;
+  cursor: pointer;
+}
+.requests-manage-mail {
+  width: 80%;
+  padding: 0 15px;
+  /*
+  border: var(--bs-border-width) solid var(--bs-border-color);
+  border-radius: var(--bs-border-radius);
+  */
 }

@@ -16,9 +16,9 @@ const RequestMail = ({
   startDate,
   endDate,
 }) => {
-  const textareaRef = useRef(message);
-  const startDateRef = useRef(startDate);
-  const endDateRef = useRef(endDate);
+  const textareaRef = useRef(null);
+  const startDateRef = useRef(null);
+  const endDateRef = useRef(null);
 
   const sentRequest = async () => {
     const request = {
@@ -59,8 +59,12 @@ const RequestMail = ({
 
       startDateRef.current.value = nextWorkDay.toISOString().split("T")[0];
       endDateRef.current.value = dayAfter.toISOString().split("T")[0];
+    } else {
+      textareaRef.current.value = message;
+      startDateRef.current.value = startDate;
+      endDateRef.current.value = endDate;
     }
-  }, []);
+  }, [sender, reciver]);
 
   return (
     <div className='request'>
