@@ -7,6 +7,15 @@
   justify-content: space-between;
 }
 .request-select {
-  max-width: 400px;
+  max-width: 410px;
+  margin-right: 10px;
+}
+.request-dates {
+  display: flex;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+}
+.request-date {
+  max-width: 200px;
   margin-right: 10px;
 }

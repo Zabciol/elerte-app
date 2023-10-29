@@ -154,7 +154,7 @@ const addNewEmployee = async (data) => {
 const getMySupervisor = async (id) => {
   return new Promise((resolve, reject) => {
     const query =
-      "SELECT Imie,Nazwisko,Mail, Przelozony_ID FROM Hierarchia LEFT JOIN Pracownicy ON Pracownicy.ID = Hierarchia.Przelozony_ID WHERE Podwladny_ID = ?";
+      "SELECT Imie,Nazwisko,Mail, Pracownicy.ID FROM Hierarchia LEFT JOIN Pracownicy ON Pracownicy.ID = Hierarchia.Przelozony_ID WHERE Podwladny_ID = ?";
     queryDatabase(query, [id], (err, results) => {
       if (err) {
         reject(err);

@@ -46,3 +46,17 @@ export const setDarkThemeForApp = (dark) => {
     html.setAttribute("data-theme", "light");
   }
 };
+export const getNextWorkDay = () => {
+  let date = new Date();
+  date.setDate(date.getDate() + 1); // najbliższy dzień
+
+  // Jeśli jutro to sobota, dodaj 2 dni
+  if (date.getDay() === 6) {
+    date.setDate(date.getDate() + 2);
+  }
+  // Jeśli jutro to niedziela, dodaj 1 dzień
+  else if (date.getDay() === 0) {
+    date.setDate(date.getDate() + 1);
+  }
+  return date;
+};
