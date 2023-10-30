@@ -7,7 +7,7 @@ const RequestsList = ({ requests, setRequest, setRequests }) => {
   const handleChangeRequest = async (request) => {
     if (request.Wyswietlone === "nie") {
       console.log("Tu się zmieni status czy wyświetlone");
-      //await updateRequestsView(request.ID);
+      await updateRequestsView(request.ID);
 
       const newRequests = requests.map((item) => {
         if (item.ID === request.ID) {

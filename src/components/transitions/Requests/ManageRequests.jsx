@@ -1,5 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { getRequestsApi } from "../../../api/requestsApi";
+import {
+  getRequestsApi,
+  accpetRequestsApi,
+  declineRequestsApi,
+} from "../../../api/requestsApi";
 import RequestsList from "./RequestsList";
 import RequestMail from "./RequestMail";
 import LoadingButton from "../../common/LoadingBtn";
@@ -10,20 +14,23 @@ const ManageRequests = ({ user }) => {
   const [sender, setSender] = useState({});
   const [reason, setReason] = useState({ Nazwa: "" });
   const [isMobileView, setIsMobileView] = useState(window.innerWidth < 767);
+
+  const accept = async () => {
+    const data = await accpetRequestsApi(request.ID);
+    console.log(data.message);
+  };
+
+  const decline = async () => {
+    const data = await declineRequestsApi(request.ID);
+    console.log(data.message);
+  };
+
   const getRequests = async () => {
     const data = await getRequestsApi(user.ID);
     console.log(data.message);
     console.log(data.data);
     setRequests(data.data);
   };
-
-  useEffect(() => {
-    const handleResize = () => {
-      setIsMobileView(window.innerWidth < 767);
-    };
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
 
   useEffect(() => {
     if (request !== null) {
@@ -40,6 +47,11 @@ const ManageRequests = ({ user }) => {
 
   useEffect(() => {
     getRequests();
+    const handleResize = () => {
+      setIsMobileView(window.innerWidth < 767);
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   const renderRequestMail = () => (
@@ -54,8 +66,14 @@ const ManageRequests = ({ user }) => {
       message={request.Wiadomosc}
       setRequest={setRequest}>
       <div className='request-manage_btns'>
-        <LoadingButton action={() => {}} buttonText={"Odrzuć"} />
-        <LoadingButton action={() => {}} buttonText={"Zaakceptuj"} />
+        <LoadingButton
+          action={() => declineRequestsApi(request.ID)}
+          buttonText={"Odrzuć"}
+        />
+        <LoadingButton
+          action={() => accpetRequestsApi(request.ID)}
+          buttonText={"Zaakceptuj"}
+        />
       </div>
     </RequestMail>
   );

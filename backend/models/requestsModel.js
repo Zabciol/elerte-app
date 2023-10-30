@@ -44,7 +44,7 @@ const getRequests = async (id) => {
 };
 const updateRequestsView = async (id) => {
   try {
-    const query = "UPDATE Wnioski SET Wyswietlone === `tak` WHERE ID = ? ?";
+    const query = "UPDATE Wnioski SET Wyswietlone = 'tak' WHERE ID = ?";
 
     const results = await queryDatabasePromise(query, id);
     console.log("Wniosek zaktualizowano pomyślnie!");
@@ -55,8 +55,42 @@ const updateRequestsView = async (id) => {
   }
 };
 
+const acceptRequests = async (id) => {
+  try {
+    const query = "UPDATE Wnioski SET `Status` = 'Zaakceptowano' WHERE ID = ?";
+    const results = await queryDatabasePromise(query, id);
+    console.log("Updated request status on accept");
+    return {
+      success: true,
+      message: "Wniosek zaakceptowano pomyślnie!",
+      data: results,
+    };
+  } catch (error) {
+    console.error("Wystąpił błąd podczas pozyskiwania wniosków:", error);
+    return { success: false, message: error.message };
+  }
+};
+
+const declineRequests = async (id) => {
+  try {
+    const query = "UPDATE Wnioski SET `Status` = 'Odrzucono' WHERE ID = ?";
+    const results = await queryDatabasePromise(query, id);
+    console.log(" Updated request status on decline");
+    return {
+      success: true,
+      message: "Wniosek odrzucono pomyślnie!",
+      data: results,
+    };
+  } catch (error) {
+    console.error("Wystąpił błąd podczas pozyskiwania wniosków:", error);
+    return { success: false, message: error.message };
+  }
+};
+
 module.exports = {
   sentRequest,
   getRequests,
   updateRequestsView,
+  acceptRequests,
+  declineRequests,
 };

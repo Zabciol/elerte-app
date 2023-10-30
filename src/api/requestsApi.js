@@ -28,10 +28,33 @@ export const getRequestsApi = async (myID) => {
 };
 export const updateRequestsView = async (id) => {
   try {
+    console.log(id);
     const response = await axios.put(`${API_URL}/updateView`, {
-      params: {
-        ID: id,
-      },
+      ID: id,
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error during API call:", error);
+    throw error;
+  }
+};
+export const accpetRequestsApi = async (id) => {
+  try {
+    console.log(id);
+    const response = await axios.put(`${API_URL}/accept`, {
+      ID: id,
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error during API call:", error);
+    throw error;
+  }
+};
+export const declineRequestsApi = async (id) => {
+  try {
+    console.log(id);
+    const response = await axios.put(`${API_URL}/decline`, {
+      ID: id,
     });
     return response.data;
   } catch (error) {

@@ -23,8 +23,29 @@ router.get("/get", async (req, res) => {
 });
 router.put("/updateView", async (req, res) => {
   try {
-    const ID = req.query.ID;
+    const ID = req.body.ID;
     const result = await requestModel.updateRequestsView(ID);
+    res.json(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Wystąpił błąd podczas aktualizacji danych.");
+  }
+});
+
+router.put("/accept", async (req, res) => {
+  try {
+    const ID = req.body.ID;
+    const result = await requestModel.acceptRequests(ID);
+    res.json(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Wystąpił błąd podczas aktualizacji danych.");
+  }
+});
+router.put("/decline", async (req, res) => {
+  try {
+    const ID = req.body.ID;
+    const result = await requestModel.declineRequests(ID);
     res.json(result);
   } catch (error) {
     console.error(error);
