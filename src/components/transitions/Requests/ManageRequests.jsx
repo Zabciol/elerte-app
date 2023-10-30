@@ -9,12 +9,21 @@ const ManageRequests = ({ user }) => {
   const [request, setRequest] = useState(null);
   const [sender, setSender] = useState({});
   const [reason, setReason] = useState({ Nazwa: "" });
+  const [isMobileView, setIsMobileView] = useState(window.innerWidth < 767);
   const getRequests = async () => {
     const data = await getRequestsApi(user.ID);
     console.log(data.message);
     console.log(data.data);
     setRequests(data.data);
   };
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobileView(window.innerWidth < 767);
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   useEffect(() => {
     if (request !== null) {
@@ -32,32 +41,49 @@ const ManageRequests = ({ user }) => {
   useEffect(() => {
     getRequests();
   }, []);
+
+  const renderRequestMail = () => (
+    <RequestMail
+      sender={sender}
+      reciver={user}
+      readOnly={true}
+      reason={reason}
+      reasons={[reason]}
+      startDate={request.Data_Od}
+      endDate={request.Data_Do}
+      message={request.Wiadomosc}
+      setRequest={setRequest}>
+      <div className='request-manage_btns'>
+        <LoadingButton action={() => {}} buttonText={"Odrzuć"} />
+        <LoadingButton action={() => {}} buttonText={"Zaakceptuj"} />
+      </div>
+    </RequestMail>
+  );
+
   return (
     <div className='requests-manage'>
-      <RequestsList
-        requests={requests}
-        setRequest={setRequest}
-        setRequests={setRequests}
-      />
-      <div className='requests-manage-mail'>
-        {request !== null ? (
-          <RequestMail
-            sender={sender}
-            reciver={user}
-            readOnly={true}
-            reason={reason}
-            reasons={[reason]}
-            startDate={request.Data_Od}
-            endDate={request.Data_Do}
-            message={request.Wiadomosc}
-            setRequest={setRequest}>
-            <LoadingButton action={() => {}} buttonText={"Odrzuć"} />
-            <LoadingButton action={() => {}} buttonText={"Zaakceptuj"} />
-          </RequestMail>
+      {isMobileView ? (
+        request === null ? (
+          <RequestsList
+            requests={requests}
+            setRequest={setRequest}
+            setRequests={setRequests}
+          />
         ) : (
-          <p>Proszę wybrać</p>
-        )}
-      </div>
+          renderRequestMail()
+        )
+      ) : (
+        <>
+          <RequestsList
+            requests={requests}
+            setRequest={setRequest}
+            setRequests={setRequests}
+          />
+          <div className='requests-manage-mail'>
+            {request !== null ? renderRequestMail() : <p>Proszę wybrać</p>}
+          </div>
+        </>
+      )}
     </div>
   );
 };

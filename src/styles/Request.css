@@ -30,7 +30,7 @@
   flex-direction: row;
 }
 .requests-manage_list {
-  max-width: 300px;
+  width: 100%;
   text-align: left;
   cursor: pointer;
 }
@@ -54,4 +54,12 @@
   right: 5px;
   top: 5px;
   --bs-bg-opacity: 0.5 !important;
+}
+.request-manage_btns {
+  display: flex;
+}
+@media (min-width: 767px) {
+  .requests-manage_list {
+    max-width: 300px;
+  }
 }
