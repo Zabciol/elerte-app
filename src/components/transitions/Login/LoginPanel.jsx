@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "../../../styles/Login/login.css";
-import logo from "../../../assets/logo.png";
+import logo from "../../../assets/logo-elerte.png";
 import LoginInput from "./LoginInput";
 import { loginApi } from "../../../api/authApi.js";
 

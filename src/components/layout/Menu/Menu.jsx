@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Container from "react-bootstrap/Container";
 import Navbar from "react-bootstrap/Navbar";
-import logo from "../../../assets/logo.png";
+import logo from "../../../assets/logo-elerte.png";
 import MenuItems from "./MenuItems";
 import MenuHeader from "./MenuHeader";
 import { setDarkThemeForApp } from "../../common/CommonFunctions";
