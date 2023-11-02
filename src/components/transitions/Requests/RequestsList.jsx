@@ -35,7 +35,7 @@ const RequestsList = ({ requests, setRequest, setRequests }) => {
               <div className='fw-bold'>
                 {request.Imie + " " + request.Nazwisko}
               </div>
-              {request.Data_Od + " / " + request.Data_Do}
+              {request.Data_Od + " / " + request.Data_Do} {request.Status}
             </div>
             {request.Wyswietlone === "nie" ? (
               <Badge
