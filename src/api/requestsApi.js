@@ -55,7 +55,7 @@ export const declineRequestsApi = async (request) => {
   try {
     console.log(request);
     const response = await axios.put(`${API_URL}/decline`, {
-      ID: request,
+      ID: request.ID,
       request: request,
     });
     return response.data;

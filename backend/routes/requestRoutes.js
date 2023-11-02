@@ -50,7 +50,14 @@ router.put("/accept", async (req, res) => {
 router.put("/decline", async (req, res) => {
   try {
     const ID = req.body.ID;
+    const request = req.body.request;
     const result = await requestModel.declineRequests(ID);
+    const resultECP = await requestModel.deleteECP(request);
+    if (!resultECP.success) {
+      throw new Error(
+        "Operacja usuwania danych z tabeli ECP nie powiodła się."
+      );
+    }
     res.json(result);
   } catch (error) {
     console.error(error);

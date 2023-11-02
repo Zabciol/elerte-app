@@ -122,7 +122,30 @@ const fillECP = async (request) => {
       data: results,
     };
   } catch (error) {
-    console.error("Wystąpił błąd podczas dodawania ecp :", error);
+    console.error("Wystąpił błąd podczas dodawania ecp:", error);
+    return { success: false, message: error.message };
+  }
+};
+const deleteECP = async (request) => {
+  try {
+    const query = `
+      DELETE FROM ECP
+      WHERE Pracownik_ID = ? AND Data >= ? AND Data <= ?
+    `;
+
+    const deleteResults = await queryDatabasePromise(query, [
+      request.Nadawca_ID,
+      request.Data_Od,
+      request.Data_Do,
+    ]);
+
+    return {
+      success: true,
+      message: "Wniosek odrzucony, dane usunięte.",
+      affectedRows: deleteResults.affectedRows,
+    };
+  } catch (error) {
+    console.error("Wystąpił błąd podczas usuwania ecp:", error);
     return { success: false, message: error.message };
   }
 };
@@ -134,4 +157,5 @@ module.exports = {
   acceptRequests,
   declineRequests,
   fillECP,
+  deleteECP,
 };
