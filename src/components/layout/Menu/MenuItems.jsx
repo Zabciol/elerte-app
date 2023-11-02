@@ -1,19 +1,14 @@
 import React from "react";
 import { Children } from "react";
+import { Link } from "react-router-dom";
 import Form from "react-bootstrap/Form";
 import Nav from "react-bootstrap/Nav";
 import NavDropdown from "react-bootstrap/NavDropdown";
 import Offcanvas from "react-bootstrap/Offcanvas";
 
 const MenuItems = (props) => {
-  const { setPage, user, darkMode, handleSwitchTheme, logout, children, show } =
-    props;
+  const { user, darkMode, handleSwitchTheme, logout, children, show } = props;
   const nav_items = ["ECP", "Pracownicy", "Kalendarz", "Wnioski"];
-
-  const onClickMenuItem = (item) => {
-    console.log(item);
-    setPage(item);
-  };
 
   return (
     <Offcanvas.Body>
@@ -45,7 +40,7 @@ const MenuItems = (props) => {
           </NavDropdown>
         ) : null}
         {nav_items.map((item) => (
-          <Nav.Link key={item} onClick={() => onClickMenuItem(item)}>
+          <Nav.Link key={item} as={Link} to={`/${item}`}>
             {item}
           </Nav.Link>
         ))}

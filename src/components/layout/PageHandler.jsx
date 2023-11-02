@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import "../../styles/Home/home.css";
 import Home from "../transitions/Home.jsx";
 import ECP from "../transitions/ECP/ECP.jsx";
@@ -10,45 +11,12 @@ import { subordinatesApi } from "../../api/employeesApi";
 import Menu from "./Menu/Menu";
 
 const PageHandler = (props) => {
-  const [page, setPage] = useState("Home");
   const [menuItems, setMenuItems] = useState();
-  const [subordinates, setSubordinates] = useState();
+  const [subordinates, setSubordinates] = useState([]);
 
   const getSubordinates = async () => {
     const data = await subordinatesApi(props.user.ID);
     setSubordinates(data.data);
-  };
-
-  const componentMap = {
-    Home: <Home user={props.user} setMenuItems={setMenuItems}></Home>,
-    ECP: (
-      <ECP
-        user={props.user}
-        setMenuItems={setMenuItems}
-        subordinates={subordinates}
-      />
-    ),
-    Pracownicy: (
-      <Employees
-        user={props.user}
-        setMenuItems={setMenuItems}
-        subordinates={subordinates}
-      />
-    ),
-    Wnioski: (
-      <Requests
-        user={props.user}
-        setMenuItems={setMenuItems}
-        subordinates={subordinates}
-      />
-    ),
-    Kalendarz: (
-      <Calender
-        user={props.user}
-        setMenuItems={setMenuItems}
-        subordinates={subordinates}
-      />
-    ),
   };
 
   useEffect(() => {
@@ -56,16 +24,61 @@ const PageHandler = (props) => {
   }, []);
 
   return (
-    <Container expand='lg'>
-      <Menu
-        setPage={setPage}
-        page={page}
-        user={props.user}
-        logout={props.logout}>
-        {menuItems}
-      </Menu>
-      <div className='interface'>{componentMap[page] || null}</div>
-    </Container>
+    <BrowserRouter>
+      <Container expand='lg'>
+        <Menu user={props.user} logout={props.logout}>
+          {menuItems}
+        </Menu>
+        <div className='interface'>
+          <Routes>
+            <Route
+              path='/'
+              element={<Home user={props.user} setMenuItems={setMenuItems} />}
+            />
+            <Route
+              path='/ecp'
+              element={
+                <ECP
+                  user={props.user}
+                  setMenuItems={setMenuItems}
+                  subordinates={subordinates}
+                />
+              }
+            />
+            <Route
+              path='/pracownicy'
+              element={
+                <Employees
+                  user={props.user}
+                  setMenuItems={setMenuItems}
+                  subordinates={subordinates}
+                />
+              }
+            />
+            <Route
+              path='/wnioski'
+              element={
+                <Requests
+                  user={props.user}
+                  setMenuItems={setMenuItems}
+                  subordinates={subordinates}
+                />
+              }
+            />
+            <Route
+              path='/kalendarz'
+              element={
+                <Calender
+                  user={props.user}
+                  setMenuItems={setMenuItems}
+                  subordinates={subordinates}
+                />
+              }
+            />
+          </Routes>
+        </div>
+      </Container>
+    </BrowserRouter>
   );
 };
 
