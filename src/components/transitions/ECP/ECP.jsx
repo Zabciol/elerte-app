@@ -45,7 +45,7 @@ const ECP = ({ user, setMenuItems, subordinates }) => {
     <GetDataProvider>
       <ECPList
         user={user}
-        subordinates={[user, ...subordinates]}
+        subordinates={subordinates}
         dzial={dzial}
         date={date}
       />

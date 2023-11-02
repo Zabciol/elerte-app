@@ -41,7 +41,7 @@ const PageHandler = (props) => {
                 <ECP
                   user={props.user}
                   setMenuItems={setMenuItems}
-                  subordinates={subordinates}
+                  subordinates={[props.user, ...subordinates]}
                 />
               }
             />
@@ -71,7 +71,7 @@ const PageHandler = (props) => {
                 <Calender
                   user={props.user}
                   setMenuItems={setMenuItems}
-                  subordinates={subordinates}
+                  subordinates={[props.user, ...subordinates]}
                 />
               }
             />
