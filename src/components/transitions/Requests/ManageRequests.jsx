@@ -28,11 +28,11 @@ const ManageRequests = ({ user }) => {
   const getRequests = async () => {
     const data = await getRequestsApi(user.ID);
     console.log(data.message);
-    console.log(data.data);
     setRequests(data.data);
   };
 
   useEffect(() => {
+    console.log(request);
     if (request !== null) {
       const person = {
         Imie: request.Imie,
@@ -67,11 +67,11 @@ const ManageRequests = ({ user }) => {
       setRequest={setRequest}>
       <div className='request-manage_btns'>
         <LoadingButton
-          action={() => declineRequestsApi(request.ID)}
+          action={() => declineRequestsApi(request)}
           buttonText={"Odrzuć"}
         />
         <LoadingButton
-          action={() => accpetRequestsApi(request.ID)}
+          action={() => accpetRequestsApi(request)}
           buttonText={"Zaakceptuj"}
         />
       </div>

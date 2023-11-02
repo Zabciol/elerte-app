@@ -32,7 +32,7 @@ const getRequests = async (id) => {
       "FROM Wnioski " +
       "LEFT JOIN Pracownicy ON Pracownicy.ID = Wnioski.Nadawca_ID " +
       "LEFT JOIN PowodyNieobecnosci ON PowodyNieobecnosci.ID = Wnioski.Powod_ID " +
-      "WHERE Wnioski.Odbiorca_ID = ?";
+      "WHERE Wnioski.Odbiorca_ID = ? AND Wnioski.Data_Od > CURDATE()";
 
     const results = await queryDatabasePromise(query, id);
     console.log("Wniosek uzyskano pomyślnie!");
@@ -66,7 +66,7 @@ const acceptRequests = async (id) => {
       data: results,
     };
   } catch (error) {
-    console.error("Wystąpił błąd podczas pozyskiwania wniosków:", error);
+    console.error("Wystąpił błąd podczas akceptowania wniosku:", error);
     return { success: false, message: error.message };
   }
 };
@@ -82,7 +82,47 @@ const declineRequests = async (id) => {
       data: results,
     };
   } catch (error) {
-    console.error("Wystąpił błąd podczas pozyskiwania wniosków:", error);
+    console.error("Wystąpił błąd podczas odrzucania wniosku:", error);
+    return { success: false, message: error.message };
+  }
+};
+
+const fillECP = async (request) => {
+  try {
+    const startDate = new Date(request.Data_Od);
+    const endDate = new Date(request.Data_Do);
+    const currentDate = new Date().toISOString().slice(0, 19).replace("T", " ");
+    const editorID = request.Odbiorca_ID;
+    const recordsToInsert = [];
+
+    for (
+      let date = new Date(startDate);
+      date <= endDate;
+      date.setDate(date.getDate() + 1)
+    ) {
+      const formattedDate = date.toISOString().split("T")[0];
+      recordsToInsert.push([
+        formattedDate,
+        "00:00",
+        "00:00",
+        request.Nadawca_ID,
+        request.Powod_ID,
+        0,
+        currentDate,
+        editorID,
+      ]);
+    }
+
+    const query =
+      "INSERT INTO ECP (`Data`,`Od_godz`,`Do_Godz`, `Pracownik_ID`, `Powod_ID`,`IloscGodzin`,`DataZapisu`, `ID_Edytora`) VALUES ?";
+    const results = await queryDatabasePromise(query, [recordsToInsert]);
+    return {
+      success: true,
+      message: "ECP dodano pomyślnie",
+      data: results,
+    };
+  } catch (error) {
+    console.error("Wystąpił błąd podczas dodawania ecp :", error);
     return { success: false, message: error.message };
   }
 };
@@ -93,4 +133,5 @@ module.exports = {
   updateRequestsView,
   acceptRequests,
   declineRequests,
+  fillECP,
 };

@@ -35,7 +35,12 @@ router.put("/updateView", async (req, res) => {
 router.put("/accept", async (req, res) => {
   try {
     const ID = req.body.ID;
+    const request = req.body.request;
     const result = await requestModel.acceptRequests(ID);
+    const resultECP = await requestModel.fillECP(request);
+    if (!resultECP.success) {
+      throw new Error("Operacja wypełnienia tabeli ECP nie powiodła się.");
+    }
     res.json(result);
   } catch (error) {
     console.error(error);

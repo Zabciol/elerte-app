@@ -91,6 +91,7 @@ const ECPInput = (props) => {
       Do_Godz: Do,
       hours: hours,
       reason: reason,
+      date: date,
     });
     addCollector(collector);
     return () => {

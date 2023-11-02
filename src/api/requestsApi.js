@@ -38,11 +38,12 @@ export const updateRequestsView = async (id) => {
     throw error;
   }
 };
-export const accpetRequestsApi = async (id) => {
+export const accpetRequestsApi = async (request) => {
   try {
-    console.log(id);
+    console.log(request);
     const response = await axios.put(`${API_URL}/accept`, {
-      ID: id,
+      ID: request.ID,
+      request: request,
     });
     return response.data;
   } catch (error) {
@@ -50,11 +51,12 @@ export const accpetRequestsApi = async (id) => {
     throw error;
   }
 };
-export const declineRequestsApi = async (id) => {
+export const declineRequestsApi = async (request) => {
   try {
-    console.log(id);
+    console.log(request);
     const response = await axios.put(`${API_URL}/decline`, {
-      ID: id,
+      ID: request,
+      request: request,
     });
     return response.data;
   } catch (error) {
