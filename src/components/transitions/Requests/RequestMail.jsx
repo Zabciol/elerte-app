@@ -59,7 +59,7 @@ const RequestMail = (props) => {
           <InputGroup className='mb-3'>
             <InputGroup.Text id='basic-addon1'>Od:</InputGroup.Text>
             <Form.Control
-              value={sender.Mail}
+              defaultValue={sender.Mail}
               aria-label='Username'
               aria-describedby='basic-addon1'
               readOnly={true}
@@ -69,7 +69,7 @@ const RequestMail = (props) => {
             <InputGroup.Text id='basic-addon1'>Do:</InputGroup.Text>
             <Form.Control
               aria-label='Text input with dropdown button'
-              value={reciver.Mail}
+              defaultValue={reciver.Mail}
               readOnly={true}
             />
           </InputGroup>
@@ -81,7 +81,7 @@ const RequestMail = (props) => {
               <Form.Control
                 as='textarea'
                 rows={3}
-                value={message}
+                defaultValue={message}
                 onChange={(e) => setMessage(e.target.value)}
                 readOnly={readOnly}
               />
@@ -93,7 +93,7 @@ const RequestMail = (props) => {
               <Form.Control
                 aria-label='Text input with dropdown button'
                 type='date'
-                value={startDate}
+                defaultValue={startDate}
                 onChange={handleStartDateChange}
                 readOnly={readOnly}
               />
@@ -103,7 +103,7 @@ const RequestMail = (props) => {
               <Form.Control
                 aria-label='Text input with dropdown button'
                 type='date'
-                value={endDate}
+                defaultValue={endDate}
                 readOnly={readOnly}
               />
             </InputGroup>
@@ -111,7 +111,7 @@ const RequestMail = (props) => {
           <div className='request-bottom-form'>
             <Form.Select
               aria-label='Default select example'
-              value={reason.Nazwa}
+              defaultValue={reason.Nazwa}
               onChange={(e) => setReason(e.target.value)}
               className='request-select'
               readOnly={readOnly}>
