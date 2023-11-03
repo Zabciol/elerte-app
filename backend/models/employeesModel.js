@@ -47,7 +47,7 @@ const getWorkedHoursByEmployee = (employeeId, month) => {
 const getEmployeeInf = (employeeId) => {
   return new Promise((resolve, reject) => {
     const query =
-      "SELECT DISTINCT p.ID, p.Imie,p.Nazwisko, p.Mail, p.NrTelefonu, s.Nazwa AS StanowiskoNazwa,d.ID AS DzialID, d.Nazwa AS DzialNazwa," +
+      "SELECT DISTINCT p.ID, p.Imie,p.Nazwisko, p.Mail, p.NrTelefonu,s.ID AS StanowiskoID, s.Nazwa AS StanowiskoNazwa, p.WymiarPracy_ID, d.ID AS DzialID, d.Nazwa AS DzialNazwa," +
       "przelozony.ID AS PrzelozonyID,przelozony.Imie AS PrzelozonyImie, przelozony.Nazwisko AS PrzelozonyNazwisko, przelozony.Mail AS PrzelozonyMail, dzialPrzelozony.Nazwa AS DzialPrzelozonyNazwa " +
       "FROM Pracownicy p LEFT JOIN Hierarchia h ON p.ID = h.Podwladny_ID LEFT JOIN Stanowisko s ON p.Stanowisko_ID = s.ID LEFT JOIN Dzialy d ON s.Dzial_ID = d.ID " +
       "LEFT JOIN Pracownicy przelozony ON h.Przelozony_ID = przelozony.ID LEFT JOIN Stanowisko stanowiskoPrzelozony ON przelozony.Stanowisko_ID = stanowiskoPrzelozony.ID " +

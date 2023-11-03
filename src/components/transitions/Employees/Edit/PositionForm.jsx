@@ -9,13 +9,13 @@ import Form from "react-bootstrap/Form";
 const PositionForm = ({ employee }) => {
   console.log(employee);
   const [departments, setDepartments] = useState([]);
-  const [department, setDepartment] = useState("");
+  const [department, setDepartment] = useState();
   const [positions, setPositions] = useState([]);
-  const [position, setPosition] = useState("");
+  const [position, setPosition] = useState();
   const [supervisors, setSupervisors] = useState([]);
-  const [supervisor, setSupervisor] = useState("");
+  const [supervisor, setSupervisor] = useState();
   const [workingTimes, setWorkingTimes] = useState([]);
-  const [workingTime, setWorkingTime] = useState("");
+  const [workingTime, setWorkingTime] = useState();
 
   const onChangeDepartment = (event) => {
     setDepartment(event.target.value);
@@ -41,16 +41,15 @@ const PositionForm = ({ employee }) => {
     getFromApi(setWorkingTimes, workingTimeApi);
 
     if (employee) {
-      // Ustaw wartość początkową dla działu bazując na danych pracownika
       setDepartment(employee.DzialID);
-
-      // Ustaw wartość początkową dla przełożonego bazując na danych pracownika
       setSupervisor(employee.PrzelozonyID);
+      setPosition(employee.StanowiskoID);
+      setWorkingTime(employee.WymiarPracy_ID);
     }
   }, []);
 
   useEffect(() => {
-    department !== ""
+    department !== undefined
       ? getFromApi(setPositions, positionApi, department)
       : getFromApi(setPositions, positionApi, 1);
   }, [department]);
@@ -63,7 +62,7 @@ const PositionForm = ({ employee }) => {
           aria-label='Floating label select example'
           onChange={onChangeDepartment}>
           {departments.map((department) => (
-            <option value={department} key={department.ID}>
+            <option value={department.ID} key={department.ID}>
               {department.Nazwa}
             </option>
           ))}
@@ -71,6 +70,7 @@ const PositionForm = ({ employee }) => {
       </FloatingLabel>
       <FloatingLabel controlId='floatingSelect' label='Stanowisko'>
         <Form.Select
+          value={position}
           aria-label='Floating label select example'
           onChange={onChangePosition}>
           {positions.map((position) => (
