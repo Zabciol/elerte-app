@@ -16,7 +16,7 @@ const UserCard = (props) => {
           <Badge>{inf}</Badge>
         </div>
       </Accordion.Header>
-      <Accordion.Body>{children}</Accordion.Body>
+      <Accordion.Body style={{ overflow: "hidden" }}>{children}</Accordion.Body>
     </Accordion.Item>
   );
 };

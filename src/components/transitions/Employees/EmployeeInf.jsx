@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
+import Button from "react-bootstrap/Button";
 import { infApi } from "../../../api/employeesApi";
 import "../../../styles/Employee.css";
+import "bootstrap-icons/font/bootstrap-icons.css";
 
 const EmployeeInf = (props) => {
   const [inf, setInf] = useState();
@@ -31,6 +33,9 @@ const EmployeeInf = (props) => {
           </p>
           <p></p>
           <p></p>
+          <Button variant='outline-secondary' className='edit-btn'>
+            <i class='bi bi-pencil-square'></i> Edytuj
+          </Button>
         </div>
       ) : (
         <>Brak danych</>
