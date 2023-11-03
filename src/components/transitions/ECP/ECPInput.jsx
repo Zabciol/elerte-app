@@ -44,7 +44,6 @@ const ECPInput = (props) => {
         importECP.hours,
         importECP.reason
       );
-      console.log(importECP);
     }
     setChecked(!checked);
   };

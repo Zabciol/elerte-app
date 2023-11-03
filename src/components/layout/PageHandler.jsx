@@ -16,6 +16,7 @@ const PageHandler = (props) => {
 
   const getSubordinates = async () => {
     const data = await subordinatesApi(props.user.ID);
+    //console.log(data);
     setSubordinates(data.data);
   };
 
