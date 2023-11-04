@@ -71,6 +71,7 @@ const FormPopUp = ({ show, setShow, employee }) => {
           </Tab>
           <Tab eventKey='subordinates' title='Podwładni'>
             <SubordinatesForm
+              employee={employee}
               subordinates={subordinates}
               setSubordinates={setSubordinates}
               department={department}

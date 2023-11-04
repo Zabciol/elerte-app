@@ -22,16 +22,18 @@ const SubordinatesForm = (props) => {
   };
 
   const filterEmployees = () => {
-    if (employees.length) {
+    if (employees.length && department) {
       const tab = employees.filter((employee) => employee.Dzial === department);
-
       setFilteredEmployees(tab);
       console.log(tab);
     }
   };
 
   const getAllEmployees = async () => {
-    const data = await allEmployees();
+    let data = await allEmployees();
+    if (props.employee) {
+      data = data.filter((employee) => employee.ID !== props.employee.ID);
+    }
     console.log(data);
     setEmployees(data);
   };
@@ -43,29 +45,27 @@ const SubordinatesForm = (props) => {
   };
 
   useEffect(() => {
-    getAllEmployees();
-    getAllDepartments();
+    const fetchData = async () => {
+      await getAllEmployees();
+      await getAllDepartments();
+    };
+
+    fetchData();
   }, []);
 
   useEffect(() => {
-    if (departments) {
-      filterEmployees();
-    }
-  }, [department, departments, employees]);
+    filterEmployees();
+  }, [department, employees]);
 
   useEffect(() => {
-    console.log("Props.department ID:", props.department);
-
     if (departments && departments.length > 0) {
       console.log(departments);
       const dep = departments.filter(
         (department) => department.ID === Number(props.department)
       );
-
-      console.log("Filtered Department:", dep);
       setDepartment(dep[0].Nazwa);
     }
-  }, [props.department]);
+  }, [props.department, departments]);
 
   return (
     <>
