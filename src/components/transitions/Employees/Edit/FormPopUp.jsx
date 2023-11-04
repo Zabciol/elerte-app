@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import InputGroup from "react-bootstrap/InputGroup";
@@ -9,6 +9,7 @@ import ContactForm from "./ContactForm";
 import NewEmployeeForm from "../NewEmployee/NewEmployeeForm";
 import PositionForm from "./PositionForm";
 import SubordinatesForm from "./SuborfinatesForm";
+import { subordinatesApi } from "../../../../api/employeesApi";
 
 const FormPopUp = ({ show, setShow, employee }) => {
   const mailRef = useRef();
@@ -38,6 +39,16 @@ const FormPopUp = ({ show, setShow, employee }) => {
     };
     console.log(newEmployee);
   };
+
+  const getSubordinates = async () => {
+    const data = await subordinatesApi(employee.ID);
+    const subordinatesID = data.data.map((employee) => employee.ID);
+    setSubordinates(subordinatesID);
+  };
+
+  useEffect(() => {
+    getSubordinates();
+  }, []);
 
   return (
     <Modal show={show} onHide={() => setShow(false)}>

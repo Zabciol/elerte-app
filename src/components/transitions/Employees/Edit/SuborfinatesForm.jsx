@@ -13,10 +13,6 @@ const SubordinatesForm = (props) => {
   const [employees, setEmployees] = useState([]);
   const [filteredEmployees, setFilteredEmployees] = useState([]);
 
-  const save = () => {
-    console.log(props.subordinates);
-    props.action();
-  };
   const onChangeDepartment = (event) => {
     setDepartment(event.target.value);
   };
@@ -25,7 +21,6 @@ const SubordinatesForm = (props) => {
     if (employees.length && department) {
       const tab = employees.filter((employee) => employee.Dzial === department);
       setFilteredEmployees(tab);
-      console.log(tab);
     }
   };
 
@@ -34,13 +29,11 @@ const SubordinatesForm = (props) => {
     if (props.employee) {
       data = data.filter((employee) => employee.ID !== props.employee.ID);
     }
-    console.log(data);
     setEmployees(data);
   };
 
   const getAllDepartments = async () => {
     const data = await departmentsApi();
-    console.log(data);
     setDepartments(data);
   };
 
@@ -58,13 +51,14 @@ const SubordinatesForm = (props) => {
 
   useEffect(() => {
     if (departments && departments.length > 0) {
-      console.log(departments);
       const dep = departments.filter(
         (department) => department.ID === Number(props.department)
       );
       setDepartment(dep[0].Nazwa);
     }
   }, [props.department, departments]);
+
+  console.log(props.subordinates);
 
   return (
     <>
@@ -95,7 +89,6 @@ const SubordinatesForm = (props) => {
                     const index = updated.indexOf(employee.ID);
                     if (index > -1) updated.splice(index, 1);
                   }
-
                   props.setSubordinates(updated);
                 }}>
                 <div className='ms-2 me-auto text-start'>

@@ -18,7 +18,6 @@ const PositionForm = (props) => {
     workingTime,
     setWorkingTime,
   } = props;
-  console.log(employee);
   const [departments, setDepartments] = useState([]);
   const [positions, setPositions] = useState([]);
   const [supervisors, setSupervisors] = useState([]);
