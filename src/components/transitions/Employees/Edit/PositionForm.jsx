@@ -6,16 +6,23 @@ import { workingTimeApi } from "../../../../api/workingTimeApi";
 import FloatingLabel from "react-bootstrap/FloatingLabel";
 import Form from "react-bootstrap/Form";
 
-const PositionForm = ({ employee }) => {
+const PositionForm = (props) => {
+  const {
+    employee,
+    department,
+    setDepartment,
+    position,
+    setPosition,
+    supervisor,
+    setSupervisor,
+    workingTime,
+    setWorkingTime,
+  } = props;
   console.log(employee);
   const [departments, setDepartments] = useState([]);
-  const [department, setDepartment] = useState();
   const [positions, setPositions] = useState([]);
-  const [position, setPosition] = useState();
   const [supervisors, setSupervisors] = useState([]);
-  const [supervisor, setSupervisor] = useState();
   const [workingTimes, setWorkingTimes] = useState([]);
-  const [workingTime, setWorkingTime] = useState();
 
   const onChangeDepartment = (event) => {
     setDepartment(event.target.value);
@@ -98,10 +105,11 @@ const PositionForm = ({ employee }) => {
       </FloatingLabel>
       <FloatingLabel controlId='floatingSelect' label='Czas pracy'>
         <Form.Select
+          value={workingTime}
           aria-label='Floating label select example'
           onChange={onChangeWorkingTime}>
           {workingTimes.map((workingTime) => (
-            <option value={workingTime} key={workingTime.ID}>
+            <option value={workingTime.ID} key={workingTime.ID}>
               {workingTime.Od + " - " + workingTime.Do}
             </option>
           ))}

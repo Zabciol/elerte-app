@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import InputGroup from "react-bootstrap/InputGroup";
@@ -8,9 +8,37 @@ import Tabs from "react-bootstrap/Tabs";
 import ContactForm from "./ContactForm";
 import NewEmployeeForm from "../NewEmployee/NewEmployeeForm";
 import PositionForm from "./PositionForm";
+import SubordinatesForm from "./SuborfinatesForm";
 
 const FormPopUp = ({ show, setShow, employee }) => {
-  console.log(employee);
+  const mailRef = useRef();
+  const phoneNumberRef = useRef();
+  const [department, setDepartment] = useState();
+  const [position, setPosition] = useState();
+  const [supervisor, setSupervisor] = useState();
+  const [workingTime, setWorkingTime] = useState();
+  const [subordinates, setSubordinates] = useState([]);
+
+  const save = () => {
+    const newEmployee = {
+      ID: employee.ID,
+      mail:
+        mailRef.current.value !== ""
+          ? mailRef.current.value + "@elerte.pl"
+          : employee.Mail,
+      phoneNumber:
+        phoneNumberRef.current.value !== ""
+          ? phoneNumberRef.current.value
+          : employee.NrTelefonu,
+      departmentID: department,
+      positionID: position,
+      supervisorID: supervisor,
+      workingTimeID: workingTime,
+      subordinates: subordinates,
+    };
+    console.log(newEmployee);
+  };
+
   return (
     <Modal show={show} onHide={() => setShow(false)}>
       <Modal.Header closeButton>
@@ -22,10 +50,31 @@ const FormPopUp = ({ show, setShow, employee }) => {
           id='uncontrolled-tab-example'
           className='mb-3'>
           <Tab eventKey='contact' title='Kontakt'>
-            <ContactForm employee={employee} />
+            <ContactForm
+              employee={employee}
+              mailRef={mailRef}
+              phoneNumberRef={phoneNumberRef}
+            />
           </Tab>
           <Tab eventKey='position' title='Stanowisko'>
-            <PositionForm employee={employee} />
+            <PositionForm
+              employee={employee}
+              department={department}
+              setDepartment={setDepartment}
+              position={position}
+              setPosition={setPosition}
+              supervisor={supervisor}
+              setSupervisor={setSupervisor}
+              workingTime={workingTime}
+              setWorkingTime={setWorkingTime}
+            />
+          </Tab>
+          <Tab eventKey='subordinates' title='Podwładni'>
+            <SubordinatesForm
+              subordinates={subordinates}
+              setSubordinates={setSubordinates}
+              department={department}
+            />
           </Tab>
         </Tabs>
       </Modal.Body>
@@ -33,7 +82,9 @@ const FormPopUp = ({ show, setShow, employee }) => {
         <Button variant='secondary' onClick={() => setShow(false)}>
           Close
         </Button>
-        <Button variant='primary'>Save Changes</Button>
+        <Button variant='primary' onClick={save}>
+          Save Changes
+        </Button>
       </Modal.Footer>
     </Modal>
   );
