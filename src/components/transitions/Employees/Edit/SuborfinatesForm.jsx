@@ -49,7 +49,6 @@ const SubordinatesForm = (props) => {
       await getAllEmployees();
       await getAllDepartments();
     };
-
     fetchData();
   }, []);
 
