@@ -171,6 +171,8 @@ const getMySupervisor = async (id) => {
   });
 };
 
+const updateMyData = async (me) => {};
+
 module.exports = {
   getSubordinates,
   getWorkedHoursByEmployee,

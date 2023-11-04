@@ -26,6 +26,12 @@ const FormPopUp = ({ show, setShow, employee }) => {
   const save = () => {
     const newEmployee = {
       ID: employee.ID,
+      name:
+        nameRef.current.value !== "" ? nameRef.current.value : employee.Imie,
+      lastname:
+        lastNameRef.current.value !== ""
+          ? lastNameRef.current.value
+          : employee.Nazwisko,
       mail:
         mailRef.current.value !== ""
           ? mailRef.current.value + "@elerte.pl"
