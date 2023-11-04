@@ -10,8 +10,11 @@ import NewEmployeeForm from "../NewEmployee/NewEmployeeForm";
 import PositionForm from "./PositionForm";
 import SubordinatesForm from "./SuborfinatesForm";
 import { subordinatesApi } from "../../../../api/employeesApi";
+import userEvent from "@testing-library/user-event";
 
 const FormPopUp = ({ show, setShow, employee }) => {
+  const nameRef = useRef();
+  const lastNameRef = useRef();
   const mailRef = useRef();
   const phoneNumberRef = useRef();
   const [department, setDepartment] = useState();
@@ -57,12 +60,14 @@ const FormPopUp = ({ show, setShow, employee }) => {
       </Modal.Header>
       <Modal.Body>
         <Tabs
-          defaultActiveKey='contact'
+          defaultActiveKey='main'
           id='uncontrolled-tab-example'
           className='mb-3'>
-          <Tab eventKey='contact' title='Kontakt'>
+          <Tab eventKey='main' title='Główne'>
             <ContactForm
               employee={employee}
+              nameRef={nameRef}
+              lastNameRef={lastNameRef}
               mailRef={mailRef}
               phoneNumberRef={phoneNumberRef}
             />

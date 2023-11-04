@@ -58,8 +58,6 @@ const SubordinatesForm = (props) => {
     }
   }, [props.department, departments]);
 
-  console.log(props.subordinates);
-
   return (
     <>
       <FloatingLabel controlId='floatingSelect' label='Dział'>
