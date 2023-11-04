@@ -48,15 +48,24 @@ const SubordinatesForm = (props) => {
   }, []);
 
   useEffect(() => {
-    if (departments.length > 0) {
-      const department = departments.filter(
-        (department) => department.ID === props.department
-      );
-      console.log(department[0]);
-      setDepartment(department[0].Nazwa);
+    if (departments) {
       filterEmployees();
     }
-  }, [props.department, department, departments, employees]);
+  }, [department, departments, employees]);
+
+  useEffect(() => {
+    console.log("Props.department ID:", props.department);
+
+    if (departments && departments.length > 0) {
+      console.log(departments);
+      const dep = departments.filter(
+        (department) => department.ID === Number(props.department)
+      );
+
+      console.log("Filtered Department:", dep);
+      setDepartment(dep[0].Nazwa);
+    }
+  }, [props.department]);
 
   return (
     <>
