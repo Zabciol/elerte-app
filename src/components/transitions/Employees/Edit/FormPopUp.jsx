@@ -12,8 +12,12 @@ import SubordinatesForm from "./SuborfinatesForm";
 import { subordinatesApi } from "../../../../api/employeesApi";
 import userEvent from "@testing-library/user-event";
 import { updateEmployeeApi } from "../../../../api/employeesApi";
+import PopUp from "../../../common/PopUp";
 
 const FormPopUp = ({ show, setShow, employee }) => {
+  const [showPopUp, setShowPopUp] = useState(false);
+  const [message, setMessage] = useState("");
+
   const nameRef = useRef();
   const lastNameRef = useRef();
   const mailRef = useRef();
@@ -50,10 +54,16 @@ const FormPopUp = ({ show, setShow, employee }) => {
     console.log(employeeData);
     try {
       const response = await updateEmployeeApi(employeeData);
-      console.log(response.message);
+      setMessage(response.message + " Zaraz nastąpi odświezenie strony...");
+      setShow(false);
+      setShowPopUp(true);
+      setTimeout(() => {
+        window.location.reload();
+      }, 3000);
     } catch (error) {
       console.error("Wystąpił błąd:", error);
-      console.log("Wystąpił błąd podczas komunikacji z serwerem.");
+      setMessage("Wystąpił błąd podczas komunikacji z serwerem.");
+      setShow(false);
     }
   };
 
@@ -68,56 +78,59 @@ const FormPopUp = ({ show, setShow, employee }) => {
   }, []);
 
   return (
-    <Modal show={show} onHide={() => setShow(false)}>
-      <Modal.Header closeButton>
-        <Modal.Title>Edycja pracownika</Modal.Title>
-      </Modal.Header>
-      <Modal.Body>
-        <Tabs
-          defaultActiveKey='main'
-          id='uncontrolled-tab-example'
-          className='mb-3'>
-          <Tab eventKey='main' title='Główne'>
-            <ContactForm
-              employee={employee}
-              nameRef={nameRef}
-              lastNameRef={lastNameRef}
-              mailRef={mailRef}
-              phoneNumberRef={phoneNumberRef}
-            />
-          </Tab>
-          <Tab eventKey='position' title='Stanowisko'>
-            <PositionForm
-              employee={employee}
-              department={department}
-              setDepartment={setDepartment}
-              position={position}
-              setPosition={setPosition}
-              supervisor={supervisor}
-              setSupervisor={setSupervisor}
-              workingTime={workingTime}
-              setWorkingTime={setWorkingTime}
-            />
-          </Tab>
-          <Tab eventKey='subordinates' title='Podwładni'>
-            <SubordinatesForm
-              employee={employee}
-              subordinates={subordinates}
-              setSubordinates={setSubordinates}
-              department={department}
-            />
-          </Tab>
-        </Tabs>
-      </Modal.Body>
-      <Modal.Footer>
-        <Button variant='secondary' onClick={() => setShow(false)}>
-          Close
-        </Button>
-        <Button variant='primary' onClick={save}>
-          Save Changes
-        </Button>
-      </Modal.Footer>
-    </Modal>
+    <>
+      <Modal show={show} onHide={() => setShow(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>Edycja pracownika</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Tabs
+            defaultActiveKey='main'
+            id='uncontrolled-tab-example'
+            className='mb-3'>
+            <Tab eventKey='main' title='Główne'>
+              <ContactForm
+                employee={employee}
+                nameRef={nameRef}
+                lastNameRef={lastNameRef}
+                mailRef={mailRef}
+                phoneNumberRef={phoneNumberRef}
+              />
+            </Tab>
+            <Tab eventKey='position' title='Stanowisko'>
+              <PositionForm
+                employee={employee}
+                department={department}
+                setDepartment={setDepartment}
+                position={position}
+                setPosition={setPosition}
+                supervisor={supervisor}
+                setSupervisor={setSupervisor}
+                workingTime={workingTime}
+                setWorkingTime={setWorkingTime}
+              />
+            </Tab>
+            <Tab eventKey='subordinates' title='Podwładni'>
+              <SubordinatesForm
+                employee={employee}
+                subordinates={subordinates}
+                setSubordinates={setSubordinates}
+                department={department}
+              />
+            </Tab>
+          </Tabs>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant='secondary' onClick={() => setShow(false)}>
+            Close
+          </Button>
+          <Button variant='primary' onClick={save}>
+            Save Changes
+          </Button>
+        </Modal.Footer>
+      </Modal>
+      <PopUp show={showPopUp} message={message} title='Powiadomienie' />
+    </>
   );
 };
 
