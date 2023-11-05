@@ -247,8 +247,6 @@ const updateEmployee = async (employeeData) => {
     }
 
     const currentSubordinates = await getSubordinates(ID);
-    console.log("Obecni podwładni");
-    console.log(currentSubordinates);
     if (currentSubordinates) {
       const currentSubordinatesIDs = currentSubordinates.map(
         (subordinate) => subordinate.ID

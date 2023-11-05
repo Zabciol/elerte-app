@@ -23,8 +23,8 @@ const MenuItems = ({ dzial, dzialy, setDzial, date, setDate }) => {
 };
 
 const Employees = ({ user, setMenuItems, subordinates }) => {
-  const dzialy = Array.from(new Set(subordinates.map((item) => item.Dzial)));
-  const [dzial, setDzial] = useState(dzialy[0]);
+  const [dzialy, setDzialy] = useState([]);
+  const [dzial, setDzial] = useState();
   const [date, setDate] = useState(getCurrentDateYearMonth());
 
   const changeDate = (event) => {
@@ -40,7 +40,15 @@ const Employees = ({ user, setMenuItems, subordinates }) => {
         setDate={changeDate}
       />
     );
-  }, [dzial, date]);
+  }, [dzial, date, dzialy]);
+
+  useEffect(() => {
+    const noweDzialy = Array.from(
+      new Set(subordinates.map((item) => item.Dzial))
+    );
+    setDzialy(noweDzialy);
+    setDzial(noweDzialy[0]);
+  }, [subordinates]);
 
   const [key, setKey] = useState("Lista");
 
