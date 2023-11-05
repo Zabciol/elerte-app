@@ -1,15 +1,23 @@
-const { queryDatabase } = require("../db");
+const { queryDatabase, queryDatabasePromise } = require("../db");
 const bcrypt = require("bcrypt");
 
-const getSubordinates = (id, callback) => {
-  queryDatabase(
-    "SELECT Pracownicy.ID, Imie, Nazwisko, Stanowisko.Nazwa AS `Stanowisko`, Dzialy.Nazwa AS `Dzial`, WymiarPracy.Od, WymiarPracy.`Do`" +
-      " FROM Pracownicy LEFT JOIN Hierarchia ON Pracownicy.ID = Hierarchia.Podwladny_ID LEFT JOIN Stanowisko" +
-      " ON Pracownicy.Stanowisko_ID = Stanowisko.ID LEFT JOIN Dzialy ON Stanowisko.Dzial_ID = Dzialy.ID" +
-      " LEFT JOIN WymiarPracy ON Pracownicy.WymiarPracy_ID = WymiarPracy.ID WHERE Przelozony_ID = ?",
-    [id],
-    callback
-  );
+const getSubordinates = (id) => {
+  return new Promise((resolve, reject) => {
+    queryDatabase(
+      "SELECT Pracownicy.ID, Imie, Nazwisko, Stanowisko.Nazwa AS `Stanowisko`, Dzialy.Nazwa AS `Dzial`, WymiarPracy.Od, WymiarPracy.`Do`" +
+        " FROM Pracownicy LEFT JOIN Hierarchia ON Pracownicy.ID = Hierarchia.Podwladny_ID LEFT JOIN Stanowisko" +
+        " ON Pracownicy.Stanowisko_ID = Stanowisko.ID LEFT JOIN Dzialy ON Stanowisko.Dzial_ID = Dzialy.ID" +
+        " LEFT JOIN WymiarPracy ON Pracownicy.WymiarPracy_ID = WymiarPracy.ID WHERE Przelozony_ID = ?",
+      [id],
+      (error, results) => {
+        if (error) {
+          reject(error);
+        } else {
+          resolve(results);
+        }
+      }
+    );
+  });
 };
 
 const getSupervisors = () => {
@@ -66,7 +74,7 @@ const getEmployeeInf = (employeeId) => {
 const getAllEmployees = () => {
   return new Promise((resolve, reject) => {
     const query =
-      "SELECT Pracownicy.ID, Imie, Nazwisko ,Dzialy.ID AS `DzialID`,  Dzialy.Nazwa AS `Dzial` FROM Pracownicy LEFT JOIN Stanowisko ON Pracownicy.Stanowisko_ID = Stanowisko.ID LEFT JOIN Dzialy ON Stanowisko.Dzial_ID = Dzialy.ID";
+      "SELECT Pracownicy.ID, Imie, Nazwisko ,Stanowisko.Nazwa AS `Stanowisko`, Dzialy.ID AS `DzialID`,  Dzialy.Nazwa AS `Dzial` FROM Pracownicy LEFT JOIN Stanowisko ON Pracownicy.Stanowisko_ID = Stanowisko.ID LEFT JOIN Dzialy ON Stanowisko.Dzial_ID = Dzialy.ID";
 
     queryDatabase(query, [], (error, results) => {
       if (error) {
@@ -92,6 +100,16 @@ const addToHierarchy = async (supervisorID, suburdinateID) => {
   return new Promise((resolve, reject) => {
     const query =
       "INSERT INTO Hierarchia (Przelozony_ID, Podwladny_ID) VALUES (?, ?)";
+    queryDatabase(query, [supervisorID, suburdinateID], (err) => {
+      if (err) reject(err);
+      resolve();
+    });
+  });
+};
+const removeFromHierarchy = async (supervisorID, suburdinateID) => {
+  return new Promise((resolve, reject) => {
+    const query =
+      "DELETE FROM Hierarchia WHERE Przelozony_ID = ? AND Podwladny_ID = ?";
     queryDatabase(query, [supervisorID, suburdinateID], (err) => {
       if (err) reject(err);
       resolve();
@@ -171,7 +189,98 @@ const getMySupervisor = async (id) => {
   });
 };
 
-const updateMyData = async (me) => {};
+const updateEmployeeMainData = async (employee) => {
+  return await queryDatabasePromise(
+    "UPDATE Pracownicy SET Imie = ?, Nazwisko = ?, Mail = ?, NrTelefonu = ?, Stanowisko_ID = ?, WymiarPracy_ID = ? WHERE ID = ?",
+    [
+      employee.name,
+      employee.lastname,
+      employee.mail,
+      employee.phoneNumber,
+      employee.positionID,
+      employee.workingTimeID,
+      employee.ID,
+    ]
+  );
+};
+
+const updateEmployee = async (employeeData) => {
+  const {
+    ID,
+    departmentID,
+    lastname,
+    mail,
+    name,
+    phoneNumber,
+    positionID,
+    subordinates,
+    supervisorID,
+    workingTimeID,
+  } = employeeData;
+
+  try {
+    const currentEmployee = await getEmployeeInf(ID);
+    const currentDataEmployee = currentEmployee[0];
+
+    if (
+      currentDataEmployee &&
+      (currentDataEmployee.DzialID !== departmentID ||
+        currentDataEmployee.Imie !== name ||
+        currentDataEmployee.Nazwisko !== lastname ||
+        currentDataEmployee.NrTelefonu !== phoneNumber ||
+        currentDataEmployee.Mail !== mail ||
+        currentDataEmployee.Stanowisko_ID !== positionID ||
+        currentDataEmployee.WymiarPracy_ID !== workingTimeID)
+    ) {
+      await updateEmployeeMainData(employeeData);
+    }
+
+    const currentSupervisor = await getMySupervisor(ID);
+    const currentSupervisorID = currentSupervisor.ID;
+
+    if (
+      currentSupervisorID &&
+      Number(currentSupervisorID) !== Number(supervisorID)
+    ) {
+      await removeFromHierarchy(currentSupervisorID, ID);
+      await addToHierarchy(supervisorID, ID);
+    }
+
+    const currentSubordinates = await getSubordinates(ID);
+    console.log("Obecni podwładni");
+    console.log(currentSubordinates);
+    if (currentSubordinates) {
+      const currentSubordinatesIDs = currentSubordinates.map(
+        (subordinate) => subordinate.ID
+      );
+
+      const subordinatesToAdd = subordinates.filter(
+        (id) => !currentSubordinatesIDs.includes(id)
+      );
+      const subordinatesToRemove = currentSubordinatesIDs.filter(
+        (id) => !subordinates.includes(id)
+      );
+
+      // Dodaj nowych podwładnych
+      for (const subordinateId of subordinatesToAdd) {
+        //await db.addSubordinate(ID, subordinateId, transaction);
+        await addToHierarchy(ID, subordinateId);
+      }
+
+      // Usuń nieaktualnych podwładnych
+      for (const subordinateId of subordinatesToRemove) {
+        //await db.removeSubordinate(ID, subordinateId, transaction);
+        await removeFromHierarchy(ID, subordinateId);
+      }
+    }
+    return { success: true, message: "Employee updated successfully." };
+  } catch (error) {
+    // W przypadku błędu, wycofaj transakcję
+    console.error("Error during employee update:", error);
+    throw error;
+    return { success: false, message: "Failed to update employee.", error };
+  }
+};
 
 module.exports = {
   getSubordinates,
@@ -181,4 +290,5 @@ module.exports = {
   getAllEmployees,
   addNewEmployee,
   getMySupervisor,
+  updateEmployee,
 };

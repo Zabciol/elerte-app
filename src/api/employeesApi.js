@@ -85,3 +85,16 @@ export const mySupervisorAPI = async (myID) => {
     throw error;
   }
 };
+
+export const updateEmployeeApi = async (employeeData) => {
+  try {
+    const response = await axios.post(
+      `${API_URL}/updateEmployee`,
+      employeeData
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error during API call:", error);
+    throw error;
+  }
+};

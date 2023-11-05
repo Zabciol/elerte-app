@@ -20,6 +20,7 @@ const SubordinatesForm = (props) => {
   const filterEmployees = () => {
     if (employees.length && department) {
       const tab = employees.filter((employee) => employee.Dzial === department);
+      console.log(tab);
       setFilteredEmployees(tab);
     }
   };
@@ -93,7 +94,7 @@ const SubordinatesForm = (props) => {
                   <div className='fw-bold'>
                     {employee.Imie} {employee.Nazwisko}
                   </div>
-                  {employee.Dzial}
+                  {employee.Stanowisko}
                 </div>
 
                 <input

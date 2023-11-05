@@ -5,15 +5,7 @@ const router = express.Router();
 
 async function getSubordinatesRecursively(id) {
   const subordinates = [];
-  const results = await new Promise((resolve, reject) => {
-    employeesModel.getSubordinates(id, (err, results) => {
-      if (err) {
-        reject(err);
-      } else {
-        resolve(results);
-      }
-    });
-  });
+  const results = await employeesModel.getSubordinates(id);
 
   for (let i = 0; i < results.length; i++) {
     subordinates.push(results[i]);
@@ -25,8 +17,6 @@ async function getSubordinatesRecursively(id) {
 }
 router.get("/", async (req, res) => {
   const { id } = req.query;
-  console.log(id);
-  console.log("Próba uzyskania danych podwładnych");
   const subordinates = await getSubordinatesRecursively(id);
   res.status(200).send({ message: "Subordinates found!", data: subordinates });
 });
@@ -105,6 +95,19 @@ router.get("/mySupervisor", async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).send("Wystąpił błąd podczas pobierania danych.");
+  }
+});
+
+router.post("/updateEmployee", async (req, res) => {
+  try {
+    await employeesModel.updateEmployee(req.body);
+    res.send({
+      message: "Dane pracownika i jego hierarchia zostały zaktualizowane.",
+    });
+  } catch (error) {
+    res
+      .status(500)
+      .send("Wystąpił błąd podczas aktualizacji danych pracownika.");
   }
 });
 

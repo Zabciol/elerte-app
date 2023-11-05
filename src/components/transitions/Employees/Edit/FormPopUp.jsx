@@ -11,6 +11,7 @@ import PositionForm from "./PositionForm";
 import SubordinatesForm from "./SuborfinatesForm";
 import { subordinatesApi } from "../../../../api/employeesApi";
 import userEvent from "@testing-library/user-event";
+import { updateEmployeeApi } from "../../../../api/employeesApi";
 
 const FormPopUp = ({ show, setShow, employee }) => {
   const nameRef = useRef();
@@ -23,8 +24,8 @@ const FormPopUp = ({ show, setShow, employee }) => {
   const [workingTime, setWorkingTime] = useState();
   const [subordinates, setSubordinates] = useState([]);
 
-  const save = () => {
-    const newEmployee = {
+  const save = async () => {
+    const employeeData = {
       ID: employee.ID,
       name:
         nameRef.current.value !== "" ? nameRef.current.value : employee.Imie,
@@ -46,7 +47,14 @@ const FormPopUp = ({ show, setShow, employee }) => {
       workingTimeID: workingTime,
       subordinates: subordinates,
     };
-    console.log(newEmployee);
+    console.log(employeeData);
+    try {
+      const response = await updateEmployeeApi(employeeData);
+      console.log(response.message);
+    } catch (error) {
+      console.error("Wystąpił błąd:", error);
+      console.log("Wystąpił błąd podczas komunikacji z serwerem.");
+    }
   };
 
   const getSubordinates = async () => {
