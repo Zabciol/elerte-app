@@ -189,6 +189,34 @@ const getMySupervisor = async (id) => {
   });
 };
 
+const getMySupervisors = async (id) => {
+  let supervisors = [];
+  let supervisorID = id;
+  let result;
+  while (supervisorID) {
+    try {
+      result = await getMySupervisor(supervisorID);
+      if (result) {
+        supervisors.push(result);
+        supervisorID = result.ID;
+      } else {
+        supervisorID = null;
+      }
+    } catch (error) {
+      return {
+        success: false,
+        message: "Wystąpił błąd podczas pobierania przełożonego.",
+        error: error,
+      };
+    }
+  }
+  return {
+    success: true,
+    message: "Przełożeni pobrani pomyślnie.",
+    supervisors: supervisors,
+  };
+};
+
 const updateEmployeeMainData = async (employee) => {
   return await queryDatabasePromise(
     "UPDATE Pracownicy SET Imie = ?, Nazwisko = ?, Mail = ?, NrTelefonu = ?, Stanowisko_ID = ?, WymiarPracy_ID = ? WHERE ID = ?",
@@ -285,6 +313,7 @@ module.exports = {
   getWorkedHoursByEmployee,
   getEmployeeInf,
   getSupervisors,
+  getMySupervisors,
   getAllEmployees,
   addNewEmployee,
   getMySupervisor,

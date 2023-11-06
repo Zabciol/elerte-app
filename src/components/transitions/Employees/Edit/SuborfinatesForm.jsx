@@ -6,12 +6,14 @@ import Badge from "react-bootstrap/Badge";
 import ListGroup from "react-bootstrap/ListGroup";
 import Button from "react-bootstrap/Button";
 import { departmentsApi } from "../../../../api/departmentsApi";
+import { mySupervisorsAPI } from "../../../../api/employeesApi";
 
 const SubordinatesForm = (props) => {
   const [departments, setDepartments] = useState([]);
   const [department, setDepartment] = useState();
   const [employees, setEmployees] = useState([]);
   const [filteredEmployees, setFilteredEmployees] = useState([]);
+  const [supervisors, setSupervisors] = useState([]);
 
   const onChangeDepartment = (event) => {
     setDepartment(event.target.value);
@@ -31,6 +33,9 @@ const SubordinatesForm = (props) => {
       data = data.filter((employee) => employee.ID !== props.employee.ID);
     }
     setEmployees(data);
+
+    let supervisorsData = await mySupervisorsAPI(props.employee.ID);
+    console.log(supervisorsData);
   };
 
   const getAllDepartments = async () => {

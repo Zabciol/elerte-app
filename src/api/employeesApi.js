@@ -85,6 +85,19 @@ export const mySupervisorAPI = async (myID) => {
     throw error;
   }
 };
+export const mySupervisorsAPI = async (myID) => {
+  try {
+    const response = await axios.get(`${API_URL}/mySupervisor`, {
+      params: {
+        myID: myID,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Błąd podczas pobierania danych z serwera:", error);
+    throw error;
+  }
+};
 
 export const updateEmployeeApi = async (employeeData) => {
   try {

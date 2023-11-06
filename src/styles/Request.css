@@ -37,10 +37,6 @@
 .requests-manage-mail {
   width: 80%;
   padding: 0 15px;
-  /*
-  border: var(--bs-border-width) solid var(--bs-border-color);
-  border-radius: var(--bs-border-radius);
-  */
 }
 .requests-manage_list > .list-group {
   flex-direction: column-reverse !important;

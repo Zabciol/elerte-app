@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Button from "react-bootstrap/Button";
 import PopUp from "./PopUp";
 
@@ -13,6 +13,7 @@ function LoadingButton({ action, data, buttonText, ...props }) {
       const response = await action();
       setResponseMessage(response.message);
       setShowPopUp(true);
+      //setTimeout(() => window.location.reload(), 2000);
     } catch (error) {
       console.error("Wystąpił błąd:", error);
       setResponseMessage("Wystąpił błąd podczas komunikacji z serwerem.");
@@ -36,7 +37,8 @@ function LoadingButton({ action, data, buttonText, ...props }) {
         show={showPopUp}
         setShow={setShowPopUp}
         title={"Powiadomienie"}
-        message={responseMessage}></PopUp>
+        message={responseMessage}
+        reload={true}></PopUp>
     </>
   );
 }

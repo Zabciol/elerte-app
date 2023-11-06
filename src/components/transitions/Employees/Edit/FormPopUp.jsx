@@ -17,6 +17,7 @@ import PopUp from "../../../common/PopUp";
 const FormPopUp = ({ show, setShow, employee }) => {
   const [showPopUp, setShowPopUp] = useState(false);
   const [message, setMessage] = useState("");
+  const [onReload, setOnReaload] = useState(false);
 
   const nameRef = useRef();
   const lastNameRef = useRef();
@@ -54,12 +55,10 @@ const FormPopUp = ({ show, setShow, employee }) => {
     console.log(employeeData);
     try {
       const response = await updateEmployeeApi(employeeData);
-      setMessage(response.message + " Zaraz nastąpi odświezenie strony...");
+      setMessage(response.message);
       setShow(false);
       setShowPopUp(true);
-      setTimeout(() => {
-        window.location.reload();
-      }, 3000);
+      setOnReaload(true);
     } catch (error) {
       console.error("Wystąpił błąd:", error);
       setMessage("Wystąpił błąd podczas komunikacji z serwerem.");
@@ -79,7 +78,11 @@ const FormPopUp = ({ show, setShow, employee }) => {
 
   return (
     <>
-      <Modal show={show} onHide={() => setShow(false)}>
+      <Modal
+        show={show}
+        onHide={() => {
+          setShow(false);
+        }}>
         <Modal.Header closeButton>
           <Modal.Title>Edycja pracownika</Modal.Title>
         </Modal.Header>
@@ -129,7 +132,13 @@ const FormPopUp = ({ show, setShow, employee }) => {
           </Button>
         </Modal.Footer>
       </Modal>
-      <PopUp show={showPopUp} message={message} title='Powiadomienie' />
+      <PopUp
+        show={showPopUp}
+        setShow={setShowPopUp}
+        message={message}
+        title='Powiadomienie'
+        reload={true}
+      />
     </>
   );
 };
