@@ -196,7 +196,7 @@ const getMySupervisors = async (id) => {
   while (supervisorID) {
     try {
       result = await getMySupervisor(supervisorID);
-      if (result) {
+      if (result.ID) {
         supervisors.push(result);
         supervisorID = result.ID;
       } else {
@@ -213,7 +213,7 @@ const getMySupervisors = async (id) => {
   return {
     success: true,
     message: "Przełożeni pobrani pomyślnie.",
-    supervisors: supervisors,
+    data: supervisors,
   };
 };
 

@@ -87,7 +87,7 @@ export const mySupervisorAPI = async (myID) => {
 };
 export const mySupervisorsAPI = async (myID) => {
   try {
-    const response = await axios.get(`${API_URL}/mySupervisor`, {
+    const response = await axios.get(`${API_URL}/mySupervisors`, {
       params: {
         myID: myID,
       },
