@@ -30,7 +30,7 @@ const ExportExcel = (props) => {
   return (
     <div>
       <Button variant='primary' onClick={download}>
-        Primary
+        Pobierz ECP do pliku Excel <i className='bi bi-download'></i>
       </Button>
     </div>
   );
