@@ -40,5 +40,20 @@ router.get("/ecp", async (req, res) => {
     res.status(500).send("Wystąpił błąd podczas pobierania danych.");
   }
 });
+router.get("/export", async (req, res) => {
+  try {
+    const date = req.query.date;
+    const employeesID = req.query.employeesID;
+    if (!date) {
+      return res.status(400).send("Brak wymaganych parametrów: data");
+    }
+
+    const result = await ecpModel.exportECPForMonth(date, employeesID, res);
+    res.json(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Wystąpił błąd podczas pobierania danych.");
+  }
+});
 
 module.exports = router;

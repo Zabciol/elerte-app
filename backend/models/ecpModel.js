@@ -1,6 +1,7 @@
 const db = require("../db");
 const { queryDatabase } = require("../db");
 const { queryDatabasePromise } = require("../db");
+const ExcelJS = require("exceljs");
 
 const getRecordsByDateAndEmployeeId = async (date, employeeIds) => {
   return await queryDatabasePromise(
@@ -103,11 +104,11 @@ const checkECPForEmployeeOnDate = async (employeeId, date) => {
   }
 };
 
-const getECPForMonth = (date, employeesID) => {
+const getECPForMonth = async (date, employeesID) => {
   const [year, month] = date.split("-");
   return new Promise((resolve, reject) => {
     const query =
-      "SELECT Pracownicy.ID, Imie, Nazwisko, IloscGodzin, ECP.Od_godz, ECP.Do_godz, WymiarPracy.Od AS `WymiarOd`, WymiarPracy.`Do` AS `WymiarDo`, " +
+      "SELECT Pracownicy.ID, Imie, Nazwisko,Mail, IloscGodzin, ECP.Od_godz, ECP.Do_godz, WymiarPracy.Od AS `WymiarOd`, WymiarPracy.`Do` AS `WymiarDo`, " +
       "PowodyNieobecnosci.Nazwa AS `Powod`, `Data` FROM ECP LEFT JOIN Pracownicy ON Pracownicy.ID = ECP.Pracownik_ID " +
       "LEFT JOIN PowodyNieobecnosci ON PowodyNieobecnosci.ID = ECP.Powod_ID LEFT JOIN WymiarPracy ON WymiarPracy.ID = Pracownicy.WymiarPracy_ID " +
       "WHERE Pracownicy.ID in (?) AND YEAR(Data) = ? " +
@@ -123,8 +124,59 @@ const getECPForMonth = (date, employeesID) => {
   });
 };
 
+const exportECPForMonth = async (date, employeesID, res) => {
+  try {
+    const workbook = new ExcelJS.Workbook();
+    const worksheet = workbook.addWorksheet("ECP");
+    const ecp = await getECPForMonth(date, employeesID);
+    console.log(ecp);
+
+    worksheet.columns = [
+      { header: "Imie", key: "imie" },
+      { header: "Nazwisko", key: "nazwisko" },
+      { header: "Mail", key: "mail" },
+      { header: "Stanowisko", key: "stanowisko" },
+      { header: "Dział", key: "dzial" },
+      { header: "Od Godziny", key: "od" },
+      { header: "Do Godziny", key: "do" },
+      { header: "Ilośc godzin w ciągu dnia", key: "godziny" },
+      { header: "Data", key: "data" },
+      { header: "Powód nieobecności", key: "powod" },
+    ];
+
+    if (ecp && ecp.length !== 0) {
+      for (var i = 0; i < ecp.length; i++) {
+        worksheet.addRow({
+          imie: ecp[i].Imie,
+          nazwisko: ecp[i].Nazwisko,
+          mail: ecp[i].Mail,
+          stanowisko: ecp[i].Stanowisko,
+          dzial: ecp[i].NazwaDzialu,
+          od: ecp[i].Od_godz,
+          do: ecp[i].do_godz,
+          godziny: ecp[i].IloscGodzin,
+          data: ecp[i].Data,
+          powod: ecp[i].Powod,
+        });
+      }
+    }
+
+    res.setHeader(
+      "Content-Type",
+      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    );
+    res.setHeader("Content-Disposition", "attachment; filename=ECP.xlsx");
+
+    await workbook.xlsx.write(res);
+    res.end();
+  } catch (error) {
+    console.error(error);
+  }
+};
+
 module.exports = {
   SentECPToDatabase,
   checkECPForEmployeeOnDate,
   getECPForMonth,
+  exportECPForMonth,
 };

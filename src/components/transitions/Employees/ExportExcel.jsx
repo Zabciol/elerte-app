@@ -1,13 +1,22 @@
 import React, { useEffect, useState } from "react";
+import Button from "react-bootstrap/Button";
 import { allEmployeesAPI } from "../../../api/employeesApi";
+import { exportECPAPI } from "../../../api/ecpApi";
 
 const ExportExcel = (props) => {
-  const [employees, setEmployees] = useState(props.subordinates);
+  const [employeesID, setEmployeesID] = useState(
+    props.subordinates.map((employee) => employee.ID)
+  );
+
+  const download = async () => {
+    const result = await exportECPAPI(props.date, employeesID);
+    console.log("Pobieranie");
+  };
 
   const getAllEmployees = async () => {
     const data = await allEmployeesAPI();
-    console.log(data);
-    setEmployees(data);
+    console.log(data.map((employee) => employee.ID));
+    setEmployeesID(data.map((employee) => employee.ID));
   };
 
   useEffect(() => {
@@ -15,7 +24,13 @@ const ExportExcel = (props) => {
       getAllEmployees();
     }
   }, []);
-  return <div>ExportExcel</div>;
+  return (
+    <div>
+      <Button variant='primary' onClick={download}>
+        Primary
+      </Button>
+    </div>
+  );
 };
 
 export default ExportExcel;

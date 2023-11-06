@@ -8,6 +8,7 @@ import EmployeeInf from "./EmployeeInf";
 import NewEmployee from "./NewEmployee/NewEmployee";
 import ExportExcel from "./ExportExcel";
 import { getCurrentDateYearMonth } from "../../common/CommonFunctions";
+import { allEmployeesAPI } from "../../../api/employeesApi";
 
 const MenuItems = ({ dzial, dzialy, setDzial, date, setDate }) => {
   return (
@@ -31,6 +32,15 @@ const Employees = ({ user, setMenuItems, subordinates }) => {
   const changeDate = (event) => {
     setDate(event.target.value);
   };
+
+  useEffect(() => {
+    const noweDzialy = Array.from(
+      new Set(subordinates.map((item) => item.Dzial))
+    );
+    setDzialy(noweDzialy);
+    setDzial(noweDzialy[0]);
+  }, [subordinates]);
+
   useEffect(() => {
     setMenuItems(
       <MenuItems
@@ -42,14 +52,6 @@ const Employees = ({ user, setMenuItems, subordinates }) => {
       />
     );
   }, [dzial, date, dzialy]);
-
-  useEffect(() => {
-    const noweDzialy = Array.from(
-      new Set(subordinates.map((item) => item.Dzial))
-    );
-    setDzialy(noweDzialy);
-    setDzial(noweDzialy[0]);
-  }, [subordinates]);
 
   const [key, setKey] = useState("Lista");
 

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Form from "react-bootstrap/Form";
 import generujEventy from "./getEvents";
 import { getCurrentDateYearMonth } from "../../common/CommonFunctions";
-import { getECP } from "../../../api/ecpApi";
+import { getECPAPI } from "../../../api/ecpApi";
 import FullCalender from "./FullCalender";
 import { SelectDzial } from "../../layout/Menu/MenuForms";
 
@@ -33,7 +33,7 @@ const Calender = (props) => {
   };
 
   const getAbsence = async (employeesID) => {
-    const data = await getECP(date, employeesID);
+    const data = await getECPAPI(date, employeesID);
     var preEvents = [];
     for (let pracownik of data) {
       let events = await generujEventy(pracownik);
