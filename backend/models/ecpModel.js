@@ -108,9 +108,14 @@ const getECPForMonth = async (date, employeesID) => {
   const [year, month] = date.split("-");
   return new Promise((resolve, reject) => {
     const query =
-      "SELECT Pracownicy.ID, Imie, Nazwisko,Mail, IloscGodzin, ECP.Od_godz, ECP.Do_godz, WymiarPracy.Od AS `WymiarOd`, WymiarPracy.`Do` AS `WymiarDo`, " +
+      "SELECT Pracownicy.ID, Imie, Nazwisko,Mail,Dzialy.Nazwa AS `Dzial`, " +
+      "Stanowisko.Nazwa AS `Stanowisko`, IloscGodzin, ECP.Od_godz, ECP.Do_godz, " +
+      "WymiarPracy.Od AS `WymiarOd`, WymiarPracy.`Do` AS `WymiarDo`, " +
       "PowodyNieobecnosci.Nazwa AS `Powod`, `Data` FROM ECP LEFT JOIN Pracownicy ON Pracownicy.ID = ECP.Pracownik_ID " +
-      "LEFT JOIN PowodyNieobecnosci ON PowodyNieobecnosci.ID = ECP.Powod_ID LEFT JOIN WymiarPracy ON WymiarPracy.ID = Pracownicy.WymiarPracy_ID " +
+      "LEFT JOIN PowodyNieobecnosci ON PowodyNieobecnosci.ID = ECP.Powod_ID " +
+      "LEFT JOIN WymiarPracy ON WymiarPracy.ID = Pracownicy.WymiarPracy_ID " +
+      "LEFT JOIN Stanowisko ON Pracownicy.Stanowisko_ID = Stanowisko.ID " +
+      "LEFT JOIN Dzialy ON Stanowisko.Dzial_ID = Dzialy.ID " +
       "WHERE Pracownicy.ID in (?) AND YEAR(Data) = ? " +
       "AND MONTH(Data) = ?";
 
@@ -151,9 +156,9 @@ const exportECPForMonth = async (date, employeesID, res) => {
           nazwisko: ecp[i].Nazwisko,
           mail: ecp[i].Mail,
           stanowisko: ecp[i].Stanowisko,
-          dzial: ecp[i].NazwaDzialu,
+          dzial: ecp[i].Dzial,
           od: ecp[i].Od_godz,
-          do: ecp[i].do_godz,
+          do: ecp[i].Do_godz,
           godziny: ecp[i].IloscGodzin,
           data: ecp[i].Data,
           powod: ecp[i].Powod,
