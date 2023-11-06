@@ -6,6 +6,7 @@ import "../../../styles/Employee.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
 
 const EmployeeInf = (props) => {
+  console.log(props.user);
   const [inf, setInf] = useState();
   const [show, setShow] = useState(false);
   const getInformation = async () => {
@@ -36,11 +37,13 @@ const EmployeeInf = (props) => {
           <p></p>
           <p></p>
           <Button
+            disabled={props.user.Dzial === "Księgowość" ? false : true}
             variant='outline-secondary'
             className='edit-btn'
             onClick={() => setShow(true)}>
             <i className='bi bi-pencil-square'></i> Edytuj
           </Button>
+
           <FormPopUp show={show} setShow={setShow} employee={inf} />
         </div>
       ) : (

@@ -67,7 +67,7 @@ const Employees = ({ user, setMenuItems, subordinates }) => {
           dzial={dzial}
           user={user}
           date={date}>
-          <EmployeeInf />
+          <EmployeeInf user={user} />
         </EmployeesList>
       </Tab>
       <Tab eventKey='Urlopy' title='Urlopy'>
