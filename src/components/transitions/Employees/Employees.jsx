@@ -27,12 +27,10 @@ const Employees = ({ user, setMenuItems, subordinates }) => {
   const [dzialy, setDzialy] = useState([]);
   const [dzial, setDzial] = useState();
   const [date, setDate] = useState(getCurrentDateYearMonth());
-  const [employees, setEmployees] = useState([...subordinates]);
 
   const changeDate = (event) => {
     setDate(event.target.value);
   };
-
   useEffect(() => {
     setMenuItems(
       <MenuItems
@@ -73,13 +71,6 @@ const Employees = ({ user, setMenuItems, subordinates }) => {
       <Tab eventKey='Urlopy' title='Urlopy'>
         Tab content for Contact
       </Tab>
-      <Tab
-        eventKey='Nowy'
-        title='Nowy'
-        //</Tabs>disabled={user.Dzial === "Księgowość" ? false : true}
-      >
-        <NewEmployee dzial={dzial} />
-      </Tab>
       <Tab eventKey='Excel' title='Exportuj'>
         {" "}
         <ExportExcel
@@ -88,6 +79,12 @@ const Employees = ({ user, setMenuItems, subordinates }) => {
           dzial={dzial}
           date={date}
         />
+      </Tab>
+      <Tab
+        eventKey='Nowy'
+        title='Nowy'
+        disabled={user.Dzial === "Księgowość" ? false : true}>
+        <NewEmployee dzial={dzial} />
       </Tab>
     </Tabs>
   );

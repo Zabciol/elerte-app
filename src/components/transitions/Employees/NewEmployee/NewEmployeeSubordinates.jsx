@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { allEmployees } from "../../../../api/employeesApi";
+import { allEmployeesAPI } from "../../../../api/employeesApi";
 import Badge from "react-bootstrap/Badge";
 import ListGroup from "react-bootstrap/ListGroup";
 import Button from "react-bootstrap/Button";
@@ -25,7 +25,7 @@ const NewEmployeeSubordinates = (props) => {
   };
 
   const getAllEmployees = async () => {
-    const data = await allEmployees();
+    const data = await allEmployeesAPI();
     setEmployees(data);
   };
 

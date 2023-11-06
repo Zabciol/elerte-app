@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { allEmployees } from "../../../../api/employeesApi";
+import { allEmployeesAPI } from "../../../../api/employeesApi";
 import FloatingLabel from "react-bootstrap/FloatingLabel";
 import Form from "react-bootstrap/Form";
 import Badge from "react-bootstrap/Badge";
@@ -34,7 +34,7 @@ const SubordinatesForm = (props) => {
   };
 
   const getAllEmployees = async () => {
-    let data = await allEmployees();
+    let data = await allEmployeesAPI();
     if (props.employee) {
       data = data.filter((employee) => employee.ID !== props.employee.ID);
     }

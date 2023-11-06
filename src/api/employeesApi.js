@@ -52,7 +52,7 @@ export const infApi = async (employeeId) => {
     throw error;
   }
 };
-export const allEmployees = async () => {
+export const allEmployeesAPI = async () => {
   try {
     const response = await axios.get(`${API_URL}/all`, {});
     return response.data;
