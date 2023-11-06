@@ -39,7 +39,6 @@ const SubordinatesForm = (props) => {
       data = data.filter((employee) => employee.ID !== props.employee.ID);
     }
     setEmployees(data);
-
     let supervisorsData = await mySupervisorsAPI(props.employee.ID);
     console.log("Przełozeni tego pracownika");
     console.log(supervisorsData.message);

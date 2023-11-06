@@ -4,7 +4,7 @@ const bcrypt = require("bcrypt");
 const getSubordinates = (id) => {
   return new Promise((resolve, reject) => {
     queryDatabase(
-      "SELECT Pracownicy.ID, Imie, Nazwisko, Stanowisko.Nazwa AS `Stanowisko`, Dzialy.Nazwa AS `Dzial`, WymiarPracy.Od, WymiarPracy.`Do`" +
+      "SELECT Pracownicy.ID, Imie, Nazwisko, Stanowisko.Nazwa AS `Stanowisko`, Dzialy.Nazwa AS `Dzial`, WymiarPracy.Od, WymiarPracy.`Do` , Aktywny" +
         " FROM Pracownicy LEFT JOIN Hierarchia ON Pracownicy.ID = Hierarchia.Podwladny_ID LEFT JOIN Stanowisko" +
         " ON Pracownicy.Stanowisko_ID = Stanowisko.ID LEFT JOIN Dzialy ON Stanowisko.Dzial_ID = Dzialy.ID" +
         " LEFT JOIN WymiarPracy ON Pracownicy.WymiarPracy_ID = WymiarPracy.ID WHERE Przelozony_ID = ?",
@@ -308,6 +308,19 @@ const updateEmployee = async (employeeData) => {
   }
 };
 
+const deleteEmployee = (employeeID) => {
+  return new Promise((resolve, reject) => {
+    const query = "Update Pracownicy set Aktywny = 'Nie' WHERE ID = ?";
+    queryDatabase(query, [employeeID], (err) => {
+      if (err) {
+        console.error("Error during employee deleting:", err);
+        return reject(err); // Log the error and reject the promise
+      }
+      resolve(); // Resolve the promise when the update is successful
+    });
+  });
+};
+
 module.exports = {
   getSubordinates,
   getWorkedHoursByEmployee,
@@ -318,4 +331,5 @@ module.exports = {
   addNewEmployee,
   getMySupervisor,
   updateEmployee,
+  deleteEmployee,
 };

@@ -10,10 +10,13 @@ import { getCurrentDateTime } from "../../common/CommonFunctions";
 const ECPList = ({ user, subordinates, dzial, date }) => {
   const [reasons, setReasons] = useState([]);
   const { collectAll } = useGetData();
+  const activeSubordinates = subordinates.filter(
+    (employee) => employee.Aktywny === "Tak"
+  );
   const filteredSubordinates =
     dzial === "Każdy"
-      ? subordinates
-      : subordinates.filter((employee) => employee.Dzial === dzial);
+      ? activeSubordinates
+      : activeSubordinates.filter((employee) => employee.Dzial === dzial);
 
   const getReasons = async () => {
     try {

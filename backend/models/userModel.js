@@ -11,8 +11,8 @@ const getUsers = async () => {
 
 const findUserByEmail = (email, callback) => {
   queryDatabase(
-    "SELECT Pracownicy.ID, Imie, Nazwisko, Mail,  Dzialy.Nazwa AS `Dzial`," +
-      " Stanowisko.Nazwa AS `Stanowisko`, WymiarPracy.Od,WymiarPracy.`Do` FROM Pracownicy" +
+    "SELECT Pracownicy.ID, Imie, Nazwisko, Mail, Dzialy.Nazwa AS `Dzial`," +
+      " Stanowisko.Nazwa AS `Stanowisko`, WymiarPracy.Od,WymiarPracy.`Do`, Aktywny FROM Pracownicy" +
       " LEFT JOIN Stanowisko ON Pracownicy.Stanowisko_ID = Stanowisko.ID" +
       " LEFT JOIN Dzialy ON Stanowisko.Dzial_ID = Dzialy.ID" +
       " LEFT JOIN WymiarPracy ON Pracownicy.WymiarPracy_ID = WymiarPracy.ID  WHERE Mail = ?",

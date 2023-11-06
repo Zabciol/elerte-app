@@ -6,6 +6,7 @@ import Form from "react-bootstrap/Form";
 import EmployeesList from "./EmployeesList";
 import EmployeeInf from "./EmployeeInf";
 import NewEmployee from "./NewEmployee/NewEmployee";
+import ExportExcel from "./ExportExcel";
 import { getCurrentDateYearMonth } from "../../common/CommonFunctions";
 
 const MenuItems = ({ dzial, dzialy, setDzial, date, setDate }) => {
@@ -26,10 +27,12 @@ const Employees = ({ user, setMenuItems, subordinates }) => {
   const [dzialy, setDzialy] = useState([]);
   const [dzial, setDzial] = useState();
   const [date, setDate] = useState(getCurrentDateYearMonth());
+  const [employees, setEmployees] = useState([...subordinates]);
 
   const changeDate = (event) => {
     setDate(event.target.value);
   };
+
   useEffect(() => {
     setMenuItems(
       <MenuItems
@@ -76,6 +79,15 @@ const Employees = ({ user, setMenuItems, subordinates }) => {
         //</Tabs>disabled={user.Dzial === "Księgowość" ? false : true}
       >
         <NewEmployee dzial={dzial} />
+      </Tab>
+      <Tab eventKey='Excel' title='Exportuj'>
+        {" "}
+        <ExportExcel
+          subordinates={subordinates}
+          user={user}
+          dzial={dzial}
+          date={date}
+        />
       </Tab>
     </Tabs>
   );

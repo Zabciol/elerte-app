@@ -6,12 +6,11 @@ import Modal from "react-bootstrap/Modal";
 import Tab from "react-bootstrap/Tab";
 import Tabs from "react-bootstrap/Tabs";
 import ContactForm from "./ContactForm";
-import NewEmployeeForm from "../NewEmployee/NewEmployeeForm";
 import PositionForm from "./PositionForm";
 import SubordinatesForm from "./SuborfinatesForm";
 import { subordinatesApi } from "../../../../api/employeesApi";
-import userEvent from "@testing-library/user-event";
 import { updateEmployeeApi } from "../../../../api/employeesApi";
+import { deleteEmployeeApi } from "../../../../api/employeesApi";
 import PopUp from "../../../common/PopUp";
 
 const FormPopUp = ({ show, setShow, employee }) => {
@@ -59,6 +58,20 @@ const FormPopUp = ({ show, setShow, employee }) => {
       setShow(false);
       setShowPopUp(true);
       setOnReaload(true);
+    } catch (error) {
+      console.error("Wystąpił błąd:", error);
+      setMessage("Wystąpił błąd podczas komunikacji z serwerem.");
+      setShow(false);
+    }
+  };
+
+  const deleteEmployee = async () => {
+    try {
+      const response = await deleteEmployeeApi(employee.ID);
+      setMessage(response.message);
+      setShow(false);
+      setShowPopUp(true);
+      setOnReaload(false);
     } catch (error) {
       console.error("Wystąpił błąd:", error);
       setMessage("Wystąpił błąd podczas komunikacji z serwerem.");
@@ -124,11 +137,14 @@ const FormPopUp = ({ show, setShow, employee }) => {
           </Tabs>
         </Modal.Body>
         <Modal.Footer>
+          <Button variant='secondary' onClick={deleteEmployee}>
+            Usuń
+          </Button>
           <Button variant='secondary' onClick={() => setShow(false)}>
-            Close
+            Zamknij
           </Button>
           <Button variant='primary' onClick={save}>
-            Save Changes
+            Zapisz zmiany
           </Button>
         </Modal.Footer>
       </Modal>

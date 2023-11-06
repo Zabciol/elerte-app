@@ -25,7 +25,7 @@ router.post("/login", (req, res) => {
 
     console.log(userData);
     userModel.findUserPasswordByID(id, (err, results) => {
-      if (results.length > 0) {
+      if (results.length > 0 || userData.Aktywny !== "Tak") {
         const user = results[0];
         console.log(user);
 
@@ -40,7 +40,7 @@ router.post("/login", (req, res) => {
               .status(200)
               .send({ message: "User logged in!", user: userData });
           } else {
-            res.status(401).send("Password is incorrect!");
+            res.status(401).send({ message: "Password is incorrect!" });
           }
         });
       } else {

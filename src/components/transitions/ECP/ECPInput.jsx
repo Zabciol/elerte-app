@@ -52,7 +52,6 @@ const ECPInput = (props) => {
     try {
       const data = await checkECPForEmployeeOnDate(employee.ID, date);
       if (data) {
-        console.log(data);
         setStartData(
           data.Od_godz,
           data.Do_godz,

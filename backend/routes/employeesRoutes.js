@@ -122,4 +122,16 @@ router.post("/updateEmployee", async (req, res) => {
   }
 });
 
+router.delete("/deleteEmployee/:id", async (req, res) => {
+  try {
+    await employeesModel.deleteEmployee(req.params.id);
+    res
+      .status(200)
+      .send({ message: "Poprawnie usunięto pracownika z listy ECP" });
+  } catch (error) {
+    console.error("Error during employee deletion:", error);
+    res.status(500).send({ message: "Napotkano problem podczas usuwania" });
+  }
+});
+
 module.exports = router;

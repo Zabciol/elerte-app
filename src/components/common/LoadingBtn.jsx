@@ -31,7 +31,7 @@ function LoadingButton({ action, data, buttonText, ...props }) {
         disabled={isLoading}
         onClick={!isLoading ? handleClick : null}
         {...props}>
-        {isLoading ? "Loading…" : buttonText}
+        {isLoading ? "Ładowanie" : buttonText}
       </Button>
       <PopUp
         show={showPopUp}

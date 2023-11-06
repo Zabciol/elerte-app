@@ -111,3 +111,14 @@ export const updateEmployeeApi = async (employeeData) => {
     throw error;
   }
 };
+export const deleteEmployeeApi = async (employeeID) => {
+  try {
+    const response = await axios.delete(
+      `${API_URL}/deleteEmployee/${employeeID}`
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error during API call:", error);
+    throw error;
+  }
+};
