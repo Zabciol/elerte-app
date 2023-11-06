@@ -3,7 +3,6 @@ import Accordion from "react-bootstrap/Accordion";
 import EmployeeListItem from "./EmployeeListItem";
 import EmployeeInf from "./EmployeeInf";
 const EmployeesList = (props) => {
-  console.log(props);
   const { subordinates, dzial, user, date, children } = props;
 
   const filteredSubordinates =

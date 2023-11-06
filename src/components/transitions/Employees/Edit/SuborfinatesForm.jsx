@@ -22,6 +22,7 @@ const SubordinatesForm = (props) => {
   const filterEmployees = () => {
     if (employees.length && department) {
       const tab = employees.filter((employee) => employee.Dzial === department);
+      console.log("Przefiltrowani pracownicy");
       console.log(tab);
       setFilteredEmployees(tab);
     }
@@ -35,6 +36,7 @@ const SubordinatesForm = (props) => {
     setEmployees(data);
 
     let supervisorsData = await mySupervisorsAPI(props.employee.ID);
+    console.log("Przełozeni tego pracownika");
     console.log(supervisorsData);
   };
 
