@@ -9,7 +9,7 @@ import LoadingButton from "../../common/LoadingBtn";
 const NewRequest = ({ user }) => {
   const [mySupervisor, setMySupervisor] = useState();
   const [reasons, setReasons] = useState([]);
-  const [reason, setReason] = useState(null);
+  const [reason, setReason] = useState({});
   const [message, setMessage] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
@@ -24,7 +24,7 @@ const NewRequest = ({ user }) => {
     try {
       const data = await reasonsApi();
       setReasons(data.data);
-      setReason(data.data[0]);
+      setReason(data.data[0].ID);
     } catch (error) {
       console.log(
         error.message || "Nie udało się uzyskać powodów nieobecności"
@@ -40,11 +40,13 @@ const NewRequest = ({ user }) => {
   };
 
   const sentRequest = async () => {
+    console.log(reasons);
+    console.log(reason);
     const request = {
       senderID: user.ID,
       reciverID: mySupervisor.ID,
       message: message,
-      reasonID: reason.ID,
+      reasonID: reason,
       dataOd: startDate,
       dataDo: endDate,
     };

@@ -42,6 +42,9 @@
   border-radius: var(--bs-border-radius);
   */
 }
+.requests-manage_list > .list-group {
+  flex-direction: column-reverse !important;
+}
 .requests-manage_list-item {
   position: relative !important;
 }

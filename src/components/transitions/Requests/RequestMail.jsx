@@ -24,6 +24,12 @@ const RequestMail = (props) => {
     children,
   } = props;
 
+  const changeReason = (e) => {
+    console.log("dasdas");
+    console.log(e.target.value);
+    setReason(e.target.value);
+  };
+
   const handleStartDateChange = (e) => {
     const startDateValue = new Date(e.target.value);
     const endDateValue = new Date(endDate);
@@ -112,11 +118,11 @@ const RequestMail = (props) => {
             <Form.Select
               aria-label='Default select example'
               defaultValue={reason.Nazwa}
-              onChange={(e) => setReason(e.target.value)}
+              onChange={changeReason}
               className='request-select'
               readOnly={readOnly}>
               {reasons.map((item, index) => (
-                <option value={item} key={index}>
+                <option value={item.ID} key={index}>
                   {item.Nazwa}
                 </option>
               ))}

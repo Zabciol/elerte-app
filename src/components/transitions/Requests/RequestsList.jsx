@@ -24,12 +24,12 @@ const RequestsList = ({ requests, setRequest, setRequests }) => {
 
   return (
     <div className='requests-manage_list'>
-      <ListGroup>
+      <ListGroup requests-manage_list>
         {requests.map((request) => (
           <ListGroup.Item
             key={request.ID}
             as='li'
-            className='d-flex justify-content-between align-items-start requests-manage_list-item'
+            className='d-flex justify-content-between align-items-start requests-manage_list-item '
             onClick={() => handleChangeRequest(request)}>
             <div className='ms-2 me-auto'>
               <div className='fw-bold'>
