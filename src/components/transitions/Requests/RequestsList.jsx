@@ -25,7 +25,7 @@ const RequestsList = ({ requests, setRequest, setRequests }) => {
   return (
     <div className='requests-manage_list'>
       <ListGroup requests-manage_list>
-        {requests.map((request) => (
+        {[...requests].reverse().map((request) => (
           <ListGroup.Item
             key={request.ID}
             as='li'

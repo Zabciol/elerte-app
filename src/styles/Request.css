@@ -38,9 +38,7 @@
   width: 80%;
   padding: 0 15px;
 }
-.requests-manage_list > .list-group {
-  flex-direction: column-reverse !important;
-}
+
 .requests-manage_list-item {
   position: relative !important;
 }
