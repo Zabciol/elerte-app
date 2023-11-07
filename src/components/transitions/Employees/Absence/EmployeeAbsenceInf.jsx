@@ -8,7 +8,7 @@ const EmployeeAbsenceInf = ({ employee }) => {
       <div className='w-100'>
         {employee.Nieobecnosci.length ? (
           <>
-            Nagłe
+            Standardowe
             <ListGroup as='ol' numbered>
               {employee.Nieobecnosci.map((absence) => (
                 <ListGroup.Item
