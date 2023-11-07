@@ -3,7 +3,7 @@ import { getAcceptedRequestsApi } from "../../../../api/requestsApi";
 import { getAbsenceAPI } from "../../../../api/ecpApi";
 import EmployeesList from "../EmployeesList";
 import EmployeeAbsenceInf from "./EmployeeAbsenceInf";
-
+import "../../../../styles/absence.css";
 const EmployeesAbsence = ({ date, subordinates, user, dzial }) => {
   const [absence, setAbsence] = useState([]);
 

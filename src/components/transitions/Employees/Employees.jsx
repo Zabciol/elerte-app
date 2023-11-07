@@ -84,7 +84,7 @@ const Employees = ({ user, setMenuItems, subordinates }) => {
           <EmployeeInf user={user} />
         </EmployeesList>
       </Tab>
-      <Tab eventKey='Urlopy' title='Urlopy'>
+      <Tab eventKey='Nieobecnosci' title='Nieobecności'>
         <EmployeesAbsence date={date} subordinates={filteredSubordinates} />
       </Tab>
       <Tab eventKey='Excel' title='Export'>

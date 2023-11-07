@@ -1,0 +1,19 @@
+@media (max-width: 992px) {
+  .absence-badge {
+    position: absolute;
+  }
+  .absence-list-item {
+    position: relative !important;
+    flex-wrap: wrap;
+    flex-direction: column;
+  }
+}
+
+.absence {
+  justify-content: space-around;
+}
+@media (max-width: 550px) {
+  .absence {
+    flex-wrap: wrap;
+  }
+}
