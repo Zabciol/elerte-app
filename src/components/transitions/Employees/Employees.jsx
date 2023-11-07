@@ -73,7 +73,7 @@ const Employees = ({ user, setMenuItems, subordinates }) => {
       <Tab eventKey='Urlopy' title='Urlopy'>
         Tab content for Contact
       </Tab>
-      <Tab eventKey='Excel' title='Exportuj'>
+      <Tab eventKey='Excel' title='Export'>
         {" "}
         <ExportExcel
           subordinates={subordinates}
