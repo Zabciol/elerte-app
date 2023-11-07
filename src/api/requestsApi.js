@@ -64,3 +64,17 @@ export const declineRequestsApi = async (request) => {
     throw error;
   }
 };
+export const getAcceptedRequestsApi = async (date, employeesIDs) => {
+  try {
+    const response = await axios.get(`${API_URL}/getAccepted`, {
+      params: {
+        date: date,
+        IDs: employeesIDs,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error during API call:", error);
+    throw error;
+  }
+};

@@ -179,9 +179,31 @@ const exportECPForMonth = async (date, employeesID, res) => {
   }
 };
 
+const getAbsenceNotIncludeRequests = async (date, IDs) => {
+  try {
+    const [year, month] = date.split("-");
+    const query =
+      "SELECT Pracownicy.ID, Pracownicy.Imie, Pracownicy.Nazwisko, ECP.`Data`, " +
+      "ECP.Od_godz, ECP.Do_godz, ECP.IloscGodzin, PowodyNieobecnosci.Nazwa AS `Powod` " +
+      "FROM ECP LEFT JOIN Pracownicy ON Pracownicy.ID = ECP.Pracownik_ID " +
+      "LEFT JOIN PowodyNieobecnosci ON ECP.Powod_ID = PowodyNieobecnosci.ID " +
+      "WHERE ECP.IloscGodzin < 8 AND YEAR(Data) = ? " +
+      "AND MONTH(Data) = ? AND PracowniCY.ID in (?) AND NOT EXISTS ( " +
+      "SELECT 1 FROM Wnioski W WHERE W.Nadawca_ID = ECP.Pracownik_ID " +
+      "AND W.Status = 'Zaakceptowano' AND ECP.Data BETWEEN W.Data_Od AND W.Data_Do)";
+    const results = await queryDatabasePromise(query, [year, month, IDs]);
+    console.log("Nieobecności uzyskano pomyślnie!");
+    return { success: true, message: "Pozyskano nieobecności", data: results };
+  } catch (error) {
+    console.error("Wystąpił błąd podczas pozyskiwania nieobecności:", error);
+    return { success: false, message: error.message };
+  }
+};
+
 module.exports = {
   SentECPToDatabase,
   checkECPForEmployeeOnDate,
   getECPForMonth,
   exportECPForMonth,
+  getAbsenceNotIncludeRequests,
 };

@@ -62,3 +62,17 @@ export const exportECPAPI = async (data, employeesID) => {
     throw error;
   }
 };
+export const getAbsenceAPI = async (data, employeesID) => {
+  try {
+    const response = await axios.get(`${API_URL}/absence`, {
+      params: {
+        date: data,
+        employeesID: employeesID,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error during API call:", error);
+    throw error;
+  }
+};

@@ -7,8 +7,8 @@ import EmployeesList from "./EmployeesList";
 import EmployeeInf from "./EmployeeInf";
 import NewEmployee from "./NewEmployee/NewEmployee";
 import ExportExcel from "./ExportExcel";
+import EmployeesAbsence from "./EmployeesAbsence";
 import { getCurrentDateYearMonth } from "../../common/CommonFunctions";
-import { allEmployeesAPI } from "../../../api/employeesApi";
 
 const MenuItems = ({ dzial, dzialy, setDzial, date, setDate }) => {
   return (
@@ -71,7 +71,7 @@ const Employees = ({ user, setMenuItems, subordinates }) => {
         </EmployeesList>
       </Tab>
       <Tab eventKey='Urlopy' title='Urlopy'>
-        Tab content for Contact
+        <EmployeesAbsence date={date} subordinates={subordinates} />
       </Tab>
       <Tab eventKey='Excel' title='Export'>
         {" "}

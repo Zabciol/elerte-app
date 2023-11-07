@@ -150,6 +150,36 @@ const deleteECP = async (request) => {
   }
 };
 
+const getAcceptedRequests = async (date, IDs) => {
+  try {
+    const [year, month] = date.split("-");
+    const query =
+      "SELECT Pracownicy.ID, Imie, Nazwisko, Stanowisko.Nazwa AS `Stanowisko` , Dzialy.Nazwa AS `Dzial`, " +
+      "PowodyNieobecnosci.Nazwa AS `Powod`, Wnioski.Data_Od,Wnioski.Data_Do " +
+      "FROM Pracownicy LEFT JOIN Stanowisko ON Stanowisko.ID = Pracownicy.Stanowisko_ID " +
+      "LEFT JOIN Dzialy ON Dzialy.ID = Stanowisko.Dzial_ID " +
+      "LEFT JOIN Wnioski ON Pracownicy.ID = Wnioski.Nadawca_ID " +
+      "LEFT JOIN PowodyNieobecnosci ON Wnioski.Powod_ID = PowodyNieobecnosci.ID " +
+      "WHERE Wnioski.`Status` = 'Zaakceptowano' " +
+      "AND (MONTH(Wnioski.Data_Od) = ? OR MONTH(Wnioski.Data_Do) = ?) " +
+      "AND (YEAR(Wnioski.Data_Od) = ? OR YEAR(Wnioski.Data_Do) = ?) AND " +
+      "Wnioski.Nadawca_ID IN (?);";
+
+    const results = await queryDatabasePromise(query, [
+      month,
+      month,
+      year,
+      year,
+      IDs,
+    ]);
+    console.log("Wnioski uzyskano pomyślnie!");
+    return { success: true, message: "Pozyskano wnioski", data: results };
+  } catch (error) {
+    console.error("Wystąpił błąd podczas pozyskiwania wniosków:", error);
+    return { success: false, message: error.message };
+  }
+};
+
 module.exports = {
   sentRequest,
   getRequests,
@@ -158,4 +188,5 @@ module.exports = {
   declineRequests,
   fillECP,
   deleteECP,
+  getAcceptedRequests,
 };

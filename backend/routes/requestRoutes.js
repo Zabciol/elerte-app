@@ -64,5 +64,16 @@ router.put("/decline", async (req, res) => {
     res.status(500).send("Wystąpił błąd podczas aktualizacji danych.");
   }
 });
+router.get("/getAccepted", async (req, res) => {
+  try {
+    const date = req.query.date;
+    const IDs = req.query.IDs;
+    const result = await requestModel.getAcceptedRequests(date, IDs);
+    res.json(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Wystąpił błąd podczas pobierania danych.");
+  }
+});
 
 module.exports = router;

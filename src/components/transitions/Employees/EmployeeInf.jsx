@@ -6,7 +6,6 @@ import "../../../styles/Employee.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
 
 const EmployeeInf = (props) => {
-  console.log(props.user);
   const [inf, setInf] = useState();
   const [show, setShow] = useState(false);
   const getInformation = async () => {
