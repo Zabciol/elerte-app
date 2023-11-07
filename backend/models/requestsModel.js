@@ -154,12 +154,15 @@ const getAcceptedRequests = async (date, IDs) => {
   try {
     const [year, month] = date.split("-");
     const query =
-      "SELECT Pracownicy.ID, Imie, Nazwisko, Stanowisko.Nazwa AS `Stanowisko` , Dzialy.Nazwa AS `Dzial`, " +
-      "PowodyNieobecnosci.Nazwa AS `Powod`, Wnioski.Data_Od,Wnioski.Data_Do " +
+      "SELECT Pracownicy.ID, Pracownicy.Imie, Pracownicy.Nazwisko, Stanowisko.Nazwa AS `Stanowisko` , Dzialy.Nazwa AS `Dzial`, " +
+      "PowodyNieobecnosci.Nazwa AS `Powod`, Wnioski.Data_Od,Wnioski.Data_Do, " +
+      "Akceptujacy.Imie AS `ImieAkceptujacego`, " +
+      "Akceptujacy.Nazwisko AS `NazwiskoAkceptujacego` " +
       "FROM Pracownicy LEFT JOIN Stanowisko ON Stanowisko.ID = Pracownicy.Stanowisko_ID " +
       "LEFT JOIN Dzialy ON Dzialy.ID = Stanowisko.Dzial_ID " +
       "LEFT JOIN Wnioski ON Pracownicy.ID = Wnioski.Nadawca_ID " +
       "LEFT JOIN PowodyNieobecnosci ON Wnioski.Powod_ID = PowodyNieobecnosci.ID " +
+      "LEFT JOIN Pracownicy AS Akceptujacy ON Wnioski.Odbiorca_ID = Akceptujacy.ID " +
       "WHERE Wnioski.`Status` = 'Zaakceptowano' " +
       "AND (MONTH(Wnioski.Data_Od) = ? OR MONTH(Wnioski.Data_Do) = ?) " +
       "AND (YEAR(Wnioski.Data_Od) = ? OR YEAR(Wnioski.Data_Do) = ?) AND " +

@@ -7,7 +7,7 @@ import EmployeesList from "./EmployeesList";
 import EmployeeInf from "./EmployeeInf";
 import NewEmployee from "./NewEmployee/NewEmployee";
 import ExportExcel from "./ExportExcel";
-import EmployeesAbsence from "./EmployeesAbsence";
+import EmployeesAbsence from "./Absence/EmployeesAbsence";
 import { getCurrentDateYearMonth } from "../../common/CommonFunctions";
 
 const MenuItems = ({ dzial, dzialy, setDzial, date, setDate }) => {

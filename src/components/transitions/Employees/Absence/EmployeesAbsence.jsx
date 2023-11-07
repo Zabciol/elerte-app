@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { getAcceptedRequestsApi } from "../../../api/requestsApi";
-import { getAbsenceAPI } from "../../../api/ecpApi";
-import EmployeesList from "./EmployeesList";
+import { getAcceptedRequestsApi } from "../../../../api/requestsApi";
+import { getAbsenceAPI } from "../../../../api/ecpApi";
+import EmployeesList from "../EmployeesList";
+import EmployeeAbsenceInf from "./EmployeeAbsenceInf";
 
 const EmployeesAbsence = ({ date, subordinates, user, dzial }) => {
   const [absence, setAbsence] = useState([]);
@@ -45,6 +46,8 @@ const EmployeesAbsence = ({ date, subordinates, user, dzial }) => {
           Data_Od: urlop.Data_Od,
           Data_Do: urlop.Data_Do,
           Powod: urlop.Powod,
+          ImieAkceptujacego: urlop.ImieAkceptujacego,
+          NazwiskoAkceptujacego: urlop.NazwiskoAkceptujacego,
         },
         "Urlop"
       );
@@ -81,9 +84,7 @@ const EmployeesAbsence = ({ date, subordinates, user, dzial }) => {
     if (subordinates.length) {
       const IDs = subordinates.map((employee) => employee.ID);
       const urlopy = await getUrlopy(IDs);
-      console.log(urlopy);
       const nieobecnosci = await getAbsence(IDs);
-      console.log(nieobecnosci);
       const newAbsence = uniteTabs(nieobecnosci, urlopy);
       console.log(newAbsence);
       setAbsence(newAbsence);
@@ -97,7 +98,7 @@ const EmployeesAbsence = ({ date, subordinates, user, dzial }) => {
   return (
     <EmployeesList subordinates={absence} date={date}>
       {" "}
-      <div>dsad</div>
+      <EmployeeAbsenceInf />
     </EmployeesList>
   );
 };
