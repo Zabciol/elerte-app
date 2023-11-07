@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { getAcceptedRequestsApi } from "../../../api/requestsApi";
 import { getAbsenceAPI } from "../../../api/ecpApi";
+import EmployeesList from "./EmployeesList";
 
-const EmployeesAbsence = ({ date, subordinates }) => {
+const EmployeesAbsence = ({ date, subordinates, user, dzial }) => {
   const [absence, setAbsence] = useState([]);
 
   const uniteTabs = (tablicaNieobecnosci, tablicaUrlopy) => {
@@ -57,6 +58,9 @@ const EmployeesAbsence = ({ date, subordinates }) => {
       Nazwisko:
         tablicaNieobecnosci.find((n) => n.ID === pracownik.ID)?.Nazwisko ||
         tablicaUrlopy.find((u) => u.ID === pracownik.ID)?.Nazwisko,
+      Stanowisko:
+        tablicaNieobecnosci.find((n) => n.ID === pracownik.ID)?.Stanowisko ||
+        tablicaUrlopy.find((u) => u.ID === pracownik.ID)?.Stanowisko,
       Urlopy: pracownik.Urlopy,
       Nieobecnosci: pracownik.Nieobecnosci,
     }));
@@ -77,7 +81,9 @@ const EmployeesAbsence = ({ date, subordinates }) => {
     if (subordinates.length) {
       const IDs = subordinates.map((employee) => employee.ID);
       const urlopy = await getUrlopy(IDs);
+      console.log(urlopy);
       const nieobecnosci = await getAbsence(IDs);
+      console.log(nieobecnosci);
       const newAbsence = uniteTabs(nieobecnosci, urlopy);
       console.log(newAbsence);
       setAbsence(newAbsence);
@@ -88,7 +94,12 @@ const EmployeesAbsence = ({ date, subordinates }) => {
     getData();
   }, [subordinates]);
 
-  return <div>EmployeesAbsence</div>;
+  return (
+    <EmployeesList subordinates={absence} date={date}>
+      {" "}
+      <div>dsad</div>
+    </EmployeesList>
+  );
 };
 
 export default EmployeesAbsence;

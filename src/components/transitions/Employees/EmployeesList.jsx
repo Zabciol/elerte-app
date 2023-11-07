@@ -3,7 +3,7 @@ import Accordion from "react-bootstrap/Accordion";
 import EmployeeListItem from "./EmployeeListItem";
 import EmployeeInf from "./EmployeeInf";
 const EmployeesList = (props) => {
-  const { subordinates, dzial, user, date, children } = props;
+  const { subordinates, date, children } = props;
 
   return (
     <Accordion className='scroll'>
