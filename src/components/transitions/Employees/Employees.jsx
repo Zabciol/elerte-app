@@ -79,7 +79,8 @@ const Employees = ({ user, setMenuItems, subordinates }) => {
           subordinates={filteredSubordinates}
           dzial={dzial}
           user={user}
-          date={date}>
+          date={date}
+          showWorkedHours={true}>
           <EmployeeInf user={user} />
         </EmployeesList>
       </Tab>

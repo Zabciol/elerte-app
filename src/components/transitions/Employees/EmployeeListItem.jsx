@@ -3,8 +3,8 @@ import UserCard from "../../common/UserCard";
 import { useEffect } from "react";
 import { hoursWorkedApi } from "../../../api/employeesApi";
 
-const EmployeeListItem = ({ employee, date, children }) => {
-  const [workedHours, setWorkedHours] = useState("");
+const EmployeeListItem = ({ employee, date, children, showWorkedHours }) => {
+  const [workedHours, setWorkedHours] = useState(null);
 
   const getWorkedHours = async () => {
     if (employee.ID && date) {
@@ -18,7 +18,7 @@ const EmployeeListItem = ({ employee, date, children }) => {
   };
 
   useEffect(() => {
-    getWorkedHours();
+    if (showWorkedHours) getWorkedHours();
   }, [date, employee]);
   return (
     <UserCard key={employee.ID} employee={employee} inf={workedHours}>

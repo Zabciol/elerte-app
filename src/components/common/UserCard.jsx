@@ -13,7 +13,7 @@ const UserCard = (props) => {
             <div className='fw-bold'>{`${Imie} ${Nazwisko}`}</div>
             {Stanowisko}
           </div>
-          <Badge>{inf}</Badge>
+          {inf !== null ? <Badge>{inf}</Badge> : null}
         </div>
       </Accordion.Header>
       <Accordion.Body style={{ overflow: "hidden" }}>{children}</Accordion.Body>
