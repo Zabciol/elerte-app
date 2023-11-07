@@ -15,8 +15,8 @@ const EmployeeAbsenceInf = ({ employee }) => {
                   key={absence.Data}
                   as='li'
                   className='d-flex justify-content-between align-items-start absence-list-item '>
-                  <div className='ms-2 me-auto'>
-                    <div className='fw-bold'>{absence.Powod}</div>
+                  <div className='ms-2 me-auto text-start'>
+                    <div className='fw-bold text-start'>{absence.Powod}</div>
                     {"Przepracowane godziny: " + absence.IloscGodzin}
                   </div>
                   <Badge bg='primary' pill className='absence-badge'>
@@ -38,8 +38,8 @@ const EmployeeAbsenceInf = ({ employee }) => {
                   key={absence.Data_Od}
                   as='li'
                   className='d-flex justify-content-between align-items-start absence-list-item'>
-                  <div className='ms-2 me-auto'>
-                    <div className='fw-bold'>{absence.Powod}</div>
+                  <div className='ms-2 me-auto text-start'>
+                    <div className='fw-bold text-start'>{absence.Powod}</div>
                     {"Zaakceptowane przez: " +
                       absence.ImieAkceptujacego +
                       " " +
