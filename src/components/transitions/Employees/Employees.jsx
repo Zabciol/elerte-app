@@ -28,6 +28,8 @@ const Employees = ({ user, setMenuItems, subordinates }) => {
   const [dzialy, setDzialy] = useState([]);
   const [dzial, setDzial] = useState();
   const [date, setDate] = useState(getCurrentDateYearMonth());
+  const [filteredSubordinates, setFilteredSubordinates] =
+    useState(subordinates);
 
   const changeDate = (event) => {
     setDate(event.target.value);
@@ -40,6 +42,17 @@ const Employees = ({ user, setMenuItems, subordinates }) => {
     setDzialy(noweDzialy);
     setDzial(noweDzialy[0]);
   }, [subordinates]);
+
+  useEffect(() => {
+    if (subordinates.length) {
+      console.log(subordinates);
+      const newFilteredSubordinates =
+        dzial === "Każdy"
+          ? subordinates
+          : subordinates.filter((employee) => employee.Dzial === dzial);
+      setFilteredSubordinates(newFilteredSubordinates);
+    }
+  }, [dzial, subordinates]);
 
   useEffect(() => {
     setMenuItems(
@@ -63,7 +76,7 @@ const Employees = ({ user, setMenuItems, subordinates }) => {
       className='mb-3'>
       <Tab eventKey='Lista' title='Lista'>
         <EmployeesList
-          subordinates={subordinates}
+          subordinates={filteredSubordinates}
           dzial={dzial}
           user={user}
           date={date}>
@@ -71,7 +84,7 @@ const Employees = ({ user, setMenuItems, subordinates }) => {
         </EmployeesList>
       </Tab>
       <Tab eventKey='Urlopy' title='Urlopy'>
-        <EmployeesAbsence date={date} subordinates={subordinates} />
+        <EmployeesAbsence date={date} subordinates={filteredSubordinates} />
       </Tab>
       <Tab eventKey='Excel' title='Export'>
         {" "}

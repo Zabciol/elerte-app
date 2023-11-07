@@ -5,14 +5,9 @@ import EmployeeInf from "./EmployeeInf";
 const EmployeesList = (props) => {
   const { subordinates, dzial, user, date, children } = props;
 
-  const filteredSubordinates =
-    dzial === "Każdy"
-      ? subordinates
-      : subordinates.filter((employee) => employee.Dzial === dzial);
-
   return (
     <Accordion className='scroll'>
-      {filteredSubordinates.map((employee) => (
+      {subordinates.map((employee) => (
         <EmployeeListItem employee={employee} date={date} key={employee.ID}>
           {React.Children.map(children, (child) => {
             if (React.isValidElement(child)) {
