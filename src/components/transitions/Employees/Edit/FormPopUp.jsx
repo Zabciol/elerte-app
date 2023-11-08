@@ -34,20 +34,16 @@ const FormPopUp = ({ show, setShow, employee }) => {
   const save = async () => {
     const employeeData = {
       ID: employee.ID,
-      name:
-        nameRef.current.value !== "" ? nameRef.current.value : employee.Imie,
-      lastname:
-        lastNameRef.current.value !== ""
-          ? lastNameRef.current.value
-          : employee.Nazwisko,
-      mail:
-        mailRef.current.value !== ""
-          ? mailRef.current.value + "@elerte.pl"
-          : employee.Mail,
-      phoneNumber:
-        phoneNumberRef.current.value !== ""
-          ? phoneNumberRef.current.value
-          : employee.NrTelefonu,
+      name: nameRef.current.value ? nameRef.current.value : employee.Imie,
+      lastname: lastNameRef.current.value
+        ? lastNameRef.current.value
+        : employee.Nazwisko,
+      mail: mailRef.current.value
+        ? mailRef.current.value + "@elerte.pl"
+        : employee.Mail,
+      phoneNumber: phoneNumberRef.current.value
+        ? phoneNumberRef.current.value
+        : employee.NrTelefonu,
       departmentID: department,
       positionID: position,
       supervisorID: supervisor,
@@ -85,15 +81,12 @@ const FormPopUp = ({ show, setShow, employee }) => {
   const getSubordinates = async () => {
     const data = await subordinatesApi(employee.ID);
     const subordinatesID = data.data.map((employee) => employee.ID);
-    console.log(subordinatesID);
     setSubordinates(subordinatesID);
-    const data2 = await myDirectSubordinatesAPI(employee.ID);
-    console.log("Moi główni podwładni");
-    console.log(employee);
-    console.log(data2);
-    const directSubordinatesID = data2.map((employee) => employee.ID);
-    console.log("ID moich głównych podwładnych");
-    console.log(directSubordinatesID);
+  };
+
+  const getDirectSubordinates = async () => {
+    const data = await myDirectSubordinatesAPI(employee.ID);
+    const directSubordinatesID = data.map((employee) => employee.ID);
     setDirectSubordinates(directSubordinatesID);
   };
 
@@ -104,6 +97,7 @@ const FormPopUp = ({ show, setShow, employee }) => {
 
   useEffect(() => {
     getSubordinates();
+    getDirectSubordinates();
   }, []);
 
   return (
