@@ -17,6 +17,7 @@ const FormPopUp = ({ show, setShow, employee }) => {
   const [showPopUp, setShowPopUp] = useState(false);
   const [message, setMessage] = useState("");
   const [onReload, setOnReaload] = useState(false);
+  const [employeeData, setEmployeeData] = useState();
 
   const nameRef = useRef();
   const lastNameRef = useRef();
