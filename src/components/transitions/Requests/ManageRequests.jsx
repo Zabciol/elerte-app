@@ -32,7 +32,6 @@ const ManageRequests = ({ user }) => {
   };
 
   useEffect(() => {
-    console.log(request);
     if (request !== null) {
       const person = {
         Imie: request.Imie,

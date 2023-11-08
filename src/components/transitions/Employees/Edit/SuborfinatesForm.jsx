@@ -2,12 +2,10 @@ import React, { useEffect, useState } from "react";
 import { allEmployeesAPI } from "../../../../api/employeesApi";
 import FloatingLabel from "react-bootstrap/FloatingLabel";
 import Form from "react-bootstrap/Form";
-import Badge from "react-bootstrap/Badge";
 import ListGroup from "react-bootstrap/ListGroup";
-import Button from "react-bootstrap/Button";
 import { departmentsApi } from "../../../../api/departmentsApi";
 import { mySupervisorsAPI } from "../../../../api/employeesApi";
-import { myDirectSubordinatesAPI } from "../../../../api/employeesApi";
+import PopUp from "../../../common/PopUp";
 
 const SubordinatesForm = (props) => {
   const [departments, setDepartments] = useState([]);
