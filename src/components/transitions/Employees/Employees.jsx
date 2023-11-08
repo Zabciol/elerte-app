@@ -9,6 +9,7 @@ import NewEmployee from "./NewEmployee/NewEmployee";
 import ExportExcel from "./ExportExcel";
 import EmployeesAbsence from "./Absence/EmployeesAbsence";
 import { getCurrentDateYearMonth } from "../../common/CommonFunctions";
+import { allEmployeesAPI } from "../../../api/employeesApi";
 
 const MenuItems = ({ dzial, dzialy, setDzial, date, setDate }) => {
   return (
@@ -28,6 +29,7 @@ const Employees = ({ user, setMenuItems, subordinates }) => {
   const [dzialy, setDzialy] = useState([]);
   const [dzial, setDzial] = useState();
   const [date, setDate] = useState(getCurrentDateYearMonth());
+  const [employees, setEmployees] = useState(subordinates);
   const [filteredSubordinates, setFilteredSubordinates] =
     useState(subordinates);
 
@@ -35,24 +37,35 @@ const Employees = ({ user, setMenuItems, subordinates }) => {
     setDate(event.target.value);
   };
 
-  useEffect(() => {
-    const noweDzialy = Array.from(
-      new Set(subordinates.map((item) => item.Dzial))
-    );
-    setDzialy(noweDzialy);
-    setDzial(noweDzialy[0]);
-  }, [subordinates]);
+  const getEmployees = async () => {
+    const data =
+      user.Dzial === "Księgowość" || user.Dzial === "Analityka"
+        ? await allEmployeesAPI()
+        : subordinates;
+    console.log("Pracownicy: ");
+    console.log(data);
+    setEmployees(data);
+  };
 
   useEffect(() => {
-    if (subordinates.length) {
-      console.log(subordinates);
+    const noweDzialy = Array.from(new Set(employees.map((item) => item.Dzial)));
+    setDzialy(noweDzialy);
+    setDzial(noweDzialy[0]);
+  }, [employees]);
+
+  useEffect(() => {
+    if (employees.length) {
       const newFilteredSubordinates =
         dzial === "Każdy"
-          ? subordinates
-          : subordinates.filter((employee) => employee.Dzial === dzial);
+          ? employees
+          : employees.filter((employee) => employee.Dzial === dzial);
       setFilteredSubordinates(newFilteredSubordinates);
     }
-  }, [dzial, subordinates]);
+  }, [dzial, employees]);
+
+  useEffect(() => {
+    getEmployees();
+  }, [subordinates]);
 
   useEffect(() => {
     setMenuItems(
@@ -90,7 +103,7 @@ const Employees = ({ user, setMenuItems, subordinates }) => {
       <Tab eventKey='Excel' title='Export'>
         {" "}
         <ExportExcel
-          subordinates={subordinates}
+          subordinates={employees}
           user={user}
           dzial={dzial}
           date={date}
