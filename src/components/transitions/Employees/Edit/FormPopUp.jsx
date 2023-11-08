@@ -31,7 +31,7 @@ const FormPopUp = ({ show, setShow, employee }) => {
   const [subordinates, setSubordinates] = useState([]);
   const [directSubordinates, setDirectSubordinates] = useState([]);
 
-  const save = async (shouldShowPopUp = true) => {
+  const save = async (shouldShowPopUp = true, directSubordinates) => {
     const employeeData = {
       ID: employee.ID,
       name: nameRef.current?.value || employee.Imie,
@@ -87,6 +87,8 @@ const FormPopUp = ({ show, setShow, employee }) => {
   const getDirectSubordinates = async () => {
     const data = await myDirectSubordinatesAPI(employee.ID);
     const directSubordinatesID = data.map((employee) => employee.ID);
+    console.log("Moi podwładni aasdasdas");
+    console.log(directSubordinatesID);
     setDirectSubordinates(directSubordinatesID);
   };
 
@@ -100,8 +102,8 @@ const FormPopUp = ({ show, setShow, employee }) => {
     getDirectSubordinates();
   }, []);
 
-  const updateData = async () => {
-    await save(false); // Wywołaj save bez pokazywania PopUp
+  const updateData = async (directSubordinates) => {
+    await save(false, directSubordinates); // Wywołaj save bez pokazywania PopUp
     await getDirectSubordinates();
     await getSubordinates();
   };
