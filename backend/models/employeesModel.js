@@ -321,6 +321,26 @@ const deleteEmployee = (employeeID) => {
   });
 };
 
+const getMyDirectSubordinates = async (id) => {
+  return new Promise((resolve, reject) => {
+    const query =
+      "SELECT Pracownicy.ID, Imie, Nazwisko, Stanowisko.Nazwa AS `Stanowisko`, Dzialy.Nazwa AS `Dzial` " +
+      "FROM Pracownicy LEFT JOIN Stanowisko ON Pracownicy.Stanowisko_ID = Stanowisko.ID " +
+      "LEFT JOIN Dzialy ON Stanowisko.Dzial_ID = Dzialy.ID " +
+      "LEFT JOIN Hierarchia ON Pracownicy.ID = Hierarchia.Podwladny_ID " +
+      "WHERE Hierarchia.Przelozony_ID = ?";
+    queryDatabase(query, [id], (err, results) => {
+      if (err) {
+        reject(err);
+        return {
+          success: false,
+          message: "Wystąpił błąd podczas dodawania pracownika i zależności.",
+        };
+      }
+      resolve(results ? results : null);
+    });
+  });
+};
 module.exports = {
   getSubordinates,
   getWorkedHoursByEmployee,
@@ -332,4 +352,5 @@ module.exports = {
   getMySupervisor,
   updateEmployee,
   deleteEmployee,
+  getMyDirectSubordinates,
 };

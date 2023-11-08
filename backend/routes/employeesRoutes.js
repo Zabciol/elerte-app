@@ -133,5 +133,15 @@ router.delete("/deleteEmployee/:id", async (req, res) => {
     res.status(500).send({ message: "Napotkano problem podczas usuwania" });
   }
 });
+router.get("/myDirectSubordinates", async (req, res) => {
+  try {
+    const myID = req.query.myID;
+    const result = await employeesModel.getMyDirectSubordinates(myID);
+    res.json(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Wystąpił błąd podczas pobierania danych.");
+  }
+});
 
 module.exports = router;

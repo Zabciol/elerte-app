@@ -7,6 +7,7 @@ import ListGroup from "react-bootstrap/ListGroup";
 import Button from "react-bootstrap/Button";
 import { departmentsApi } from "../../../../api/departmentsApi";
 import { mySupervisorsAPI } from "../../../../api/employeesApi";
+import { myDirectSubordinatesAPI } from "../../../../api/employeesApi";
 
 const SubordinatesForm = (props) => {
   const [departments, setDepartments] = useState([]);
@@ -94,14 +95,25 @@ const SubordinatesForm = (props) => {
                 as='li'
                 className='d-flex justify-content-between align-items-start'
                 onClick={() => {
-                  const updated = [...props.subordinates];
-                  if (!props.subordinates.includes(employee.ID)) {
-                    updated.push(employee.ID);
-                  } else {
-                    const index = updated.indexOf(employee.ID);
-                    if (index > -1) updated.splice(index, 1);
+                  const directSubordinates = [...props.directSubordinates];
+                  const allSubordinates = [...props.subordinates];
+                  if (
+                    !props.subordinates.includes(employee.ID) &&
+                    !props.directSubordinates.includes(employee.ID)
+                  ) {
+                    directSubordinates.push(employee.ID);
+                    allSubordinates.push(employee.ID);
+                  } else if (
+                    props.subordinates.includes(employee.ID) &&
+                    props.directSubordinates.includes(employee.ID)
+                  ) {
+                    const index = directSubordinates.indexOf(employee.ID);
+                    if (index > -1) directSubordinates.splice(index, 1);
+                    const index2 = allSubordinates.indexOf(employee.ID);
+                    if (index2 > -1) allSubordinates.splice(index2, 1);
                   }
-                  props.setSubordinates(updated);
+                  props.setDirectSubordinates(directSubordinates);
+                  props.setSubordinates(allSubordinates);
                 }}>
                 <div className='ms-2 me-auto text-start'>
                   <div className='fw-bold'>

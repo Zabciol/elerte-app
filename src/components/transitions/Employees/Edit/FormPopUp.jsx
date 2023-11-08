@@ -11,6 +11,7 @@ import SubordinatesForm from "./SuborfinatesForm";
 import { subordinatesApi } from "../../../../api/employeesApi";
 import { updateEmployeeApi } from "../../../../api/employeesApi";
 import { deleteEmployeeApi } from "../../../../api/employeesApi";
+import { myDirectSubordinatesAPI } from "../../../../api/employeesApi";
 import PopUp from "../../../common/PopUp";
 
 const FormPopUp = ({ show, setShow, employee }) => {
@@ -28,6 +29,7 @@ const FormPopUp = ({ show, setShow, employee }) => {
   const [supervisor, setSupervisor] = useState();
   const [workingTime, setWorkingTime] = useState();
   const [subordinates, setSubordinates] = useState([]);
+  const [directSubordinates, setDirectSubordinates] = useState([]);
 
   const save = async () => {
     const employeeData = {
@@ -50,7 +52,7 @@ const FormPopUp = ({ show, setShow, employee }) => {
       positionID: position,
       supervisorID: supervisor,
       workingTimeID: workingTime,
-      subordinates: subordinates,
+      subordinates: directSubordinates,
     };
     console.log(employeeData);
     try {
@@ -83,8 +85,22 @@ const FormPopUp = ({ show, setShow, employee }) => {
   const getSubordinates = async () => {
     const data = await subordinatesApi(employee.ID);
     const subordinatesID = data.data.map((employee) => employee.ID);
+    console.log(subordinatesID);
     setSubordinates(subordinatesID);
+    const data2 = await myDirectSubordinatesAPI(employee.ID);
+    console.log("Moi główni podwładni");
+    console.log(employee);
+    console.log(data2);
+    const directSubordinatesID = data2.map((employee) => employee.ID);
+    console.log("ID moich głównych podwładnych");
+    console.log(directSubordinatesID);
+    setDirectSubordinates(directSubordinatesID);
   };
+
+  useEffect(() => {
+    console.log(subordinates);
+    console.log(directSubordinates);
+  }, [directSubordinates]);
 
   useEffect(() => {
     getSubordinates();
@@ -132,6 +148,8 @@ const FormPopUp = ({ show, setShow, employee }) => {
                 employee={employee}
                 subordinates={subordinates}
                 setSubordinates={setSubordinates}
+                directSubordinates={directSubordinates}
+                setDirectSubordinates={setDirectSubordinates}
                 department={department}
               />
             </Tab>
