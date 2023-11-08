@@ -17,7 +17,7 @@ import PopUp from "../../../common/PopUp";
 const FormPopUp = ({ show, setShow, employee }) => {
   const [showPopUp, setShowPopUp] = useState(false);
   const [message, setMessage] = useState("");
-  const [onReload, setOnReaload] = useState(false);
+  const [onReload, setOnReload] = useState(false);
   const [employeeData, setEmployeeData] = useState();
 
   const nameRef = useRef();
@@ -31,7 +31,10 @@ const FormPopUp = ({ show, setShow, employee }) => {
   const [subordinates, setSubordinates] = useState([]);
   const [directSubordinates, setDirectSubordinates] = useState([]);
 
-  const save = async (shouldShowPopUp = true, directSubordinates) => {
+  const save = async (
+    shouldShowPopUp = true,
+    subordinates = directSubordinates
+  ) => {
     const employeeData = {
       ID: employee.ID,
       name: nameRef.current?.value || employee.Imie,
@@ -44,23 +47,29 @@ const FormPopUp = ({ show, setShow, employee }) => {
       positionID: position,
       supervisorID: supervisor,
       workingTimeID: workingTime,
-      subordinates: directSubordinates,
+      subordinates: subordinates,
     };
     console.log(employeeData);
-    console.log(directSubordinates);
+    console.log(subordinates);
     try {
-      //const response = await updateEmployeeApi(employeeData);
+      const response = await updateEmployeeApi(employeeData);
       if (shouldShowPopUp) {
-        //setMessage(response.message);
+        setShow(false);
+        setOnReload(true);
+        setMessage(response.message);
         setShowPopUp(true);
       }
-      setOnReaload(true);
     } catch (error) {
       console.error("Wystąpił błąd:", error);
       setMessage("Wystąpił błąd podczas komunikacji z serwerem.");
       if (shouldShowPopUp) {
+        setShow(false);
         setShowPopUp(true);
+        setOnReload(false);
       }
+    } finally {
+      getDirectSubordinates();
+      getSubordinates();
     }
   };
 
@@ -70,7 +79,7 @@ const FormPopUp = ({ show, setShow, employee }) => {
       setMessage(response.message);
       setShow(false);
       setShowPopUp(true);
-      setOnReaload(false);
+      setOnReload(false);
     } catch (error) {
       console.error("Wystąpił błąd:", error);
       setMessage("Wystąpił błąd podczas komunikacji z serwerem.");
@@ -87,14 +96,14 @@ const FormPopUp = ({ show, setShow, employee }) => {
   const getDirectSubordinates = async () => {
     const data = await myDirectSubordinatesAPI(employee.ID);
     const directSubordinatesID = data.map((employee) => employee.ID);
-    console.log("Moi podwładni aasdasdas");
+    console.log("Moi podwładni");
     console.log(directSubordinatesID);
     setDirectSubordinates(directSubordinatesID);
   };
 
   useEffect(() => {
-    console.log(subordinates);
-    console.log(directSubordinates);
+    //console.log(subordinates);
+    //console.log(directSubordinates);
   }, [directSubordinates]);
 
   useEffect(() => {
