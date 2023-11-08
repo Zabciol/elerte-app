@@ -52,6 +52,27 @@ const SubordinatesForm = (props) => {
     setDepartments(data);
   };
 
+  const updateHierarchy = (employee) => {
+    const directSubordinates = [...props.directSubordinates];
+    const allSubordinates = [...props.subordinates];
+    if (
+      !props.subordinates.includes(employee.ID) &&
+      !props.directSubordinates.includes(employee.ID)
+    ) {
+      directSubordinates.push(employee.ID);
+      allSubordinates.push(employee.ID);
+    } else if (
+      props.subordinates.includes(employee.ID) &&
+      props.directSubordinates.includes(employee.ID)
+    ) {
+      const index = directSubordinates.indexOf(employee.ID);
+      if (index > -1) directSubordinates.splice(index, 1);
+      const index2 = allSubordinates.indexOf(employee.ID);
+      if (index2 > -1) allSubordinates.splice(index2, 1);
+    }
+    props.setDirectSubordinates(directSubordinates);
+    props.setSubordinates(allSubordinates);
+  };
   useEffect(() => {
     const fetchData = async () => {
       await getAllEmployees();
@@ -94,27 +115,7 @@ const SubordinatesForm = (props) => {
                 key={employee.ID}
                 as='li'
                 className='d-flex justify-content-between align-items-start'
-                onClick={() => {
-                  const directSubordinates = [...props.directSubordinates];
-                  const allSubordinates = [...props.subordinates];
-                  if (
-                    !props.subordinates.includes(employee.ID) &&
-                    !props.directSubordinates.includes(employee.ID)
-                  ) {
-                    directSubordinates.push(employee.ID);
-                    allSubordinates.push(employee.ID);
-                  } else if (
-                    props.subordinates.includes(employee.ID) &&
-                    props.directSubordinates.includes(employee.ID)
-                  ) {
-                    const index = directSubordinates.indexOf(employee.ID);
-                    if (index > -1) directSubordinates.splice(index, 1);
-                    const index2 = allSubordinates.indexOf(employee.ID);
-                    if (index2 > -1) allSubordinates.splice(index2, 1);
-                  }
-                  props.setDirectSubordinates(directSubordinates);
-                  props.setSubordinates(allSubordinates);
-                }}>
+                onClick={() => updateHierarchy(employee)}>
                 <div className='ms-2 me-auto text-start'>
                   <div className='fw-bold'>
                     {employee.Imie} {employee.Nazwisko}
