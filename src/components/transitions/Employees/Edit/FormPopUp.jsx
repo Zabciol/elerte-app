@@ -48,6 +48,8 @@ const FormPopUp = ({ show, setShow, employee }) => {
       workingTimeID: workingTime,
       subordinates: subordinates,
     };
+    console.log("Aktualne dane:");
+    console.log(employeeData);
     try {
       const response = await updateEmployeeApi(employeeData);
       if (shouldShowPopUp) {
