@@ -86,7 +86,6 @@ const EmployeesAbsence = ({ date, subordinates, user, dzial }) => {
       const urlopy = await getUrlopy(IDs);
       const nieobecnosci = await getAbsence(IDs);
       const newAbsence = uniteTabs(nieobecnosci, urlopy);
-      console.log(newAbsence);
       setAbsence(newAbsence);
     }
   };

@@ -18,7 +18,6 @@ const FormPopUp = ({ show, setShow, employee }) => {
   const [showPopUp, setShowPopUp] = useState(false);
   const [message, setMessage] = useState("");
   const [onReload, setOnReload] = useState(false);
-  const [employeeData, setEmployeeData] = useState();
 
   const nameRef = useRef();
   const lastNameRef = useRef();
@@ -49,8 +48,6 @@ const FormPopUp = ({ show, setShow, employee }) => {
       workingTimeID: workingTime,
       subordinates: subordinates,
     };
-    console.log(employeeData);
-    console.log(subordinates);
     try {
       const response = await updateEmployeeApi(employeeData);
       if (shouldShowPopUp) {
@@ -96,15 +93,9 @@ const FormPopUp = ({ show, setShow, employee }) => {
   const getDirectSubordinates = async () => {
     const data = await myDirectSubordinatesAPI(employee.ID);
     const directSubordinatesID = data.map((employee) => employee.ID);
-    console.log("Moi podwładni");
-    console.log(directSubordinatesID);
+
     setDirectSubordinates(directSubordinatesID);
   };
-
-  useEffect(() => {
-    //console.log(subordinates);
-    //console.log(directSubordinates);
-  }, [directSubordinates]);
 
   useEffect(() => {
     getSubordinates();

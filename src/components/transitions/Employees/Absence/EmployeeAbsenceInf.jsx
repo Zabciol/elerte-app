@@ -2,7 +2,6 @@ import React from "react";
 import Badge from "react-bootstrap/Badge";
 import ListGroup from "react-bootstrap/ListGroup";
 const EmployeeAbsenceInf = ({ employee }) => {
-  console.log(employee);
   return (
     <div className='d-flex absence w-100'>
       <div className='w-100'>

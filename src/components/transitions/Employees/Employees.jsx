@@ -42,8 +42,6 @@ const Employees = ({ user, setMenuItems, subordinates }) => {
       user.Dzial === "Księgowość" || user.Dzial === "Analityka"
         ? await allEmployeesAPI()
         : subordinates;
-    console.log("Pracownicy: ");
-    console.log(data);
     setEmployees(data);
   };
 

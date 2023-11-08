@@ -48,9 +48,9 @@ const PositionForm = (props) => {
 
     if (employee) {
       setDepartment(employee.DzialID);
-      setSupervisor(employee.PrzelozonyID);
       setPosition(employee.StanowiskoID);
       setWorkingTime(employee.WymiarPracy_ID);
+      setSupervisor(employee.PrzelozonyID);
     }
   }, []);
 

@@ -41,10 +41,12 @@ const SubordinatesForm = (props) => {
     }
     setEmployees(data);
     const supervisorsData = await mySupervisorsAPI(props.employee.ID);
-    console.log("Przełozeni tego pracownika: ");
+    console.log("Przełozeni tego pracownika:");
     console.log(supervisorsData.message);
-    console.log(supervisorsData.data);
-    setSupervisors(supervisorsData.data);
+    if (supervisorsData.data.length) {
+      console.log(supervisorsData.data);
+      setSupervisors(supervisorsData.data);
+    }
   };
 
   const getAllDepartments = async () => {
@@ -55,8 +57,7 @@ const SubordinatesForm = (props) => {
   const updateHierarchy = (employee) => {
     const directSubordinates = [...props.directSubordinates];
     const allSubordinates = [...props.subordinates];
-    console.log("Przed edycją");
-    console.log(directSubordinates);
+
     if (
       !props.subordinates.includes(employee.ID) &&
       !props.directSubordinates.includes(employee.ID)
@@ -72,10 +73,6 @@ const SubordinatesForm = (props) => {
       const index2 = allSubordinates.indexOf(employee.ID);
       if (index2 > -1) allSubordinates.splice(index2, 1);
     }
-    console.log("Po edycji");
-    console.log(directSubordinates);
-    //props.setDirectSubordinates(directSubordinates);
-    //props.setSubordinates(allSubordinates);
     props.updateData(directSubordinates);
   };
   useEffect(() => {
