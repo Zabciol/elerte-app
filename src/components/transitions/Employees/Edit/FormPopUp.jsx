@@ -31,19 +31,15 @@ const FormPopUp = ({ show, setShow, employee }) => {
   const [subordinates, setSubordinates] = useState([]);
   const [directSubordinates, setDirectSubordinates] = useState([]);
 
-  const save = async () => {
+  const save = async (shouldShowPopUp = true) => {
     const employeeData = {
       ID: employee.ID,
-      name: nameRef.current.value ? nameRef.current.value : employee.Imie,
-      lastname: lastNameRef.current.value
-        ? lastNameRef.current.value
-        : employee.Nazwisko,
-      mail: mailRef.current.value
+      name: nameRef.current?.value || employee.Imie,
+      lastname: lastNameRef.current?.value || employee.Nazwisko,
+      mail: mailRef.current?.value
         ? mailRef.current.value + "@elerte.pl"
         : employee.Mail,
-      phoneNumber: phoneNumberRef.current.value
-        ? phoneNumberRef.current.value
-        : employee.NrTelefonu,
+      phoneNumber: phoneNumberRef.current?.value || employee.NrTelefonu,
       departmentID: department,
       positionID: position,
       supervisorID: supervisor,
@@ -51,16 +47,20 @@ const FormPopUp = ({ show, setShow, employee }) => {
       subordinates: directSubordinates,
     };
     console.log(employeeData);
+    console.log(directSubordinates);
     try {
-      const response = await updateEmployeeApi(employeeData);
-      setMessage(response.message);
-      setShow(false);
-      setShowPopUp(true);
+      //const response = await updateEmployeeApi(employeeData);
+      if (shouldShowPopUp) {
+        //setMessage(response.message);
+        setShowPopUp(true);
+      }
       setOnReaload(true);
     } catch (error) {
       console.error("Wystąpił błąd:", error);
       setMessage("Wystąpił błąd podczas komunikacji z serwerem.");
-      setShow(false);
+      if (shouldShowPopUp) {
+        setShowPopUp(true);
+      }
     }
   };
 
@@ -99,6 +99,12 @@ const FormPopUp = ({ show, setShow, employee }) => {
     getSubordinates();
     getDirectSubordinates();
   }, []);
+
+  const updateData = async () => {
+    await save(false); // Wywołaj save bez pokazywania PopUp
+    await getDirectSubordinates();
+    await getSubordinates();
+  };
 
   return (
     <>
@@ -145,6 +151,7 @@ const FormPopUp = ({ show, setShow, employee }) => {
                 directSubordinates={directSubordinates}
                 setDirectSubordinates={setDirectSubordinates}
                 department={department}
+                updateData={updateData}
               />
             </Tab>
           </Tabs>

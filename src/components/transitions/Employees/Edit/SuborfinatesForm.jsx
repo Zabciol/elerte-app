@@ -70,8 +70,11 @@ const SubordinatesForm = (props) => {
       const index2 = allSubordinates.indexOf(employee.ID);
       if (index2 > -1) allSubordinates.splice(index2, 1);
     }
+    console.log(directSubordinates);
+    console.log(allSubordinates);
     props.setDirectSubordinates(directSubordinates);
     props.setSubordinates(allSubordinates);
+    props.updateData();
   };
   useEffect(() => {
     const fetchData = async () => {
