@@ -2,6 +2,9 @@ const express = require("express");
 const bcrypt = require("bcrypt");
 const userModel = require("../models/userModel");
 const router = express.Router();
+const jwt = require("jsonwebtoken");
+const secretKey =
+  "37x!A%D*G-KaPdSgVkYp3s6v9y$B&E)H@McQfTjWnZr4u7w!z%C*F-JaNnRfUjXn";
 
 router.get("/", async (req, res) => {
   try {
@@ -36,9 +39,18 @@ router.post("/login", (req, res) => {
 
           if (isMatch) {
             console.log("Zalogowano");
-            res
-              .status(200)
-              .send({ message: "User logged in!", user: userData });
+
+            const token = jwt.sign(
+              { id: user.ID, email: user.Mail },
+              secretKey,
+              { expiresIn: "1h" } // Token wygasa po 1 godzinie
+            );
+
+            res.status(200).send({
+              message: "User logged in!",
+              user: userData,
+              token: token,
+            });
           } else {
             res.status(401).send({ message: "Password is incorrect!" });
           }
