@@ -1,8 +1,9 @@
 const express = require("express");
 const router = express.Router();
 const departmentsModel = require("../models/departmentsModel");
+const { verifyToken } = require("../db");
 
-router.get("/", async (req, res) => {
+router.get("/", verifyToken, async (req, res) => {
   try {
     const result = await departmentsModel.getDepartments();
     res.json(result);

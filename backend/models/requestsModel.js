@@ -1,5 +1,4 @@
-const { queryDatabase } = require("../db");
-const { queryDatabasePromise } = require("../db");
+const { queryDatabase, queryDatabasePromise } = require("../db");
 
 const sentRequest = async (request) => {
   try {

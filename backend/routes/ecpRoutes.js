@@ -1,8 +1,9 @@
 const express = require("express");
 const router = express.Router();
 const ecpModel = require("../models/ecpModel");
+const { verifyToken } = require("../db");
 
-router.post("/SentECPToDatabase", async (req, res) => {
+router.post("/SentECPToDatabase", verifyToken, async (req, res) => {
   try {
     const data = req.body;
     const result = await ecpModel.SentECPToDatabase(data);
@@ -12,7 +13,7 @@ router.post("/SentECPToDatabase", async (req, res) => {
   }
 });
 
-router.get("/checkECP/:employeeId/:date", async (req, res) => {
+router.get("/checkECP/:employeeId/:date", verifyToken, async (req, res) => {
   try {
     const { employeeId, date } = req.params;
     const result = await ecpModel.checkECPForEmployeeOnDate(employeeId, date);
@@ -25,7 +26,7 @@ router.get("/checkECP/:employeeId/:date", async (req, res) => {
     res.status(500).json({ message: "Internal server error." });
   }
 });
-router.get("/ecp", async (req, res) => {
+router.get("/ecp", verifyToken, async (req, res) => {
   try {
     const date = req.query.date;
     const employeesID = req.query.employeesID;
@@ -40,7 +41,7 @@ router.get("/ecp", async (req, res) => {
     res.status(500).send("Wystąpił błąd podczas pobierania danych.");
   }
 });
-router.get("/export", async (req, res) => {
+router.get("/export", verifyToken, async (req, res) => {
   try {
     const date = req.query.date;
     const employeesID = req.query.employeesID;
@@ -55,7 +56,7 @@ router.get("/export", async (req, res) => {
     res.status(500).send("Wystąpił błąd podczas pobierania danych.");
   }
 });
-router.get("/absence", async (req, res) => {
+router.get("/absence", verifyToken, async (req, res) => {
   try {
     const date = req.query.date;
     const employeesID = req.query.employeesID;

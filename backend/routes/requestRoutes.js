@@ -1,8 +1,8 @@
 const express = require("express");
 const requestModel = require("../models/requestsModel");
 const router = express.Router();
-
-router.post("/new", async (req, res) => {
+const { verifyToken } = require("../db");
+router.post("/new", verifyToken, async (req, res) => {
   try {
     const request = req.body;
     const result = await requestModel.sentRequest(request);
@@ -11,7 +11,7 @@ router.post("/new", async (req, res) => {
     res.status(500).send(err);
   }
 });
-router.get("/get", async (req, res) => {
+router.get("/get", verifyToken, async (req, res) => {
   try {
     const myID = req.query.myID;
     const result = await requestModel.getRequests(myID);
@@ -21,7 +21,7 @@ router.get("/get", async (req, res) => {
     res.status(500).send("Wystąpił błąd podczas pobierania danych.");
   }
 });
-router.put("/updateView", async (req, res) => {
+router.put("/updateView", verifyToken, async (req, res) => {
   try {
     const ID = req.body.ID;
     const result = await requestModel.updateRequestsView(ID);
@@ -32,7 +32,7 @@ router.put("/updateView", async (req, res) => {
   }
 });
 
-router.put("/accept", async (req, res) => {
+router.put("/accept", verifyToken, async (req, res) => {
   try {
     const ID = req.body.ID;
     const request = req.body.request;
@@ -47,7 +47,7 @@ router.put("/accept", async (req, res) => {
     res.status(500).send("Wystąpił błąd podczas aktualizacji danych.");
   }
 });
-router.put("/decline", async (req, res) => {
+router.put("/decline", verifyToken, async (req, res) => {
   try {
     const ID = req.body.ID;
     const request = req.body.request;
@@ -64,7 +64,7 @@ router.put("/decline", async (req, res) => {
     res.status(500).send("Wystąpił błąd podczas aktualizacji danych.");
   }
 });
-router.get("/getAccepted", async (req, res) => {
+router.get("/getAccepted", verifyToken, async (req, res) => {
   try {
     const date = req.query.date;
     const IDs = req.query.IDs;

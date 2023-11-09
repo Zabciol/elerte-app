@@ -1,4 +1,4 @@
-const { queryDatabase } = require("../db");
+const { queryDatabase, queryDatabasePromise } = require("../db");
 
 const getWorkingTime = () => {
   return new Promise((resolve, reject) => {

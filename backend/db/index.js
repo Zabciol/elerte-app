@@ -22,6 +22,21 @@ const queryDatabasePromise = (query, data) => {
   });
 };
 
+const verifyToken = (req, res, next) => {
+  const token = req.headers["authorization"]?.split(" ")[1]?.replace(/"/g, "");
+  if (!token) {
+    return res.status(401).send("No token provided");
+  }
+  try {
+    const decoded = jwt.verify(token, getSecretKey());
+    req.user = decoded; // Zapisujemy zdekodowane dane do obiektu żądania
+    next(); // Przechodzimy do następnego middleware
+  } catch (error) {
+    console.error("Błąd weryfikacji tokena:", error);
+    res.status(401).json({ isValid: false, error: error.message });
+  }
+};
+
 const getSecretKey = () => {
   return secretKey;
 };
@@ -30,4 +45,5 @@ module.exports = {
   queryDatabase,
   queryDatabasePromise,
   getSecretKey,
+  verifyToken,
 };

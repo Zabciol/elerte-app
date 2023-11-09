@@ -5,7 +5,12 @@ const API_URL = `http://localhost:${Variables.port}/ecp`;
 
 export const SentECPToDatabase = async (data) => {
   try {
-    const response = await axios.post(`${API_URL}/SentECPToDatabase`, data);
+    const token = sessionStorage.getItem("userToken");
+    const response = await axios.post(`${API_URL}/SentECPToDatabase`, data, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
     return response.data;
   } catch (error) {
     console.error("Error during API call:", error);
@@ -14,8 +19,14 @@ export const SentECPToDatabase = async (data) => {
 };
 export const checkECPForEmployeeOnDate = async (employeeId, date) => {
   try {
+    const token = sessionStorage.getItem("userToken");
     const response = await axios.get(
-      `${API_URL}/checkECP/${employeeId}/${date}`
+      `${API_URL}/checkECP/${employeeId}/${date}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
     );
 
     return response.data;
@@ -27,10 +38,14 @@ export const checkECPForEmployeeOnDate = async (employeeId, date) => {
 
 export const getECPAPI = async (data, employeesID) => {
   try {
+    const token = sessionStorage.getItem("userToken");
     const response = await axios.get(`${API_URL}/ecp`, {
       params: {
         date: data,
         employeesID: employeesID,
+      },
+      headers: {
+        Authorization: `Bearer ${token}`,
       },
     });
     return response.data;
@@ -41,12 +56,16 @@ export const getECPAPI = async (data, employeesID) => {
 };
 export const exportECPAPI = async (data, employeesID) => {
   try {
+    const token = sessionStorage.getItem("userToken");
     const response = await axios.get(`${API_URL}/export`, {
       params: {
         date: data,
         employeesID: employeesID,
       },
-      responseType: "blob", // Dodano, aby oczekiwać odpowiedzi w formie bloba
+      responseType: "blob",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      }, // Dodano, aby oczekiwać odpowiedzi w formie bloba
     });
 
     // Tworzy URL dla bloba
@@ -64,10 +83,14 @@ export const exportECPAPI = async (data, employeesID) => {
 };
 export const getAbsenceAPI = async (data, employeesID) => {
   try {
+    const token = sessionStorage.getItem("userToken");
     const response = await axios.get(`${API_URL}/absence`, {
       params: {
         date: data,
         employeesID: employeesID,
+      },
+      headers: {
+        Authorization: `Bearer ${token}`,
       },
     });
     return response.data;

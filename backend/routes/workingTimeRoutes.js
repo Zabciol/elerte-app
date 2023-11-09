@@ -1,8 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const workingTimeModel = require("../models/workingTime");
-
-router.get("/", async (req, res) => {
+const { verifyToken } = require("../db");
+router.get("/", verifyToken, async (req, res) => {
   try {
     const result = await workingTimeModel.getWorkingTime();
     res.json(result);

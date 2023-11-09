@@ -38,19 +38,22 @@ const findUserPasswordByID = async (id) => {
   }
 };
 
-const verifyToken = (req, res, next) => {
-  const token = req.headers["authorization"]; // Token jest zazwyczaj w nagłówku 'Authorization'
-
+const verifyToken = async (req, res, next) => {
+  const token = req.headers["authorization"]?.split(" ")[1]?.replace(/"/g, "");
   if (!token) {
-    return res.status(403).send("A token is required for authentication");
+    return res.status(401).send("No token provided");
   }
-  console.log("token: ", token);
   try {
     const decoded = jwt.verify(token, getSecretKey());
-    req.user = decoded; // Zdekodowane dane przypisane do obiektu zapytania
-    next(); // Przejdź do następnego middleware/route handlera
-  } catch (err) {
-    return res.status(401).send("Invalid Token");
+    const users = await findUserByEmail(decoded.mail);
+    if (users.length === 0) {
+      return res.status(404).send("User not found");
+    }
+    const userData = users[0];
+    res.json({ isValid: true, user: userData });
+  } catch (error) {
+    console.error("Błąd weryfikacji tokena:", error);
+    res.status(401).json({ isValid: false, error: error.message });
   }
 };
 

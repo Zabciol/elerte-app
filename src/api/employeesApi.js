@@ -5,7 +5,13 @@ const API_URL = `http://localhost:${Variables.port}/employees`;
 
 export const subordinatesApi = async (id) => {
   try {
-    const response = await axios.get(API_URL, { params: { id } });
+    const token = sessionStorage.getItem("userToken");
+    const response = await axios.get(API_URL, {
+      params: { id },
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
 
     return response.data;
   } catch (error) {
@@ -15,7 +21,12 @@ export const subordinatesApi = async (id) => {
 
 export const supervisorsApi = async () => {
   try {
-    const response = await axios.get(`${API_URL}/supervisors`, {});
+    const token = sessionStorage.getItem("userToken");
+    const response = await axios.get(`${API_URL}/supervisors`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
     return response.data;
   } catch (error) {
     console.error("Błąd podczas pobierania danych z serwera:", error);
@@ -25,10 +36,14 @@ export const supervisorsApi = async () => {
 
 export const hoursWorkedApi = async (employeeId, month) => {
   try {
+    const token = sessionStorage.getItem("userToken");
     const response = await axios.get(`${API_URL}/worked-hours-by-employee`, {
       params: {
         employeeId: employeeId,
         month: month,
+      },
+      headers: {
+        Authorization: `Bearer ${token}`,
       },
     });
 
@@ -40,9 +55,13 @@ export const hoursWorkedApi = async (employeeId, month) => {
 };
 export const infApi = async (employeeId) => {
   try {
+    const token = sessionStorage.getItem("userToken");
     const response = await axios.get(`${API_URL}/inf`, {
       params: {
         employeeId: employeeId,
+      },
+      headers: {
+        Authorization: `Bearer ${token}`,
       },
     });
 
@@ -54,7 +73,12 @@ export const infApi = async (employeeId) => {
 };
 export const allEmployeesAPI = async () => {
   try {
-    const response = await axios.get(`${API_URL}/all`, {});
+    const token = sessionStorage.getItem("userToken");
+    const response = await axios.get(`${API_URL}/all`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
     return response.data;
   } catch (error) {
     console.error("Błąd podczas pobierania danych z serwera:", error);
@@ -64,7 +88,12 @@ export const allEmployeesAPI = async () => {
 
 export const addEmployee = async (data) => {
   try {
-    const response = await axios.post(`${API_URL}/add`, data);
+    const token = sessionStorage.getItem("userToken");
+    const response = await axios.post(`${API_URL}/add`, data, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
     return response.data;
   } catch (error) {
     console.error("Error during API call:", error);
@@ -74,9 +103,13 @@ export const addEmployee = async (data) => {
 
 export const mySupervisorAPI = async (myID) => {
   try {
+    const token = sessionStorage.getItem("userToken");
     const response = await axios.get(`${API_URL}/mySupervisor`, {
       params: {
         myID: myID,
+      },
+      headers: {
+        Authorization: `Bearer ${token}`,
       },
     });
     return response.data;
@@ -87,9 +120,13 @@ export const mySupervisorAPI = async (myID) => {
 };
 export const mySupervisorsAPI = async (myID) => {
   try {
+    const token = sessionStorage.getItem("userToken");
     const response = await axios.get(`${API_URL}/mySupervisors`, {
       params: {
         myID: myID,
+      },
+      headers: {
+        Authorization: `Bearer ${token}`,
       },
     });
     return response.data;
@@ -101,9 +138,15 @@ export const mySupervisorsAPI = async (myID) => {
 
 export const updateEmployeeApi = async (employeeData) => {
   try {
+    const token = sessionStorage.getItem("userToken");
     const response = await axios.post(
       `${API_URL}/updateEmployee`,
-      employeeData
+      employeeData,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
     );
     return response.data;
   } catch (error) {
@@ -113,8 +156,14 @@ export const updateEmployeeApi = async (employeeData) => {
 };
 export const deleteEmployeeApi = async (employeeID) => {
   try {
+    const token = sessionStorage.getItem("userToken");
     const response = await axios.delete(
-      `${API_URL}/deleteEmployee/${employeeID}`
+      `${API_URL}/deleteEmployee/${employeeID}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
     );
     return response.data;
   } catch (error) {
@@ -125,9 +174,13 @@ export const deleteEmployeeApi = async (employeeID) => {
 
 export const myDirectSubordinatesAPI = async (myID) => {
   try {
+    const token = sessionStorage.getItem("userToken");
     const response = await axios.get(`${API_URL}/myDirectSubordinates`, {
       params: {
         myID: myID,
+      },
+      headers: {
+        Authorization: `Bearer ${token}`,
       },
     });
     return response.data;

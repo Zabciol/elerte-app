@@ -2,6 +2,7 @@ const express = require("express");
 const bcrypt = require("bcrypt");
 const employeesModel = require("../models/employeesModel");
 const router = express.Router();
+const { verifyToken } = require("../db");
 
 async function getSubordinatesRecursively(id) {
   const subordinates = [];
@@ -15,13 +16,13 @@ async function getSubordinatesRecursively(id) {
 
   return subordinates;
 }
-router.get("/", async (req, res) => {
+router.get("/", verifyToken, async (req, res) => {
   const { id } = req.query;
   const subordinates = await getSubordinatesRecursively(id);
   res.status(200).send({ message: "Subordinates found!", data: subordinates });
 });
 
-router.get("/supervisors", async (req, res) => {
+router.get("/supervisors", verifyToken, async (req, res) => {
   try {
     const result = await employeesModel.getSupervisors();
     res.json(result);
@@ -31,7 +32,7 @@ router.get("/supervisors", async (req, res) => {
   }
 });
 
-router.get("/worked-hours-by-employee", async (req, res) => {
+router.get("/worked-hours-by-employee", verifyToken, async (req, res) => {
   try {
     const employeeId = req.query.employeeId;
     const month = req.query.month;
@@ -52,7 +53,7 @@ router.get("/worked-hours-by-employee", async (req, res) => {
     res.status(500).send("Wystąpił błąd podczas pobierania danych.");
   }
 });
-router.get("/inf", async (req, res) => {
+router.get("/inf", verifyToken, async (req, res) => {
   try {
     const employeeId = req.query.employeeId;
 
@@ -69,7 +70,7 @@ router.get("/inf", async (req, res) => {
     res.status(500).send("Wystąpił błąd podczas pobierania danych.");
   }
 });
-router.get("/all", async (req, res) => {
+router.get("/all", verifyToken, async (req, res) => {
   try {
     const result = await employeesModel.getAllEmployees();
     res.json(result);
@@ -78,7 +79,7 @@ router.get("/all", async (req, res) => {
     res.status(500).send("Wystąpił błąd podczas pobierania danych.");
   }
 });
-router.post("/add", async (req, res) => {
+router.post("/add", verifyToken, async (req, res) => {
   try {
     const employee = req.body;
     const result = await employeesModel.addNewEmployee(employee);
@@ -87,7 +88,7 @@ router.post("/add", async (req, res) => {
     res.status(500).send(err);
   }
 });
-router.get("/mySupervisor", async (req, res) => {
+router.get("/mySupervisor", verifyToken, async (req, res) => {
   try {
     const myID = req.query.myID;
     const result = await employeesModel.getMySupervisor(myID);
@@ -98,7 +99,7 @@ router.get("/mySupervisor", async (req, res) => {
   }
 });
 
-router.get("/mySupervisors", async (req, res) => {
+router.get("/mySupervisors", verifyToken, async (req, res) => {
   try {
     const myID = req.query.myID;
     const result = await employeesModel.getMySupervisors(myID);
@@ -109,7 +110,7 @@ router.get("/mySupervisors", async (req, res) => {
   }
 });
 
-router.post("/updateEmployee", async (req, res) => {
+router.post("/updateEmployee", verifyToken, async (req, res) => {
   try {
     await employeesModel.updateEmployee(req.body);
     res.send({
@@ -122,7 +123,7 @@ router.post("/updateEmployee", async (req, res) => {
   }
 });
 
-router.delete("/deleteEmployee/:id", async (req, res) => {
+router.delete("/deleteEmployee/:id", verifyToken, async (req, res) => {
   try {
     await employeesModel.deleteEmployee(req.params.id);
     res
@@ -133,7 +134,7 @@ router.delete("/deleteEmployee/:id", async (req, res) => {
     res.status(500).send({ message: "Napotkano problem podczas usuwania" });
   }
 });
-router.get("/myDirectSubordinates", async (req, res) => {
+router.get("/myDirectSubordinates", verifyToken, async (req, res) => {
   try {
     const myID = req.query.myID;
     const result = await employeesModel.getMyDirectSubordinates(myID);

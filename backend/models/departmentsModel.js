@@ -1,5 +1,5 @@
 const db = require("../db");
-const { queryDatabase } = require("../db");
+const { queryDatabase, queryDatabasePromise } = require("../db");
 
 const getDepartments = () => {
   return new Promise((resolve, reject) => {

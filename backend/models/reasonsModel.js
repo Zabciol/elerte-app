@@ -1,4 +1,4 @@
-const { queryDatabase } = require("../db");
+const { queryDatabase, queryDatabasePromise } = require("../db");
 
 const getReasons = (callback) => {
   queryDatabase("SELECT * from PowodyNieobecnosci", [], callback);

@@ -1,4 +1,4 @@
-const { queryDatabase } = require("../db");
+const { queryDatabase, queryDatabasePromise } = require("../db");
 
 const getPositionByID = (Dzial_ID) => {
   return new Promise((resolve, reject) => {

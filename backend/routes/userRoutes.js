@@ -4,8 +4,9 @@ const userModel = require("../models/userModel");
 const router = express.Router();
 const jwt = require("jsonwebtoken");
 const { getSecretKey } = require("../db");
+const { verifyToken } = require("../db");
 
-router.get("/", async (req, res) => {
+router.get("/", verifyToken, async (req, res) => {
   try {
     const users = await userModel.getUsers();
     res.json(users);
@@ -14,7 +15,7 @@ router.get("/", async (req, res) => {
   }
 });
 
-router.post("/login", async (req, res) => {
+router.post("/login", verifyToken, async (req, res) => {
   const { email, password } = req.body;
   console.log("Próba zalogowania");
 
@@ -64,7 +65,7 @@ router.post("/login", async (req, res) => {
   }
 });
 
-router.get("/verify-token", async (req, res) => {
+router.get("/verify-token", verifyToken, async (req, res) => {
   const token = req.headers["authorization"]?.split(" ")[1]?.replace(/"/g, "");
   if (!token) {
     return res.status(401).send("No token provided");

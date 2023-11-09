@@ -1,6 +1,5 @@
 const db = require("../db");
-const { queryDatabase } = require("../db");
-const { queryDatabasePromise } = require("../db");
+const { queryDatabase, queryDatabasePromise } = require("../db");
 const ExcelJS = require("exceljs");
 
 const getRecordsByDateAndEmployeeId = async (date, employeeIds) => {
