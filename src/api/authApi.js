@@ -13,8 +13,6 @@ export const loginApi = async (email, password) => {
 };
 
 export const verifyTokenApi = async (token) => {
-  console.log("Przed weryfikacją");
-  console.log(token);
   try {
     const response = await axios.get(`${API_URL}/verify-token`, {
       headers: {

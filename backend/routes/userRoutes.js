@@ -14,78 +14,72 @@ router.get("/", async (req, res) => {
   }
 });
 
-router.post("/login", (req, res) => {
+router.post("/login", async (req, res) => {
   const { email, password } = req.body;
   console.log("Próba zalogowania");
 
-  userModel.findUserByEmail(email, (err, results) => {
-    if (err) {
-      return res.status(500).send("Server error!");
+  try {
+    const users = await userModel.findUserByEmail(email);
+    if (users.length === 0) {
+      return res.status(404).send({ message: "Nie ma takiego uzytkownika" });
     }
-    const id = results[0].ID;
-    const userData = results[0];
+    const userData = users[0];
 
-    console.log(userData);
-    userModel.findUserPasswordByID(id, (err, results) => {
-      if (results.length > 0 || userData.Aktywny !== "Tak") {
-        const user = results[0];
-        console.log(user);
+    if (userData.Aktywny !== "Tak") {
+      return res.status(401).send({ message: "Account is inactive!" });
+    }
 
-        bcrypt.compare(password, user.Haslo, (error, isMatch) => {
-          if (error) {
-            return res.status(500).send("Server error!");
-          }
+    const userPasswordData = await userModel.findUserPasswordByID(userData.ID);
+    if (userPasswordData.length === 0) {
+      return res.status(404).send({ message: "Nie ma takiego uzytkownika" });
+    }
+    const userPassword = userPasswordData[0];
 
-          if (isMatch) {
-            console.log("Zalogowano");
+    bcrypt.compare(password, userPassword.Haslo, (error, isMatch) => {
+      if (error) {
+        return res.status(500).send("Server error!");
+      }
 
-            console.log("User", userData);
-            const token = jwt.sign(
-              { id: userData.ID, mail: userData.Mail },
-              getSecretKey(),
-              { expiresIn: "8h" } // Token wygasa po 1 godzinie
-            );
+      if (isMatch) {
+        console.log("Zalogowano");
 
-            console.log(token);
-            res.status(200).send({
-              message: "User logged in!",
-              user: userData,
-              token: token,
-            });
-          } else {
-            res.status(401).send({ message: "Password is incorrect!" });
-          }
+        const token = jwt.sign(
+          { id: userData.ID, mail: userData.Mail },
+          getSecretKey(),
+          { expiresIn: "8h" }
+        );
+
+        res.status(200).send({
+          message: "User logged in!",
+          user: userData,
+          token: token,
         });
       } else {
-        res.status(404).send("User not found!");
+        res.status(401).send({ message: "Hasło jest niepoprawne!" });
       }
     });
-  });
+  } catch (err) {
+    console.error("Server error:", err);
+    res.status(500).send("Server error!");
+  }
 });
 
-router.get("/verify-token", (req, res) => {
-  const token = req.headers["authorization"]?.split(" ")[1].replace(/"/g, "");
-  console.log("Autoryzuje:");
-  console.log(token);
-  if (token) {
-    try {
-      const decoded = jwt.verify(token, getSecretKey());
-      console.log("Token zdekodowany:", decoded);
-      if (decoded.id) {
-        userModel.findUserByEmail(decoded.mail, (err, results) => {
-          if (err) {
-            return res.status(500).send("Server error!");
-          }
-          const userData = results[0];
-          res.json({ isValid: true, user: userData });
-        });
-      }
-    } catch (error) {
-      console.error("Błąd weryfikacji tokena:", error);
-      res.status(401).json({ isValid: false, error: error.message });
+router.get("/verify-token", async (req, res) => {
+  const token = req.headers["authorization"]?.split(" ")[1]?.replace(/"/g, "");
+  if (!token) {
+    return res.status(401).send("No token provided");
+  }
+  try {
+    const decoded = jwt.verify(token, getSecretKey());
+    const users = await userModel.findUserByEmail(decoded.mail);
+    if (users.length === 0) {
+      return res.status(404).send("User not found");
     }
-  } else {
-    res.status(401).send("No token provided");
+    const userData = users[0];
+    res.json({ isValid: true, user: userData });
+  } catch (error) {
+    console.error("Błąd weryfikacji tokena:", error);
+    res.status(401).json({ isValid: false, error: error.message });
   }
 });
 

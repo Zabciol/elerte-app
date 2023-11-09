@@ -1,4 +1,4 @@
-const { queryDatabase, getSecretKey } = require("../db");
+const { queryDatabase, queryDatabasePromise, getSecretKey } = require("../db");
 
 const getUsers = async () => {
   try {
@@ -9,23 +9,33 @@ const getUsers = async () => {
   }
 };
 
-const findUserByEmail = (email, callback) => {
-  queryDatabase(
-    "SELECT Pracownicy.ID, Imie, Nazwisko, Mail, Dzialy.Nazwa AS `Dzial`," +
-      " Stanowisko.Nazwa AS `Stanowisko`, WymiarPracy.Od,WymiarPracy.`Do`, Aktywny FROM Pracownicy" +
-      " LEFT JOIN Stanowisko ON Pracownicy.Stanowisko_ID = Stanowisko.ID" +
-      " LEFT JOIN Dzialy ON Stanowisko.Dzial_ID = Dzialy.ID" +
-      " LEFT JOIN WymiarPracy ON Pracownicy.WymiarPracy_ID = WymiarPracy.ID  WHERE Mail = ?",
-    [email],
-    callback
-  );
-
-  console.log(callback);
+const findUserByEmail = async (email) => {
+  try {
+    const query = `
+      SELECT Pracownicy.ID, Imie, Nazwisko, Mail, Dzialy.Nazwa AS Dzial,
+      Stanowisko.Nazwa AS Stanowisko, WymiarPracy.Od, WymiarPracy.Do, Aktywny FROM Pracownicy
+      LEFT JOIN Stanowisko ON Pracownicy.Stanowisko_ID = Stanowisko.ID
+      LEFT JOIN Dzialy ON Stanowisko.Dzial_ID = Dzialy.ID
+      LEFT JOIN WymiarPracy ON Pracownicy.WymiarPracy_ID = WymiarPracy.ID
+      WHERE Mail = ?
+    `;
+    const results = await queryDatabasePromise(query, [email]);
+    return results;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
 };
-const findUserPasswordByID = (id, callback) => {
-  queryDatabase("SELECT * FROM Login WHERE Pracownik_ID = ?", [id], callback);
 
-  console.log(callback);
+const findUserPasswordByID = async (id) => {
+  try {
+    const query = "SELECT * FROM Login WHERE Pracownik_ID = ?";
+    const results = await queryDatabasePromise(query, [id]);
+    return results;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
 };
 
 const verifyToken = (req, res, next) => {
