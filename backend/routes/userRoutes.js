@@ -3,8 +3,7 @@ const bcrypt = require("bcrypt");
 const userModel = require("../models/userModel");
 const router = express.Router();
 const jwt = require("jsonwebtoken");
-const secretKey =
-  "37x!A%D*G-KaPdSgVkYp3s6v9y$B&E)H@McQfTjWnZr4u7w!z%C*F-JaNnRfUjXn";
+const { getSecretKey } = require("../db");
 
 router.get("/", async (req, res) => {
   try {
@@ -40,12 +39,14 @@ router.post("/login", (req, res) => {
           if (isMatch) {
             console.log("Zalogowano");
 
+            console.log("User", userData);
             const token = jwt.sign(
-              { id: user.ID, email: user.Mail },
-              secretKey,
-              { expiresIn: "1h" } // Token wygasa po 1 godzinie
+              { id: userData.ID, mail: userData.Mail },
+              getSecretKey(),
+              { expiresIn: "8h" } // Token wygasa po 1 godzinie
             );
 
+            console.log(token);
             res.status(200).send({
               message: "User logged in!",
               user: userData,
@@ -60,6 +61,32 @@ router.post("/login", (req, res) => {
       }
     });
   });
+});
+
+router.get("/verify-token", (req, res) => {
+  const token = req.headers["authorization"]?.split(" ")[1].replace(/"/g, "");
+  console.log("Autoryzuje:");
+  console.log(token);
+  if (token) {
+    try {
+      const decoded = jwt.verify(token, getSecretKey());
+      console.log("Token zdekodowany:", decoded);
+      if (decoded.id) {
+        userModel.findUserByEmail(decoded.mail, (err, results) => {
+          if (err) {
+            return res.status(500).send("Server error!");
+          }
+          const userData = results[0];
+          res.json({ isValid: true, user: userData });
+        });
+      }
+    } catch (error) {
+      console.error("Błąd weryfikacji tokena:", error);
+      res.status(401).json({ isValid: false, error: error.message });
+    }
+  } else {
+    res.status(401).send("No token provided");
+  }
 });
 
 module.exports = router;

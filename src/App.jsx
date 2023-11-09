@@ -1,24 +1,16 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext, createContext } from "react";
 import LoginPanel from "./components/transitions/Login/LoginPanel";
 import PageHandler from "./components/layout/PageHandler";
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
+import { useAuth } from "./components/transitions/Login/AuthContext";
 
 function App() {
-  const [isLoggedIn, setIsLogged] = useState(false);
-  const [user, setUser] = useState({});
+  const { user, isLogged } = useAuth(); // Korzystamy z wartości z AuthContext
   const token = JSON.parse(localStorage.getItem("userTokenElerteApp"));
   const darkTheme = JSON.parse(localStorage.getItem("DarkTheme"));
 
-  const logout = () => {
-    setIsLogged(false);
-    localStorage.removeItem("userTokenElerteApp");
-  };
   useEffect(() => {
-    if (token) {
-      setIsLogged(true);
-      setUser(token);
-    }
     const html = document.documentElement;
     if (darkTheme) {
       html.setAttribute("data-bs-theme", "dark");
@@ -32,11 +24,7 @@ function App() {
   console.log(user);
   return (
     <div className='App'>
-      {isLoggedIn ? (
-        <PageHandler logout={logout} user={user} />
-      ) : (
-        <LoginPanel setIsLogged={setIsLogged} setUser={setUser} />
-      )}
+      {isLogged ? <PageHandler user={user} /> : <LoginPanel />}
     </div>
   );
 }

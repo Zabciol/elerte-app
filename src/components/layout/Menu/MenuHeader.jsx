@@ -2,8 +2,14 @@ import React, { useState } from "react";
 import Form from "react-bootstrap/Form";
 import NavDropdown from "react-bootstrap/NavDropdown";
 import Offcanvas from "react-bootstrap/Offcanvas";
+import { useAuth } from "../../transitions/Login/AuthContext";
 
 const MenuHeader = (props) => {
+  const { logout } = useAuth();
+
+  const handleLogout = () => {
+    logout();
+  };
   return (
     <Offcanvas.Header closeButton>
       <Offcanvas.Title id={`offcanvasNavbarLabel-expand-lg`}>
@@ -24,12 +30,7 @@ const MenuHeader = (props) => {
           </NavDropdown.Item>
           <NavDropdown.Item>Zmień hasło</NavDropdown.Item>
           <NavDropdown.Divider />
-          <NavDropdown.Item
-            onClick={() => {
-              props.logout();
-            }}>
-            Wyloguj
-          </NavDropdown.Item>
+          <NavDropdown.Item onClick={handleLogout}>Wyloguj</NavDropdown.Item>
         </NavDropdown>
       </Offcanvas.Title>
     </Offcanvas.Header>

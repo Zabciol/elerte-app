@@ -3,20 +3,15 @@ import "../../../styles/Login/login.css";
 import logo from "../../../assets/logo-elerte.png";
 import LoginInput from "./LoginInput";
 import { loginApi } from "../../../api/authApi.js";
+import { useAuth } from "./AuthContext";
 
 const LoginPanel = (props) => {
+  const { login } = useAuth();
+
   const submit = async (email, password) => {
     console.log(email);
     console.log(password);
-    try {
-      const data = await loginApi(email, password);
-      localStorage.setItem("userTokenElerteApp", JSON.stringify(data.user));
-      console.log("Zalogowano");
-      props.setUser(data.user);
-      props.setIsLogged(true);
-    } catch (error) {
-      console.log(error.message || "Login failed. Please try again.");
-    }
+    await login(email, password);
   };
   return (
     <div className='LoginPanel' data-bs-theme='light'>

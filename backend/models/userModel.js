@@ -1,4 +1,4 @@
-const { queryDatabase } = require("../db");
+const { queryDatabase, getSecretKey } = require("../db");
 
 const getUsers = async () => {
   try {
@@ -28,10 +28,27 @@ const findUserPasswordByID = (id, callback) => {
   console.log(callback);
 };
 
+const verifyToken = (req, res, next) => {
+  const token = req.headers["authorization"]; // Token jest zazwyczaj w nagłówku 'Authorization'
+
+  if (!token) {
+    return res.status(403).send("A token is required for authentication");
+  }
+  console.log("token: ", token);
+  try {
+    const decoded = jwt.verify(token, getSecretKey());
+    req.user = decoded; // Zdekodowane dane przypisane do obiektu zapytania
+    next(); // Przejdź do następnego middleware/route handlera
+  } catch (err) {
+    return res.status(401).send("Invalid Token");
+  }
+};
+
 // Inne funkcje dotyczące operacji na użytkownikach...
 
 module.exports = {
   getUsers,
   findUserByEmail,
   findUserPasswordByID,
+  verifyToken,
 };
