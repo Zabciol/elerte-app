@@ -3,10 +3,12 @@ import { allEmployeesAPI } from "../../../../api/employeesApi";
 import Badge from "react-bootstrap/Badge";
 import ListGroup from "react-bootstrap/ListGroup";
 import Button from "react-bootstrap/Button";
+import { useAuth } from "../../Login/AuthContext";
 
 const NewEmployeeSubordinates = (props) => {
   const [employees, setEmployees] = useState([]);
   const [filteredEmployees, setFilteredEmployees] = useState([]);
+  const { setShowPopUpLogout, setMessage } = useAuth();
 
   const save = () => {
     console.log(props.subordinates);
@@ -25,8 +27,13 @@ const NewEmployeeSubordinates = (props) => {
   };
 
   const getAllEmployees = async () => {
-    const data = await allEmployeesAPI();
-    setEmployees(data);
+    try {
+      const data = await allEmployeesAPI();
+      setEmployees(data);
+    } catch (error) {
+      setMessage(error.message);
+      setShowPopUpLogout(true);
+    }
   };
 
   useEffect(() => {

@@ -5,8 +5,10 @@ import { departmentsApi } from "../../../../api/departmentsApi";
 import { positionApi } from "../../../../api/positionApi";
 import { workingTimeApi } from "../../../../api/workingTimeApi";
 import PopUp from "../../../common/PopUp";
+import { useAuth } from "../../Login/AuthContext";
 
 const NewEmployeeForm = (props) => {
+  const { setShowPopUpLogout, setMessage } = useAuth();
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState({
     name: "",
@@ -102,43 +104,58 @@ const NewEmployeeForm = (props) => {
   };
 
   const getWorkingTime = async () => {
-    const data = await workingTimeApi();
-    const transformedData = data.map((item) => ({
-      ID: item.ID,
-      Nazwa: item.Od + " - " + item.Do,
-    }));
-    setFormData((prevData) => ({
-      ...prevData,
-      workingTime: data[0].ID,
-    }));
+    try {
+      const data = await workingTimeApi();
+      const transformedData = data.map((item) => ({
+        ID: item.ID,
+        Nazwa: item.Od + " - " + item.Do,
+      }));
+      setFormData((prevData) => ({
+        ...prevData,
+        workingTime: data[0].ID,
+      }));
 
-    setWorkingTime(transformedData);
+      setWorkingTime(transformedData);
+    } catch (error) {
+      setMessage(error.message);
+      setShowPopUpLogout(true);
+    }
   };
 
   const getSuperVisors = async () => {
-    const data = await supervisorsApi();
-    const transformedData = data.map((item) => ({
-      ID: item.ID,
-      Nazwa: item.Imie + " " + item.Nazwisko + " - " + item.Nazwa,
-    }));
-    setFormData((prevData) => ({
-      ...prevData,
-      supervisor: data[0].ID,
-    }));
+    try {
+      const data = await supervisorsApi();
+      const transformedData = data.map((item) => ({
+        ID: item.ID,
+        Nazwa: item.Imie + " " + item.Nazwisko + " - " + item.Nazwa,
+      }));
+      setFormData((prevData) => ({
+        ...prevData,
+        supervisor: data[0].ID,
+      }));
 
-    setSupervisors(transformedData);
+      setSupervisors(transformedData);
+    } catch (error) {
+      setMessage(error.message);
+      setShowPopUpLogout(true);
+    }
   };
 
   const getFromApi = async (name, apiFuncion, setState, value) => {
-    let data;
-    if (value === undefined) data = await apiFuncion();
-    else data = await apiFuncion(value);
+    try {
+      let data;
+      if (value === undefined) data = await apiFuncion();
+      else data = await apiFuncion(value);
 
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: data[0].ID,
-    }));
-    setState(data);
+      setFormData((prevData) => ({
+        ...prevData,
+        [name]: data[0].ID,
+      }));
+      setState(data);
+    } catch (error) {
+      setMessage(error.message);
+      setShowPopUpLogout(true);
+    }
   };
 
   const getData = () => {

@@ -15,7 +15,7 @@ router.get("/", verifyToken, async (req, res) => {
   }
 });
 
-router.post("/login", verifyToken, async (req, res) => {
+router.post("/login", async (req, res) => {
   const { email, password } = req.body;
   console.log("Próba zalogowania");
 
@@ -47,7 +47,7 @@ router.post("/login", verifyToken, async (req, res) => {
         const token = jwt.sign(
           { id: userData.ID, mail: userData.Mail },
           getSecretKey(),
-          { expiresIn: "8h" }
+          { expiresIn: "5s" }
         );
 
         res.status(200).send({

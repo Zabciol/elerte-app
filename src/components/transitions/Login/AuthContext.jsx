@@ -6,6 +6,7 @@ import React, {
   useEffect,
 } from "react";
 import { loginApi, verifyTokenApi } from "../../../api/authApi"; // załóżmy, że ścieżka jest poprawna
+import ConfirmPupUp from "../../common/ConfirmPopUp";
 
 // Tworzenie kontekstu auth
 const AuthContext = createContext(null);
@@ -16,6 +17,8 @@ export const AuthProvider = ({ children }) => {
   );
   const [user, setUser] = useState(null);
   const [isLogged, setIsLogged] = useState(false);
+  const [showPopUpLogout, setShowPopUpLogout] = useState(false);
+  const [message, setMessage] = useState();
 
   // Funkcja do aktualizacji tokena
   const updateToken = (newToken) => {
@@ -43,6 +46,7 @@ export const AuthProvider = ({ children }) => {
     setUser(null);
     setIsLogged(false);
     sessionStorage.removeItem("userToken");
+    setShowPopUpLogout(false);
   }, []);
 
   useEffect(() => {
@@ -71,8 +75,18 @@ export const AuthProvider = ({ children }) => {
   }, [setAuthToken, setIsLogged, setUser, logout]);
 
   return (
-    <AuthContext.Provider value={{ authToken, user, isLogged, login, logout }}>
+    <AuthContext.Provider
+      value={{ authToken, user, isLogged, login, logout, setShowPopUpLogout }}>
       {children}
+      <ConfirmPupUp
+        show={showPopUpLogout}
+        decline={() => window.location.reload()}
+        confirm={logout}
+        declineText='Odświez stronę'
+        confirmText='Wyloguj'
+        title='Uwaga'
+        message={message}
+      />
     </AuthContext.Provider>
   );
 };

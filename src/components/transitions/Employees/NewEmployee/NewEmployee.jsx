@@ -5,6 +5,7 @@ import PopUp from "../../../common/PopUp";
 import ConfirmPupUp from "../../../common/ConfirmPopUp";
 import Spinner from "react-bootstrap/Spinner";
 import { addEmployee } from "../../../../api/employeesApi";
+import { useAuth } from "../../Login/AuthContext";
 
 const NewEmployee = (props) => {
   const [newEmployee, setNewEmployee] = useState({});
@@ -13,6 +14,7 @@ const NewEmployee = (props) => {
   const [showPopUp, setShowPopUp] = useState(false);
   const [subordinates, setSubordinates] = useState([]);
   const [responseMessage, setResponseMessage] = useState("");
+  const { setShowPopUpLogout, setMessage } = useAuth();
 
   const decline = () => {
     setShowConfirmPopUp(false);
@@ -37,8 +39,8 @@ const NewEmployee = (props) => {
       setShowPopUp(true);
     } catch (error) {
       console.error("Wystąpił błąd:", error);
-      setResponseMessage("Wystąpił błąd podczas komunikacji z serwerem.");
-      setShowPopUp(true);
+      setMessage(error.message);
+      setShowPopUpLogout(true);
     } finally {
       setStage(1);
     }

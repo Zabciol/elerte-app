@@ -14,9 +14,11 @@ function ConfirmPupUp(props) {
       </Modal.Header>
       <Modal.Body>{props.message}</Modal.Body>
       <Modal.Footer>
-        <Button variant='secondary' onClick={props.decline}>
-          {props.declineText}
-        </Button>
+        {props.declineText ? (
+          <Button variant='secondary' onClick={props.decline}>
+            {props.declineText}
+          </Button>
+        ) : null}
         <Button variant='primary' onClick={props.confirm}>
           {props.confirmText}
         </Button>

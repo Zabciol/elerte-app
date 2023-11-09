@@ -32,6 +32,11 @@ const verifyToken = (req, res, next) => {
     req.user = decoded; // Zapisujemy zdekodowane dane do obiektu żądania
     next(); // Przechodzimy do następnego middleware
   } catch (error) {
+    if (error.name === "TokenExpiredError") {
+      return res
+        .status(401)
+        .json({ isValid: false, error: "Token expired", logout: true });
+    }
     console.error("Błąd weryfikacji tokena:", error);
     res.status(401).json({ isValid: false, error: error.message });
   }

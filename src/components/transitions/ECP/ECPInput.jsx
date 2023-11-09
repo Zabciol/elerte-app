@@ -4,8 +4,10 @@ import Form from "react-bootstrap/Form";
 import calculateHoursWorked from "./scripts";
 import { checkECPForEmployeeOnDate } from "../../../api/ecpApi";
 import { useGetData } from "./ECPDataContext";
+import { useAuth } from "../Login/AuthContext";
 
 const ECPInput = (props) => {
+  const { setShowPopUpLogout, setMessage } = useAuth();
   const { employee, hours, setHours, reasons, date, properHours } = props;
   const { addCollector, removeCollector } = useGetData();
   const [Od, setOd] = useState(employee.Od);
@@ -68,6 +70,8 @@ const ECPInput = (props) => {
         setChecked(false);
       }
     } catch (error) {
+      setShowPopUpLogout(true);
+      setMessage(error.message);
       console.error("Błąd podczas sprawdzania ECP:", error.message);
     }
   };

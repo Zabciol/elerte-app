@@ -4,7 +4,9 @@ import { getAbsenceAPI } from "../../../../api/ecpApi";
 import EmployeesList from "../EmployeesList";
 import EmployeeAbsenceInf from "./EmployeeAbsenceInf";
 import "../../../../styles/absence.css";
+import { useAuth } from "../../Login/AuthContext";
 const EmployeesAbsence = ({ date, subordinates, user, dzial }) => {
+  const { setShowPopUpLogout, setMessage } = useAuth();
   const [absence, setAbsence] = useState([]);
 
   const uniteTabs = (tablicaNieobecnosci, tablicaUrlopy) => {
@@ -70,15 +72,25 @@ const EmployeesAbsence = ({ date, subordinates, user, dzial }) => {
   };
 
   const getUrlopy = async (IDs) => {
-    const data = await getAcceptedRequestsApi(date, IDs);
-    console.log(data.message);
-    return data.data;
+    try {
+      const data = await getAcceptedRequestsApi(date, IDs);
+      console.log(data.message);
+      return data.data;
+    } catch (error) {
+      setShowPopUpLogout(true);
+      setMessage(error.message);
+    }
   };
 
   const getAbsence = async (IDs) => {
-    const data = await getAbsenceAPI(date, IDs);
-    console.log(data.message);
-    return data.data;
+    try {
+      const data = await getAbsenceAPI(date, IDs);
+      console.log(data.message);
+      return data.data;
+    } catch (error) {
+      setShowPopUpLogout(true);
+      setMessage(error.message);
+    }
   };
   const getData = async () => {
     if (subordinates.length) {

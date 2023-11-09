@@ -5,6 +5,7 @@ import { getCurrentDateYearMonth } from "../../common/CommonFunctions";
 import { getECPAPI } from "../../../api/ecpApi";
 import FullCalender from "./FullCalender";
 import { SelectDzial } from "../../layout/Menu/MenuForms";
+import { useAuth } from "../Login/AuthContext";
 
 const MenuItems = ({ date, setDate, dzial, dzialy, setDzial }) => {
   return (
@@ -22,6 +23,7 @@ const MenuItems = ({ date, setDate, dzial, dzialy, setDzial }) => {
 };
 
 const Calender = (props) => {
+  const { setShowPopUpLogout } = useAuth();
   const [date, setDate] = useState(getCurrentDateYearMonth());
   const [events, setEvents] = useState([]);
   const dzialy = Array.from(
@@ -33,13 +35,17 @@ const Calender = (props) => {
   };
 
   const getAbsence = async (employeesID) => {
-    const data = await getECPAPI(date, employeesID);
-    var preEvents = [];
-    for (let pracownik of data) {
-      let events = await generujEventy(pracownik);
-      preEvents.push(...events);
+    try {
+      const data = await getECPAPI(date, employeesID);
+      var preEvents = [];
+      for (let pracownik of data) {
+        let events = await generujEventy(pracownik);
+        preEvents.push(...events);
+      }
+      return preEvents;
+    } catch (error) {
+      setShowPopUpLogout(true);
     }
-    return preEvents;
   };
 
   const getEmployeesID = () => {

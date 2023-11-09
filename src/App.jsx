@@ -7,7 +7,6 @@ import { useAuth } from "./components/transitions/Login/AuthContext";
 
 function App() {
   const { user, isLogged } = useAuth(); // Korzystamy z wartości z AuthContext
-  const token = JSON.parse(localStorage.getItem("userTokenElerteApp"));
   const darkTheme = JSON.parse(localStorage.getItem("DarkTheme"));
 
   useEffect(() => {

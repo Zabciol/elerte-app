@@ -8,15 +8,21 @@ import Calender from "../transitions/Calender/Calender";
 import Container from "react-bootstrap/Container";
 import Requests from "../transitions/Requests/Requests";
 import { subordinatesApi } from "../../api/employeesApi";
+import { useAuth } from "../transitions/Login/AuthContext.jsx";
 import Menu from "./Menu/Menu";
 
 const PageHandler = (props) => {
+  const { setShowPopUpLogout } = useAuth();
   const [menuItems, setMenuItems] = useState();
   const [subordinates, setSubordinates] = useState([]);
 
   const getSubordinates = async () => {
-    const data = await subordinatesApi(props.user.ID);
-    setSubordinates(data.data);
+    try {
+      const data = await subordinatesApi(props.user.ID);
+      setSubordinates(data.data);
+    } catch (error) {
+      setShowPopUpLogout(true);
+    }
   };
 
   useEffect(() => {

@@ -1,7 +1,7 @@
 const express = require("express");
 const reasonsModel = require("../models/reasonsModel");
 const router = express.Router();
-
+const { verifyToken } = require("../db");
 router.get("/", (req, res) => {
   reasonsModel.getReasons((err, reasons) => {
     if (err) {

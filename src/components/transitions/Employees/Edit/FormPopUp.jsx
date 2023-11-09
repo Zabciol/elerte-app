@@ -13,10 +13,12 @@ import { updateEmployeeApi } from "../../../../api/employeesApi";
 import { deleteEmployeeApi } from "../../../../api/employeesApi";
 import { myDirectSubordinatesAPI } from "../../../../api/employeesApi";
 import PopUp from "../../../common/PopUp";
+import { useAuth } from "../../Login/AuthContext";
 
 const FormPopUp = ({ show, setShow, employee }) => {
+  const { setShowPopUpLogout, setMessage } = useAuth();
   const [showPopUp, setShowPopUp] = useState(false);
-  const [message, setMessage] = useState("");
+  const [messageHere, setMessageHere] = useState("");
   const [onReload, setOnReload] = useState(false);
 
   const nameRef = useRef();
@@ -55,12 +57,14 @@ const FormPopUp = ({ show, setShow, employee }) => {
       if (shouldShowPopUp) {
         setShow(false);
         setOnReload(true);
-        setMessage(response.message);
+        setMessageHere(response.message);
         setShowPopUp(true);
       }
     } catch (error) {
       console.error("Wystąpił błąd:", error);
-      setMessage("Wystąpił błąd podczas komunikacji z serwerem.");
+      setMessageHere("Wystąpił błąd podczas komunikacji z serwerem.");
+      setMessage(error.message);
+      setShowPopUpLogout(true);
       if (shouldShowPopUp) {
         setShow(false);
         setShowPopUp(true);
@@ -75,28 +79,39 @@ const FormPopUp = ({ show, setShow, employee }) => {
   const deleteEmployee = async () => {
     try {
       const response = await deleteEmployeeApi(employee.ID);
-      setMessage(response.message);
+      setMessageHere(response.message);
       setShow(false);
       setShowPopUp(true);
       setOnReload(false);
     } catch (error) {
       console.error("Wystąpił błąd:", error);
-      setMessage("Wystąpił błąd podczas komunikacji z serwerem.");
+      setMessageHere("Wystąpił błąd podczas komunikacji z serwerem.");
+      setMessage(error.message);
+      setShowPopUpLogout(true);
       setShow(false);
     }
   };
 
   const getSubordinates = async () => {
-    const data = await subordinatesApi(employee.ID);
-    const subordinatesID = data.data.map((employee) => employee.ID);
-    setSubordinates(subordinatesID);
+    try {
+      const data = await subordinatesApi(employee.ID);
+      const subordinatesID = data.data.map((employee) => employee.ID);
+      setSubordinates(subordinatesID);
+    } catch (error) {
+      setMessage(error.message);
+      setShowPopUpLogout(true);
+    }
   };
 
   const getDirectSubordinates = async () => {
-    const data = await myDirectSubordinatesAPI(employee.ID);
-    const directSubordinatesID = data.map((employee) => employee.ID);
-
-    setDirectSubordinates(directSubordinatesID);
+    try {
+      const data = await myDirectSubordinatesAPI(employee.ID);
+      const directSubordinatesID = data.map((employee) => employee.ID);
+      setDirectSubordinates(directSubordinatesID);
+    } catch (error) {
+      setMessage(error.message);
+      setShowPopUpLogout(true);
+    }
   };
 
   useEffect(() => {
@@ -175,7 +190,7 @@ const FormPopUp = ({ show, setShow, employee }) => {
       <PopUp
         show={showPopUp}
         setShow={setShowPopUp}
-        message={message}
+        message={messageHere}
         title='Powiadomienie'
         reload={true}
       />

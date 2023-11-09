@@ -6,8 +6,10 @@ import LoadingButton from "../../common/LoadingBtn";
 import { SentECPToDatabase } from "../../../api/ecpApi";
 import { useGetData } from "./ECPDataContext";
 import { getCurrentDateTime } from "../../common/CommonFunctions";
+import { useAuth } from "../Login/AuthContext";
 
 const ECPList = ({ user, subordinates, dzial, date }) => {
+  const { setShowPopUpLogout, setMessage } = useAuth();
   const [reasons, setReasons] = useState([]);
   const { collectAll } = useGetData();
   const activeSubordinates = subordinates.filter(
@@ -26,6 +28,8 @@ const ECPList = ({ user, subordinates, dzial, date }) => {
       console.log(
         error.message || "Nie udało się uzyskać powodów nieobecności"
       );
+      setShowPopUpLogout(true);
+      setMessage(error.message);
     }
   };
   useEffect(() => {
@@ -46,6 +50,7 @@ const ECPList = ({ user, subordinates, dzial, date }) => {
       return response;
     } catch (error) {
       throw error;
+      setShowPopUpLogout(true);
     }
   };
   return (

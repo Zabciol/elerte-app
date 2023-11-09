@@ -2,14 +2,13 @@ import React, { useEffect, useState } from "react";
 import { allEmployeesAPI } from "../../../../api/employeesApi";
 import FloatingLabel from "react-bootstrap/FloatingLabel";
 import Form from "react-bootstrap/Form";
-import Badge from "react-bootstrap/Badge";
 import ListGroup from "react-bootstrap/ListGroup";
-import Button from "react-bootstrap/Button";
 import { departmentsApi } from "../../../../api/departmentsApi";
 import { mySupervisorsAPI } from "../../../../api/employeesApi";
-import { myDirectSubordinatesAPI } from "../../../../api/employeesApi";
+import { useAuth } from "../../Login/AuthContext";
 
 const SubordinatesForm = (props) => {
+  const { setShowPopUpLogoutm, setMessage } = useAuth();
   const [departments, setDepartments] = useState([]);
   const [department, setDepartment] = useState();
   const [employees, setEmployees] = useState([]);
@@ -35,23 +34,30 @@ const SubordinatesForm = (props) => {
   };
 
   const getAllEmployees = async () => {
-    let data = await allEmployeesAPI();
-    if (props.employee) {
-      data = data.filter((employee) => employee.ID !== props.employee.ID);
-    }
-    setEmployees(data);
-    const supervisorsData = await mySupervisorsAPI(props.employee.ID);
-    console.log("Przełozeni tego pracownika:");
-    console.log(supervisorsData.message);
-    if (supervisorsData.data.length) {
-      console.log(supervisorsData.data);
-      setSupervisors(supervisorsData.data);
+    try {
+      let data = await allEmployeesAPI();
+      if (props.employee) {
+        data = data.filter((employee) => employee.ID !== props.employee.ID);
+      }
+      setEmployees(data);
+      const supervisorsData = await mySupervisorsAPI(props.employee.ID);
+      if (supervisorsData.data.length) {
+        setSupervisors(supervisorsData.data);
+      }
+    } catch (error) {
+      setMessage(error.message);
+      setShowPopUpLogoutm(true);
     }
   };
 
   const getAllDepartments = async () => {
-    const data = await departmentsApi();
-    setDepartments(data);
+    try {
+      const data = await departmentsApi();
+      setDepartments(data);
+    } catch (error) {
+      setMessage(error.message);
+      setShowPopUpLogoutm(true);
+    }
   };
 
   const updateHierarchy = (employee) => {

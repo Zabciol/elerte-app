@@ -5,6 +5,7 @@ import { positionApi } from "../../../../api/positionApi";
 import { workingTimeApi } from "../../../../api/workingTimeApi";
 import FloatingLabel from "react-bootstrap/FloatingLabel";
 import Form from "react-bootstrap/Form";
+import { useAuth } from "../../Login/AuthContext";
 
 const PositionForm = (props) => {
   const {
@@ -18,6 +19,8 @@ const PositionForm = (props) => {
     workingTime,
     setWorkingTime,
   } = props;
+
+  const { setShowPopUpLogout, setMessage } = useAuth();
   const [departments, setDepartments] = useState([]);
   const [positions, setPositions] = useState([]);
   const [supervisors, setSupervisors] = useState([]);
@@ -37,9 +40,14 @@ const PositionForm = (props) => {
   };
 
   const getFromApi = async (setStateTab, api, value) => {
-    value === undefined
-      ? setStateTab(await api())
-      : setStateTab(await api(value));
+    try {
+      value === undefined
+        ? setStateTab(await api())
+        : setStateTab(await api(value));
+    } catch (error) {
+      setMessage(error.message);
+      setShowPopUpLogout(true);
+    }
   };
   useEffect(() => {
     getFromApi(setDepartments, departmentsApi);
