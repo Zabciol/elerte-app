@@ -76,7 +76,15 @@ export const AuthProvider = ({ children }) => {
 
   return (
     <AuthContext.Provider
-      value={{ authToken, user, isLogged, login, logout, setShowPopUpLogout }}>
+      value={{
+        authToken,
+        user,
+        isLogged,
+        login,
+        logout,
+        setShowPopUpLogout,
+        setMessage,
+      }}>
       {children}
       <ConfirmPupUp
         show={showPopUpLogout}
