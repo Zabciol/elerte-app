@@ -52,12 +52,12 @@ router.put("/decline", verifyToken, async (req, res) => {
     const ID = req.body.ID;
     const request = req.body.request;
     const result = await requestModel.declineRequests(ID);
-    const resultECP = await requestModel.deleteECP(request);
     if (!resultECP.success) {
       throw new Error(
         "Operacja usuwania danych z tabeli ECP nie powiodła się."
       );
     }
+    const resultECP = await requestModel.deleteECP(request);
     res.json(result);
   } catch (error) {
     console.error(error);
