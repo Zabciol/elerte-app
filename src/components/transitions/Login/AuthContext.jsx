@@ -7,6 +7,7 @@ import React, {
 } from "react";
 import { loginApi, verifyTokenApi } from "../../../api/authApi"; // załóżmy, że ścieżka jest poprawna
 import ConfirmPupUp from "../../common/ConfirmPopUp";
+import { handleError } from "../../common/CommonFunctions";
 
 // Tworzenie kontekstu auth
 const AuthContext = createContext(null);
@@ -37,7 +38,8 @@ export const AuthProvider = ({ children }) => {
         sessionStorage.setItem("userToken", JSON.stringify(data.token)); // Opcjonalnie zapisz token w localStorage
       }
     } catch (error) {
-      console.error(error.message || "Login failed. Please try again.");
+      console.error(error || "Login failed. Please try again.");
+      throw error;
     }
   }, []);
 

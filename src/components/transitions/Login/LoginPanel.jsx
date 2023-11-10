@@ -7,17 +7,23 @@ import { useAuth } from "./AuthContext";
 
 const LoginPanel = (props) => {
   const { login } = useAuth();
+  const [message, setMessage] = useState("");
 
   const submit = async (email, password) => {
     console.log(email);
     console.log(password);
-    await login(email, password);
+    try {
+      await login(email, password);
+    } catch (error) {
+      setMessage(error.message);
+    }
   };
   return (
     <div className='LoginPanel' data-bs-theme='light'>
       <img src={logo} alt='logo' />
       <div className='LoginPanel-form'>
         <LoginInput submit={submit} />
+        <p style={{ color: `black` }}>{message}</p>
       </div>
     </div>
   );

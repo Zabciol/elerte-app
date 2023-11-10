@@ -23,23 +23,26 @@ router.post("/login", async (req, res) => {
   try {
     const users = await userModel.findUserByEmail(email);
     if (users.length === 0) {
-      return res.status(404).send({ message: "Nie ma takiego uzytkownika" });
+      return res.status(404).send("Nie ma takiego uzytkownika");
     }
     const userData = users[0];
 
     if (userData.Aktywny !== "Tak") {
-      return res.status(401).send({ message: "Account is inactive!" });
+      //return res.status(401).send({ message: "Account is inactive!" });
+      return res.status(500).send("Konto jest nieaktywne.");
     }
 
     const userPasswordData = await userModel.findUserPasswordByID(userData.ID);
     if (userPasswordData.length === 0) {
-      return res.status(404).send({ message: "Nie ma takiego uzytkownika" });
+      //return res.status(404).send({ message: "Nie ma takiego uzytkownika" });
+      return res.status(500).send("Nie ma takiego uzytkownika.");
     }
     const userPassword = userPasswordData[0];
 
     bcrypt.compare(password, userPassword.Haslo, (error, isMatch) => {
       if (error) {
-        return res.status(500).send("Server error!");
+        //return res.status(500).send("Server error!");
+        return res.status(500).send("Błąd serwera");
       }
 
       if (isMatch) {
@@ -57,12 +60,14 @@ router.post("/login", async (req, res) => {
           token: token,
         });
       } else {
-        res.status(401).send({ message: "Hasło jest niepoprawne!" });
+        //res.status(401).send({ message: "Hasło jest niepoprawne!" });
+        res.status(500).send("Haslo jest niepoprawne");
       }
     });
   } catch (err) {
     console.error("Server error:", err);
-    res.status(500).send("Server error!");
+    //res.status(500).send("Server error!");
+    res.status(500).send("Błąd serwera");
   }
 });
 
