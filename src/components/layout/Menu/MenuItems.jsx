@@ -5,10 +5,12 @@ import Form from "react-bootstrap/Form";
 import Nav from "react-bootstrap/Nav";
 import NavDropdown from "react-bootstrap/NavDropdown";
 import Offcanvas from "react-bootstrap/Offcanvas";
+import { useAuth } from "../../transitions/Login/AuthContext";
 
 const MenuItems = (props) => {
-  const { user, darkMode, handleSwitchTheme, logout, children, show } = props;
+  const { user, darkMode, handleSwitchTheme, children, show } = props;
   const nav_items = ["ECP", "Pracownicy", "Kalendarz", "Wnioski"];
+  const { logout } = useAuth();
 
   return (
     <Offcanvas.Body>

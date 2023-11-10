@@ -8,6 +8,7 @@ const MenuHeader = (props) => {
   const { logout } = useAuth();
 
   const handleLogout = () => {
+    console.log("Trwa wylogowywaniue");
     logout();
   };
   return (
