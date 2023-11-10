@@ -33,20 +33,21 @@ const sentMail = async (request) => {
     const requestMessage =
       request.message !== "" ? " </br> Wiadomość: " + request.message : "";
     const message =
-      " <p>Witaj, </br> " +
+      " <p>Witaj, <br/> " +
       sender.Imie +
       " " +
       sender.Nazwisko +
-      " wysłał do ciebie wniosek w aplikacji Elerte ECP. </br>" +
+      " wysłał do ciebie wniosek w aplikacji Elerte ECP. <br/>" +
       "Na następujący termin: " +
-      "</br>od: " +
+      "<br/>od: " +
       request.dataOd +
-      "</br>do: " +
+      "<br/>do: " +
       request.dataDo +
-      "</br>Powód: " +
+      "<br/>Powód: " +
       reason.Powod +
       requestMessage +
-      "</br></br> </br> </br> Akceptuj wniosek klikając w ten link -> tubedzielink </br> Odrzuć wniosek klikając w ten link -> dasfsgg";
+      "<br/><br/><br/><br/><a href='linkDoAkceptacji' style='background-color: #007bff; color: white; padding: 10px 20px; text-align: center; text-decoration: none; display: inline-block; border-radius: 5px;'>Akceptuj</a>" +
+      " <a href='linkDoOdrzucenia' style='background-color: #dc3545; color: white; padding: 10px 20px; text-align: center; text-decoration: none; display: inline-block; border-radius: 5px;'>Odrzuć</a><br/></p>";
 
     console.log("Wiadomość");
     console.log(message);
