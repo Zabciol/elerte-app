@@ -1,4 +1,73 @@
 const { queryDatabase, queryDatabasePromise } = require("../db");
+const nodemailer = require("nodemailer");
+const employeeModel = require("./employeesModel");
+const reasonsModel = require("./reasonsModel");
+
+//Konfiguracja wysyłki maila
+const transporter = nodemailer.createTransport({
+  host: "smtp.office365.com",
+  port: 587,
+  secure: false, // true for 465, false for other ports
+  auth: {
+    user: "noreply@elerte.pl", // Twoja nazwa użytkownika Office 365
+    pass: "lmsnhkgzylyqlhxz", // Twoje hasło Office 365
+  },
+  tls: {
+    ciphers: "SSLv3",
+  },
+});
+
+const sentMail = async (request) => {
+  try {
+    const sender = await employeeModel.getEmployeeCasualInf(request.senderID);
+    const reciver = await employeeModel.getEmployeeCasualInf(request.reciverID);
+    const reason = await reasonsModel.getReasonByID(request.reasonID);
+    console.log(request);
+    console.log("Sender");
+    console.group(sender);
+    console.log("Reciver");
+    console.log(reciver);
+    console.log("Powdod");
+    console.log(reason);
+
+    const requestMessage =
+      request.message !== "" ? " </br> Wiadomość: " + request.message : "";
+    const message =
+      " <p>Witaj, </br> " +
+      sender.Imie +
+      " " +
+      sender.Nazwisko +
+      " wysłał do ciebie wniosek w aplikacji Elerte ECP. </br>" +
+      "Na następujący termin: " +
+      "</br>od:" +
+      request.dataOd +
+      "</br>do:" +
+      request.dataDo +
+      "</br>Powód tego urlopu: " +
+      reason.Powod +
+      requestMessage +
+      "</br></br> </br> </br> Akceptuj wniosek klikając w ten link -> tubedzielink </br> Odrzuć wniosek klikając w ten link -> dasfsgg";
+
+    console.log("Wiadomość");
+    console.log(message);
+    const mailOptions = {
+      from: "noreply@elerte.pl", // adres nadawcy
+      to: "jan.zaborowicz@elerte.pl", // lista odbiorców
+      subject: "Urlop", // Temat wiadomości
+      text: request.message, // treść wiadomości w formie tekstowej
+      html: message, // treść wiadomości w formie HTML
+    };
+
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        throw error;
+      }
+      console.log("Wiadomość wysłana: %s", info.messageId);
+    });
+  } catch (error) {
+    throw error;
+  }
+};
 
 const sentRequest = async (request) => {
   try {
@@ -16,6 +85,7 @@ const sentRequest = async (request) => {
 
     await queryDatabasePromise(query, [insertData]);
     console.log("Wniosek dodany pomyślnie!");
+    await sentMail(request);
     return { success: true, message: "Wysłano wniosek" };
   } catch (error) {
     console.error("Wystąpił błąd podczas wysyłania wniosku", error);
@@ -154,6 +224,7 @@ const deleteECP = async (request) => {
   }
 };
 const getAcceptedRequests = async (date, IDs) => {
+  //Wykorzystywane do nieobecności pracownika w miesiącu
   try {
     const [year, month] = date.split("-");
     const query =

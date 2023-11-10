@@ -52,6 +52,16 @@ const getWorkedHoursByEmployee = (employeeId, month) => {
   });
 };
 
+const getEmployeeCasualInf = async (id) => {
+  const results = await queryDatabasePromise(
+    "SELECT ID, Imie, Nazwisko, Mail, NrTelefonu FROM Pracownicy WHERE ID = ?",
+    [id]
+  );
+
+  // Zwróć pierwszy element tablicy wyników, jeśli istnieje
+  return results.length > 0 ? results[0] : null;
+};
+
 const getEmployeeInf = (employeeId) => {
   return new Promise((resolve, reject) => {
     const query =
@@ -353,4 +363,5 @@ module.exports = {
   updateEmployee,
   deleteEmployee,
   getMyDirectSubordinates,
+  getEmployeeCasualInf,
 };

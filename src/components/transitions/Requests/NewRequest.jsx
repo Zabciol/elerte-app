@@ -16,6 +16,7 @@ const NewRequest = ({ user }) => {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [loading, setLoading] = useState(true);
+
   const getMySupervisor = async () => {
     setLoading(true);
     const data = await mySupervisorAPI(user.ID);
@@ -80,7 +81,7 @@ const NewRequest = ({ user }) => {
           setReason={setReason}
           readOnly={false}
           message={message}
-          setMessage={setMessage}
+          setMessage={setMessageHere}
           startDate={startDate}
           setStartDate={setStartDate}
           endDate={endDate}

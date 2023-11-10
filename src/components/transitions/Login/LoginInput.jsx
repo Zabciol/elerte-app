@@ -79,11 +79,11 @@ const LoginInput = (props) => {
       </FloatingLabel>
 
       <Accordion.Collapse eventKey='0'>
-        <FloatingLabel controlId='floatingPassword' label='Password'>
+        <FloatingLabel controlId='floatingPassword' label='Hasło'>
           <Form.Control
             ref={passwordRef}
             type='password'
-            placeholder='Password'
+            placeholder='Hasło'
             onChange={changePassword}
           />
           {mailRef.current.value && passwordRef.current.value ? (
