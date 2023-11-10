@@ -60,3 +60,16 @@ export const getNextWorkDay = () => {
   }
   return date;
 };
+
+export const handleError = (error) => {
+  console.log("Handle error: ", error);
+  if (error.response) {
+    throw new Error(
+      error.response.data || "Błąd podczas pobierania danych z API"
+    );
+  } else if (error.request) {
+    throw new Error("Brak odpowiedzi od serwera");
+  } else {
+    throw new Error("API not available");
+  }
+};

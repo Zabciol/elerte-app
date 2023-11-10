@@ -1,5 +1,6 @@
 import axios from "axios";
 import Variables from "../components/common/CommonFunctions";
+import { handleError } from "../components/common/CommonFunctions";
 
 const API_URL = `http://localhost:${Variables.port}/position`;
 
@@ -16,14 +17,6 @@ export const positionApi = async (id) => {
     });
     return response.data;
   } catch (error) {
-    if (error.response) {
-      throw new Error(
-        error.response.data || "Błąd podczas pobierania danych z API"
-      );
-    } else if (error.request) {
-      throw new Error("Brak odpowiedzi od serwera");
-    } else {
-      throw new Error("API not available");
-    }
+    handleError(error);
   }
 };

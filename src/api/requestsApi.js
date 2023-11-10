@@ -1,5 +1,6 @@
 import axios from "axios";
 import Variables from "../components/common/CommonFunctions";
+import { handleError } from "../components/common/CommonFunctions";
 
 const API_URL = `http://localhost:${Variables.port}/requests`;
 
@@ -14,16 +15,7 @@ export const newRequestApi = async (data) => {
     console.log(response.data);
     return response.data;
   } catch (error) {
-    console.error("Error during API call:", error);
-    if (error.response) {
-      throw new Error(
-        error.response.data || "Błąd podczas pobierania danych z API"
-      );
-    } else if (error.request) {
-      throw new Error("Brak odpowiedzi od serwera");
-    } else {
-      throw new Error("API not available");
-    }
+    handleError(error);
   }
 };
 export const getRequestsApi = async (myID) => {
@@ -39,16 +31,7 @@ export const getRequestsApi = async (myID) => {
     });
     return response.data;
   } catch (error) {
-    console.error("Error during API call:", error);
-    if (error.response) {
-      throw new Error(
-        error.response.data || "Błąd podczas pobierania danych z API"
-      );
-    } else if (error.request) {
-      throw new Error("Brak odpowiedzi od serwera");
-    } else {
-      throw new Error("API not available");
-    }
+    handleError(error);
   }
 };
 export const updateRequestsView = async (id) => {
@@ -60,16 +43,7 @@ export const updateRequestsView = async (id) => {
     });
     return response.data;
   } catch (error) {
-    console.error("Error during API call:", error);
-    if (error.response) {
-      throw new Error(
-        error.response.data || "Błąd podczas pobierania danych z API"
-      );
-    } else if (error.request) {
-      throw new Error("Brak odpowiedzi od serwera");
-    } else {
-      throw new Error("API not available");
-    }
+    handleError(error);
   }
 };
 export const accpetRequestsApi = async (request) => {
@@ -85,16 +59,7 @@ export const accpetRequestsApi = async (request) => {
     });
     return response.data;
   } catch (error) {
-    console.error("Error during API call:", error);
-    if (error.response) {
-      throw new Error(
-        error.response.data || "Błąd podczas pobierania danych z API"
-      );
-    } else if (error.request) {
-      throw new Error("Brak odpowiedzi od serwera");
-    } else {
-      throw new Error("API not available");
-    }
+    handleError(error);
   }
 };
 export const declineRequestsApi = async (request) => {
@@ -110,16 +75,7 @@ export const declineRequestsApi = async (request) => {
     });
     return response.data;
   } catch (error) {
-    console.error("Error during API call:", error);
-    if (error.response) {
-      throw new Error(
-        error.response.data || "Błąd podczas pobierania danych z API"
-      );
-    } else if (error.request) {
-      throw new Error("Brak odpowiedzi od serwera");
-    } else {
-      throw new Error("API not available");
-    }
+    handleError(error);
   }
 };
 export const getAcceptedRequestsApi = async (date, employeesIDs) => {
@@ -136,15 +92,6 @@ export const getAcceptedRequestsApi = async (date, employeesIDs) => {
     });
     return response.data;
   } catch (error) {
-    console.error("Error during API call:", error);
-    if (error.response) {
-      throw new Error(
-        error.response.data || "Błąd podczas pobierania danych z API"
-      );
-    } else if (error.request) {
-      throw new Error("Brak odpowiedzi od serwera");
-    } else {
-      throw new Error("API not available");
-    }
+    handleError(error);
   }
 };

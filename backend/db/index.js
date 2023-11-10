@@ -33,7 +33,7 @@ const verifyToken = (req, res, next) => {
     next();
   } catch (error) {
     if (error.name === "TokenExpiredError") {
-      res.status(500).send("Wymagane przelogowanie.");
+      res.status(500).send("Token stracił wazność. Wymagane przelogowanie.");
     } else {
       console.error("Błąd weryfikacji tokena:", error);
       res.status(500).send("Napotkano problem przy uwierzytelnianiu.");
