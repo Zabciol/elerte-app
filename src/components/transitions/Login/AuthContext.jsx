@@ -31,7 +31,6 @@ export const AuthProvider = ({ children }) => {
     try {
       const data = await loginApi(email, password);
       if (data.token) {
-        console.log(data.token);
         setAuthToken(data.token);
         setUser(data.user);
         setIsLogged(true);
