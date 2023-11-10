@@ -37,13 +37,6 @@ const NewRequest = ({ user }) => {
     }
   };
 
-  const changeReason = (e) => {
-    const index = e.target.value;
-    const selectedReason = reasons[index];
-    console.log(selectedReason);
-    setReason(selectedReason);
-  };
-
   const sentRequest = async () => {
     console.log(reasons);
     console.log(reason);

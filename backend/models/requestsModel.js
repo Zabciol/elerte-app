@@ -39,11 +39,11 @@ const sentMail = async (request) => {
       sender.Nazwisko +
       " wysłał do ciebie wniosek w aplikacji Elerte ECP. </br>" +
       "Na następujący termin: " +
-      "</br>od:" +
+      "</br>od: " +
       request.dataOd +
-      "</br>do:" +
+      "</br>do: " +
       request.dataDo +
-      "</br>Powód tego urlopu: " +
+      "</br>Powód: " +
       reason.Powod +
       requestMessage +
       "</br></br> </br> </br> Akceptuj wniosek klikając w ten link -> tubedzielink </br> Odrzuć wniosek klikając w ten link -> dasfsgg";
@@ -54,7 +54,7 @@ const sentMail = async (request) => {
       from: "noreply@elerte.pl", // adres nadawcy
       to: "jan.zaborowicz@elerte.pl", // lista odbiorców
       subject: "Urlop", // Temat wiadomości
-      text: request.message, // treść wiadomości w formie tekstowej
+      text: message, // treść wiadomości w formie tekstowej
       html: message, // treść wiadomości w formie HTML
     };
 
