@@ -14,7 +14,15 @@ export const SentECPToDatabase = async (data) => {
     return response.data;
   } catch (error) {
     console.error("Error during API call:", error);
-    throw error;
+    if (error.response) {
+      throw new Error(
+        error.response.data || "Błąd podczas pobierania danych z API"
+      );
+    } else if (error.request) {
+      throw new Error("Brak odpowiedzi od serwera");
+    } else {
+      throw new Error("API not available");
+    }
   }
 };
 export const checkECPForEmployeeOnDate = async (employeeId, date) => {
@@ -32,7 +40,15 @@ export const checkECPForEmployeeOnDate = async (employeeId, date) => {
     return response.data;
   } catch (error) {
     console.error("Error during API call:", error);
-    throw error;
+    if (error.response) {
+      throw new Error(
+        error.response.data || "Błąd podczas pobierania danych z API"
+      );
+    } else if (error.request) {
+      throw new Error("Brak odpowiedzi od serwera");
+    } else {
+      throw new Error("API not available");
+    }
   }
 };
 
@@ -51,7 +67,15 @@ export const getECPAPI = async (data, employeesID) => {
     return response.data;
   } catch (error) {
     console.error("Error during API call:", error);
-    throw error;
+    if (error.response) {
+      throw new Error(
+        error.response.data || "Błąd podczas pobierania danych z API"
+      );
+    } else if (error.request) {
+      throw new Error("Brak odpowiedzi od serwera");
+    } else {
+      throw new Error("API not available");
+    }
   }
 };
 export const exportECPAPI = async (data, employeesID) => {
@@ -78,7 +102,15 @@ export const exportECPAPI = async (data, employeesID) => {
     link.remove(); // Czyści DOM z niepotrzebnego już linku
   } catch (error) {
     console.error("Error during API call:", error);
-    throw error;
+    if (error.response) {
+      throw new Error(
+        error.response.data || "Błąd podczas pobierania danych z API"
+      );
+    } else if (error.request) {
+      throw new Error("Brak odpowiedzi od serwera");
+    } else {
+      throw new Error("API not available");
+    }
   }
 };
 export const getAbsenceAPI = async (data, employeesID) => {
@@ -96,6 +128,14 @@ export const getAbsenceAPI = async (data, employeesID) => {
     return response.data;
   } catch (error) {
     console.error("Error during API call:", error);
-    throw error;
+    if (error.response) {
+      throw new Error(
+        error.response.data || "Błąd podczas pobierania danych z API"
+      );
+    } else if (error.request) {
+      throw new Error("Brak odpowiedzi od serwera");
+    } else {
+      throw new Error("API not available");
+    }
   }
 };

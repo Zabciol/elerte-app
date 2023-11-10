@@ -2,12 +2,19 @@ import React, { useState } from "react";
 import ListGroup from "react-bootstrap/ListGroup";
 import Badge from "react-bootstrap/Badge";
 import { updateRequestsView } from "../../../api/requestsApi";
+import { useAuth } from "../Login/AuthContext";
 
 const RequestsList = ({ requests, setRequest, setRequests }) => {
+  const { setShowPopUpLogout, setMessage } = useAuth();
   const handleChangeRequest = async (request) => {
     if (request.Wyswietlone === "nie") {
       console.log("Tu się zmieni status czy wyświetlone");
-      await updateRequestsView(request.ID);
+      try {
+        await updateRequestsView(request.ID);
+      } catch (error) {
+        setMessage(error.message);
+        setShowPopUpLogout(true);
+      }
 
       const newRequests = requests.map((item) => {
         if (item.ID === request.ID) {

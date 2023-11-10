@@ -7,8 +7,10 @@ import {
 import RequestsList from "./RequestsList";
 import RequestMail from "./RequestMail";
 import LoadingButton from "../../common/LoadingBtn";
+import { useAuth } from "../Login/AuthContext";
 
 const ManageRequests = ({ user }) => {
+  const { setShowPopUpLogout, setMessage } = useAuth();
   const [requests, setRequests] = useState([]);
   const [request, setRequest] = useState(null);
   const [sender, setSender] = useState({});
@@ -16,19 +18,34 @@ const ManageRequests = ({ user }) => {
   const [isMobileView, setIsMobileView] = useState(window.innerWidth < 767);
 
   const accept = async () => {
-    const data = await accpetRequestsApi(request.ID);
-    console.log(data.message);
+    try {
+      const data = await accpetRequestsApi(request.ID);
+      console.log(data.message);
+    } catch (error) {
+      setMessage(error.message);
+      setShowPopUpLogout(true);
+    }
   };
 
   const decline = async () => {
-    const data = await declineRequestsApi(request.ID);
-    console.log(data.message);
+    try {
+      const data = await declineRequestsApi(request.ID);
+      console.log(data.message);
+    } catch (error) {
+      setMessage(error.message);
+      setShowPopUpLogout(true);
+    }
   };
 
   const getRequests = async () => {
-    const data = await getRequestsApi(user.ID);
-    console.log(data.message);
-    setRequests(data.data);
+    try {
+      const data = await getRequestsApi(user.ID);
+      console.log(data.message);
+      setRequests(data.data);
+    } catch (error) {
+      setMessage(error.message);
+      setShowPopUpLogout(true);
+    }
   };
 
   useEffect(() => {

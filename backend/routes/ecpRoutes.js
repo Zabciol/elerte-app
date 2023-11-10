@@ -9,7 +9,7 @@ router.post("/SentECPToDatabase", verifyToken, async (req, res) => {
     const result = await ecpModel.SentECPToDatabase(data);
     res.send(result);
   } catch (err) {
-    res.status(500).send(err);
+    res.status(500).send("Wystąpił błąd podczas wysyłania danych danych.");
   }
 });
 
@@ -23,7 +23,7 @@ router.get("/checkECP/:employeeId/:date", verifyToken, async (req, res) => {
       res.status(200).json(result || null);
     }
   } catch (error) {
-    res.status(500).json({ message: "Internal server error." });
+    res.status(500).send("Wystąpił błąd podczas usuwania danych.");
   }
 });
 router.get("/ecp", verifyToken, async (req, res) => {

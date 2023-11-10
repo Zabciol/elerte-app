@@ -6,12 +6,24 @@ const API_URL = `http://localhost:${Variables.port}/requests`;
 export const newRequestApi = async (data) => {
   try {
     const token = sessionStorage.getItem("userToken");
-    const response = await axios.post(`${API_URL}/new`, data);
+    const response = await axios.post(`${API_URL}/new`, data, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
     console.log(response.data);
     return response.data;
   } catch (error) {
     console.error("Error during API call:", error);
-    throw error;
+    if (error.response) {
+      throw new Error(
+        error.response.data || "Błąd podczas pobierania danych z API"
+      );
+    } else if (error.request) {
+      throw new Error("Brak odpowiedzi od serwera");
+    } else {
+      throw new Error("API not available");
+    }
   }
 };
 export const getRequestsApi = async (myID) => {
@@ -21,11 +33,22 @@ export const getRequestsApi = async (myID) => {
       params: {
         myID: myID,
       },
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
     });
     return response.data;
   } catch (error) {
     console.error("Error during API call:", error);
-    throw error;
+    if (error.response) {
+      throw new Error(
+        error.response.data || "Błąd podczas pobierania danych z API"
+      );
+    } else if (error.request) {
+      throw new Error("Brak odpowiedzi od serwera");
+    } else {
+      throw new Error("API not available");
+    }
   }
 };
 export const updateRequestsView = async (id) => {
@@ -38,7 +61,15 @@ export const updateRequestsView = async (id) => {
     return response.data;
   } catch (error) {
     console.error("Error during API call:", error);
-    throw error;
+    if (error.response) {
+      throw new Error(
+        error.response.data || "Błąd podczas pobierania danych z API"
+      );
+    } else if (error.request) {
+      throw new Error("Brak odpowiedzi od serwera");
+    } else {
+      throw new Error("API not available");
+    }
   }
 };
 export const accpetRequestsApi = async (request) => {
@@ -48,11 +79,22 @@ export const accpetRequestsApi = async (request) => {
     const response = await axios.put(`${API_URL}/accept`, {
       ID: request.ID,
       request: request,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
     });
     return response.data;
   } catch (error) {
     console.error("Error during API call:", error);
-    throw error;
+    if (error.response) {
+      throw new Error(
+        error.response.data || "Błąd podczas pobierania danych z API"
+      );
+    } else if (error.request) {
+      throw new Error("Brak odpowiedzi od serwera");
+    } else {
+      throw new Error("API not available");
+    }
   }
 };
 export const declineRequestsApi = async (request) => {
@@ -69,7 +111,15 @@ export const declineRequestsApi = async (request) => {
     return response.data;
   } catch (error) {
     console.error("Error during API call:", error);
-    throw error;
+    if (error.response) {
+      throw new Error(
+        error.response.data || "Błąd podczas pobierania danych z API"
+      );
+    } else if (error.request) {
+      throw new Error("Brak odpowiedzi od serwera");
+    } else {
+      throw new Error("API not available");
+    }
   }
 };
 export const getAcceptedRequestsApi = async (date, employeesIDs) => {
@@ -87,6 +137,14 @@ export const getAcceptedRequestsApi = async (date, employeesIDs) => {
     return response.data;
   } catch (error) {
     console.error("Error during API call:", error);
-    throw error;
+    if (error.response) {
+      throw new Error(
+        error.response.data || "Błąd podczas pobierania danych z API"
+      );
+    } else if (error.request) {
+      throw new Error("Brak odpowiedzi od serwera");
+    } else {
+      throw new Error("API not available");
+    }
   }
 };

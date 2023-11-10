@@ -58,10 +58,8 @@ export const AuthProvider = ({ children }) => {
           if (data.isValid) {
             setAuthToken(storedToken);
             setIsLogged(true);
-            // Załaduj dane użytkownika, jeśli są zwrócone z API
             setUser(data.user);
           } else {
-            // Token nie jest ważny, więc wykonaj czynności wylogowujące
             logout();
           }
         }

@@ -11,6 +11,7 @@ router.get("/", verifyToken, async (req, res) => {
     const users = await userModel.getUsers();
     res.json(users);
   } catch (err) {
+    throw new Error(err.message);
     res.status(500).json({ message: err.message });
   }
 });
@@ -65,22 +66,22 @@ router.post("/login", async (req, res) => {
   }
 });
 
-router.get("/verify-token", verifyToken, async (req, res) => {
+router.get("/verify-token", async (req, res) => {
   const token = req.headers["authorization"]?.split(" ")[1]?.replace(/"/g, "");
   if (!token) {
-    return res.status(401).send("No token provided");
+    throw new Error("Brak tokenu uwierzytelniającego");
   }
   try {
     const decoded = jwt.verify(token, getSecretKey());
     const users = await userModel.findUserByEmail(decoded.mail);
     if (users.length === 0) {
-      return res.status(404).send("User not found");
+      console.log("Nie znaleziono uzytkownika");
+      throw new Error("Nie znaleziono uzytkownika");
     }
     const userData = users[0];
     res.json({ isValid: true, user: userData });
   } catch (error) {
-    console.error("Błąd weryfikacji tokena:", error);
-    res.status(401).json({ isValid: false, error: error.message });
+    res.status(500).send("Wystąpił błąd podczas weryfikowania tokenu.");
   }
 });
 

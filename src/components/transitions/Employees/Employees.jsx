@@ -10,6 +10,7 @@ import ExportExcel from "./ExportExcel";
 import EmployeesAbsence from "./Absence/EmployeesAbsence";
 import { getCurrentDateYearMonth } from "../../common/CommonFunctions";
 import { allEmployeesAPI } from "../../../api/employeesApi";
+import { useAuth } from "../Login/AuthContext";
 
 const MenuItems = ({ dzial, dzialy, setDzial, date, setDate }) => {
   return (
@@ -26,6 +27,7 @@ const MenuItems = ({ dzial, dzialy, setDzial, date, setDate }) => {
 };
 
 const Employees = ({ user, setMenuItems, subordinates }) => {
+  const { setShowPopUpLogout, setMessage } = useAuth();
   const [dzialy, setDzialy] = useState([]);
   const [dzial, setDzial] = useState();
   const [date, setDate] = useState(getCurrentDateYearMonth());
@@ -38,11 +40,16 @@ const Employees = ({ user, setMenuItems, subordinates }) => {
   };
 
   const getEmployees = async () => {
-    const data =
-      user.Dzial === "Księgowość" || user.Dzial === "Analityka"
-        ? await allEmployeesAPI()
-        : subordinates;
-    setEmployees(data);
+    try {
+      const data =
+        user.Dzial === "Księgowość" || user.Dzial === "Analityka"
+          ? await allEmployeesAPI()
+          : subordinates;
+      setEmployees(data);
+    } catch (error) {
+      setMessage(error.message);
+      setShowPopUpLogout(true);
+    }
   };
 
   useEffect(() => {

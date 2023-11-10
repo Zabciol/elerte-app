@@ -9,7 +9,7 @@ router.get("/", verifyToken, async (req, res) => {
     res.json(result);
   } catch (error) {
     console.error(error);
-    res.status(500).send("Wystąpił błąd podczas pobierania danych.");
+    res.status(500).json({ error: error.message });
   }
 });
 

@@ -12,7 +12,7 @@ import { useAuth } from "../transitions/Login/AuthContext.jsx";
 import Menu from "./Menu/Menu";
 
 const PageHandler = (props) => {
-  const { setShowPopUpLogout } = useAuth();
+  const { setShowPopUpLogout, setMessage } = useAuth();
   const [menuItems, setMenuItems] = useState();
   const [subordinates, setSubordinates] = useState([]);
 
@@ -21,6 +21,7 @@ const PageHandler = (props) => {
       const data = await subordinatesApi(props.user.ID);
       setSubordinates(data.data);
     } catch (error) {
+      setMessage(error.message);
       setShowPopUpLogout(true);
     }
   };

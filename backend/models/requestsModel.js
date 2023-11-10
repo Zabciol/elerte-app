@@ -38,6 +38,7 @@ const getRequests = async (id) => {
     return { success: true, message: "Pozyskano wnioski", data: results };
   } catch (error) {
     console.error("Wystąpił błąd podczas pozyskiwania wniosków:", error);
+    throw error;
     return { success: false, message: error.message };
   }
 };
@@ -50,6 +51,7 @@ const updateRequestsView = async (id) => {
     return { success: true, message: "Updated request view", data: results };
   } catch (error) {
     console.error("Wystąpił błąd podczas pozyskiwania wniosków:", error);
+    throw error;
     return { success: false, message: error.message };
   }
 };
@@ -66,6 +68,7 @@ const acceptRequests = async (id) => {
     };
   } catch (error) {
     console.error("Wystąpił błąd podczas akceptowania wniosku:", error);
+    throw error;
     return { success: false, message: error.message };
   }
 };
@@ -82,6 +85,7 @@ const declineRequests = async (id) => {
     };
   } catch (error) {
     console.error("Wystąpił błąd podczas odrzucania wniosku:", error);
+    throw error;
     return { success: false, message: error.message };
   }
 };
@@ -145,6 +149,7 @@ const deleteECP = async (request) => {
     };
   } catch (error) {
     console.error("Wystąpił błąd podczas usuwania ecp:", error);
+    throw error;
     return { success: false, message: error.message };
   }
 };
@@ -178,6 +183,7 @@ const getAcceptedRequests = async (date, IDs) => {
     return { success: true, message: "Pozyskano wnioski", data: results };
   } catch (error) {
     console.error("Wystąpił błąd podczas pozyskiwania wniosków:", error);
+    throw error;
     return { success: false, message: error.message };
   }
 };

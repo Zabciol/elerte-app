@@ -5,12 +5,14 @@ import { mySupervisorAPI } from "../../../api/employeesApi";
 import { newRequestApi } from "../../../api/requestsApi";
 import RequestMail from "./RequestMail";
 import LoadingButton from "../../common/LoadingBtn";
+import { useAuth } from "../Login/AuthContext";
 
 const NewRequest = ({ user }) => {
+  const { setShowPopUpLogout, setMessage } = useAuth();
   const [mySupervisor, setMySupervisor] = useState();
   const [reasons, setReasons] = useState([]);
   const [reason, setReason] = useState({});
-  const [message, setMessage] = useState("");
+  const [message, setMessageHere] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [loading, setLoading] = useState(true);
@@ -29,6 +31,8 @@ const NewRequest = ({ user }) => {
       console.log(
         error.message || "Nie udało się uzyskać powodów nieobecności"
       );
+      setMessage(error.message);
+      setShowPopUpLogout(true);
     }
   };
 

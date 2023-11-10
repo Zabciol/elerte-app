@@ -15,7 +15,15 @@ export const subordinatesApi = async (id) => {
 
     return response.data;
   } catch (error) {
-    throw error.response ? error.response.data : new Error("API not available");
+    if (error.response) {
+      throw new Error(
+        error.response.data || "Błąd podczas pobierania danych z API"
+      );
+    } else if (error.request) {
+      throw new Error("Brak odpowiedzi od serwera");
+    } else {
+      throw new Error("API not available");
+    }
   }
 };
 
@@ -30,7 +38,15 @@ export const supervisorsApi = async () => {
     return response.data;
   } catch (error) {
     console.error("Błąd podczas pobierania danych z serwera:", error);
-    throw error;
+    if (error.response) {
+      throw new Error(
+        error.response.data || "Błąd podczas pobierania danych z API"
+      );
+    } else if (error.request) {
+      throw new Error("Brak odpowiedzi od serwera");
+    } else {
+      throw new Error("API not available");
+    }
   }
 };
 
@@ -50,7 +66,15 @@ export const hoursWorkedApi = async (employeeId, month) => {
     return response.data;
   } catch (error) {
     console.error("Błąd podczas pobierania danych z serwera:", error);
-    throw error;
+    if (error.response) {
+      throw new Error(
+        error.response.data || "Błąd podczas pobierania danych z API"
+      );
+    } else if (error.request) {
+      throw new Error("Brak odpowiedzi od serwera");
+    } else {
+      throw new Error("API not available");
+    }
   }
 };
 export const infApi = async (employeeId) => {
@@ -68,7 +92,15 @@ export const infApi = async (employeeId) => {
     return response.data;
   } catch (error) {
     console.error("Błąd podczas pobierania danych z serwera:", error);
-    throw error;
+    if (error.response) {
+      throw new Error(
+        error.response.data || "Błąd podczas pobierania danych z API"
+      );
+    } else if (error.request) {
+      throw new Error("Brak odpowiedzi od serwera");
+    } else {
+      throw new Error("API not available");
+    }
   }
 };
 export const allEmployeesAPI = async () => {
@@ -82,7 +114,15 @@ export const allEmployeesAPI = async () => {
     return response.data;
   } catch (error) {
     console.error("Błąd podczas pobierania danych z serwera:", error);
-    throw error;
+    if (error.response) {
+      throw new Error(
+        error.response.data || "Błąd podczas pobierania danych z API"
+      );
+    } else if (error.request) {
+      throw new Error("Brak odpowiedzi od serwera");
+    } else {
+      throw new Error("API not available");
+    }
   }
 };
 
@@ -97,7 +137,15 @@ export const addEmployee = async (data) => {
     return response.data;
   } catch (error) {
     console.error("Error during API call:", error);
-    throw error;
+    if (error.response) {
+      throw new Error(
+        error.response.data || "Błąd podczas pobierania danych z API"
+      );
+    } else if (error.request) {
+      throw new Error("Brak odpowiedzi od serwera");
+    } else {
+      throw new Error("API not available");
+    }
   }
 };
 
@@ -115,7 +163,15 @@ export const mySupervisorAPI = async (myID) => {
     return response.data;
   } catch (error) {
     console.error("Błąd podczas pobierania danych z serwera:", error);
-    throw error;
+    if (error.response) {
+      throw new Error(
+        error.response.data || "Błąd podczas pobierania danych z API"
+      );
+    } else if (error.request) {
+      throw new Error("Brak odpowiedzi od serwera");
+    } else {
+      throw new Error("API not available");
+    }
   }
 };
 export const mySupervisorsAPI = async (myID) => {
@@ -132,7 +188,15 @@ export const mySupervisorsAPI = async (myID) => {
     return response.data;
   } catch (error) {
     console.error("Błąd podczas pobierania danych z serwera:", error);
-    throw error;
+    if (error.response) {
+      throw new Error(
+        error.response.data || "Błąd podczas pobierania danych z API"
+      );
+    } else if (error.request) {
+      throw new Error("Brak odpowiedzi od serwera");
+    } else {
+      throw new Error("API not available");
+    }
   }
 };
 
@@ -151,7 +215,15 @@ export const updateEmployeeApi = async (employeeData) => {
     return response.data;
   } catch (error) {
     console.error("Error during API call:", error);
-    throw error;
+    if (error.response) {
+      throw new Error(
+        error.response.data || "Błąd podczas pobierania danych z API"
+      );
+    } else if (error.request) {
+      throw new Error("Brak odpowiedzi od serwera");
+    } else {
+      throw new Error("API not available");
+    }
   }
 };
 export const deleteEmployeeApi = async (employeeID) => {
@@ -168,7 +240,15 @@ export const deleteEmployeeApi = async (employeeID) => {
     return response.data;
   } catch (error) {
     console.error("Error during API call:", error);
-    throw error;
+    if (error.response) {
+      throw new Error(
+        error.response.data || "Błąd podczas pobierania danych z API"
+      );
+    } else if (error.request) {
+      throw new Error("Brak odpowiedzi od serwera");
+    } else {
+      throw new Error("API not available");
+    }
   }
 };
 
@@ -186,6 +266,14 @@ export const myDirectSubordinatesAPI = async (myID) => {
     return response.data;
   } catch (error) {
     console.error("Błąd podczas pobierania danych z serwera:", error);
-    throw error;
+    if (error.response) {
+      throw new Error(
+        error.response.data || "Błąd podczas pobierania danych z API"
+      );
+    } else if (error.request) {
+      throw new Error("Brak odpowiedzi od serwera");
+    } else {
+      throw new Error("API not available");
+    }
   }
 };

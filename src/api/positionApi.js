@@ -16,6 +16,14 @@ export const positionApi = async (id) => {
     });
     return response.data;
   } catch (error) {
-    throw error.response ? error.response.data : new Error("API not available");
+    if (error.response) {
+      throw new Error(
+        error.response.data || "Błąd podczas pobierania danych z API"
+      );
+    } else if (error.request) {
+      throw new Error("Brak odpowiedzi od serwera");
+    } else {
+      throw new Error("API not available");
+    }
   }
 };

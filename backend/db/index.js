@@ -25,20 +25,19 @@ const queryDatabasePromise = (query, data) => {
 const verifyToken = (req, res, next) => {
   const token = req.headers["authorization"]?.split(" ")[1]?.replace(/"/g, "");
   if (!token) {
-    return res.status(401).send("No token provided");
+    res.status(500).send("Brak tokenu.");
   }
   try {
     const decoded = jwt.verify(token, getSecretKey());
-    req.user = decoded; // Zapisujemy zdekodowane dane do obiektu żądania
-    next(); // Przechodzimy do następnego middleware
+    req.user = decoded;
+    next();
   } catch (error) {
     if (error.name === "TokenExpiredError") {
-      return res
-        .status(401)
-        .json({ isValid: false, error: "Token expired", logout: true });
+      res.status(500).send("Wymagane przelogowanie.");
+    } else {
+      console.error("Błąd weryfikacji tokena:", error);
+      res.status(500).send("Napotkano problem przy uwierzytelnianiu.");
     }
-    console.error("Błąd weryfikacji tokena:", error);
-    res.status(401).json({ isValid: false, error: error.message });
   }
 };
 

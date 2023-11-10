@@ -4,15 +4,22 @@ import FormPopUp from "./Edit/FormPopUp";
 import { infApi } from "../../../api/employeesApi";
 import "../../../styles/Employee.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
+import { useAuth } from "../Login/AuthContext";
 
 const EmployeeInf = (props) => {
   const [inf, setInf] = useState();
   const [show, setShow] = useState(false);
+  const { setShowPopUpLogout, setMessage } = useAuth();
   const getInformation = async () => {
-    const response = await infApi(props.employee.ID);
-    if (response.length) {
-      setInf(response[0]);
-    } else setInf(null);
+    try {
+      const response = await infApi(props.employee.ID);
+      if (response.length) {
+        setInf(response[0]);
+      } else setInf(null);
+    } catch (error) {
+      setMessage(error.message);
+      setShowPopUpLogout(true);
+    }
   };
   useEffect(() => {
     getInformation();

@@ -13,13 +13,18 @@ async function getSubordinatesRecursively(id) {
     const childSubordinates = await getSubordinatesRecursively(results[i].ID);
     subordinates.push(...childSubordinates);
   }
-
   return subordinates;
 }
 router.get("/", verifyToken, async (req, res) => {
-  const { id } = req.query;
-  const subordinates = await getSubordinatesRecursively(id);
-  res.status(200).send({ message: "Subordinates found!", data: subordinates });
+  try {
+    const { id } = req.query;
+    const subordinates = await getSubordinatesRecursively(id);
+    res
+      .status(200)
+      .send({ message: "Subordinates found!", data: subordinates });
+  } catch (error) {
+    res.status(500).send("Wystąpił błąd podczas pobierania danych.");
+  }
 });
 
 router.get("/supervisors", verifyToken, async (req, res) => {
@@ -85,7 +90,7 @@ router.post("/add", verifyToken, async (req, res) => {
     const result = await employeesModel.addNewEmployee(employee);
     res.send(result);
   } catch (err) {
-    res.status(500).send(err);
+    res.status(500).send("Wystąpił błąd podczas dodawania danych.");
   }
 });
 router.get("/mySupervisor", verifyToken, async (req, res) => {

@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
 import Button from "react-bootstrap/Button";
 import PopUp from "./PopUp";
+import { useAuth } from "../transitions/Login/AuthContext";
 
 function LoadingButton({ action, data, buttonText, ...props }) {
+  const { setShowPopUpLogout, setMessage } = useAuth();
   const [isLoading, setLoading] = useState(false);
   const [showPopUp, setShowPopUp] = useState(false);
   const [responseMessage, setResponseMessage] = useState("");
@@ -16,8 +18,10 @@ function LoadingButton({ action, data, buttonText, ...props }) {
       //setTimeout(() => window.location.reload(), 2000);
     } catch (error) {
       console.error("Wystąpił błąd:", error);
-      setResponseMessage("Wystąpił błąd podczas komunikacji z serwerem.");
-      setShowPopUp(true);
+      //setResponseMessage("Wystąpił błąd podczas komunikacji z serwerem.");
+      setMessage(error.message);
+      setShowPopUpLogout(true);
+      //setShowPopUp(true);
     } finally {
       setLoading(false);
     }

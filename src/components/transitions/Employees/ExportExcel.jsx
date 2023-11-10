@@ -2,17 +2,29 @@ import React, { useEffect, useState } from "react";
 import Button from "react-bootstrap/Button";
 import { allEmployeesAPI } from "../../../api/employeesApi";
 import { exportECPAPI } from "../../../api/ecpApi";
+import { useAuth } from "../Login/AuthContext";
 
 const ExportExcel = (props) => {
+  const { setShowPopUpLogout, setMessage } = useAuth();
   const [employeesID, setEmployeesID] = useState([]);
 
   const download = async () => {
-    await exportECPAPI(props.date, employeesID);
+    try {
+      await exportECPAPI(props.date, employeesID);
+    } catch (error) {
+      setMessage(error.message);
+      setShowPopUpLogout(true);
+    }
   };
 
   const getAllEmployees = async () => {
-    const data = await allEmployeesAPI();
-    setEmployeesID(data.map((employee) => employee.ID));
+    try {
+      const data = await allEmployeesAPI();
+      setEmployeesID(data.map((employee) => employee.ID));
+    } catch (error) {
+      setMessage(error.message);
+      setShowPopUpLogout(true);
+    }
   };
 
   useEffect(() => {

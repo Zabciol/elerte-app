@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const positionModel = require("./../models/positionModel");
 const { verifyToken } = require("../db");
-router.get("/", async (req, res) => {
+router.get("/", verifyToken, async (req, res) => {
   try {
     const Dzial_ID = req.query.Dzial_ID;
 
