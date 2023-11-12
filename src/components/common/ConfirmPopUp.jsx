@@ -2,25 +2,29 @@ import { useState } from "react";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 
-function ConfirmPupUp(props) {
+function ConfirmPupUp({
+  show,
+  title,
+  decline,
+  declineText,
+  confirm,
+  confirmText,
+  children,
+}) {
   return (
-    <Modal
-      show={props.show}
-      onHide={props.decline}
-      backdrop='static'
-      keyboard={false}>
+    <Modal show={show} onHide={decline} backdrop='static' keyboard={false}>
       <Modal.Header closeButton>
-        <Modal.Title>{props.title}</Modal.Title>
+        <Modal.Title>{title}</Modal.Title>
       </Modal.Header>
-      <Modal.Body>{props.message}</Modal.Body>
+      <Modal.Body>{children}</Modal.Body>
       <Modal.Footer>
-        {props.declineText ? (
-          <Button variant='secondary' onClick={props.decline}>
-            {props.declineText}
+        {declineText ? (
+          <Button variant='secondary' onClick={decline}>
+            {declineText}
           </Button>
         ) : null}
-        <Button variant='primary' onClick={props.confirm}>
-          {props.confirmText}
+        <Button variant='primary' onClick={confirm}>
+          {confirmText}
         </Button>
       </Modal.Footer>
     </Modal>

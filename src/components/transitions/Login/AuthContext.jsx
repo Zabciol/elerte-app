@@ -91,9 +91,9 @@ export const AuthProvider = ({ children }) => {
         confirm={logout}
         declineText='Odświez stronę'
         confirmText='Wyloguj'
-        title='Uwaga'
-        message={message}
-      />
+        title='Uwaga'>
+        {message}
+      </ConfirmPupUp>
     </AuthContext.Provider>
   );
 };

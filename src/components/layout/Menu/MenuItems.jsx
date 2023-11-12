@@ -1,14 +1,18 @@
-import React from "react";
+import React, { useState } from "react";
 import { Children } from "react";
 import { Link } from "react-router-dom";
 import Form from "react-bootstrap/Form";
 import Nav from "react-bootstrap/Nav";
 import NavDropdown from "react-bootstrap/NavDropdown";
 import Offcanvas from "react-bootstrap/Offcanvas";
+import { useAuth } from "../../transitions/Login/AuthContext";
+import ChangePassword from "../../transitions/ChangePassword";
 
 const MenuItems = (props) => {
-  const { user, darkMode, handleSwitchTheme, logout, children, show } = props;
+  const { user, darkMode, handleSwitchTheme, children, show } = props;
+  const { logout } = useAuth();
   const nav_items = ["ECP", "Pracownicy", "Kalendarz", "Wnioski"];
+  const [showChangePassword, setShowChangePassword] = useState(false);
 
   return (
     <Offcanvas.Body>
@@ -29,7 +33,12 @@ const MenuItems = (props) => {
                 />{" "}
               </Form>
             </NavDropdown.Item>
-            <NavDropdown.Item>Zmień hasło</NavDropdown.Item>
+            <NavDropdown.Item
+              onClick={() => {
+                setShowChangePassword(true);
+              }}>
+              Zmień hasło
+            </NavDropdown.Item>
             <NavDropdown.Divider />
             <NavDropdown.Item
               onClick={() => {
@@ -47,6 +56,11 @@ const MenuItems = (props) => {
       </Nav>
       <hr className='solid' />
       <Nav>{children}</Nav>
+      <ChangePassword
+        user={user}
+        show={showChangePassword}
+        setShow={setShowChangePassword}
+      />
     </Offcanvas.Body>
   );
 };

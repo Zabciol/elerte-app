@@ -3,9 +3,11 @@ import Form from "react-bootstrap/Form";
 import NavDropdown from "react-bootstrap/NavDropdown";
 import Offcanvas from "react-bootstrap/Offcanvas";
 import { useAuth } from "../../transitions/Login/AuthContext";
+import ChangePassword from "../../transitions/ChangePassword";
 
 const MenuHeader = (props) => {
   const { logout } = useAuth();
+  const [showChangePassword, setShowChangePassword] = useState(false);
 
   const handleLogout = () => {
     logout();
@@ -28,11 +30,21 @@ const MenuHeader = (props) => {
               />{" "}
             </Form>
           </NavDropdown.Item>
-          <NavDropdown.Item>Zmień hasło</NavDropdown.Item>
+          <NavDropdown.Item
+            onClick={() => {
+              setShowChangePassword(true);
+            }}>
+            Zmień hasło
+          </NavDropdown.Item>
           <NavDropdown.Divider />
           <NavDropdown.Item onClick={handleLogout}>Wyloguj</NavDropdown.Item>
         </NavDropdown>
       </Offcanvas.Title>
+      <ChangePassword
+        user={props.user}
+        show={showChangePassword}
+        setShow={setShowChangePassword}
+      />
     </Offcanvas.Header>
   );
 };

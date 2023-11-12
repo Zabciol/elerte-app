@@ -67,10 +67,10 @@ const NewEmployee = (props) => {
         decline={decline}
         confirm={confirm}
         title={"Powiadomienie"}
-        message={"Czy ten pracownik ma być czyimś przełozonym?"}
         declineText={"Nie"}
-        confirmText={"Tak"}
-      />
+        confirmText={"Tak"}>
+        <p>Czy ten pracownik ma być czyimś przełozonym?</p>
+      </ConfirmPupUp>
       <PopUp
         show={showPopUp}
         setShow={setShowPopUp}
