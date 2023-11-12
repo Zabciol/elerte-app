@@ -13,21 +13,35 @@ const ChangePassword = ({ user, show, setShow }) => {
     setShow(false);
   };
 
+  const confirm = () => {
+    console.log("Teoretyczna zmiana hasła");
+  };
+
   return (
     <ConfirmPupUp
       show={show}
       title={"Zmiana hasła"}
+      confirm={confirm}
       confirmText={"Zmień hasło"}
       decline={decline}
       declineText={"Anuluj"}>
       <>
         <FloatingLabel controlId='floatingOldPassword' label='Stare hasło'>
-          <Form.Control type='password' placeholder='Password' />
+          <Form.Control
+            ref={oldPasswordRef}
+            type='password'
+            placeholder='Password'
+          />
         </FloatingLabel>
         <FloatingLabel controlId='floatingNewPassword' label='Nowe hasło'>
-          <Form.Control type='password' placeholder='Password' />
+          <Form.Control
+            ref={newPasswordRef}
+            type='password'
+            placeholder='Password'
+          />
         </FloatingLabel>
         <FloatingLabel
+          ref={newPasswordRepeatRef}
           controlId='floatingNewPasswordRepeat'
           label='Powtórz nowe hasło'>
           <Form.Control type='password' placeholder='Password' />

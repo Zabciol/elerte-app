@@ -71,6 +71,10 @@ router.post("/login", async (req, res) => {
   }
 });
 
+router.put("/changePassword", verifyToken, async (req, res) => {
+  const { oldPassword, newPassword, newPasswordRepeat, userID } = req.body;
+});
+
 router.get("/verify-token", async (req, res) => {
   const token = req.headers["authorization"]?.split(" ")[1]?.replace(/"/g, "");
   if (!token) {
