@@ -37,7 +37,7 @@ const sentMail = async (request) => {
       sender.Imie +
       " " +
       sender.Nazwisko +
-      " wysłał do ciebie wniosek w aplikacji Elerte ECP. <br/>" +
+      " wysłał do ciebie wniosek w aplikacji Elerte ECP.  <br/>" +
       "Na następujący termin: " +
       "<br/>od: " +
       request.dataOd +
