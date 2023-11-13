@@ -6,21 +6,12 @@ import Nav from "react-bootstrap/Nav";
 import NavDropdown from "react-bootstrap/NavDropdown";
 import Offcanvas from "react-bootstrap/Offcanvas";
 import { useAuth } from "../../transitions/Login/AuthContext";
-<<<<<<< HEAD
-
-const MenuItems = (props) => {
-  const { user, darkMode, handleSwitchTheme, children, show } = props;
-  const nav_items = ["ECP", "Pracownicy", "Kalendarz", "Wnioski"];
-  const { logout } = useAuth();
-=======
 import ChangePassword from "../../transitions/ChangePassword";
-
 const MenuItems = (props) => {
   const { user, darkMode, handleSwitchTheme, children, show } = props;
   const { logout } = useAuth();
   const nav_items = ["ECP", "Pracownicy", "Kalendarz", "Wnioski"];
   const [showChangePassword, setShowChangePassword] = useState(false);
->>>>>>> main
 
   return (
     <Offcanvas.Body>
