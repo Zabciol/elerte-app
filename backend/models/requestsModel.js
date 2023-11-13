@@ -31,7 +31,7 @@ const sentMail = async (request, token) => {
     console.log("Powdod");
     console.log(reason);
 
-    const API_URL = `http://localhost:8000/requests`;
+    const API_URL = `http://localhost:3000/requests`;
     const acceptLink = `${API_URL}/accept?token=${token}`;
     const declineLink = `${API_URL}/decline?token=${token}`;
 
