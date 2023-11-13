@@ -21,6 +21,7 @@ export const AuthProvider = ({ children }) => {
   const [isLogged, setIsLogged] = useState(false);
   const [showPopUpLogout, setShowPopUpLogout] = useState(false);
   const [showPopUp, setShowPopUp] = useState();
+  const [reloadPopUp, setReloadPopUp] = useState(false);
   const [message, setMessage] = useState();
 
   // Funkcja do aktualizacji tokena
@@ -83,6 +84,8 @@ export const AuthProvider = ({ children }) => {
         isLogged,
         login,
         logout,
+        setShowPopUp,
+        setReloadPopUp,
         setShowPopUpLogout,
         setMessage,
       }}>
@@ -97,6 +100,13 @@ export const AuthProvider = ({ children }) => {
         title='Uwaga'>
         {message}
       </ConfirmPupUp>
+      <PopUp
+        show={showPopUp}
+        setShow={setShowPopUp}
+        message={message}
+        reload={reloadPopUp}
+        setReloadPopUp={setReloadPopUp}
+        title='Powiadomienie'></PopUp>
     </AuthContext.Provider>
   );
 };

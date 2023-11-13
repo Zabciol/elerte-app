@@ -8,13 +8,13 @@ import { addEmployee } from "../../../../api/employeesApi";
 import { useAuth } from "../../Login/AuthContext";
 
 const NewEmployee = (props) => {
+  const { setShowPopUp, setShowPopUpLogout, setMessage } = useAuth();
   const [newEmployee, setNewEmployee] = useState({});
   const [stage, setStage] = useState(1);
   const [showConfirmPopUp, setShowConfirmPopUp] = useState(false);
-  const [showPopUp, setShowPopUp] = useState(false);
+  //const [showPopUp, setShowPopUp] = useState(false);
   const [subordinates, setSubordinates] = useState([]);
-  const [responseMessage, setResponseMessage] = useState("");
-  const { setShowPopUpLogout, setMessage } = useAuth();
+  //const [responseMessage, setResponseMessage] = useState("");
 
   const decline = () => {
     setShowConfirmPopUp(false);
@@ -35,7 +35,7 @@ const NewEmployee = (props) => {
     console.log(employeeData);
     try {
       const response = await addEmployee(employeeData);
-      setResponseMessage(response.message);
+      setMessage(response.message);
       setShowPopUp(true);
     } catch (error) {
       console.error("Wystąpił błąd:", error);
@@ -72,12 +72,6 @@ const NewEmployee = (props) => {
         confirmText={"Tak"}>
         <p>Czy ten pracownik ma być czyimś przełozonym?</p>
       </ConfirmPupUp>
-      <PopUp
-        show={showPopUp}
-        setShow={setShowPopUp}
-        message={responseMessage}
-        title={"Powiadomienie"}
-      />
     </>
   );
 };

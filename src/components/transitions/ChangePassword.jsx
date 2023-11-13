@@ -7,7 +7,7 @@ import { changePasswordApi } from "../../api/authApi";
 import { useAuth } from "./Login/AuthContext";
 
 const ChangePassword = ({ user, show, setShow }) => {
-  const { setShowPopUpLogout, setMessage } = useAuth();
+  const { setShowPopUp, setShowPopUpLogout, setMessage } = useAuth();
   const oldPasswordRef = useRef("");
   const newPasswordRef = useRef("");
   const newPasswordRepeatRef = useRef("");
@@ -26,6 +26,7 @@ const ChangePassword = ({ user, show, setShow }) => {
       );
       console.log(response.message);
       setMessage(response.message);
+      setShowPopUp(true);
     } catch (error) {
       setMessage(error.message);
       setShowPopUpLogout(true);
