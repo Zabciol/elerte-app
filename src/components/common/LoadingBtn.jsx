@@ -7,8 +7,6 @@ function LoadingButton({ action, data, buttonText, ...props }) {
   const { setShowPopUp, setReloadPopUp, setShowPopUpLogout, setMessage } =
     useAuth();
   const [isLoading, setLoading] = useState(false);
-  //const [showPopUp, setShowPopUp] = useState(false);
-  const [responseMessage, setResponseMessage] = useState("");
 
   const handleClick = async () => {
     setLoading(true);
