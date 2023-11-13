@@ -134,7 +134,6 @@ const addPassword = async (idPracownika) => {
     const query = "INSERT INTO Login (Haslo, Pracownik_ID) VALUES (?,?)";
     queryDatabase(query, [hashedPassword, idPracownika], (error, results) => {
       if (error) throw error;
-      console.log("Hasło dodano pomyślnie!");
     });
   } catch (error) {
     console.error("Wystąpił błąd podczas zapisywania hasła:", error);
@@ -156,14 +155,12 @@ const addNewEmployee = async (data) => {
 
     if (data.supervisor) {
       await addToHierarchy(data.supervisor, pracownikID);
-      console.log("Dodano przełoonego uzytkownika");
     }
 
     if (data.subordinates && data.subordinates.length) {
       for (let subID of data.subordinates) {
         await addToHierarchy(pracownikID, subID);
       }
-      console.log("Dodano podwladnych uzytkownika");
     }
     if (
       data.isManager &&
