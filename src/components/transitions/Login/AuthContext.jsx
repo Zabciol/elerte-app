@@ -8,7 +8,6 @@ import React, {
 import { loginApi, verifyTokenApi } from "../../../api/authApi"; // załóżmy, że ścieżka jest poprawna
 import ConfirmPupUp from "../../common/ConfirmPopUp";
 import PopUp from "../../common/PopUp";
-import { handleError } from "../../common/CommonFunctions";
 
 // Tworzenie kontekstu auth
 const AuthContext = createContext(null);

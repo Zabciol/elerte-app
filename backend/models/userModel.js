@@ -61,7 +61,6 @@ const changePassword = async (userID, newPassword) => {
     const hashedPassword = await bcrypt.hash(newPassword, 10);
     const query = "UPDATE Login SET Haslo = ? WHERE Pracownik_ID = ?";
     const results = queryDatabasePromise(query, [hashedPassword, userID]);
-    console.log("Updated password");
     return {
       success: true,
       message: "Hasło zmieniono pomyślnie!",

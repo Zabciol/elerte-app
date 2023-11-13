@@ -18,7 +18,6 @@ router.get("/", verifyToken, async (req, res) => {
 
 router.post("/login", async (req, res) => {
   const { email, password } = req.body;
-  console.log("Próba zalogowania");
 
   try {
     const users = await userModel.findUserByEmail(email);
@@ -38,11 +37,6 @@ router.post("/login", async (req, res) => {
       return res.status(500).send("Nie ma takiego uzytkownika.");
     }
     const userPassword = userPasswordData[0];
-
-    console.log("Wpisane hasło przed porównanie");
-    console.log(password);
-    console.log("Hasło wyciągnięte z bazy");
-    console.log(userPassword.Haslo);
     bcrypt.compare(password, userPassword.Haslo, (error, isMatch) => {
       if (error) {
         //return res.status(500).send("Server error!");
@@ -50,8 +44,6 @@ router.post("/login", async (req, res) => {
       }
 
       if (isMatch) {
-        console.log("Zalogowano");
-
         const token = jwt.sign(
           { id: userData.ID, mail: userData.Mail },
           getSecretKey(),
@@ -80,24 +72,18 @@ router.put("/changePassword", verifyToken, async (req, res) => {
   try {
     const userPasswordData = await userModel.findUserPasswordByID(userID);
     if (userPasswordData.length === 0) {
-      console.log("Nie znaleziono hasła do twojego profilu.");
       return res.status(500).send("Nie znaleziono hasła do twojego profilu.");
     }
     if (newPassword !== newPasswordRepeat) {
-      console.log("Nowe hasła nie są takie same");
       return res.status(500).send("Nowe hasła nie są takie same");
     }
     const userPassword = userPasswordData[0];
-    console.log("stare hasło: ", oldPassword);
     bcrypt.compare(oldPassword, userPassword.Haslo, (error, isMatch) => {
       if (error) {
-        //return res.status(500).send("Server error!");
-        console.log("Błąd podczas porówywania haseł", error);
         return res.status(500).send("Błąd serwera");
       }
 
       if (isMatch) {
-        console.log("Hasła zgadzają się");
         userModel.changePassword(userID, newPassword);
         res.status(200).send({
           succes: true,
@@ -121,7 +107,6 @@ router.get("/verify-token", async (req, res) => {
     const decoded = jwt.verify(token, getSecretKey());
     const users = await userModel.findUserByEmail(decoded.mail);
     if (users.length === 0) {
-      console.log("Nie znaleziono uzytkownika");
       throw new Error("Nie znaleziono uzytkownika");
     }
     const userData = users[0];
