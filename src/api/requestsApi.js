@@ -56,18 +56,12 @@ export const updateRequestsView = async (id) => {
 };
 export const acceptRequestsApi = async (request) => {
   try {
-    const token = sessionStorage.getItem("userToken");
     console.log(request);
     const response = await axios.put(
-      `${API_URL}/accept`,
+      `${API_URL}/accept?token=${encodeURIComponent(request.token)}`,
       {
         ID: request.ID,
         request: request,
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
       }
     );
     return response.data;
@@ -77,18 +71,12 @@ export const acceptRequestsApi = async (request) => {
 };
 export const declineRequestsApi = async (request) => {
   try {
-    const token = sessionStorage.getItem("userToken");
     console.log(request);
     const response = await axios.put(
-      `${API_URL}/decline`,
+      `${API_URL}/decline?token=${encodeURIComponent(request.token)}`,
       {
         ID: request.ID,
         request: request,
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
       }
     );
     return response.data;

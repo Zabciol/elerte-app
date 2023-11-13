@@ -1,7 +1,9 @@
 const express = require("express");
 const requestModel = require("../models/requestsModel");
 const router = express.Router();
-const { verifyToken } = require("../db");
+const { verifyToken, getSecretKey } = require("../db");
+const jwt = require("jsonwebtoken");
+
 router.post("/new", verifyToken, async (req, res) => {
   try {
     const request = req.body;
@@ -21,7 +23,7 @@ router.get("/get", verifyToken, async (req, res) => {
     res.status(500).send("Wystąpił błąd podczas pobierania danych.");
   }
 });
-router.put("/updateView", verifyToken, async (req, res) => {
+router.put("/updateView", async (req, res) => {
   try {
     const ID = req.body.ID;
     const result = await requestModel.updateRequestsView(ID);
@@ -32,9 +34,11 @@ router.put("/updateView", verifyToken, async (req, res) => {
   }
 });
 
-router.put("/accept", verifyToken, async (req, res) => {
+router.put("/accept", async (req, res) => {
   try {
-    const ID = req.body.ID;
+    const tokenData = jwt.verify(req.query.token, getSecretKey());
+    console.log(tokenData);
+    const ID = tokenData.id;
     const request = req.body.request;
     const result = await requestModel.acceptRequests(ID);
     const resultECP = await requestModel.fillECP(request);
@@ -47,9 +51,10 @@ router.put("/accept", verifyToken, async (req, res) => {
     res.status(500).send("Wystąpił błąd podczas aktualizacji danych.");
   }
 });
-router.put("/decline", verifyToken, async (req, res) => {
+router.put("/decline", async (req, res) => {
   try {
-    const ID = req.body.ID;
+    const tokenData = jwt.verify(req.query.token, getSecretKey());
+    const ID = tokenData.id;
     const request = req.body.request;
     const result = await requestModel.declineRequests(ID);
     if (!resultECP.success) {

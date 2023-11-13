@@ -3,7 +3,6 @@ const nodemailer = require("nodemailer");
 const employeeModel = require("./employeesModel");
 const reasonsModel = require("./reasonsModel");
 const jwt = require("jsonwebtoken");
-import Variables from "../../src/components/common/CommonFunctions";
 
 //Konfiguracja wysyłki maila
 const transporter = nodemailer.createTransport({
@@ -32,7 +31,7 @@ const sentMail = async (request, token) => {
     console.log("Powdod");
     console.log(reason);
 
-    const API_URL = `http://localhost:${Variables.port}/requests`;
+    const API_URL = `http://localhost:8000/requests`;
     const acceptLink = `${API_URL}/accept?token=${token}`;
     const declineLink = `${API_URL}/decline?token=${token}`;
 
@@ -105,8 +104,10 @@ const sentRequest = async (request) => {
     });
     console.log(token);
 
+    const insertTokenQuery = "UPDATE Wnioski SET token = ? WHERE ID = ?";
+    await queryDatabasePromise(insertTokenQuery, [token, requestId]);
     console.log("Wniosek dodany pomyślnie! ID: ", requestId);
-    await sentMail(request, token); // Przekazanie tokenu do funkcji wysyłającej email
+    await sentMail(request, token);
 
     return { success: true, message: "Wysłano wniosek", requestId: requestId };
   } catch (error) {
@@ -119,7 +120,7 @@ const getRequests = async (id) => {
     const query =
       "SELECT Wnioski.ID, Wnioski.Odbiorca_ID, Wnioski.Nadawca_ID, Pracownicy.Imie, Pracownicy.Nazwisko, " +
       "Pracownicy.Mail, Wnioski.Powod_ID, PowodyNieobecnosci.Nazwa AS `Powod`, Wnioski.Data_Od, " +
-      "Wnioski.Data_Do, Wnioski.`Status`, Wnioski.Wiadomosc, Wnioski.Wyswietlone " +
+      "Wnioski.Data_Do, Wnioski.`Status`, Wnioski.Wiadomosc, Wnioski.Wyswietlone, Wnioski.token " +
       "FROM Wnioski " +
       "LEFT JOIN Pracownicy ON Pracownicy.ID = Wnioski.Nadawca_ID " +
       "LEFT JOIN PowodyNieobecnosci ON PowodyNieobecnosci.ID = Wnioski.Powod_ID " +
