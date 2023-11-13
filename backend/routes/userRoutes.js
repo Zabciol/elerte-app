@@ -99,6 +99,10 @@ router.put("/changePassword", verifyToken, async (req, res) => {
       if (isMatch) {
         console.log("Hasła zgadzają się");
         userModel.changePassword(userID, newPassword);
+        res.status(200).send({
+          succes: true,
+          message: "Zmieniono hasło!",
+        });
       } else {
         res.status(500).send("Stare hasło jest niepoprawne");
       }

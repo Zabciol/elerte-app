@@ -7,6 +7,7 @@ import React, {
 } from "react";
 import { loginApi, verifyTokenApi } from "../../../api/authApi"; // załóżmy, że ścieżka jest poprawna
 import ConfirmPupUp from "../../common/ConfirmPopUp";
+import PopUp from "../../common/PopUp";
 import { handleError } from "../../common/CommonFunctions";
 
 // Tworzenie kontekstu auth
@@ -19,6 +20,7 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [isLogged, setIsLogged] = useState(false);
   const [showPopUpLogout, setShowPopUpLogout] = useState(false);
+  const [showPopUp, setShowPopUp] = useState();
   const [message, setMessage] = useState();
 
   // Funkcja do aktualizacji tokena

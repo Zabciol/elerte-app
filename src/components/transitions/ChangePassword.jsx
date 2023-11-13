@@ -18,17 +18,19 @@ const ChangePassword = ({ user, show, setShow }) => {
 
   const confirm = async () => {
     try {
-      await changePasswordApi(
+      const response = await changePasswordApi(
         oldPasswordRef.current.value,
         newPasswordRef.current.value,
         newPasswordRepeatRef.current.value,
         user.ID
       );
-      setShow(false);
+      console.log(response.message);
+      setMessage(response.message);
     } catch (error) {
-      setShow(false);
       setMessage(error.message);
       setShowPopUpLogout(true);
+    } finally {
+      setShow(false);
     }
   };
 

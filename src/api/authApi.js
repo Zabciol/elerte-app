@@ -48,7 +48,6 @@ export const changePasswordApi = async (
         },
       }
     );
-    console.log(response);
     return response.data;
   } catch (error) {
     handleError(error);
