@@ -87,6 +87,7 @@ export const AuthProvider = ({ children }) => {
       {children}
       <ConfirmPupUp
         show={showPopUpLogout}
+        hide={() => setShowPopUpLogout(false)}
         decline={() => window.location.reload()}
         confirm={logout}
         declineText='Odświez stronę'

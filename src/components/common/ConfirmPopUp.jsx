@@ -4,6 +4,7 @@ import Modal from "react-bootstrap/Modal";
 
 function ConfirmPupUp({
   show,
+  hide,
   title,
   decline,
   declineText,
@@ -12,7 +13,7 @@ function ConfirmPupUp({
   children,
 }) {
   return (
-    <Modal show={show} onHide={decline} backdrop='static' keyboard={false}>
+    <Modal show={show} onHide={hide} backdrop='static' keyboard={false}>
       <Modal.Header closeButton>
         <Modal.Title>{title}</Modal.Title>
       </Modal.Header>

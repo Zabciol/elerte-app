@@ -56,15 +56,20 @@ const findUserPasswordByID = async (id) => {
   }
 };
 
-const changePassword = async (userID, newHashedPassword) => {
+const changePassword = async (userID, newPassword) => {
   try {
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
     const query = "UPDATE Login SET Haslo = ? WHERE Pracownik_ID = ?";
-    queryDatabase(query, [newHashedPassword, userID], (error, results) => {
-      if (error) throw error;
-      console.log("Hasło dodano pomyślnie!");
-    });
+    const results = queryDatabasePromise(query, [hashedPassword, userID]);
+    console.log("Updated password");
+    return {
+      success: true,
+      message: "Hasło zmieniono pomyślnie!",
+      data: results,
+    };
   } catch (error) {
-    console.error("Wystąpił błąd podczas zapisywania hasła:", error);
+    console.error("Wystąpił błąd podczas aktualizacji hasła:", error);
+    throw error;
   }
 };
 
@@ -74,5 +79,6 @@ module.exports = {
   getUsers,
   findUserByEmail,
   findUserPasswordByID,
+  changePassword,
   verifyToken,
 };

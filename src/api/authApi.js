@@ -25,3 +25,32 @@ export const verifyTokenApi = async (token) => {
     handleError(error);
   }
 };
+
+export const changePasswordApi = async (
+  oldPassword,
+  newPassword,
+  newPasswordRepeat,
+  userID
+) => {
+  try {
+    const token = sessionStorage.getItem("userToken");
+    const response = await axios.put(
+      `${API_URL}/changePassword`,
+      {
+        oldPassword,
+        newPassword,
+        newPasswordRepeat,
+        userID,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    console.log(response);
+    return response.data;
+  } catch (error) {
+    handleError(error);
+  }
+};

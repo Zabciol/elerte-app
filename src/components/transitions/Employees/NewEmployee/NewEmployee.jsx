@@ -64,6 +64,7 @@ const NewEmployee = (props) => {
       {stage === 3 ? <Spinner animation='border' /> : null}
       <ConfirmPupUp
         show={showConfirmPopUp}
+        hide={() => setShowConfirmPopUp(false)}
         decline={decline}
         confirm={confirm}
         title={"Powiadomienie"}
