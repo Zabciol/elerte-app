@@ -8,7 +8,8 @@ import { addEmployee } from "../../../../api/employeesApi";
 import { useAuth } from "../../Login/AuthContext";
 
 const NewEmployee = (props) => {
-  const { setShowPopUp, setShowPopUpLogout, setMessage } = useAuth();
+  const { setShowPopUp, setReloadPopUp, setShowPopUpLogout, setMessage } =
+    useAuth();
   const [newEmployee, setNewEmployee] = useState({});
   const [stage, setStage] = useState(1);
   const [showConfirmPopUp, setShowConfirmPopUp] = useState(false);
@@ -36,6 +37,7 @@ const NewEmployee = (props) => {
     try {
       const response = await addEmployee(employeeData);
       setMessage(response.message);
+      setReloadPopUp(true);
       setShowPopUp(true);
     } catch (error) {
       console.error("Wystąpił błąd:", error);
