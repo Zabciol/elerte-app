@@ -40,7 +40,6 @@ router.get("/accept", async (req, res) => {
     const ID = tokenData.id;
     const result = await requestModel.acceptRequests(ID);
     const request = await requestModel.getRequestByID(ID);
-    console.log(request.message);
 
     const resultECP = await requestModel.fillECP(request.data);
     if (!resultECP.success) {
@@ -57,7 +56,7 @@ router.get("/decline", async (req, res) => {
     const tokenData = jwt.verify(req.query.token, getSecretKey());
     const ID = tokenData.id;
     const request = await requestModel.getRequestByID(ID);
-    console.log(request.message);
+
     const result = await requestModel.declineRequests(ID);
     const resultECP = await requestModel.deleteECP(request.data);
     if (!resultECP.success) {

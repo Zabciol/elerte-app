@@ -75,9 +75,6 @@ const SentECPToDatabase = async (records) => {
     if (toInsert.length > 0) {
       await insertRecordsInDB(toInsert, editDate, editUser);
     }
-
-    console.log("Zaktualizowane pola: " + toUpdate.length);
-    console.log("Dodane pola: " + toInsert.length);
     return {
       updated: toUpdate.length,
       inserted: toInsert.length,
@@ -126,7 +123,6 @@ const exportECPForMonth = async (date, employeesID, res) => {
     const workbook = new ExcelJS.Workbook();
     const worksheet = workbook.addWorksheet("ECP");
     const ecp = await getECPForMonth(date, employeesID);
-    console.log(ecp);
 
     worksheet.columns = [
       { header: "Imie", key: "imie" },
@@ -187,7 +183,6 @@ const getAbsenceNotIncludeRequests = async (date, IDs) => {
       "SELECT 1 FROM Wnioski W WHERE W.Nadawca_ID = ECP.Pracownik_ID " +
       "AND W.Status = 'Zaakceptowano' AND ECP.Data BETWEEN W.Data_Od AND W.Data_Do)";
     const results = await queryDatabasePromise(query, [year, month, IDs]);
-    console.log("Nieobecności uzyskano pomyślnie!");
     return { success: true, message: "Pozyskano nieobecności", data: results };
   } catch (error) {
     console.error("Wystąpił błąd podczas pozyskiwania nieobecności:", error);

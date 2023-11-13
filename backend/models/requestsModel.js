@@ -23,13 +23,6 @@ const sentMail = async (request, token) => {
     const sender = await employeeModel.getEmployeeCasualInf(request.senderID);
     const reciver = await employeeModel.getEmployeeCasualInf(request.reciverID);
     const reason = await reasonsModel.getReasonByID(request.reasonID);
-    console.log(request);
-    console.log("Sender");
-    console.group(sender);
-    console.log("Reciver");
-    console.log(reciver);
-    console.log("Powdod");
-    console.log(reason);
 
     const API_URL = `http://localhost:8000/requests`;
     const acceptLink = `${API_URL}/accept?token=${token}`;
@@ -58,8 +51,6 @@ const sentMail = async (request, token) => {
       declineLink +
       " style='background-color: #dc3545; color: white; padding: 10px 20px; text-align: center; text-decoration: none; display: inline-block; border-radius: 5px;'>Odrzuć</a><br/></p>";
 
-    console.log("Wiadomość");
-    console.log(message);
     const mailOptions = {
       from: "noreply@elerte.pl", // adres nadawcy
       to: "jan.zaborowicz@elerte.pl", // lista odbiorców
@@ -72,7 +63,6 @@ const sentMail = async (request, token) => {
       if (error) {
         throw error;
       }
-      console.log("Wiadomość wysłana: %s", info.messageId);
     });
   } catch (error) {
     throw error;
@@ -80,7 +70,6 @@ const sentMail = async (request, token) => {
 };
 const sentRequest = async (request) => {
   try {
-    console.log(request);
 
     const insertData = [
       request.senderID,
@@ -102,11 +91,9 @@ const sentRequest = async (request) => {
     const token = jwt.sign({ id: requestId }, getSecretKey(), {
       expiresIn: "7d",
     });
-    console.log(token);
 
     const insertTokenQuery = "UPDATE Wnioski SET token = ? WHERE ID = ?";
     await queryDatabasePromise(insertTokenQuery, [token, requestId]);
-    console.log("Wniosek dodany pomyślnie! ID: ", requestId);
     await sentMail(request, token);
 
     return { success: true, message: "Wysłano wniosek", requestId: requestId };
@@ -127,7 +114,6 @@ const getRequests = async (id) => {
       "WHERE Wnioski.Odbiorca_ID = ? AND Wnioski.Data_Od > CURDATE()";
 
     const results = await queryDatabasePromise(query, id);
-    console.log("Wnioski uzyskano pomyślnie!");
     return { success: true, message: "Pozyskano wnioski", data: results };
   } catch (error) {
     console.error("Wystąpił błąd podczas pozyskiwania wniosków:", error);
@@ -140,7 +126,6 @@ const getRequestByID = async (id) => {
   try {
     const query = "SELECT * from Wnioski WHERE ID = ?";
     const results = await queryDatabasePromise(query, id);
-    console.log("Wniosek uzyskano pomyślnie!");
     return { success: true, message: "Pozyskano wniosek", data: results[0] };
   } catch (error) {
     console.error("Wystąpił błąd podczas pozyskiwania wniosków:", error);
@@ -153,7 +138,6 @@ const updateRequestsView = async (id) => {
     const query = "UPDATE Wnioski SET Wyswietlone = 'tak' WHERE ID = ?";
 
     const results = await queryDatabasePromise(query, id);
-    console.log("Wniosek zaktualizowano pomyślnie!");
     return { success: true, message: "Updated request view", data: results };
   } catch (error) {
     console.error("Wystąpił błąd podczas pozyskiwania wniosków:", error);
@@ -166,7 +150,6 @@ const acceptRequests = async (id) => {
   try {
     const query = "UPDATE Wnioski SET `Status` = 'Zaakceptowano' WHERE ID = ?";
     const results = await queryDatabasePromise(query, id);
-    console.log("Updated request status on accept");
     return {
       success: true,
       message: "Wniosek zaakceptowano pomyślnie!",
@@ -183,7 +166,6 @@ const declineRequests = async (id) => {
   try {
     const query = "UPDATE Wnioski SET `Status` = 'Odrzucono' WHERE ID = ?";
     const results = await queryDatabasePromise(query, id);
-    console.log(" Updated request status on decline");
     return {
       success: true,
       message: "Wniosek odrzucono pomyślnie!",
@@ -285,7 +267,6 @@ const getAcceptedRequests = async (date, IDs) => {
       year,
       IDs,
     ]);
-    console.log("Wnioski uzyskano pomyślnie!");
     return { success: true, message: "Pozyskano wnioski", data: results };
   } catch (error) {
     console.error("Wystąpił błąd podczas pozyskiwania wniosków:", error);
