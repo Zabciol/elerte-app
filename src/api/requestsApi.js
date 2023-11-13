@@ -56,13 +56,8 @@ export const updateRequestsView = async (id) => {
 };
 export const acceptRequestsApi = async (request) => {
   try {
-    console.log(request);
-    const response = await axios.put(
-      `${API_URL}/accept?token=${encodeURIComponent(request.token)}`,
-      {
-        ID: request.ID,
-        request: request,
-      }
+    const response = await axios.get(
+      `${API_URL}/accept?token=${encodeURIComponent(request.token)}`
     );
     return response.data;
   } catch (error) {
@@ -71,13 +66,8 @@ export const acceptRequestsApi = async (request) => {
 };
 export const declineRequestsApi = async (request) => {
   try {
-    console.log(request);
-    const response = await axios.put(
-      `${API_URL}/decline?token=${encodeURIComponent(request.token)}`,
-      {
-        ID: request.ID,
-        request: request,
-      }
+    const response = await axios.get(
+      `${API_URL}/decline?token=${encodeURIComponent(request.token)}`
     );
     return response.data;
   } catch (error) {

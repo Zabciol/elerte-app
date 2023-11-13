@@ -34,14 +34,15 @@ router.put("/updateView", async (req, res) => {
   }
 });
 
-router.put("/accept", async (req, res) => {
+router.get("/accept", async (req, res) => {
   try {
     const tokenData = jwt.verify(req.query.token, getSecretKey());
-    console.log(tokenData);
     const ID = tokenData.id;
-    const request = req.body.request;
     const result = await requestModel.acceptRequests(ID);
-    const resultECP = await requestModel.fillECP(request);
+    const request = await requestModel.getRequestByID(ID);
+    console.log(request.message);
+
+    const resultECP = await requestModel.fillECP(request.data);
     if (!resultECP.success) {
       throw new Error("Operacja wypełnienia tabeli ECP nie powiodła się.");
     }
@@ -51,18 +52,19 @@ router.put("/accept", async (req, res) => {
     res.status(500).send("Wystąpił błąd podczas aktualizacji danych.");
   }
 });
-router.put("/decline", async (req, res) => {
+router.get("/decline", async (req, res) => {
   try {
     const tokenData = jwt.verify(req.query.token, getSecretKey());
     const ID = tokenData.id;
-    const request = req.body.request;
+    const request = await requestModel.getRequestByID(ID);
+    console.log(request.message);
     const result = await requestModel.declineRequests(ID);
+    const resultECP = await requestModel.deleteECP(request.data);
     if (!resultECP.success) {
       throw new Error(
         "Operacja usuwania danych z tabeli ECP nie powiodła się."
       );
     }
-    const resultECP = await requestModel.deleteECP(request);
     res.json(result);
   } catch (error) {
     console.error(error);

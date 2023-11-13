@@ -47,7 +47,6 @@ const RequestMail = (props) => {
   };
 
   useEffect(() => {
-    console.log(request);
     if (readOnly === false) {
       const nextWorkDay = getNextWorkDay();
       const dayAfter = new Date(nextWorkDay);

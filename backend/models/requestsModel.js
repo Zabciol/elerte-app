@@ -31,7 +31,7 @@ const sentMail = async (request, token) => {
     console.log("Powdod");
     console.log(reason);
 
-    const API_URL = `http://localhost:3000/requests`;
+    const API_URL = `http://localhost:8000/requests`;
     const acceptLink = `${API_URL}/accept?token=${token}`;
     const declineLink = `${API_URL}/decline?token=${token}`;
 
@@ -127,8 +127,21 @@ const getRequests = async (id) => {
       "WHERE Wnioski.Odbiorca_ID = ? AND Wnioski.Data_Od > CURDATE()";
 
     const results = await queryDatabasePromise(query, id);
-    console.log("Wniosek uzyskano pomyślnie!");
+    console.log("Wnioski uzyskano pomyślnie!");
     return { success: true, message: "Pozyskano wnioski", data: results };
+  } catch (error) {
+    console.error("Wystąpił błąd podczas pozyskiwania wniosków:", error);
+    throw error;
+    return { success: false, message: error.message };
+  }
+};
+
+const getRequestByID = async (id) => {
+  try {
+    const query = "SELECT * from Wnioski WHERE ID = ?";
+    const results = await queryDatabasePromise(query, id);
+    console.log("Wniosek uzyskano pomyślnie!");
+    return { success: true, message: "Pozyskano wniosek", data: results[0] };
   } catch (error) {
     console.error("Wystąpił błąd podczas pozyskiwania wniosków:", error);
     throw error;
@@ -290,4 +303,5 @@ module.exports = {
   fillECP,
   deleteECP,
   getAcceptedRequests,
+  getRequestByID,
 };
