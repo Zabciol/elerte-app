@@ -1,7 +1,9 @@
-const { queryDatabase, queryDatabasePromise } = require("../db");
+const { queryDatabase, queryDatabasePromise, getSecretKey } = require("../db");
 const nodemailer = require("nodemailer");
 const employeeModel = require("./employeesModel");
 const reasonsModel = require("./reasonsModel");
+const jwt = require("jsonwebtoken");
+import Variables from "../../src/components/common/CommonFunctions";
 
 //Konfiguracja wysyłki maila
 const transporter = nodemailer.createTransport({
@@ -17,7 +19,7 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-const sentMail = async (request) => {
+const sentMail = async (request, token) => {
   try {
     const sender = await employeeModel.getEmployeeCasualInf(request.senderID);
     const reciver = await employeeModel.getEmployeeCasualInf(request.reciverID);
@@ -29,6 +31,10 @@ const sentMail = async (request) => {
     console.log(reciver);
     console.log("Powdod");
     console.log(reason);
+
+    const API_URL = `http://localhost:${Variables.port}/requests`;
+    const acceptLink = `${API_URL}/accept?token=${token}`;
+    const declineLink = `${API_URL}/decline?token=${token}`;
 
     const requestMessage =
       request.message !== "" ? " </br> Wiadomość: " + request.message : "";
@@ -46,8 +52,12 @@ const sentMail = async (request) => {
       "<br/>Powód: " +
       reason.Powod +
       requestMessage +
-      "<br/><br/><br/><br/><a href='linkDoAkceptacji' style='background-color: #007bff; color: white; padding: 10px 20px; text-align: center; text-decoration: none; display: inline-block; border-radius: 5px;'>Akceptuj</a>" +
-      " <a href='linkDoOdrzucenia' style='background-color: #dc3545; color: white; padding: 10px 20px; text-align: center; text-decoration: none; display: inline-block; border-radius: 5px;'>Odrzuć</a><br/></p>";
+      "<br/><br/><br/><br/><a href=" +
+      acceptLink +
+      " style='background-color: #007bff; color: white; padding: 10px 20px; text-align: center; text-decoration: none; display: inline-block; border-radius: 5px;'>Akceptuj</a>" +
+      " <a href=" +
+      declineLink +
+      " style='background-color: #dc3545; color: white; padding: 10px 20px; text-align: center; text-decoration: none; display: inline-block; border-radius: 5px;'>Odrzuć</a><br/></p>";
 
     console.log("Wiadomość");
     console.log(message);
@@ -69,9 +79,10 @@ const sentMail = async (request) => {
     throw error;
   }
 };
-
 const sentRequest = async (request) => {
   try {
+    console.log(request);
+
     const insertData = [
       request.senderID,
       request.reciverID,
@@ -81,13 +92,23 @@ const sentRequest = async (request) => {
       request.dataDo,
       "Oczekujący",
     ];
-    const query =
+    const insertQuery =
       "INSERT INTO Wnioski (Nadawca_ID,Odbiorca_ID,Wiadomosc,Powod_ID,Data_Od ,Data_Do,`Status`) VALUES (?)";
+    const selectQuery = "SELECT LAST_INSERT_ID() as lastId";
 
-    await queryDatabasePromise(query, [insertData]);
-    console.log("Wniosek dodany pomyślnie!");
-    await sentMail(request);
-    return { success: true, message: "Wysłano wniosek" };
+    await queryDatabasePromise(insertQuery, [insertData]);
+    const result = await queryDatabasePromise(selectQuery);
+    const requestId = result[0].lastId;
+
+    const token = jwt.sign({ id: requestId }, getSecretKey(), {
+      expiresIn: "7d",
+    });
+    console.log(token);
+
+    console.log("Wniosek dodany pomyślnie! ID: ", requestId);
+    await sentMail(request, token); // Przekazanie tokenu do funkcji wysyłającej email
+
+    return { success: true, message: "Wysłano wniosek", requestId: requestId };
   } catch (error) {
     console.error("Wystąpił błąd podczas wysyłania wniosku", error);
     return { success: false, message: error.message };
