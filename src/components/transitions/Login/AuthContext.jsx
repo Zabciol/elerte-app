@@ -7,6 +7,7 @@ import React, {
 } from "react";
 import { loginApi, verifyTokenApi } from "../../../api/authApi"; // załóżmy, że ścieżka jest poprawna
 import ConfirmPupUp from "../../common/ConfirmPopUp";
+import PopUp from "../../common/PopUp";
 import { handleError } from "../../common/CommonFunctions";
 
 // Tworzenie kontekstu auth
@@ -19,6 +20,8 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [isLogged, setIsLogged] = useState(false);
   const [showPopUpLogout, setShowPopUpLogout] = useState(false);
+  const [showPopUp, setShowPopUp] = useState();
+  const [reloadPopUp, setReloadPopUp] = useState(false);
   const [message, setMessage] = useState();
 
   // Funkcja do aktualizacji tokena
@@ -81,19 +84,29 @@ export const AuthProvider = ({ children }) => {
         isLogged,
         login,
         logout,
+        setShowPopUp,
+        setReloadPopUp,
         setShowPopUpLogout,
         setMessage,
       }}>
       {children}
       <ConfirmPupUp
         show={showPopUpLogout}
+        hide={() => setShowPopUpLogout(false)}
         decline={() => window.location.reload()}
         confirm={logout}
         declineText='Odświez stronę'
         confirmText='Wyloguj'
-        title='Uwaga'
+        title='Uwaga'>
+        {message}
+      </ConfirmPupUp>
+      <PopUp
+        show={showPopUp}
+        setShow={setShowPopUp}
         message={message}
-      />
+        reload={reloadPopUp}
+        setReloadPopUp={setReloadPopUp}
+        title='Powiadomienie'></PopUp>
     </AuthContext.Provider>
   );
 };

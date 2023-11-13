@@ -9,6 +9,7 @@ function PopUp(props) {
     props.setShow(false);
     if (props.reload) {
       window.location.reload();
+      props.setReloadPopUp(false);
     }
   };
 

@@ -16,10 +16,11 @@ import PopUp from "../../../common/PopUp";
 import { useAuth } from "../../Login/AuthContext";
 
 const FormPopUp = ({ show, setShow, employee }) => {
-  const { setShowPopUpLogout, setMessage } = useAuth();
-  const [showPopUp, setShowPopUp] = useState(false);
-  const [messageHere, setMessageHere] = useState("");
-  const [onReload, setOnReload] = useState(false);
+  const { setShowPopUp, setReloadPopUp, setShowPopUpLogout, setMessage } =
+    useAuth();
+  //const [showPopUp, setShowPopUp] = useState(false);
+  //const [messageHere, setMessage] = useState("");
+  //const [onReload, setReloadPopUp] = useState(false);
 
   const nameRef = useRef();
   const lastNameRef = useRef();
@@ -50,25 +51,22 @@ const FormPopUp = ({ show, setShow, employee }) => {
       workingTimeID: workingTime,
       subordinates: subordinates,
     };
-    console.log("Aktualne dane:");
-    console.log(employeeData);
     try {
       const response = await updateEmployeeApi(employeeData);
       if (shouldShowPopUp) {
         setShow(false);
-        setOnReload(true);
-        setMessageHere(response.message);
+        setReloadPopUp(true);
+        setMessage(response.message);
         setShowPopUp(true);
       }
     } catch (error) {
       console.error("Wystąpił błąd:", error);
-      setMessageHere("Wystąpił błąd podczas komunikacji z serwerem.");
       setMessage(error.message);
       setShowPopUpLogout(true);
       if (shouldShowPopUp) {
         setShow(false);
         setShowPopUp(true);
-        setOnReload(false);
+        setReloadPopUp(false);
       }
     } finally {
       getDirectSubordinates();
@@ -79,13 +77,13 @@ const FormPopUp = ({ show, setShow, employee }) => {
   const deleteEmployee = async () => {
     try {
       const response = await deleteEmployeeApi(employee.ID);
-      setMessageHere(response.message);
+      setMessage(response.message);
       setShow(false);
       setShowPopUp(true);
-      setOnReload(false);
+      setReloadPopUp(false);
     } catch (error) {
       console.error("Wystąpił błąd:", error);
-      setMessageHere("Wystąpił błąd podczas komunikacji z serwerem.");
+      setMessage("Wystąpił błąd podczas komunikacji z serwerem.");
       setMessage(error.message);
       setShowPopUpLogout(true);
       setShow(false);
@@ -187,13 +185,6 @@ const FormPopUp = ({ show, setShow, employee }) => {
           </Button>
         </Modal.Footer>
       </Modal>
-      <PopUp
-        show={showPopUp}
-        setShow={setShowPopUp}
-        message={messageHere}
-        title='Powiadomienie'
-        reload={true}
-      />
     </>
   );
 };

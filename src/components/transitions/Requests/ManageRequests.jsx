@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import {
   getRequestsApi,
-  accpetRequestsApi,
+  acceptRequestsApi,
   declineRequestsApi,
 } from "../../../api/requestsApi";
 import RequestsList from "./RequestsList";
@@ -16,26 +16,6 @@ const ManageRequests = ({ user }) => {
   const [sender, setSender] = useState({});
   const [reason, setReason] = useState({ Nazwa: "" });
   const [isMobileView, setIsMobileView] = useState(window.innerWidth < 767);
-
-  const accept = async () => {
-    try {
-      const data = await accpetRequestsApi(request.ID);
-      console.log(data.message);
-    } catch (error) {
-      setMessage(error.message);
-      setShowPopUpLogout(true);
-    }
-  };
-
-  const decline = async () => {
-    try {
-      const data = await declineRequestsApi(request.ID);
-      console.log(data.message);
-    } catch (error) {
-      setMessage(error.message);
-      setShowPopUpLogout(true);
-    }
-  };
 
   const getRequests = async () => {
     try {
@@ -88,7 +68,7 @@ const ManageRequests = ({ user }) => {
           buttonText={"Odrzuć"}
         />
         <LoadingButton
-          action={() => accpetRequestsApi(request)}
+          action={() => acceptRequestsApi(request)}
           buttonText={"Zaakceptuj"}
         />
       </div>

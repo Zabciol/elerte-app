@@ -1,11 +1,29 @@
 const { queryDatabase, queryDatabasePromise, getSecretKey } = require("../db");
-
+const bcrypt = require("bcrypt");
 const getUsers = async () => {
   try {
     const [users] = await db.query("SELECT * FROM users");
     return users;
   } catch (err) {
     throw err;
+  }
+};
+const verifyToken = async (req, res, next) => {
+  const token = req.headers["authorization"]?.split(" ")[1]?.replace(/"/g, "");
+  if (!token) {
+    return res.status(401).send("No token provided");
+  }
+  try {
+    const decoded = jwt.verify(token, getSecretKey());
+    const users = await findUserByEmail(decoded.mail);
+    if (users.length === 0) {
+      return res.status(404).send("User not found");
+    }
+    const userData = users[0];
+    res.json({ isValid: true, user: userData });
+  } catch (error) {
+    console.error("Błąd weryfikacji tokena:", error);
+    res.status(401).json({ isValid: false, error: error.message });
   }
 };
 
@@ -38,22 +56,20 @@ const findUserPasswordByID = async (id) => {
   }
 };
 
-const verifyToken = async (req, res, next) => {
-  const token = req.headers["authorization"]?.split(" ")[1]?.replace(/"/g, "");
-  if (!token) {
-    return res.status(401).send("No token provided");
-  }
+const changePassword = async (userID, newPassword) => {
   try {
-    const decoded = jwt.verify(token, getSecretKey());
-    const users = await findUserByEmail(decoded.mail);
-    if (users.length === 0) {
-      return res.status(404).send("User not found");
-    }
-    const userData = users[0];
-    res.json({ isValid: true, user: userData });
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    const query = "UPDATE Login SET Haslo = ? WHERE Pracownik_ID = ?";
+    const results = queryDatabasePromise(query, [hashedPassword, userID]);
+    console.log("Updated password");
+    return {
+      success: true,
+      message: "Hasło zmieniono pomyślnie!",
+      data: results,
+    };
   } catch (error) {
-    console.error("Błąd weryfikacji tokena:", error);
-    res.status(401).json({ isValid: false, error: error.message });
+    console.error("Wystąpił błąd podczas aktualizacji hasła:", error);
+    throw error;
   }
 };
 
@@ -63,5 +79,6 @@ module.exports = {
   getUsers,
   findUserByEmail,
   findUserPasswordByID,
+  changePassword,
   verifyToken,
 };

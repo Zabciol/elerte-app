@@ -163,7 +163,7 @@ const addNewEmployee = async (data) => {
       for (let subID of data.subordinates) {
         await addToHierarchy(pracownikID, subID);
       }
-      console.log("dodano podwladnych uzytkownika");
+      console.log("Dodano podwladnych uzytkownika");
     }
     if (
       data.isManager &&
@@ -172,7 +172,7 @@ const addNewEmployee = async (data) => {
       await addToHierarchy(pracownikID, null);
     }
 
-    return { success: true, message: "Wszystko dodane poprawnie" };
+    return { success: true, message: "Pracownik został dodany poprawnie" };
   } catch (error) {
     console.error("Wystąpił błąd:", error);
     return {

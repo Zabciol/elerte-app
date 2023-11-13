@@ -38,8 +38,6 @@ const NewRequest = ({ user }) => {
   };
 
   const sentRequest = async () => {
-    console.log(reasons);
-    console.log(reason);
     const request = {
       senderID: user.ID,
       reciverID: mySupervisor.ID,
