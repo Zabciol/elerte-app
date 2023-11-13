@@ -61,7 +61,8 @@ const ManageRequests = ({ user }) => {
       startDate={request.Data_Od}
       endDate={request.Data_Do}
       message={request.Wiadomosc}
-      setRequest={setRequest}>
+      setRequest={setRequest}
+      request={request}>
       <div className='request-manage_btns'>
         <LoadingButton
           action={() => declineRequestsApi(request)}

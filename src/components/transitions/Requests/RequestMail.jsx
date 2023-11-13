@@ -22,6 +22,7 @@ const RequestMail = (props) => {
     startDate,
     endDate,
     children,
+    request,
   } = props;
 
   const changeReason = (e) => {
@@ -41,7 +42,12 @@ const RequestMail = (props) => {
     setStartDate(e.target.value);
   };
 
+  const handleChangeEndDate = (e) => {
+    setEndDate(e.target.value);
+  };
+
   useEffect(() => {
+    console.log(request);
     if (readOnly === false) {
       const nextWorkDay = getNextWorkDay();
       const dayAfter = new Date(nextWorkDay);
@@ -65,7 +71,7 @@ const RequestMail = (props) => {
           <InputGroup className='mb-3'>
             <InputGroup.Text id='basic-addon1'>Od:</InputGroup.Text>
             <Form.Control
-              defaultValue={sender.Mail}
+              value={sender.Mail}
               aria-label='Username'
               aria-describedby='basic-addon1'
               readOnly={true}
@@ -75,7 +81,7 @@ const RequestMail = (props) => {
             <InputGroup.Text id='basic-addon1'>Do:</InputGroup.Text>
             <Form.Control
               aria-label='Text input with dropdown button'
-              defaultValue={reciver.Mail}
+              value={reciver.Mail}
               readOnly={true}
             />
           </InputGroup>
@@ -87,7 +93,7 @@ const RequestMail = (props) => {
               <Form.Control
                 as='textarea'
                 rows={3}
-                defaultValue={message}
+                value={message}
                 onChange={(e) => setMessage(e.target.value)}
                 readOnly={readOnly}
               />
@@ -99,7 +105,7 @@ const RequestMail = (props) => {
               <Form.Control
                 aria-label='Text input with dropdown button'
                 type='date'
-                defaultValue={startDate}
+                value={startDate}
                 onChange={handleStartDateChange}
                 readOnly={readOnly}
               />
@@ -109,7 +115,8 @@ const RequestMail = (props) => {
               <Form.Control
                 aria-label='Text input with dropdown button'
                 type='date'
-                defaultValue={endDate}
+                value={endDate}
+                onChange={handleChangeEndDate}
                 readOnly={readOnly}
               />
             </InputGroup>
@@ -117,7 +124,7 @@ const RequestMail = (props) => {
           <div className='request-bottom-form'>
             <Form.Select
               aria-label='Default select example'
-              defaultValue={reason.Nazwa}
+              value={reason.Nazwa}
               onChange={changeReason}
               className='request-select'
               readOnly={readOnly}>
