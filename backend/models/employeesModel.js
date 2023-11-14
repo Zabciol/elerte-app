@@ -148,7 +148,7 @@ const addLoginAndPassword = async (idPracownika, login) => {
 
 const addNewEmployee = async (data) => {
   try {
-    const transaction = await connection.beginTransaction();
+    await queryDatabase("START TRANSACTION");
     const pracownikID = await addEmployee({
       Imie: data.name,
       Nazwisko: data.lastname,
@@ -175,11 +175,11 @@ const addNewEmployee = async (data) => {
     ) {
       await addToHierarchy(pracownikID, null);
     }
-    transaction.commit();
+    await queryDatabase("COMMIT");
     return { success: true, message: "Pracownik został dodany poprawnie" };
   } catch (error) {
     console.error("Wystąpił błąd:", error);
-    await transaction.rollback();
+    await queryDatabase("ROLLBACK");
     return {
       success: false,
       message: "Wystąpił błąd podczas dodawania pracownika i zależności.",
