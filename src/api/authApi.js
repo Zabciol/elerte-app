@@ -2,7 +2,7 @@ import axios from "axios";
 import Variables from "../components/common/CommonFunctions";
 import { handleError } from "../components/common/CommonFunctions";
 
-const API_URL = `http://localhost:${Variables.port}/users`;
+const API_URL = `${Variables.host}:${Variables.port}/users`;
 
 export const loginApi = async (email, password) => {
   try {

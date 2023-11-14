@@ -18,6 +18,25 @@ app.use(express.json());
 //app.use("/employees", employeesRoutes);
 app.use("", router);
 
-app.listen(config.port, () => {
-  console.log(`Server is running on http://localhost:${config.port}`);
+if (config.useHttps) {
+  const httpsOptions = {
+    key: fs.readFileSync("./path/to/key"),
+    cert: fs.readFileSync("./path/to/cert"),
+  };
+  httpsServer = https.createServer(httpsOptions, app);
+  console.log(
+    `Server started on https://lokalizacje.elerte.local:${config.port}`
+  );
+} else {
+  httpsServer = app;
+  console.log(`Server started on http://localhost:${config.port}`);
+}
+
+httpsServer.listen(config.port, () => {
+  console.log(
+    `Server running on ${config.useHttps ? "https" : "http"}://localhost:${
+      config.port
+    }`
+  );
+  //connectToDatabase();
 });

@@ -2,7 +2,7 @@ import axios from "axios";
 import Variables from "../components/common/CommonFunctions";
 import { handleError } from "../components/common/CommonFunctions";
 
-const API_URL = `http://localhost:${Variables.port}/position`;
+const API_URL = `${Variables.host}:${Variables.port}/position`;
 
 export const positionApi = async (id) => {
   try {

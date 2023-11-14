@@ -1,17 +1,15 @@
-const environment = process.argv[2] || process.env.NODE_ENV || "local";
+const environment = process.argv[2] || process.env.NODE_ENV || "elerte";
 
 let config;
 try {
-  if (environment == "") {
-    config = require(`./config.elerte.js`);
-  } else {
-    config = require(`./config.janek.js`);
-  }
+  config = require(`./config.${environment}.js`);
+  console.log(config);
 } catch (error) {
   console.error(
     `Could not load config for environment '${environment}', using local config as fallback.`
   );
-  config = require("./config.local.js");
+  console.error(error);
+  //config = require("./config.janek.js");
 }
 
 module.exports = config;
