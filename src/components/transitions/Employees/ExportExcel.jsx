@@ -12,6 +12,7 @@ const ExportExcel = (props) => {
     try {
       await exportECPAPI(props.date, employeesID);
     } catch (error) {
+      console.error(error);
       setMessage(error.message);
       setShowPopUpLogout(true);
     }
@@ -22,6 +23,7 @@ const ExportExcel = (props) => {
       const data = await allEmployeesAPI();
       setEmployeesID(data.map((employee) => employee.ID));
     } catch (error) {
+      console.error(error);
       setMessage(error.message);
       setShowPopUpLogout(true);
     }

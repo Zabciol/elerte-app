@@ -77,6 +77,7 @@ const EmployeesAbsence = ({ date, subordinates, user, dzial }) => {
       console.log(data.message);
       return data.data;
     } catch (error) {
+      console.error(error);
       setShowPopUpLogout(true);
       setMessage(error.message);
     }
@@ -88,6 +89,7 @@ const EmployeesAbsence = ({ date, subordinates, user, dzial }) => {
       console.log(data.message);
       return data.data;
     } catch (error) {
+      console.error(error);
       setShowPopUpLogout(true);
       setMessage(error.message);
     }

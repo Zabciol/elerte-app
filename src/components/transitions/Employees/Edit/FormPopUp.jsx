@@ -96,6 +96,7 @@ const FormPopUp = ({ show, setShow, employee }) => {
       const subordinatesID = data.data.map((employee) => employee.ID);
       setSubordinates(subordinatesID);
     } catch (error) {
+      console.error(error);
       setMessage(error.message);
       setShowPopUpLogout(true);
     }

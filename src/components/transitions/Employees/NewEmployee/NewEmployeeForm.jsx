@@ -118,6 +118,7 @@ const NewEmployeeForm = (props) => {
 
       setWorkingTime(transformedData);
     } catch (error) {
+      console.error(error);
       setMessage(error.message);
       setShowPopUpLogout(true);
     }
