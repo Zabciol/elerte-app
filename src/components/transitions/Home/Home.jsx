@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Nav from "react-bootstrap/Nav";
 import Carousel from "react-bootstrap/Carousel";
+import Presence from "./Presence";
 
 const Home = (props) => {
   const menuItems = <></>;
@@ -19,7 +20,6 @@ const Home = (props) => {
   }, []);
   return (
     <>
-      <h3>Witaj {props.user.Imie}</h3>
       <Carousel>
         <Carousel.Item>
           <img
@@ -28,8 +28,7 @@ const Home = (props) => {
             alt='First slide'
           />
           <Carousel.Caption>
-            <h3>First slide label</h3>
-            <p>Nulla vitae elit libero, a pharetra augue mollis interdum.</p>
+            <Presence />
           </Carousel.Caption>
         </Carousel.Item>
         <Carousel.Item>

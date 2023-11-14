@@ -29,12 +29,15 @@
   max-height: 600px;
   object-fit: cover;
   object-position: top;
+  opacity: 40%;
 }
 .carousel-caption {
-  left: 0 !important;
+  left: 50% !important;
   right: 0 !important;
   bottom: 0 !important;
   height: 110%;
   width: 110%;
   backdrop-filter: blur(5px);
+  top: 50%;
+  transform: translate(-50%, -50%);
 }
