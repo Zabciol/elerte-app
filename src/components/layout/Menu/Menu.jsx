@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import Container from "react-bootstrap/Container";
 import Navbar from "react-bootstrap/Navbar";
 import logo from "../../../assets/logo-elerte.png";
@@ -23,7 +24,7 @@ const Menu = ({ logout, user, setPage, children }) => {
   return (
     <Navbar expand='xl' className='bg-body-tertiary mb-3 menu '>
       <Container fluid>
-        <Navbar.Brand href='#'>
+        <Navbar.Brand as={Link} to={`/home`}>
           <img src={logo} className='logo'></img>
         </Navbar.Brand>
         <Navbar.Toggle

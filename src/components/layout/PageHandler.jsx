@@ -39,7 +39,7 @@ const PageHandler = (props) => {
         <div className='interface'>
           <Routes>
             <Route
-              path='/'
+              path='/home'
               element={<Home user={props.user} setMenuItems={setMenuItems} />}
             />
             <Route
