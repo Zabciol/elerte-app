@@ -4,7 +4,7 @@ module.exports = {
     host: "192.168.1.190",
     user: "dev",
     password: "Elerte123!",
-    database: "elerte",
+    database: "elerte_app",
     timezone: "Europe/Warsaw",
   },
   httpsOptions: {
@@ -12,6 +12,6 @@ module.exports = {
     ca: fs.readFileSync("./ssl/RootCA.crt"),
     key: fs.readFileSync("./ssl/elerteLocal.key"),
   },
-  hostname: "lokalizacje.elerte.local",
+  hostname: "ewidencja.elerte.local",
   port: 8000,
 };
