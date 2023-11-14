@@ -1,4 +1,4 @@
-const { queryDatabase, queryDatabasePromise } = require("../db");
+const { connection, queryDatabase, queryDatabasePromise } = require("../db");
 const bcrypt = require("bcrypt");
 
 const getSubordinates = (id) => {
@@ -127,21 +127,28 @@ const removeFromHierarchy = async (supervisorID, suburdinateID) => {
   });
 };
 
-const addPassword = async (idPracownika) => {
+const addLoginAndPassword = async (idPracownika, login) => {
   try {
     const plainPassword = "a";
     const hashedPassword = await bcrypt.hash(plainPassword, 10);
-    const query = "INSERT INTO Login (Haslo, Pracownik_ID) VALUES (?,?)";
-    queryDatabase(query, [hashedPassword, idPracownika], (error, results) => {
-      if (error) throw error;
-    });
+    const query =
+      "INSERT INTO Login (Login, Haslo, Pracownik_ID) VALUES (?,?,?)";
+    queryDatabase(
+      query,
+      [login, hashedPassword, idPracownika],
+      (error, results) => {
+        if (error) throw error;
+      }
+    );
   } catch (error) {
-    console.error("Wystąpił błąd podczas zapisywania hasła:", error);
+    console.error("Wystąpił błąd podczas zapisywania hasła i loginu:", error);
+    throw new Error(error);
   }
 };
 
 const addNewEmployee = async (data) => {
   try {
+    const transaction = await connection.beginTransaction();
     const pracownikID = await addEmployee({
       Imie: data.name,
       Nazwisko: data.lastname,
@@ -150,8 +157,8 @@ const addNewEmployee = async (data) => {
       Stanowisko_ID: data.position,
       WymiarPracy_ID: data.workingTime,
     });
-
-    addPassword(pracownikID);
+    const login = data.name + "." + data.lastname;
+    addLoginAndPassword(pracownikID, login.toLowerCase());
 
     if (data.supervisor) {
       await addToHierarchy(data.supervisor, pracownikID);
@@ -168,10 +175,11 @@ const addNewEmployee = async (data) => {
     ) {
       await addToHierarchy(pracownikID, null);
     }
-
+    transaction.commit();
     return { success: true, message: "Pracownik został dodany poprawnie" };
   } catch (error) {
     console.error("Wystąpił błąd:", error);
+    await transaction.rollback();
     return {
       success: false,
       message: "Wystąpił błąd podczas dodawania pracownika i zależności.",

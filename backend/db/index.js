@@ -50,4 +50,5 @@ module.exports = {
   queryDatabasePromise,
   getSecretKey,
   verifyToken,
+  connection,
 };

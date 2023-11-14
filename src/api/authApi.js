@@ -4,9 +4,9 @@ import { handleError } from "../components/common/CommonFunctions";
 
 const API_URL = `${Variables.host}:${Variables.port}/users`;
 
-export const loginApi = async (email, password) => {
+export const loginApi = async (login, password) => {
   try {
-    const response = await axios.post(`${API_URL}/login`, { email, password });
+    const response = await axios.post(`${API_URL}/login`, { login, password });
     return response.data;
   } catch (error) {
     handleError(error);

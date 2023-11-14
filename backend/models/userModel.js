@@ -45,6 +45,25 @@ const findUserByEmail = async (email) => {
   }
 };
 
+const findUserByLogin = async (login) => {
+  try {
+    const query = `
+      SELECT Pracownicy.ID, Imie, Nazwisko, Mail, Dzialy.Nazwa AS Dzial,
+      Stanowisko.Nazwa AS Stanowisko, WymiarPracy.Od, WymiarPracy.Do, Aktywny FROM Pracownicy
+      LEFT JOIN Stanowisko ON Pracownicy.Stanowisko_ID = Stanowisko.ID
+      LEFT JOIN Dzialy ON Stanowisko.Dzial_ID = Dzialy.ID
+      LEFT JOIN WymiarPracy ON Pracownicy.WymiarPracy_ID = WymiarPracy.ID
+      LEFT JOIN Login ON Pracownicy.ID = Login.Pracownik_ID
+      WHERE Login.Login = ?
+    `;
+    const results = await queryDatabasePromise(query, [login]);
+    return results;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
+
 const findUserPasswordByID = async (id) => {
   try {
     const query = "SELECT * FROM Login WHERE Pracownik_ID = ?";
@@ -77,6 +96,7 @@ const changePassword = async (userID, newPassword) => {
 module.exports = {
   getUsers,
   findUserByEmail,
+  findUserByLogin,
   findUserPasswordByID,
   changePassword,
   verifyToken,
