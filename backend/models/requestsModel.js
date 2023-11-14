@@ -70,7 +70,6 @@ const sentMail = async (request, token) => {
 };
 const sentRequest = async (request) => {
   try {
-
     const insertData = [
       request.senderID,
       request.reciverID,
@@ -88,9 +87,13 @@ const sentRequest = async (request) => {
     const result = await queryDatabasePromise(selectQuery);
     const requestId = result[0].lastId;
 
-    const token = jwt.sign({ id: requestId }, getSecretKey(), {
-      expiresIn: "7d",
-    });
+    const token = jwt.sign(
+      { id: requestId, data_od: request.dataOd },
+      getSecretKey(),
+      {
+        expiresIn: "7d",
+      }
+    );
 
     const insertTokenQuery = "UPDATE Wnioski SET token = ? WHERE ID = ?";
     await queryDatabasePromise(insertTokenQuery, [token, requestId]);

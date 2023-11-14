@@ -38,6 +38,11 @@ router.get("/accept", async (req, res) => {
   try {
     const tokenData = jwt.verify(req.query.token, getSecretKey());
     const ID = tokenData.id;
+    const data_od = new Date(tokenData.data_od);
+    const current_date = new Date();
+    if (current_date >= data_od) {
+      throw new Error("Skończył się czas na akceptacje wniosku");
+    }
     const result = await requestModel.acceptRequests(ID);
     const request = await requestModel.getRequestByID(ID);
 
@@ -48,15 +53,21 @@ router.get("/accept", async (req, res) => {
     res.json(result);
   } catch (error) {
     console.error(error);
-    res.status(500).send("Wystąpił błąd podczas aktualizacji danych.");
+    res
+      .status(500)
+      .send(error.message || "Wystąpił błąd podczas aktualizacji danych.");
   }
 });
 router.get("/decline", async (req, res) => {
   try {
     const tokenData = jwt.verify(req.query.token, getSecretKey());
     const ID = tokenData.id;
+    const data_od = new Date(tokenData.data_od);
+    const current_date = new Date();
+    if (current_date >= data_od) {
+      throw new Error("Skończył się czas na akceptacje wniosku");
+    }
     const request = await requestModel.getRequestByID(ID);
-
     const result = await requestModel.declineRequests(ID);
     const resultECP = await requestModel.deleteECP(request.data);
     if (!resultECP.success) {
@@ -67,7 +78,9 @@ router.get("/decline", async (req, res) => {
     res.json(result);
   } catch (error) {
     console.error(error);
-    res.status(500).send("Wystąpił błąd podczas aktualizacji danych.");
+    res
+      .status(500)
+      .send(error.message || "Wystąpił błąd podczas aktualizacji danych.");
   }
 });
 router.get("/getAccepted", verifyToken, async (req, res) => {

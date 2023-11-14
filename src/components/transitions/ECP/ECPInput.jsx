@@ -35,6 +35,15 @@ const ECPInput = (props) => {
 
   const changeValue = (setter) => (event) => setter(event.target.value);
 
+  const roundToNearest15Min = (setter) => (event) => {
+    const [hours, minutes] = event.target.value.split(":").map(Number);
+    const roundedMinutes = 15 * Math.round(minutes / 15);
+    const formattedHours = hours.toString().padStart(2, "0");
+    const formattedMinutes = roundedMinutes.toString().padStart(2, "0");
+    event.target.value = `${formattedHours}:${formattedMinutes}`;
+    setter(event.target.value);
+  };
+
   const toggleCheckBox = (event) => {
     if (event.target.checked) {
       let reason = importECP.reason;
@@ -118,21 +127,21 @@ const ECPInput = (props) => {
       <div className='ECP-input'>
         <div className='ECP-input__time'>
           <FloatingLabel
-            controlId='floatingInput'
+            controlId='floatingInputOd'
             label='Od godz:'
             className='mb-2'>
             <Form.Control
               type='time'
               value={Od}
-              onChange={changeValue(setOd)}
+              onChange={roundToNearest15Min(setOd)}
               disabled={checked}
             />
           </FloatingLabel>
-          <FloatingLabel controlId='floatingPassword' label='Do godz:'>
+          <FloatingLabel controlId='floatingInputDo' label='Do godz:'>
             <Form.Control
               type='time'
               value={Do}
-              onChange={changeValue(setDo)}
+              onChange={roundToNearest15Min(setDo)}
               disabled={checked}
             />
           </FloatingLabel>
