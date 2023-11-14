@@ -24,3 +24,17 @@
   overflow-y: scroll;
   max-height: 500px;
 }
+
+.carousel-item > img {
+  max-height: 600px;
+  object-fit: cover;
+  object-position: top;
+}
+.carousel-caption {
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  height: 110%;
+  width: 110%;
+  backdrop-filter: blur(5px);
+}
