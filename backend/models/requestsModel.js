@@ -53,7 +53,7 @@ const sentMail = async (request, token) => {
 
     const mailOptions = {
       from: "noreply@elerte.pl", // adres nadawcy
-      to: "jan.zaborowicz@elerte.pl", // lista odbiorców
+      to: reciver.Mail, // lista odbiorców
       subject: "Urlop", // Temat wiadomości
       text: message, // treść wiadomości w formie tekstowej
       html: message, // treść wiadomości w formie HTML
