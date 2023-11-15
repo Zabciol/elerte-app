@@ -27,7 +27,7 @@ const Presence = ({ user, date }) => {
   return (
     <div className='p-5 pt-0 text-white'>
       <h3>Obecność</h3>
-      <div className='d-flex justify-content-between align-items-top'>
+      <div className='d-flex flex-wrap justify-content-between align-items-top w-100'>
         <div className='w-100 p-5 pt-2'>
           {" "}
           <label>
