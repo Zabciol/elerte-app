@@ -23,11 +23,12 @@ const Presence = ({ user, date }) => {
   }, []);
 
   return (
-    <div className='p-5 text-white'>
+    <div className='p-5 pt-0 text-white'>
       <h3>Obecność</h3>
       <div className='d-flex justify-content-between align-items-center '>
-        <div className='w-100'>
+        <div className='w-100 p-5'>
           {" "}
+          <label>Przepracowany czas w tym miesiącu</label>
           <ProgressBar
             now={percentOfWorkedHours}
             label={`${percentOfWorkedHours}%`}
