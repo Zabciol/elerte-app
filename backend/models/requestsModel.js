@@ -25,7 +25,7 @@ const sentMail = async (request, token) => {
     const reciver = await employeeModel.getEmployeeCasualInf(request.reciverID);
     const reason = await reasonsModel.getReasonByID(request.reasonID);
 
-    const API_URL = `${config.api}/requests`;
+    const API_URL = `${config.protocol}://${config.dbConnectionStr.host}:${config.port}/requests`;
     console.log("api");
     console.log(API_URL);
     const acceptLink = `${API_URL}/accept?token=${token}`;

@@ -16,5 +16,6 @@ module.exports = {
   },
   hostname: "ewidencja.elerte.local",
   port: 7999,
+  protocol: "https",
   api: `https://192.168.1.190:7999`,
 };
