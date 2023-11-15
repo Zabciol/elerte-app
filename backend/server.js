@@ -1,10 +1,7 @@
 const express = require("express");
-const userRoutes = require("./routes/userRoutes");
-const employeesRoutes = require("./routes/employeesRoutes");
 const router = require("./routes/index");
 const cors = require("cors");
 const app = express();
-const PORT = process.env.PORT || 5001;
 const config = require("./config");
 
 if (config.useHttps) {
@@ -23,17 +20,9 @@ if (config.useHttps) {
   );
 }
 app.use(express.json());
-//app.use("/users", userRoutes);
-//app.use("/employees", employeesRoutes);
 app.use("", router);
 
 if (config.useHttps) {
-  /*
-  const httpsOptions = {
-    key: fs.readFileSync("./path/to/key"),
-    cert: fs.readFileSync("./path/to/cert"),
-  };
-  */
   httpsServer = https.createServer(config.httpsOptions, app);
   console.log(
     `Server started on https://lokalizacje.elerte.local:${config.port}`
