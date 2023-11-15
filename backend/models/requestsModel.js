@@ -54,6 +54,7 @@ const sentMail = async (request, token) => {
     const mailOptions = {
       from: "noreply@elerte.pl", // adres nadawcy
       to: reciver.Mail, // lista odbiorców
+      //dev to: "jan.zaborowicz@elerte.pl",
       subject: "Urlop", // Temat wiadomości
       text: message, // treść wiadomości w formie tekstowej
       html: message, // treść wiadomości w formie HTML
@@ -70,6 +71,7 @@ const sentMail = async (request, token) => {
 };
 const sentRequest = async (request) => {
   try {
+    await queryDatabase("START TRANSACTION");
     const insertData = [
       request.senderID,
       request.reciverID,
@@ -98,10 +100,11 @@ const sentRequest = async (request) => {
     const insertTokenQuery = "UPDATE Wnioski SET token = ? WHERE ID = ?";
     await queryDatabasePromise(insertTokenQuery, [token, requestId]);
     await sentMail(request, token);
-
+    await queryDatabase("COMMIT");
     return { success: true, message: "Wysłano wniosek", requestId: requestId };
   } catch (error) {
     console.error("Wystąpił błąd podczas wysyłania wniosku", error);
+    await queryDatabase("ROLLBACK");
     return { success: false, message: error.message };
   }
 };
