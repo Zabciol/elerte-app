@@ -35,8 +35,8 @@
   left: 50% !important;
   right: 0 !important;
   bottom: 0 !important;
-  height: 110%;
-  width: 110%;
+  height: 100%;
+  width: 100%;
   backdrop-filter: blur(5px);
   top: 50%;
   transform: translate(-50%, -50%);
