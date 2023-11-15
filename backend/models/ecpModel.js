@@ -15,7 +15,7 @@ const findExistingRecords = async (records, date) => {
   return await getRecordsByDateAndEmployeeId(date, employeeIds);
 };
 
-const updateRecordInDB = async (record, editDate, editUser) => {
+const updateRecordInDB = async (record, date, editDate, editUser) => {
   return await queryDatabasePromise(
     "UPDATE ECP SET Od_godz = ?, Do_godz = ?, IloscGodzin = ?, Powod_ID = ?, DataZapisu = ?, ID_Edytora = ? WHERE Data = ? AND Pracownik_ID = ?",
     [
@@ -25,15 +25,15 @@ const updateRecordInDB = async (record, editDate, editUser) => {
       record.reason,
       editDate,
       editUser,
-      record.date,
+      date,
       record.employeeID,
     ]
   );
 };
 
-const insertRecordsInDB = async (toInsert, editDate, editUser) => {
+const insertRecordsInDB = async (toInsert, date, editDate, editUser) => {
   const insertData = toInsert.map((record) => [
-    record.date,
+    date,
     record.Od_Godz,
     record.Do_Godz,
     record.employeeID,
@@ -68,12 +68,14 @@ const SentECPToDatabase = async (records) => {
 
     if (toUpdate.length > 0) {
       await Promise.all(
-        toUpdate.map((record) => updateRecordInDB(record, editDate, editUser))
+        toUpdate.map((record) =>
+          updateRecordInDB(record, date, editDate, editUser)
+        )
       );
     }
 
     if (toInsert.length > 0) {
-      await insertRecordsInDB(toInsert, editDate, editUser);
+      await insertRecordsInDB(toInsert, date, editDate, editUser);
     }
     return {
       updated: toUpdate.length,
