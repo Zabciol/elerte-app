@@ -9,8 +9,6 @@ import Form from "react-bootstrap/Form";
 const LoginInput = (props) => {
   const mailRef = useRef("");
   const passwordRef = useRef("");
-  const [mail, setMail] = useState("");
-  const [password, setPassword] = useState("");
   const [showToggle, setShowToggle] = useState(false);
   const [openAccordion, setOpenAccordion] = useState(false);
 
@@ -28,7 +26,7 @@ const LoginInput = (props) => {
   };
 
   const submit = () => {
-    props.submit(mail, passwordRef.current.value);
+    props.submit(mailRef.current.value, passwordRef.current.value);
   };
   const toggleAccordion = () => {
     setOpenAccordion(!openAccordion);
