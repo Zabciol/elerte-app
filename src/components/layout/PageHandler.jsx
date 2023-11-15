@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+//import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { HashRouter as Router, Route, Routes } from "react-router-dom";
 import "../../styles/Home/home.css";
 import Home from "../transitions/Home/Home.jsx";
 import ECP from "../transitions/ECP/ECP.jsx";
@@ -32,7 +33,7 @@ const PageHandler = (props) => {
   }, []);
 
   return (
-    <BrowserRouter>
+    <Router>
       <Container expand='lg'>
         <Menu user={props.user} logout={props.logout}>
           {menuItems}
@@ -86,7 +87,7 @@ const PageHandler = (props) => {
           </Routes>
         </div>
       </Container>
-    </BrowserRouter>
+    </Router>
   );
 };
 
