@@ -19,11 +19,13 @@ app.use(express.json());
 app.use("", router);
 
 if (config.useHttps) {
+  /*
   const httpsOptions = {
     key: fs.readFileSync("./path/to/key"),
     cert: fs.readFileSync("./path/to/cert"),
   };
-  httpsServer = https.createServer(httpsOptions, app);
+  */
+  httpsServer = https.createServer(config.httpsOptions, app);
   console.log(
     `Server started on https://lokalizacje.elerte.local:${config.port}`
   );
