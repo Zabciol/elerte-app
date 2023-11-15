@@ -31,6 +31,7 @@ const NewEmployeeSubordinates = (props) => {
       const data = await allEmployeesAPI();
       setEmployees(data);
     } catch (error) {
+      console.error(error);
       setMessage(error.message);
       setShowPopUpLogout(true);
     }

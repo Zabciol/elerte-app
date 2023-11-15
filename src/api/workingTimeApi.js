@@ -2,7 +2,7 @@ import axios from "axios";
 import Variables from "../components/common/CommonFunctions";
 import { handleError } from "../components/common/CommonFunctions";
 
-const API_URL = `http://localhost:${Variables.port}/workingtime`;
+const API_URL = `${Variables.host}:${Variables.port}/workingtime`;
 
 export const workingTimeApi = async () => {
   try {

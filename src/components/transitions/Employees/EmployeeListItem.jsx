@@ -16,6 +16,7 @@ const EmployeeListItem = ({ employee, date, children, showWorkedHours }) => {
           setWorkedHours(response[0].SumaGodzin);
         } else setWorkedHours(0);
       } catch (error) {
+        console.error(error);
         setMessage(error.message);
         setShowPopUpLogout(true);
       }

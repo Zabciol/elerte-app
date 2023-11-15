@@ -2,7 +2,7 @@ import axios from "axios";
 import Variables from "../components/common/CommonFunctions";
 import { handleError } from "../components/common/CommonFunctions";
 
-const API_URL = `http://localhost:${Variables.port}/ecp`;
+const API_URL = `${Variables.host}:${Variables.port}/ecp`;
 
 export const SentECPToDatabase = async (data) => {
   try {

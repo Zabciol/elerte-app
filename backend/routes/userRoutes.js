@@ -17,10 +17,11 @@ router.get("/", verifyToken, async (req, res) => {
 });
 
 router.post("/login", async (req, res) => {
-  const { email, password } = req.body;
+  const { login, password } = req.body;
 
   try {
-    const users = await userModel.findUserByEmail(email);
+    //const users = await userModel.findUserByEmail(login);
+    const users = await userModel.findUserByLogin(login);
     if (users.length === 0) {
       return res.status(404).send("Nie ma takiego uzytkownika");
     }

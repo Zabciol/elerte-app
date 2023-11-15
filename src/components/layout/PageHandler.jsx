@@ -21,6 +21,7 @@ const PageHandler = (props) => {
       const data = await subordinatesApi(props.user.ID);
       setSubordinates(data.data);
     } catch (error) {
+      console.error(error);
       setMessage(error.message);
       setShowPopUpLogout(true);
     }

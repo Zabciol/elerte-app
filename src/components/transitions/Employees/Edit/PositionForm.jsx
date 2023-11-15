@@ -45,6 +45,7 @@ const PositionForm = (props) => {
         ? setStateTab(await api())
         : setStateTab(await api(value));
     } catch (error) {
+      console.error(error);
       setMessage(error.message);
       setShowPopUpLogout(true);
     }

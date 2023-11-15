@@ -17,6 +17,7 @@ const EmployeeInf = (props) => {
         setInf(response[0]);
       } else setInf(null);
     } catch (error) {
+      console.error(error);
       setMessage(error.message);
       setShowPopUpLogout(true);
     }

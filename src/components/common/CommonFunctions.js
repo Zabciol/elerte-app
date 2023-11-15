@@ -2,6 +2,8 @@ const PORT = 8000;
 
 const Variables = {
   port: PORT,
+  //host: "https://ewidencja.elerte.local",
+  host: "http://localhost",
 };
 export default Variables;
 
