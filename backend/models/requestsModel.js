@@ -25,7 +25,8 @@ const sentMail = async (request, token) => {
     const reciver = await employeeModel.getEmployeeCasualInf(request.reciverID);
     const reason = await reasonsModel.getReasonByID(request.reasonID);
 
-    const API_URL = `${config.api}/requests`;
+    const API_URL = `${config.protocol}://${config.dbConnectionStr.host}:${config.port}/requests`;
+    //const API_URL = `${config.api}/requests`;
     const acceptLink = `${API_URL}/accept?token=${token}`;
     const declineLink = `${API_URL}/decline?token=${token}`;
 
@@ -54,9 +55,8 @@ const sentMail = async (request, token) => {
 
     const mailOptions = {
       from: "noreply@elerte.pl", // adres nadawcy
-      //to: reciver.Mail, // lista odbiorców
-      //dev
-      to: "jan.zaborowicz@elerte.pl",
+      to: reciver.Mail, // lista odbiorców
+      //dev to: "jan.zaborowicz@elerte.pl",
       subject: "Urlop", // Temat wiadomości
       text: message, // treść wiadomości w formie tekstowej
       html: message, // treść wiadomości w formie HTML
