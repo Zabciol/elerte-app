@@ -24,7 +24,7 @@ const Menu = ({ logout, user, setPage, children }) => {
   return (
     <Navbar expand='xl' className='bg-body-tertiary mb-3 menu '>
       <Container fluid>
-        <Navbar.Brand as={Link} to={`/home`}>
+        <Navbar.Brand as={Link} to={`/`}>
           <img src={logo} className='logo'></img>
         </Navbar.Brand>
         <Navbar.Toggle
