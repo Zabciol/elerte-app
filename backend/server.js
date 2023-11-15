@@ -13,6 +13,21 @@ app.use(
     credentials: true, // pozwól na przesyłanie certyfikatów
   })
 );
+if (config.useHttps) {
+  app.use(
+    cors({
+      origin: "https://ewidencja.elerte.local",
+      credentials: true,
+    })
+  );
+} else {
+  app.use(
+    cors({
+      origin: "http://localhost:3000",
+      credentials: true,
+    })
+  );
+}
 app.use(express.json());
 //app.use("/users", userRoutes);
 //app.use("/employees", employeesRoutes);
