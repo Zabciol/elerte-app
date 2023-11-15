@@ -3,7 +3,7 @@
   max-height: 800px;
 }
 .list-group-item {
-  position: static !important;
+  /* position: static !important; */
 }
 .ECP-input {
   display: flex;

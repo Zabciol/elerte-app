@@ -25,11 +25,15 @@
   max-height: 500px;
 }
 
-.carousel-item > img {
+.carousel-item {
+  position: relative;
+  min-height: 400px;
+}
+.carousel-item > .background {
   max-height: 600px;
   object-fit: cover;
   object-position: top;
-  opacity: 40%;
+  opacity: 25%;
 }
 .carousel-caption {
   left: 50% !important;
@@ -40,4 +44,12 @@
   backdrop-filter: blur(5px);
   top: 50%;
   transform: translate(-50%, -50%);
+}
+
+.background-footer {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  transform: translate(-50%, -25px) scale(1.6);
+  opacity: 85%;
 }

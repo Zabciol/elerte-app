@@ -3,6 +3,7 @@ import Form from "react-bootstrap/Form";
 import Carousel from "react-bootstrap/Carousel";
 import Presence from "./Presence";
 import { getCurrentDateYearMonth } from "../../common/CommonFunctions";
+import ElerteFooter from "../../../assets/Carousel/elerte-bottom.png";
 
 const MenuItems = ({ date, setDate }) => {
   return (
@@ -41,17 +42,18 @@ const Home = ({ user, setMenuItems }) => {
       <Carousel>
         <Carousel.Item>
           <img
-            className='d-block w-100 h-100'
+            className='d-block w-100 h-100 background'
             src={images[0]}
             alt='First slide'
           />
           <Carousel.Caption>
             <Presence user={user} date={date} />
           </Carousel.Caption>
+          <img src={ElerteFooter} className='background-footer' />
         </Carousel.Item>
         <Carousel.Item>
           <img
-            className='d-block w-100 h-100'
+            className='d-block w-100 h-100 background'
             src={images[1]}
             alt='Second slide'
           />
@@ -59,10 +61,11 @@ const Home = ({ user, setMenuItems }) => {
             <h3>Second slide label</h3>
             <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
           </Carousel.Caption>
+          <img src={ElerteFooter} className='background-footer' />
         </Carousel.Item>
         <Carousel.Item>
           <img
-            className='d-block w-100 h-100'
+            className='d-block w-100 h-100 background'
             src={images[2]}
             alt='Third slide'
           />
@@ -72,6 +75,7 @@ const Home = ({ user, setMenuItems }) => {
               Praesent commodo cursus magna, vel scelerisque nisl consectetur.
             </p>
           </Carousel.Caption>
+          <img src={ElerteFooter} className='background-footer' />
         </Carousel.Item>
       </Carousel>
     </>
