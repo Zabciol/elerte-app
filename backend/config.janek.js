@@ -9,4 +9,5 @@ module.exports = {
   },
   protocol: "http",
   port: 8000,
+  api: `http://localhost:8000`,
 };

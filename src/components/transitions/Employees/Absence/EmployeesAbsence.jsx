@@ -111,7 +111,7 @@ const EmployeesAbsence = ({ date, subordinates, user, dzial }) => {
   return (
     <EmployeesList subordinates={absence} date={date}>
       {" "}
-      <EmployeeAbsenceInf />
+      <EmployeeAbsenceInf date={date} />
     </EmployeesList>
   );
 };
