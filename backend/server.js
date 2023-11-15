@@ -14,17 +14,34 @@ app.use(
     credentials: true, // pozwól na przesyłanie certyfikatów
   })
 );
+if (config.useHttps) {
+  app.use(
+    cors({
+      origin: "https://ewidencja.elerte.local",
+      credentials: true,
+    })
+  );
+} else {
+  app.use(
+    cors({
+      origin: "http://localhost:3000",
+      credentials: true,
+    })
+  );
+}
 app.use(express.json());
 //app.use("/users", userRoutes);
 //app.use("/employees", employeesRoutes);
 app.use("", router);
 
 if (config.useHttps) {
+  /*
   const httpsOptions = {
     key: fs.readFileSync("./path/to/key"),
     cert: fs.readFileSync("./path/to/cert"),
   };
-  httpsServer = https.createServer(httpsOptions, app);
+  */
+  httpsServer = https.createServer(config.httpsOptions, app);
   console.log(
     `Server started on https://lokalizacje.elerte.local:${config.port}`
   );

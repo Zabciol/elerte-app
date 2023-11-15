@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+<<<<<<< HEAD
 import Form from "react-bootstrap/Form";
 import Carousel from "react-bootstrap/Carousel";
 import Presence from "./Presence";
@@ -28,13 +29,32 @@ const Home = ({ user, setMenuItems }) => {
   const importAllImages = (r) => {
     return r.keys().map(r);
   };
+=======
+import Nav from "react-bootstrap/Nav";
+import Carousel from "react-bootstrap/Carousel";
+import Presence from "./Presence";
+
+const Home = ({ user, setMenuItems }) => {
+  const menuItems = <></>;
+
+  const [filteredImages, setFilteredImages] = useState([]);
+
+  function importAllImages(r) {
+    return r.keys().map(r);
+  }
+>>>>>>> main
   const images = importAllImages(
     require.context("../../../assets/Carousel", false, /\.(png|jpe?g|svg)$/)
   );
 
   useEffect(() => {
+<<<<<<< HEAD
     setMenuItems(<MenuItems date={date} setDate={changeDate} />);
   }, [date]);
+=======
+    setMenuItems(menuItems);
+  }, []);
+>>>>>>> main
   return (
     <>
       <Carousel>
@@ -45,7 +65,11 @@ const Home = ({ user, setMenuItems }) => {
             alt='First slide'
           />
           <Carousel.Caption>
+<<<<<<< HEAD
             <Presence user={user} date={date} />
+=======
+            <Presence user={user} />
+>>>>>>> main
           </Carousel.Caption>
         </Carousel.Item>
         <Carousel.Item>

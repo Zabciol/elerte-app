@@ -15,5 +15,5 @@ module.exports = {
     key: fs.readFileSync("./ssl/elerteLocal.key"),
   },
   hostname: "ewidencja.elerte.local",
-  port: 8000,
+  port: 7999,
 };
