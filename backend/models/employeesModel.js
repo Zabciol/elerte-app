@@ -297,6 +297,7 @@ const getMyDirectSubordinates = async (id) => {
     });
   });
 };
+
 module.exports = {
   getSubordinates,
   getWorkedHoursByEmployee,
