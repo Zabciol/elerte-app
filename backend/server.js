@@ -7,12 +7,6 @@ const app = express();
 const PORT = process.env.PORT || 5001;
 const config = require("./config");
 
-app.use(
-  cors({
-    origin: "http://localhost:3000", // adres, z którego przychodzą zapytania
-    credentials: true, // pozwól na przesyłanie certyfikatów
-  })
-);
 if (config.useHttps) {
   app.use(
     cors({
