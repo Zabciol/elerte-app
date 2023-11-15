@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { hoursWorkedApi } from "../../../api/employeesApi";
-
+import EmployeeAbsenceInf from "../Employees/EmployeeAbsenceInf";
 import { useAuth } from "../Login/AuthContext";
 import ProgressBar from "react-bootstrap/ProgressBar";
-import EmployeesAbsence from "../Employees/Absence/EmployeesAbsence";
 
 const Presence = ({ user, date }) => {
   const { setMessage, setShowPopUpLogout } = useAuth();
@@ -39,7 +38,9 @@ const Presence = ({ user, date }) => {
             label={`${percentOfWorkedHours / 160}%`}
           />
         </div>
-        <div className='w-100 p-5 pt-2'></div>
+        <div className='w-100 p-5 pt-2'>
+          <EmployeeAbsenceInf employee={user} date={date} />
+        </div>
       </div>
     </div>
   );

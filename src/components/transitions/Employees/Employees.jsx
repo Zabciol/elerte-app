@@ -7,7 +7,7 @@ import EmployeesList from "./EmployeesList";
 import EmployeeInf from "./EmployeeInf";
 import NewEmployee from "./NewEmployee/NewEmployee";
 import ExportExcel from "./ExportExcel";
-import EmployeesAbsence from "./Absence/EmployeesAbsence";
+import EmployeeAbsenceInf from "./EmployeeAbsenceInf";
 import { getCurrentDateYearMonth } from "../../common/CommonFunctions";
 import { allEmployeesAPI } from "../../../api/employeesApi";
 import { useAuth } from "../Login/AuthContext";
@@ -103,7 +103,10 @@ const Employees = ({ user, setMenuItems, subordinates }) => {
         </EmployeesList>
       </Tab>
       <Tab eventKey='Nieobecnosci' title='Nieobecności'>
-        <EmployeesAbsence date={date} subordinates={filteredSubordinates} />
+        <EmployeesList subordinates={filteredSubordinates} date={date}>
+          {" "}
+          <EmployeeAbsenceInf date={date} />
+        </EmployeesList>
       </Tab>
       <Tab eventKey='Excel' title='Export'>
         {" "}
