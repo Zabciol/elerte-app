@@ -3,7 +3,7 @@ import Nav from "react-bootstrap/Nav";
 import Carousel from "react-bootstrap/Carousel";
 import Presence from "./Presence";
 
-const Home = (props) => {
+const Home = ({ user, setMenuItems }) => {
   const menuItems = <></>;
 
   const [filteredImages, setFilteredImages] = useState([]);
@@ -16,7 +16,7 @@ const Home = (props) => {
   );
 
   useEffect(() => {
-    props.setMenuItems(menuItems);
+    setMenuItems(menuItems);
   }, []);
   return (
     <>
@@ -28,7 +28,7 @@ const Home = (props) => {
             alt='First slide'
           />
           <Carousel.Caption>
-            <Presence />
+            <Presence user={user} />
           </Carousel.Caption>
         </Carousel.Item>
         <Carousel.Item>
