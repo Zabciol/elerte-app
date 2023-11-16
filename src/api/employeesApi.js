@@ -34,8 +34,9 @@ export const supervisorsApi = async () => {
   }
 };
 
-export const hoursWorkedApi = async (employeeId, month) => {
+export const hoursWorkedApi = async (employeeId, date) => {
   try {
+    const [year, month] = date.split("-");
     const token = sessionStorage.getItem("userToken");
     const response = await axios.get(`${API_URL}/worked-hours-by-employee`, {
       params: {

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Badge from "react-bootstrap/Badge";
 import ListGroup from "react-bootstrap/ListGroup";
+import "../../../styles/absence.css";
 import { getAbsenceAPI } from "../../../api/ecpApi";
 import { getAcceptedRequestsApi } from "../../../api/requestsApi";
 import { useAuth } from "../Login/AuthContext";
@@ -108,7 +109,7 @@ const EmployeeAbsenceInf = ({ employee, date }) => {
     <div className='d-flex absence w-100'>
       {employeeData ? (
         <>
-          <div className='w-100'>
+          <div className='w-100 m-1'>
             {employeeData && employeeData.Nieobecnosci.length ? (
               <>
                 Standardowe
@@ -133,7 +134,7 @@ const EmployeeAbsenceInf = ({ employee, date }) => {
               </>
             ) : null}
           </div>
-          <div className='w-100'>
+          <div className='w-100 m-1'>
             {employeeData && employeeData.Urlopy.length ? (
               <>
                 Zaplanowane
@@ -163,7 +164,7 @@ const EmployeeAbsenceInf = ({ employee, date }) => {
           </div>
         </>
       ) : (
-        <p>Brak danych</p>
+        <p>Brak danych o nieobecnościach</p>
       )}
     </div>
   );

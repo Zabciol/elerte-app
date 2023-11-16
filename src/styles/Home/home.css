@@ -25,12 +25,17 @@
   max-height: 500px;
 }
 
+::-webkit-scrollbar {
+  width: 0.1rem; /* Szerokość paska przewijania w Webkit (Chrome, Safari) */
+}
+
 .carousel-item {
   position: relative;
-  min-height: 400px;
+  min-height: 500px;
 }
 .carousel-item > .background {
   max-height: 600px;
+  min-height: 500px;
   object-fit: cover;
   object-position: top;
   opacity: 25%;
@@ -52,4 +57,23 @@
   bottom: 0;
   transform: translate(-50%, -25px) scale(1.6);
   opacity: 85%;
+}
+.home-presence_data {
+  padding: 30px;
+  margin: 10px;
+  width: 100%;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  text-align: center;
+}
+
+.home-presence_data > div > p {
+  text-align: center;
+  width: 100%;
+}
+@media (max-width: 575px) {
+  .home-presence_data {
+    padding: 0;
+    margin: 20px 0 0 0;
+  }
 }

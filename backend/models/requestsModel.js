@@ -26,7 +26,7 @@ const sentMail = async (request, token) => {
     const reason = await reasonsModel.getReasonByID(request.reasonID);
 
     const API_URL = `${config.protocol}://${config.dbConnectionStr.host}:${config.port}/requests`;
-    console.log("api");
+    console.log("api");--
     console.log(API_URL);
     const acceptLink = `${API_URL}/accept?token=${token}`;
     const declineLink = `${API_URL}/decline?token=${token}`;
