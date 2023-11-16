@@ -49,13 +49,18 @@
   backdrop-filter: blur(5px);
   top: 50%;
   transform: translate(-50%, -50%);
+  overflow-y: scroll;
+}
+.carousel-indicators {
+  bottom: -25px !important;
 }
 
 .background-footer {
   position: absolute;
   left: 50%;
-  bottom: 0;
-  transform: translate(-50%, -25px) scale(1.6);
+  bottom: -10px;
+  transform: translate(-50%, 0px);
+  height: 120px;
   opacity: 85%;
 }
 .home-presence_data {
@@ -75,5 +80,15 @@
   .home-presence_data {
     padding: 0;
     margin: 20px 0 0 0;
+  }
+  .background-footer {
+    transform: translate(-50%, 0);
+    height: 90px !important;
+  }
+}
+@media (max-width: 767px) {
+  .background-footer {
+    transform: translate(-50%, 0px);
+    height: 110px;
   }
 }

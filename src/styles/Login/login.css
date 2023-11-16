@@ -27,7 +27,7 @@ img {
   .LoginPanel {
     width: 300px;
   }
-  img {
+  .login-img {
     height: 80px;
   }
 }

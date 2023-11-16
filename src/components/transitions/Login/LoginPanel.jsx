@@ -20,7 +20,7 @@ const LoginPanel = (props) => {
   };
   return (
     <div className='LoginPanel' data-bs-theme='light'>
-      <img src={logo} alt='logo' />
+      <img src={logo} alt='logo' className='login-img' />
       <div className='LoginPanel-form'>
         <LoginInput submit={submit} />
         <p style={{ color: `black` }}>{message}</p>
