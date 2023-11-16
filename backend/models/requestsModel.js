@@ -75,7 +75,14 @@ const sentMail = async (request, token) => {
 const sentRequest = async (request) => {
   try {
     await queryDatabase("START TRANSACTION");
-    if (!(await checkIfIsEntitledToLeave(request.senderID))) {
+    if (
+      !(await checkIfIsEntitledToLeave(
+        request.senderID,
+        request.dataOd,
+        request.dataDo
+      ))
+    ) {
+      console.log("Masz za mało dni urlopowych");
       throw Error("Masz za mało dni urlopowych");
     }
 
@@ -119,16 +126,17 @@ const sentRequest = async (request) => {
 const checkIfIsEntitledToLeave = async (userID, dataOd, dataDo) => {
   try {
     const first = new Date(dataOd);
-    const second = new Date(dataOd);
-    const roznicaMilisekundy = Math.abs(first - second);
+    const second = new Date(dataDo);
+    const roznicaMilisekundy = Math.abs(second - first);
     const difference = Math.floor(roznicaMilisekundy / (24 * 60 * 60 * 1000));
     const query =
       "SELECT PozostalyUrlopTegoRoku as `Ilosc` FROM Pracownicy WHERE ID = ?";
     const results = await queryDatabasePromise(query, userID);
-    console.log(results);
     if (results[0].Ilosc >= difference) {
+      console.log("Moze wysłać");
       return true;
     } else {
+      console.log("Nie moze wysłać");
       return false;
     }
   } catch (error) {
