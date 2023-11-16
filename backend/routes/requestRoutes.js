@@ -44,18 +44,12 @@ router.get("/accept", async (req, res) => {
       throw new Error("Skończył się czas na akceptacje wniosku");
     }
     const result = await requestModel.acceptRequests(ID);
-    const request = await requestModel.getRequestByID(ID);
-
-    const resultECP = await requestModel.fillECP(request.data);
-    if (!resultECP.success) {
-      throw new Error("Operacja wypełnienia tabeli ECP nie powiodła się.");
-    }
     res.json(result);
   } catch (error) {
     console.error(error);
     res
       .status(500)
-      .send(error.message || "Wystąpił błąd podczas aktualizacji danych.");
+      .send(error.message || "Wystąpił błąd podczas akceptowania wniosku.");
   }
 });
 router.get("/decline", async (req, res) => {
@@ -80,7 +74,7 @@ router.get("/decline", async (req, res) => {
     console.error(error);
     res
       .status(500)
-      .send(error.message || "Wystąpił błąd podczas aktualizacji danych.");
+      .send(error.message || "Wystąpił błąd podczas odrzucania Wniosku.");
   }
 });
 router.get("/getAccepted", verifyToken, async (req, res) => {

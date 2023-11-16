@@ -26,8 +26,7 @@ const sentMail = async (request, token) => {
     const reason = await reasonsModel.getReasonByID(request.reasonID);
 
     const API_URL = `${config.protocol}://${config.dbConnectionStr.host}:${config.port}/requests`;
-    console.log("api");--
-    console.log(API_URL);
+    //const API_URL = `${config.api}/requests`;
     const acceptLink = `${API_URL}/accept?token=${token}`;
     const declineLink = `${API_URL}/decline?token=${token}`;
 
@@ -56,9 +55,8 @@ const sentMail = async (request, token) => {
 
     const mailOptions = {
       from: "noreply@elerte.pl", // adres nadawcy
-      //to: reciver.Mail, // lista odbiorców
-      //dev
-      to: "jan.zaborowicz@elerte.pl",
+      to: reciver.Mail, // lista odbiorców
+      //dev to: "jan.zaborowicz@elerte.pl",
       subject: "Urlop", // Temat wiadomości
       text: message, // treść wiadomości w formie tekstowej
       html: message, // treść wiadomości w formie HTML
@@ -158,8 +156,17 @@ const updateRequestsView = async (id) => {
 
 const acceptRequests = async (id) => {
   try {
-    const query = "UPDATE Wnioski SET `Status` = 'Zaakceptowano' WHERE ID = ?";
-    const results = await queryDatabasePromise(query, id);
+    await queryDatabase("START TRANSACTION");
+    const requestInf = await getRequestByID(id);
+
+    await deleteECP(requestInf.data);
+
+    await fillECP(requestInf.data);
+
+    const changeStatusQuery =
+      "UPDATE Wnioski SET `Status` = 'Zaakceptowano' WHERE ID = ?";
+    const results = await queryDatabasePromise(changeStatusQuery, id);
+    await queryDatabase("COMMIT");
     return {
       success: true,
       message: "Wniosek zaakceptowano pomyślnie!",
@@ -167,6 +174,7 @@ const acceptRequests = async (id) => {
     };
   } catch (error) {
     console.error("Wystąpił błąd podczas akceptowania wniosku:", error);
+    await queryDatabase("ROLLBACK");
     throw error;
     return { success: false, message: error.message };
   }
@@ -224,6 +232,7 @@ const fillECP = async (request) => {
     };
   } catch (error) {
     console.error("Wystąpił błąd podczas dodawania ecp:", error);
+    throw error;
     return { success: false, message: error.message };
   }
 };
@@ -242,7 +251,7 @@ const deleteECP = async (request) => {
 
     return {
       success: true,
-      message: "Wniosek odrzucony, dane usunięte.",
+      message: "Dane z wniosku w ECP zostały usunięte.",
       affectedRows: deleteResults.affectedRows,
     };
   } catch (error) {

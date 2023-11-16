@@ -90,7 +90,7 @@ const NewEmployeeForm = (props) => {
   };
 
   const handleSubmit = () => {
-    const { email, ...restFormData } = formData;
+    const { email, telephoneNumber, ...restFormData } = formData;
     const hasEmptyValue = Object.values(restFormData).some(
       (value) => value === "" || value === null || value === undefined
     );

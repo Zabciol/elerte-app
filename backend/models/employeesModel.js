@@ -21,7 +21,7 @@ const getSupervisors = async () => {
 const getWorkedHoursByEmployee = async (employeeId, month) => {
   const query =
     `SELECT Pracownik_ID, DATE_FORMAT(Data, '%Y-%m') as Miesiac, SUM(IloscGodzin) as SumaGodzin ` +
-    `FROM ECP WHERE Pracownik_ID = ? AND MONTH(Data) = ? GROUP BY Pracownik_ID, DATE_FORMAT(Data, '%Y-%m')`;
+    `FROM ECP WHERE Pracownik_ID = ? AND DATE_FORMAT(Data, '%Y-%m') = ? GROUP BY Pracownik_ID, DATE_FORMAT(Data, '%Y-%m')`;
 
   return await queryDatabasePromise(query, [employeeId, month]);
 };
@@ -56,7 +56,10 @@ const getAllEmployees = async () => {
 
 const addEmployee = async (employee) => {
   const query = "INSERT INTO Pracownicy SET ?";
-  return await queryDatabasePromise(query, employee);
+  await queryDatabasePromise(query, employee);
+  const selectQuery = "SELECT LAST_INSERT_ID() as lastId";
+  const result = await queryDatabasePromise(selectQuery);
+  return result[0].lastId;
 };
 
 const addToHierarchy = async (supervisorID, suburdinateID) => {
@@ -72,6 +75,8 @@ const removeFromHierarchy = async (supervisorID, suburdinateID) => {
 
 const addLoginAndPassword = async (idPracownika, login) => {
   try {
+    console.log("id pracownika:", idPracownika);
+    console.log("login: ", login);
     const plainPassword = "a";
     const hashedPassword = await bcrypt.hash(plainPassword, 10);
     const query =
@@ -98,8 +103,11 @@ const addNewEmployee = async (data) => {
       Stanowisko_ID: data.position,
       WymiarPracy_ID: data.workingTime,
     });
-    const login = data.name + "." + data.lastname;
-    await addLoginAndPassword(pracownikID, login.toLowerCase());
+    const login = deletePolishChars(
+      data.name + "." + data.lastname
+    ).toLowerCase();
+
+    await addLoginAndPassword(pracownikID, login);
 
     if (data.supervisor) {
       await addToHierarchy(data.supervisor, pracownikID);
@@ -298,6 +306,33 @@ const getMyDirectSubordinates = async (id) => {
   });
 };
 
+const deletePolishChars = (tekst) => {
+  const znaki = {
+    ą: "a",
+    ć: "c",
+    ę: "e",
+    ł: "l",
+    ń: "n",
+    ó: "o",
+    ś: "s",
+    ż: "z",
+    ź: "z",
+    Ą: "A",
+    Ć: "C",
+    Ę: "E",
+    Ł: "L",
+    Ń: "N",
+    Ó: "O",
+    Ś: "S",
+    Ż: "Z",
+    Ź: "Z",
+  };
+
+  return tekst
+    .split("")
+    .map((znak) => znaki[znak] || znak)
+    .join("");
+};
 module.exports = {
   getSubordinates,
   getWorkedHoursByEmployee,
