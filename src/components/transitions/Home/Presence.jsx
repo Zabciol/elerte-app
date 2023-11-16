@@ -16,6 +16,7 @@ const Presence = ({ user, date }) => {
         console.log(data[0]);
         setPercentWorkedHours(data[0].SumaGodzin);
       } else {
+        setPercentWorkedHours(0);
         console.log(
           "Brak danych o przeprawcowanych godzinach dla tego pracownika"
         );
@@ -41,8 +42,8 @@ const Presence = ({ user, date }) => {
             Przepracowany czas w tym miesiącu ({percentOfWorkedHours} godzin/y)
           </label>
           <ProgressBar
-            now={percentOfWorkedHours / 160}
-            label={`${percentOfWorkedHours / 160}%`}
+            now={(percentOfWorkedHours / 160) * 100}
+            label={`${(percentOfWorkedHours / 160) * 100}%`}
           />
         </div>
         <div className='home-presence_data'>

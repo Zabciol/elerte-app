@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import Form from "react-bootstrap/Form";
 import Carousel from "react-bootstrap/Carousel";
 import Presence from "./Presence";
+import Leaves from "./Leaves";
 import { getCurrentDateYearMonth } from "../../common/CommonFunctions";
 import ElerteFooter from "../../../assets/Carousel/elerte-bottom.png";
 
@@ -58,8 +59,7 @@ const Home = ({ user, setMenuItems }) => {
             alt='Second slide'
           />
           <Carousel.Caption>
-            <h3>Second slide label</h3>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+            <Leaves user={user} date={date} />
           </Carousel.Caption>
           <img src={ElerteFooter} className='background-footer' />
         </Carousel.Item>
