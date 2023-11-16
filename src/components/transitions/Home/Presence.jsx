@@ -11,6 +11,7 @@ const Presence = ({ user, date }) => {
   const getInf = async () => {
     try {
       const data = await hoursWorkedApi(user.ID, date);
+      console.log(data);
       if (data[0]) {
         console.log(data[0]);
         setPercentWorkedHours(data[0].SumaGodzin);
@@ -28,7 +29,7 @@ const Presence = ({ user, date }) => {
 
   useEffect(() => {
     getInf();
-  }, []);
+  }, [user, date]);
 
   return (
     <div className='p-5 pt-0 text-white'>

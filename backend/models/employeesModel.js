@@ -21,7 +21,7 @@ const getSupervisors = async () => {
 const getWorkedHoursByEmployee = async (employeeId, month) => {
   const query =
     `SELECT Pracownik_ID, DATE_FORMAT(Data, '%Y-%m') as Miesiac, SUM(IloscGodzin) as SumaGodzin ` +
-    `FROM ECP WHERE Pracownik_ID = ? AND DATE_FORMAT(Data, '%Y-%m') = ? GROUP BY Pracownik_ID, DATE_FORMAT(Data, '%Y-%m')`;
+    `FROM ECP WHERE Pracownik_ID = ? AND Month(Data) = ? GROUP BY Pracownik_ID, DATE_FORMAT(Data, '%Y-%m')`;
 
   return await queryDatabasePromise(query, [employeeId, month]);
 };
