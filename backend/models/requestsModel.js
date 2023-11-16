@@ -133,10 +133,8 @@ const checkIfIsEntitledToLeave = async (userID, dataOd, dataDo) => {
       "SELECT PozostalyUrlopTegoRoku as `Ilosc` FROM Pracownicy WHERE ID = ?";
     const results = await queryDatabasePromise(query, userID);
     if (results[0].Ilosc >= difference) {
-      console.log("Moze wysłać");
       return true;
     } else {
-      console.log("Nie moze wysłać");
       return false;
     }
   } catch (error) {
