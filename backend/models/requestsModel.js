@@ -83,8 +83,8 @@ const sentRequest = async (request) => {
       request.dataDo
     );
     if (!isEntitled.status) {
-      console.log("Masz za mało dni urlopowych");
-      throw Error("Masz za mało dni urlopowych");
+      console.log("Masz za mało dostępnego urlopu");
+      throw Error("Masz za mało dostępnego urlopu");
     }
 
     const insertData = [

@@ -174,16 +174,21 @@ const FormPopUp = ({ show, setShow, employee }) => {
             </Tab>
           </Tabs>
         </Modal.Body>
-        <Modal.Footer>
+        <Modal.Footer className='d-flex justify-content-between'>
           <Button variant='secondary' onClick={deleteEmployee}>
             Usuń
           </Button>
-          <Button variant='secondary' onClick={() => setShow(false)}>
-            Zamknij
-          </Button>
-          <Button variant='primary' onClick={save}>
-            Zapisz zmiany
-          </Button>
+          <div>
+            <Button
+              variant='secondary'
+              className='me-2'
+              onClick={() => setShow(false)}>
+              Zamknij
+            </Button>
+            <Button variant='primary' onClick={save}>
+              Zapisz zmiany
+            </Button>
+          </div>
         </Modal.Footer>
       </Modal>
     </>
