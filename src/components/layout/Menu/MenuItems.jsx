@@ -18,7 +18,7 @@ const MenuItems = (props) => {
     const supervisorNavItems = ["ECP", "Pracownicy"];
     if (props.user.supervisor && !nav_items.includes("ECP", "Pracownicy"))
       setNavItems(supervisorNavItems.concat(nav_items));
-  }, []);
+  }, [user]);
   return (
     <Offcanvas.Body>
       <Nav className='justify-content-start flex-grow-1 pe-3 '>
