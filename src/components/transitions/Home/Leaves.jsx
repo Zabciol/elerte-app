@@ -4,14 +4,14 @@ import { vacationApi } from "../../../api/userApi";
 
 const Leaves = ({ user, date }) => {
   const [zalegle, setZalegle] = useState(0);
-  const [tegoroczne, setTegoroczne] = useState(0);
+  const [nieWykorzystane, setNieWykorzystane] = useState(0);
   const [wykorzystane, setWykorzystane] = useState(0);
 
   const getData = async () => {
     const data = await vacationApi(user.ID);
     console.log(data);
     setZalegle(data.data.ZaleglyUrlop);
-    setTegoroczne(data.data.TegorocznyUrlop);
+    setNieWykorzystane(data.data.NieWykorzystane);
     setWykorzystane(data.data.Wykorzystane);
   };
 
@@ -34,7 +34,7 @@ const Leaves = ({ user, date }) => {
             <tbody>
               <tr>
                 <td>{zalegle}</td>
-                <td>{tegoroczne}</td>
+                <td>{nieWykorzystane}</td>
                 <td>{wykorzystane}</td>
               </tr>
             </tbody>

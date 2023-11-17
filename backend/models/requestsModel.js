@@ -133,7 +133,7 @@ const checkIfIsEntitledToLeave = async (userID, dataOd, dataDo) => {
     console.log(second);
     console.log(difference);
     const query =
-      "SELECT TegorocznyUrlop + ZaleglyUrlop as `Ilosc` FROM UrlopyInf WHERE Pracownik_ID = ?";
+      "SELECT NieWykorzystane + ZaleglyUrlop as `Ilosc` FROM UrlopyInf WHERE Pracownik_ID = ?";
     const results = await queryDatabasePromise(query, userID);
     if (results[0].Ilosc >= difference) {
       return { status: true, count: difference };
@@ -333,7 +333,7 @@ const removeHolidayDays = async (employeeID, countOfDays) => {
   try {
     const findQuery = `select * from UrlopyInf WHERE Pracownik_ID = ?`;
     const findResults = await queryDatabasePromise(findQuery, [employeeID]);
-    const { TegorocznyUrlop, ZaleglyUrlop, MaxIloscDni } = findResults[0];
+    const { NieWykorzystane, ZaleglyUrlop, MaxIloscDni } = findResults[0];
 
     if (ZaleglyUrlop >= countOfDays) {
       await queryDatabasePromise(
@@ -343,7 +343,7 @@ const removeHolidayDays = async (employeeID, countOfDays) => {
     } else {
       const difference = countOfDays - ZaleglyUrlop;
       await queryDatabasePromise(
-        `UPDATE UrlopyInf SET ZaleglyUrlop = 0, TegorocznyUrlop = TegorocznyUrlop - ? WHERE Pracownik_ID = ?`,
+        `UPDATE UrlopyInf SET ZaleglyUrlop = 0, NieWykorzystane = NieWykorzystane - ? WHERE Pracownik_ID = ?`,
         [difference, employeeID]
       );
     }
@@ -360,17 +360,17 @@ const addHolidayDays = async (employeeID, countOfDays) => {
   try {
     const findQuery = `select * from UrlopyInf WHERE Pracownik_ID = ?`;
     const findResults = await queryDatabasePromise(findQuery, [employeeID]);
-    const { TegorocznyUrlop, ZaleglyUrlop, MaxIloscDni } = findResults[0];
+    const { NieWykorzystane, ZaleglyUrlop, MaxIloscDni } = findResults[0];
 
-    if (TegorocznyUrlop + countOfDays <= MaxIloscDni) {
+    if (NieWykorzystane + countOfDays <= MaxIloscDni) {
       await queryDatabasePromise(
-        `UPDATE UrlopyInf SET TegorocznyUrlop = ? WHERE Pracownik_ID = ?`,
-        [TegorocznyUrlop + countOfDays, employeeID]
+        `UPDATE UrlopyInf SET NieWykorzystane = ? WHERE Pracownik_ID = ?`,
+        [NieWykorzystane + countOfDays, employeeID]
       );
     } else {
-      const difference = TegorocznyUrlop + countOfDays - MaxIloscDni;
+      const difference = NieWykorzystane + countOfDays - MaxIloscDni;
       await queryDatabasePromise(
-        `UPDATE UrlopyInf SET TegorocznyUrlop = MaxIloscDni, ZaleglyUrlop = ? WHERE Pracownik_ID = ?`,
+        `UPDATE UrlopyInf SET NieWykorzystane = MaxIloscDni, ZaleglyUrlop = ? WHERE Pracownik_ID = ?`,
         [difference, employeeID]
       );
     }
