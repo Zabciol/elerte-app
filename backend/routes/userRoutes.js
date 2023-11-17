@@ -117,4 +117,15 @@ router.get("/verify-token", async (req, res) => {
   }
 });
 
+router.get("/vacation", verifyToken, async (req, res) => {
+  try {
+    const ID = req.query.ID;
+    const result = await userModel.getMyVacation(ID);
+    res.json(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Wystąpił błąd podczas pobierania danych.");
+  }
+});
+
 module.exports = router;

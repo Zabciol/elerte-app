@@ -347,6 +347,11 @@ const removeHolidayDays = async (employeeID, countOfDays) => {
         [difference, employeeID]
       );
     }
+
+    await queryDatabasePromise(
+      `UPDATE UrlopyInf set Wykorzystane = Wykorzystane + ? WHERE Pracownik_ID =?`,
+      [countOfDays, employeeID]
+    );
   } catch (error) {
     throw error;
   }
@@ -369,6 +374,10 @@ const addHolidayDays = async (employeeID, countOfDays) => {
         [difference, employeeID]
       );
     }
+    await queryDatabasePromise(
+      `UPDATE UrlopyInf set Wykorzystane = Wykorzystane - ? WHERE Pracownik_ID =?`,
+      [countOfDays, employeeID]
+    );
     console.log("Operacje UPDATE zostały wykonane.");
   } catch (error) {
     console.error(error);

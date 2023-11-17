@@ -94,7 +94,6 @@ const EmployeeAbsenceInf = ({ employee, date }) => {
   };
 
   const gatherData = async () => {
-    console.log("asfafasf");
     const absenceData = await getAbsence();
     const holidaysData = await getHolidays();
     const employeeData = uniteTabs(absenceData, holidaysData);

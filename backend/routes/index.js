@@ -20,5 +20,4 @@ router.use("/departments", departmentsRouter);
 router.use("/position", positionRouter);
 router.use("/workingtime", workingTimeRouter);
 router.use("/requests", requestsRouter);
-
 module.exports = router;

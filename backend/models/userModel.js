@@ -91,6 +91,20 @@ const changePassword = async (userID, newPassword) => {
   }
 };
 
+const getMyVacation = async (ID) => {
+  try {
+    const query = `Select * from UrlopyInf WHERE Pracownik_ID = ?`;
+    const results = await queryDatabasePromise(query, [ID]);
+    return {
+      success: true,
+      message: "Urlopy pozyskano pomyślnie!",
+      data: results[0],
+    };
+  } catch (error) {
+    throw error;
+  }
+};
+
 // Inne funkcje dotyczące operacji na użytkownikach...
 
 module.exports = {
@@ -100,4 +114,5 @@ module.exports = {
   findUserPasswordByID,
   changePassword,
   verifyToken,
+  getMyVacation,
 };

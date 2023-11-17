@@ -76,6 +76,12 @@
   text-align: center;
   width: 100%;
 }
+
+.home-presence_data > div > table {
+  opacity: 80%;
+  backdrop-filter: blur(20px) !important;
+  border-radius: 5px;
+}
 @media (max-width: 575px) {
   .home-presence_data {
     padding: 0;
