@@ -2,6 +2,7 @@ const { queryDatabase, queryDatabasePromise, getSecretKey } = require("../db");
 const nodemailer = require("nodemailer");
 const employeeModel = require("./employeesModel");
 const reasonsModel = require("./reasonsModel");
+const { differenceInCalendarDays } = require("date-fns");
 const jwt = require("jsonwebtoken");
 const config = require("../config");
 
@@ -72,16 +73,16 @@ const sentMail = async (request, token) => {
     throw error;
   }
 };
+
 const sentRequest = async (request) => {
   try {
     await queryDatabase("START TRANSACTION");
-    if (
-      !(await checkIfIsEntitledToLeave(
-        request.senderID,
-        request.dataOd,
-        request.dataDo
-      ))
-    ) {
+    const isEntitled = await checkIfIsEntitledToLeave(
+      request.senderID,
+      request.dataOd,
+      request.dataDo
+    );
+    if (!isEntitled.status) {
       console.log("Masz za mało dni urlopowych");
       throw Error("Masz za mało dni urlopowych");
     }
@@ -127,15 +128,17 @@ const checkIfIsEntitledToLeave = async (userID, dataOd, dataDo) => {
   try {
     const first = new Date(dataOd);
     const second = new Date(dataDo);
-    const roznicaMilisekundy = Math.abs(second - first);
-    const difference = Math.floor(roznicaMilisekundy / (24 * 60 * 60 * 1000));
+    const difference = differenceInCalendarDays(second, first) + 1;
+    console.log(first);
+    console.log(second);
+    console.log(difference);
     const query =
-      "SELECT PozostalyUrlopTegoRoku as `Ilosc` FROM Pracownicy WHERE ID = ?";
+      "SELECT TegorocznyUrlop + ZaleglyUrlop as `Ilosc` FROM UrlopyInf WHERE Pracownik_ID = ?";
     const results = await queryDatabasePromise(query, userID);
     if (results[0].Ilosc >= difference) {
-      return true;
+      return { status: true, count: difference };
     } else {
-      return false;
+      return { status: false, count: difference };
     }
   } catch (error) {
     console.error(error);
@@ -192,9 +195,20 @@ const acceptRequests = async (id) => {
     await queryDatabase("START TRANSACTION");
     const requestInf = await getRequestByID(id);
 
+    if (requestInf.data.Status === "Zaakceptowano") {
+      throw "Ten wniosek juz został zaakceptowany";
+    }
     await deleteECP(requestInf.data);
 
     await fillECP(requestInf.data);
+
+    const result = await checkIfIsEntitledToLeave(
+      requestInf.data.Nadawca_ID,
+      requestInf.data.Data_Od,
+      requestInf.data.Data_Do
+    );
+
+    await removeHolidayDays(requestInf.data.Nadawca_ID, result.count);
 
     const changeStatusQuery =
       "UPDATE Wnioski SET `Status` = 'Zaakceptowano' WHERE ID = ?";
@@ -215,8 +229,28 @@ const acceptRequests = async (id) => {
 
 const declineRequests = async (id) => {
   try {
+    await queryDatabase("START TRANSACTION");
+    const requestInf = await getRequestByID(id);
+    console.log("Wniosek:");
+    console.log(requestInf);
+
+    if (requestInf.data.Status === "Odrzucono") {
+      throw "Wniosek juz został odrzucony";
+    }
+
+    if (requestInf.data.Status === "Zaakceptowano") {
+      const result = await checkIfIsEntitledToLeave(
+        requestInf.data.Nadawca_ID,
+        requestInf.data.Data_Od,
+        requestInf.data.Data_Do
+      );
+      await addHolidayDays(requestInf.data.Nadawca_ID, result.count);
+    }
+
+    await deleteECP(requestInf.data);
     const query = "UPDATE Wnioski SET `Status` = 'Odrzucono' WHERE ID = ?";
     const results = await queryDatabasePromise(query, id);
+    await queryDatabase("COMMIT");
     return {
       success: true,
       message: "Wniosek odrzucono pomyślnie!",
@@ -224,6 +258,7 @@ const declineRequests = async (id) => {
     };
   } catch (error) {
     console.error("Wystąpił błąd podczas odrzucania wniosku:", error);
+    await queryDatabase("ROLLBACK");
     throw error;
     return { success: false, message: error.message };
   }
@@ -269,7 +304,7 @@ const fillECP = async (request) => {
     return { success: false, message: error.message };
   }
 };
-const deleteECP = async (request) => {
+const deleteECP = async (requestInf) => {
   try {
     const query = `
       DELETE FROM ECP
@@ -277,9 +312,9 @@ const deleteECP = async (request) => {
     `;
 
     const deleteResults = await queryDatabasePromise(query, [
-      request.Nadawca_ID,
-      request.Data_Od,
-      request.Data_Do,
+      requestInf.Nadawca_ID,
+      requestInf.Data_Od,
+      requestInf.Data_Do,
     ]);
 
     return {
@@ -293,6 +328,54 @@ const deleteECP = async (request) => {
     return { success: false, message: error.message };
   }
 };
+
+const removeHolidayDays = async (employeeID, countOfDays) => {
+  try {
+    const findQuery = `select * from UrlopyInf WHERE Pracownik_ID = ?`;
+    const findResults = await queryDatabasePromise(findQuery, [employeeID]);
+    const { TegorocznyUrlop, ZaleglyUrlop, MaxIloscDni } = findResults[0];
+
+    if (ZaleglyUrlop >= countOfDays) {
+      await queryDatabasePromise(
+        `UPDATE UrlopyInf set ZaleglyUrlop = Zaleglyurlop - ? WHERE Pracownik_ID = ?`,
+        [countOfDays, employeeID]
+      );
+    } else {
+      const difference = countOfDays - ZaleglyUrlop;
+      await queryDatabasePromise(
+        `UPDATE UrlopyInf SET ZaleglyUrlop = 0, TegorocznyUrlop = TegorocznyUrlop - ? WHERE Pracownik_ID = ?`,
+        [difference, employeeID]
+      );
+    }
+  } catch (error) {
+    throw error;
+  }
+};
+const addHolidayDays = async (employeeID, countOfDays) => {
+  try {
+    const findQuery = `select * from UrlopyInf WHERE Pracownik_ID = ?`;
+    const findResults = await queryDatabasePromise(findQuery, [employeeID]);
+    const { TegorocznyUrlop, ZaleglyUrlop, MaxIloscDni } = findResults[0];
+
+    if (TegorocznyUrlop + countOfDays <= MaxIloscDni) {
+      await queryDatabasePromise(
+        `UPDATE UrlopyInf SET TegorocznyUrlop = ? WHERE Pracownik_ID = ?`,
+        [TegorocznyUrlop + countOfDays, employeeID]
+      );
+    } else {
+      const difference = TegorocznyUrlop + countOfDays - MaxIloscDni;
+      await queryDatabasePromise(
+        `UPDATE UrlopyInf SET TegorocznyUrlop = MaxIloscDni, ZaleglyUrlop = ? WHERE Pracownik_ID = ?`,
+        [difference, employeeID]
+      );
+    }
+    console.log("Operacje UPDATE zostały wykonane.");
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
+
 const getAcceptedRequests = async (date, IDs) => {
   //Wykorzystywane do nieobecności pracownika w miesiącu
   try {

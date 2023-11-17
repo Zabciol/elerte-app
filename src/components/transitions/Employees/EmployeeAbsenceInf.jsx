@@ -103,7 +103,7 @@ const EmployeeAbsenceInf = ({ employee, date }) => {
   };
   useEffect(() => {
     gatherData();
-  }, []);
+  }, [date]);
 
   return (
     <div className='d-flex absence w-100'>

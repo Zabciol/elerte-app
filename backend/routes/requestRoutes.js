@@ -61,14 +61,8 @@ router.get("/decline", async (req, res) => {
     if (current_date >= data_od) {
       throw new Error("Skończył się czas na akceptacje wniosku");
     }
-    const request = await requestModel.getRequestByID(ID);
+    //const request = await requestModel.getRequestByID(ID);
     const result = await requestModel.declineRequests(ID);
-    const resultECP = await requestModel.deleteECP(request.data);
-    if (!resultECP.success) {
-      throw new Error(
-        "Operacja usuwania danych z tabeli ECP nie powiodła się."
-      );
-    }
     res.json(result);
   } catch (error) {
     console.error(error);
