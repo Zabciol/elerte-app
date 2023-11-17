@@ -15,10 +15,12 @@ const PageHandler = (props) => {
   const { setShowPopUpLogout, setMessage } = useAuth();
   const [menuItems, setMenuItems] = useState();
   const [subordinates, setSubordinates] = useState([]);
+  const [user, setUser] = useState({ ...props.user, supervisor: false });
 
   const getSubordinates = async () => {
     try {
       const data = await subordinatesApi(props.user.ID);
+      setUser({ ...user, supervisor: data.supervisor });
       setSubordinates(data.data);
     } catch (error) {
       console.error(error);
@@ -30,26 +32,25 @@ const PageHandler = (props) => {
   useEffect(() => {
     getSubordinates();
   }, []);
-
   return (
     <Router>
       <Container expand='lg'>
-        <Menu user={props.user} logout={props.logout}>
+        <Menu user={user} logout={props.logout}>
           {menuItems}
         </Menu>
         <div className='interface'>
           <Routes>
             <Route
               path='/'
-              element={<Home user={props.user} setMenuItems={setMenuItems} />}
+              element={<Home user={user} setMenuItems={setMenuItems} />}
             />
             <Route
               path='/ecp'
               element={
                 <ECP
-                  user={props.user}
+                  user={user}
                   setMenuItems={setMenuItems}
-                  subordinates={[props.user, ...subordinates]}
+                  subordinates={[user, ...subordinates]}
                 />
               }
             />
@@ -57,7 +58,7 @@ const PageHandler = (props) => {
               path='/pracownicy'
               element={
                 <Employees
-                  user={props.user}
+                  user={user}
                   setMenuItems={setMenuItems}
                   subordinates={subordinates}
                 />
@@ -67,7 +68,7 @@ const PageHandler = (props) => {
               path='/wnioski'
               element={
                 <Requests
-                  user={props.user}
+                  user={user}
                   setMenuItems={setMenuItems}
                   subordinates={subordinates}
                 />
@@ -77,9 +78,9 @@ const PageHandler = (props) => {
               path='/kalendarz'
               element={
                 <Calender
-                  user={props.user}
+                  user={user}
                   setMenuItems={setMenuItems}
-                  subordinates={[props.user, ...subordinates]}
+                  subordinates={[user, ...subordinates]}
                 />
               }
             />

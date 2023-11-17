@@ -19,8 +19,6 @@ function App() {
       html.setAttribute("data-theme", "light");
     }
   }, []);
-
-  console.log(user);
   return (
     <div className='App'>
       {isLogged ? <PageHandler user={user} /> : <LoginPanel />}

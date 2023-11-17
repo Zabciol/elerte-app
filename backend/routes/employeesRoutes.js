@@ -19,9 +19,11 @@ router.get("/", verifyToken, async (req, res) => {
   try {
     const { id } = req.query;
     const subordinates = await getSubordinatesRecursively(id);
-    res
-      .status(200)
-      .send({ message: "Subordinates found!", data: subordinates });
+    res.status(200).send({
+      supervisor: subordinates.length > 0 ? true : false,
+      message: "Subordinates found!",
+      data: subordinates,
+    });
   } catch (error) {
     res.status(500).send("Wystąpił błąd podczas pobierania danych.");
   }

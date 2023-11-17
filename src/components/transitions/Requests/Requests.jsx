@@ -6,10 +6,12 @@ import Tabs from "react-bootstrap/Tabs";
 import "../../../styles/Request.css";
 const Requests = ({ user }) => {
   return (
-    <Tabs defaultActiveKey='box' id='uncontrolled-tab-example' className='mb-3'>
-      <Tab eventKey='box' title='Skrzynka'>
-        <ManageRequests user={user} />
-      </Tab>
+    <Tabs defaultActiveKey='new' id='uncontrolled-tab-example' className='mb-3'>
+      {user.supervisor ? (
+        <Tab eventKey='box' title='Skrzynka'>
+          <ManageRequests user={user} />
+        </Tab>
+      ) : null}
       <Tab
         eventKey='new'
         title='Nowy Wniosek'

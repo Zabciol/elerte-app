@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Children } from "react";
 import { Link } from "react-router-dom";
 import Form from "react-bootstrap/Form";
@@ -10,9 +10,15 @@ import ChangePassword from "../../transitions/ChangePassword";
 const MenuItems = (props) => {
   const { user, darkMode, handleSwitchTheme, children, show } = props;
   const { logout } = useAuth();
-  const nav_items = ["ECP", "Pracownicy", "Kalendarz", "Wnioski"];
+  const [nav_items, setNavItems] = useState(["Kalendarz", "Wnioski"]);
+
   const [showChangePassword, setShowChangePassword] = useState(false);
 
+  useEffect(() => {
+    const supervisorNavItems = ["ECP", "Pracownicy"];
+    if (props.user.supervisor && !nav_items.includes("ECP", "Pracownicy"))
+      setNavItems(supervisorNavItems.concat(nav_items));
+  }, []);
   return (
     <Offcanvas.Body>
       <Nav className='justify-content-start flex-grow-1 pe-3 '>
