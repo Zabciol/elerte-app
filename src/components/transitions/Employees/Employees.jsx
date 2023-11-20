@@ -35,7 +35,6 @@ const Employees = ({ user, setMenuItems, subordinates }) => {
   const [employees, setEmployees] = useState(subordinates);
   const [filteredSubordinates, setFilteredSubordinates] =
     useState(subordinates);
-  const [allEmployees, setAllEmployees] = useState(subordinates);
   const changeDate = (event) => {
     setDate(event.target.value);
   };
@@ -53,7 +52,11 @@ const Employees = ({ user, setMenuItems, subordinates }) => {
 
   useEffect(() => {
     let noweDzialy = [];
-    if (key === "Lista") {
+    if (
+      key === "Lista" ||
+      (key === "Nieobecnosci" &&
+        (user.Uprawnienia === 2 || user.Uprawnienia === 4))
+    ) {
       noweDzialy = Array.from(new Set(employees.map((item) => item.Dzial)));
     } else {
       noweDzialy = Array.from(new Set(subordinates.map((item) => item.Dzial)));

@@ -31,6 +31,8 @@ const Calender = (props) => {
     Array.from(new Set(props.subordinates.map((item) => item.Dzial)))
   );
   const [dzial, setDzial] = useState(dzialy[0]);
+  const [employees, setEmployees] = useState(props.subordinates);
+
   const changeDate = (event) => {
     setDate(event.target.value);
   };
@@ -60,17 +62,22 @@ const Calender = (props) => {
   };
 
   const fetchData = async () => {
-    let employeesID;
-    if (props.user.Uprawnienia === 2 || props.user.Uprawnienia === 4) {
-      const employees = await allEmployeesAPI();
-      setDzialy(Array.from(new Set(employees.map((item) => item.Dzial))));
-      employeesID = getEmployeesID(employees);
-    } else {
-      employeesID = getEmployeesID(props.subordinates);
-    }
+    const employeesID = getEmployeesID(employees);
     const data = await getAbsence(employeesID);
     setEvents(data);
   };
+
+  const getEmployees = async () => {
+    if (props.user.Uprawnienia === 2 || props.user.Uprawnienia === 4) {
+      const data = await allEmployeesAPI();
+      setEmployees(data);
+      setDzialy(Array.from(new Set(data.map((item) => item.Dzial))));
+    }
+  };
+
+  useEffect(() => {
+    getEmployees();
+  }, []);
 
   useEffect(() => {
     fetchData();
