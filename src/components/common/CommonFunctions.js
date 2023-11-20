@@ -1,3 +1,4 @@
+import { eachDayOfInterval, isWeekend } from "date-fns";
 const PORT = 8000;
 
 const Variables = {
@@ -74,4 +75,24 @@ export const handleError = (error) => {
   } else {
     throw new Error("API not available");
   }
+};
+
+export const calculateWorkingDays = (date, holidays) => {
+  const dateObj = new Date(date);
+  const year = dateObj.getFullYear();
+  const month = dateObj.getMonth();
+  const startDate = new Date(year, month, 1);
+  const endDate = new Date(year, month + 1, 0);
+  const allDaysInMonth = eachDayOfInterval({ start: startDate, end: endDate });
+
+  const workingDays = allDaysInMonth.filter((day) => !isWeekend(day));
+
+  const holidayDates = holidays.map((holiday) =>
+    new Date(holiday.date).toISOString()
+  );
+  const workingDaysWithoutHolidays = workingDays.filter(
+    (day) => !holidayDates.includes(day.toISOString())
+  );
+
+  return workingDaysWithoutHolidays.length;
 };

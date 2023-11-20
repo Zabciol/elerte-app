@@ -33,7 +33,6 @@ export const holidaysApi = async (data) => {
         month: month,
       },
     });
-    console.log(response);
     return response.data;
   } catch (error) {
     handleError(error);
