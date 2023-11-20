@@ -56,9 +56,6 @@ const PositionForm = (props) => {
   const getSupervisors = async () => {
     try {
       console.log(employee);
-      const data2 = await subordinatesApi(employee.ID);
-      const subordinatesID = data2.data.map((employee) => employee.ID);
-      console.log("Podwładni: ", subordinatesID);
       const data = await supervisorsApi();
       console.log("Twoi podwładni: ", subordinates);
       console.log("Przełozeni w całej firmie: ", data);

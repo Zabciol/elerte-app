@@ -92,6 +92,7 @@ const FormPopUp = ({ show, setShow, employee }) => {
       const data = await subordinatesApi(employee.ID);
       const subordinatesID = data.data.map((employee) => employee.ID);
       console.log(employee);
+      console.log("Wszyscy podwładni");
       console.log(subordinatesID);
       setSubordinates(subordinatesID);
     } catch (error) {
@@ -105,6 +106,9 @@ const FormPopUp = ({ show, setShow, employee }) => {
     try {
       const data = await myDirectSubordinatesAPI(employee.ID);
       const directSubordinatesID = data.map((employee) => employee.ID);
+      console.log(employee);
+      console.log("Direct subordinates");
+      console.log(directSubordinatesID);
       setDirectSubordinates(directSubordinatesID);
     } catch (error) {
       setMessage(error.message);
