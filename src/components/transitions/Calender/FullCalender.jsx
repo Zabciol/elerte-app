@@ -22,38 +22,63 @@ const FullCalender = (props) => {
       props.setDate(formattedDate);
     }
   };
-
   const renderEventContent = (eventInfo) => {
-    const startTime = new Date(eventInfo.event.start).toLocaleTimeString([], {
-      hour: "2-digit",
-      minute: "2-digit",
-    });
-    const endTime = new Date(eventInfo.event.end).toLocaleTimeString([], {
-      hour: "2-digit",
-      minute: "2-digit",
-    });
+    const event = eventInfo.event;
+    const isAllDay = event.allDay; // Sprawdzamy, czy wydarzenie jest całodniowe
 
-    return (
-      <>
-        <div style={{ display: "flex", alignItems: "center" }}>
-          <div
-            style={{
-              marginRight: "5px",
-              backgroundColor: eventInfo.event.backgroundColor,
-              width: "8px",
-              height: "8px",
-              borderRadius: "50%",
-            }}></div>
-          <div>
-            <b>
-              {startTime} - {endTime}
-            </b>
-            <i> {eventInfo.event.title}</i>
+    if (isAllDay) {
+      // Jeśli wydarzenie jest całodniowe, nie wyświetlamy godzin
+      return (
+        <>
+          <div style={{ display: "flex", alignItems: "center" }}>
+            <div
+              style={{
+                marginRight: "5px",
+                backgroundColor: event.backgroundColor,
+                width: "8px",
+                height: "8px",
+                borderRadius: "50%",
+              }}></div>
+            <div>
+              <b>{event.title}</b>
+            </div>
           </div>
-        </div>
-      </>
-    );
+        </>
+      );
+    } else {
+      // Jeśli wydarzenie ma godziny, wyświetlamy godziny
+      const startTime = new Date(event.start).toLocaleTimeString([], {
+        hour: "2-digit",
+        minute: "2-digit",
+      });
+      const endTime = new Date(event.end).toLocaleTimeString([], {
+        hour: "2-digit",
+        minute: "2-digit",
+      });
+
+      return (
+        <>
+          <div style={{ display: "flex", alignItems: "center" }}>
+            <div
+              style={{
+                marginRight: "5px",
+                backgroundColor: event.backgroundColor,
+                width: "8px",
+                height: "8px",
+                borderRadius: "50%",
+              }}></div>
+            <div>
+              <b>
+                {startTime} - {endTime}
+              </b>
+              <i> {event.title}</i>
+            </div>
+          </div>
+        </>
+      );
+    }
   };
+
   return (
     <FullCalendar
       locale={plLocale}
