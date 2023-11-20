@@ -49,7 +49,7 @@ const findUserByLogin = async (login) => {
   try {
     const query = `
       SELECT Pracownicy.ID, Imie, Nazwisko, Mail, Dzialy.Nazwa AS Dzial,
-      Stanowisko.Nazwa AS Stanowisko, WymiarPracy.Od, WymiarPracy.Do, Aktywny FROM Pracownicy
+      Stanowisko.Nazwa AS Stanowisko, WymiarPracy.Od, WymiarPracy.Do, Aktywny, Uprawnienia_ID AS Uprawnienia FROM Pracownicy
       LEFT JOIN Stanowisko ON Pracownicy.Stanowisko_ID = Stanowisko.ID
       LEFT JOIN Dzialy ON Stanowisko.Dzial_ID = Dzialy.ID
       LEFT JOIN WymiarPracy ON Pracownicy.WymiarPracy_ID = WymiarPracy.ID

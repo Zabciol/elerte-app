@@ -46,7 +46,7 @@ router.post("/login", async (req, res) => {
 
       if (isMatch) {
         const token = jwt.sign(
-          { id: userData.ID, mail: userData.Mail },
+          { id: userData.ID, login: login },
           getSecretKey(),
           { expiresIn: "1h" }
         );
@@ -106,7 +106,7 @@ router.get("/verify-token", async (req, res) => {
   }
   try {
     const decoded = jwt.verify(token, getSecretKey());
-    const users = await userModel.findUserByEmail(decoded.mail);
+    const users = await userModel.findUserByLogin(decoded.login);
     if (users.length === 0) {
       throw new Error("Nie znaleziono uzytkownika");
     }

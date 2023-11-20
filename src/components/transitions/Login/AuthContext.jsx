@@ -35,6 +35,7 @@ export const AuthProvider = ({ children }) => {
       if (data.token) {
         setAuthToken(data.token);
         setUser(data.user);
+        console.log(data.user);
         setIsLogged(true);
         sessionStorage.setItem("userToken", JSON.stringify(data.token)); // Opcjonalnie zapisz token w localStorage
       }

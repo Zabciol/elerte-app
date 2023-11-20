@@ -30,11 +30,7 @@ const ExportExcel = (props) => {
   };
 
   useEffect(() => {
-    if (
-      props.user.Dzial === "Księgowość" ||
-      props.user.Dzial === "Analityka" ||
-      props.user.Dzial === "Dyrekcja"
-    ) {
+    if (props.user.Uprawnienia === 2 || props.user.Uprawnienia === 4) {
       getAllEmployees();
     } else {
       const IDs = props.subordinates.map((employee) => employee.ID);

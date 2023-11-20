@@ -18,6 +18,8 @@ const MenuItems = (props) => {
     const supervisorNavItems = ["ECP", "Pracownicy"];
     if (props.user.supervisor && !nav_items.includes("ECP", "Pracownicy"))
       setNavItems(supervisorNavItems.concat(nav_items));
+    if (props.user.Uprawnienia !== 1 && !nav_items.includes("Pracownicy"))
+      setNavItems(["Pracownicy"].concat(nav_items));
   }, [user]);
   return (
     <Offcanvas.Body>

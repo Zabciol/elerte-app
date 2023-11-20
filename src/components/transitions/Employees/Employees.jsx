@@ -42,7 +42,7 @@ const Employees = ({ user, setMenuItems, subordinates }) => {
   const getEmployees = async () => {
     try {
       const data =
-        user.Dzial === "Księgowość" || user.Dzial === "Analityka"
+        user.Uprawnienia === 2 || user.Uprawnienia === 4
           ? await allEmployeesAPI()
           : subordinates;
       setEmployees(data);
@@ -70,7 +70,7 @@ const Employees = ({ user, setMenuItems, subordinates }) => {
 
   useEffect(() => {
     getEmployees();
-  }, [subordinates]);
+  }, [user, subordinates]);
 
   useEffect(() => {
     setMenuItems(
@@ -120,7 +120,9 @@ const Employees = ({ user, setMenuItems, subordinates }) => {
       <Tab
         eventKey='Nowy'
         title='Nowy'
-        disabled={user.Dzial === "Księgowość" ? false : true}>
+        disabled={
+          user.Uprawnienia === 3 || user.Uprawnienia === 4 ? false : true
+        }>
         <NewEmployee dzial={dzial} />
       </Tab>
     </Tabs>

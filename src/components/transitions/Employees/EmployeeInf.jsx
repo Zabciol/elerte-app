@@ -44,7 +44,11 @@ const EmployeeInf = (props) => {
           <p></p>
           <p></p>
           <Button
-            disabled={props.user.Dzial === "Księgowość" ? false : true}
+            disabled={
+              props.user.Uprawnienia === 3 || props.user.Uprawniania === 4
+                ? false
+                : true
+            }
             variant='outline-secondary'
             className='edit-btn'
             onClick={() => setShow(true)}>
