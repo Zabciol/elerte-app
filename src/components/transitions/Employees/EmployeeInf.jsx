@@ -7,6 +7,7 @@ import "bootstrap-icons/font/bootstrap-icons.css";
 import { useAuth } from "../Login/AuthContext";
 
 const EmployeeInf = (props) => {
+  console.log(props.user);
   const [inf, setInf] = useState();
   const [show, setShow] = useState(false);
   const { setShowPopUpLogout, setMessage } = useAuth();
@@ -45,9 +46,7 @@ const EmployeeInf = (props) => {
           <p></p>
           <Button
             disabled={
-              props.user.Uprawnienia === 3 || props.user.Uprawniania === 4
-                ? false
-                : true
+              !(props.user.Uprawnienia === 3 || props.user.Uprawnienia === 4)
             }
             variant='outline-secondary'
             className='edit-btn'

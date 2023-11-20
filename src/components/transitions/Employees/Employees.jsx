@@ -83,7 +83,7 @@ const Employees = ({ user, setMenuItems, subordinates }) => {
 
   useEffect(() => {
     getEmployees();
-  }, [subordinates]);
+  }, [subordinates, user]);
 
   useEffect(() => {
     setMenuItems(
