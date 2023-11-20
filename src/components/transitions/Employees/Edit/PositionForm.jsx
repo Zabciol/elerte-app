@@ -3,6 +3,7 @@ import { supervisorsApi } from "../../../../api/employeesApi";
 import { departmentsApi } from "../../../../api/departmentsApi";
 import { positionApi } from "../../../../api/positionApi";
 import { workingTimeApi } from "../../../../api/workingTimeApi";
+import { subordinatesApi } from "../../../../api/employeesApi";
 import FloatingLabel from "react-bootstrap/FloatingLabel";
 import Form from "react-bootstrap/Form";
 import { useAuth } from "../../Login/AuthContext";
@@ -16,6 +17,7 @@ const PositionForm = (props) => {
     setPosition,
     supervisor,
     setSupervisor,
+    subordinates,
     workingTime,
     setWorkingTime,
   } = props;
@@ -50,9 +52,35 @@ const PositionForm = (props) => {
       setShowPopUpLogout(true);
     }
   };
+
+  const getSupervisors = async () => {
+    try {
+      console.log(employee);
+      const data2 = await subordinatesApi(employee.ID);
+      const subordinatesID = data2.data.map((employee) => employee.ID);
+      console.log("Podwładni: ", subordinatesID);
+      const data = await supervisorsApi();
+      console.log("Twoi podwładni: ", subordinates);
+      console.log("Przełozeni w całej firmie: ", data);
+      let newTab = data.filter(
+        (supervisor) => !subordinates.includes(supervisor.ID)
+      );
+      if (employee.ID !== 1) {
+        newTab = newTab.filter((supervisor) => supervisor.ID !== employee.ID);
+      }
+
+      console.log(newTab);
+      setSupervisors(newTab);
+    } catch (error) {
+      console.error(error);
+      setMessage(error.message);
+      setShowPopUpLogout(true);
+    }
+  };
   useEffect(() => {
+    getSupervisors();
     getFromApi(setDepartments, departmentsApi);
-    getFromApi(setSupervisors, supervisorsApi);
+    //getFromApi(setSupervisors, supervisorsApi);
     getFromApi(setWorkingTimes, workingTimeApi);
 
     if (employee) {
@@ -97,7 +125,7 @@ const PositionForm = (props) => {
       </FloatingLabel>
       <FloatingLabel controlId='floatingSelect' label='Przełozony'>
         <Form.Select
-          value={supervisor}
+          value={supervisor || employee.ID}
           aria-label='Floating label select example'
           onChange={onChangeSupervisor}>
           {supervisors.map((supervisor) => (

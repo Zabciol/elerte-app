@@ -7,7 +7,6 @@ import "bootstrap-icons/font/bootstrap-icons.css";
 import { useAuth } from "../Login/AuthContext";
 
 const EmployeeInf = (props) => {
-  console.log(props.user);
   const [inf, setInf] = useState();
   const [show, setShow] = useState(false);
   const { setShowPopUpLogout, setMessage } = useAuth();

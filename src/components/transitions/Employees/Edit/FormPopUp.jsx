@@ -18,9 +18,6 @@ import { useAuth } from "../../Login/AuthContext";
 const FormPopUp = ({ show, setShow, employee }) => {
   const { setShowPopUp, setReloadPopUp, setShowPopUpLogout, setMessage } =
     useAuth();
-  //const [showPopUp, setShowPopUp] = useState(false);
-  //const [messageHere, setMessage] = useState("");
-  //const [onReload, setReloadPopUp] = useState(false);
 
   const nameRef = useRef();
   const lastNameRef = useRef();
@@ -47,7 +44,7 @@ const FormPopUp = ({ show, setShow, employee }) => {
       phoneNumber: phoneNumberRef.current?.value || employee.NrTelefonu,
       departmentID: department,
       positionID: position,
-      supervisorID: supervisor,
+      supervisorID: supervisor !== employee.ID ? supervisor : null,
       workingTimeID: workingTime,
       subordinates: subordinates,
     };
@@ -94,6 +91,8 @@ const FormPopUp = ({ show, setShow, employee }) => {
     try {
       const data = await subordinatesApi(employee.ID);
       const subordinatesID = data.data.map((employee) => employee.ID);
+      console.log(employee);
+      console.log(subordinatesID);
       setSubordinates(subordinatesID);
     } catch (error) {
       console.error(error);
@@ -157,6 +156,7 @@ const FormPopUp = ({ show, setShow, employee }) => {
                 setPosition={setPosition}
                 supervisor={supervisor}
                 setSupervisor={setSupervisor}
+                subordinates={subordinates}
                 workingTime={workingTime}
                 setWorkingTime={setWorkingTime}
               />
