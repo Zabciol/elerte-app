@@ -15,11 +15,16 @@ const MenuItems = (props) => {
   const [showChangePassword, setShowChangePassword] = useState(false);
 
   useEffect(() => {
-    const supervisorNavItems = ["ECP", "Pracownicy"];
-    if (props.user.supervisor && !nav_items.includes("ECP", "Pracownicy"))
-      setNavItems(supervisorNavItems.concat(nav_items));
-    if (props.user.Uprawnienia !== 1 && !nav_items.includes("Pracownicy"))
-      setNavItems(["Pracownicy"].concat(nav_items));
+    let newItems = [];
+
+    if (props.user.supervisor) {
+      newItems.push("ECP", "Pracownicy");
+    } else if (props.user.Uprawnienia !== 1) {
+      newItems.push("Pracownicy");
+    }
+    newItems = newItems.concat(nav_items);
+    const uniqueItems = Array.from(new Set(newItems));
+    setNavItems(uniqueItems);
   }, [user]);
   return (
     <Offcanvas.Body>

@@ -28,13 +28,14 @@ const MenuItems = ({ dzial, dzialy, setDzial, date, setDate }) => {
 
 const Employees = ({ user, setMenuItems, subordinates }) => {
   const { setShowPopUpLogout, setMessage } = useAuth();
+  const [key, setKey] = useState("Lista");
   const [dzialy, setDzialy] = useState([]);
   const [dzial, setDzial] = useState();
   const [date, setDate] = useState(getCurrentDateYearMonth());
   const [employees, setEmployees] = useState(subordinates);
   const [filteredSubordinates, setFilteredSubordinates] =
     useState(subordinates);
-
+  const [allEmployees, setAllEmployees] = useState(subordinates);
   const changeDate = (event) => {
     setDate(event.target.value);
   };
@@ -42,9 +43,7 @@ const Employees = ({ user, setMenuItems, subordinates }) => {
   const getEmployees = async () => {
     try {
       const data =
-        user.Uprawnienia === 2 || user.Uprawnienia === 4
-          ? await allEmployeesAPI()
-          : subordinates;
+        user.Uprawnienia !== 1 ? await allEmployeesAPI() : subordinates;
       setEmployees(data);
     } catch (error) {
       setMessage(error.message);
@@ -53,24 +52,35 @@ const Employees = ({ user, setMenuItems, subordinates }) => {
   };
 
   useEffect(() => {
-    const noweDzialy = Array.from(new Set(employees.map((item) => item.Dzial)));
+    let noweDzialy = [];
+    if (key === "Lista") {
+      noweDzialy = Array.from(new Set(employees.map((item) => item.Dzial)));
+    } else {
+      noweDzialy = Array.from(new Set(subordinates.map((item) => item.Dzial)));
+    }
     setDzialy(noweDzialy);
     setDzial(noweDzialy[0]);
-  }, [employees]);
+  }, [employees, key]);
 
   useEffect(() => {
-    if (employees.length) {
-      const newFilteredSubordinates =
+    let newFilteredSubordinates = [];
+    if (employees.length && key === "Lista") {
+      newFilteredSubordinates =
         dzial === "Każdy"
           ? employees
           : employees.filter((employee) => employee.Dzial === dzial);
-      setFilteredSubordinates(newFilteredSubordinates);
+    } else if (subordinates.length) {
+      newFilteredSubordinates =
+        dzial === "Każdy"
+          ? subordinates
+          : subordinates.filter((employee) => employee.Dzial === dzial);
     }
-  }, [dzial, employees]);
+    setFilteredSubordinates(newFilteredSubordinates);
+  }, [dzial]);
 
   useEffect(() => {
     getEmployees();
-  }, [user, subordinates]);
+  }, [subordinates]);
 
   useEffect(() => {
     setMenuItems(
@@ -83,8 +93,6 @@ const Employees = ({ user, setMenuItems, subordinates }) => {
       />
     );
   }, [dzial, date, dzialy]);
-
-  const [key, setKey] = useState("Lista");
 
   return (
     <Tabs
@@ -102,7 +110,16 @@ const Employees = ({ user, setMenuItems, subordinates }) => {
           <EmployeeInf user={user} />
         </EmployeesList>
       </Tab>
-      <Tab eventKey='Nieobecnosci' title='Nieobecności'>
+      <Tab
+        eventKey='Nieobecnosci'
+        title='Nieobecności'
+        disabled={
+          user.Uprawnienia === 2 ||
+          user.Uprawnienia === 4 ||
+          subordinates.length
+            ? false
+            : true
+        }>
         <EmployeesList subordinates={filteredSubordinates} date={date}>
           {" "}
           <EmployeeAbsenceInf date={date} />
@@ -111,7 +128,11 @@ const Employees = ({ user, setMenuItems, subordinates }) => {
       <Tab eventKey='Excel' title='Export'>
         {" "}
         <ExportExcel
-          subordinates={employees}
+          subordinates={
+            user.Uprawnienia === 2 || user.Uprawnienia === 4
+              ? employees
+              : subordinates
+          }
           user={user}
           dzial={dzial}
           date={date}
