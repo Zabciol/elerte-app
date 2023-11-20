@@ -7,6 +7,8 @@ import FullCalender from "./FullCalender";
 import { SelectDzial } from "../../layout/Menu/MenuForms";
 import { useAuth } from "../Login/AuthContext";
 import { allEmployeesAPI } from "../../../api/employeesApi";
+import { holidaysApi } from "../../../api/workingTimeApi";
+import { generujEventySwieta } from "./getEvents";
 
 const MenuItems = ({ date, setDate, dzial, dzialy, setDzial }) => {
   return (
@@ -62,9 +64,12 @@ const Calender = (props) => {
   };
 
   const fetchData = async () => {
+    const holidays = generujEventySwieta(await holidaysApi(date));
+    console.log(holidays);
     const employeesID = getEmployeesID(employees);
     const data = await getAbsence(employeesID);
-    setEvents(data);
+    console.log([...data, ...holidays]);
+    setEvents([...data, ...holidays]);
   };
 
   const getEmployees = async () => {

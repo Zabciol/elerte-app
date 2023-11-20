@@ -98,4 +98,26 @@ function generujEvent(tablica, pracownik, start, koniec, kolor, komunikat) {
   });
 }
 
+export function generujEventySwieta(holidays) {
+  const fullCalendarEvents = holidays.map((holiday) => {
+    const originalDate = holiday.date;
+    const start = new Date(originalDate + "T00:00:00"); // Czas rozpoczęcia na północ (00:00)
+    const end = new Date(originalDate + "T23:59:59"); // Czas zakończenia na koniec dnia (23:59:59)
+
+    /*
+    if (isNaN(start.getTime()) || isNaN(end.getTime())) {
+      console.error("Nieprawidłowa data:", originalDate);
+    }
+*/
+    return {
+      title: holiday.name,
+      start: holiday.date,
+      end: holiday.date,
+      allDay: true, // Ustaw jako całodniowe
+    };
+  });
+
+  return fullCalendarEvents;
+}
+
 export default generujEventy;
