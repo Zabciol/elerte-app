@@ -7,11 +7,10 @@ import "../../../styles/Request.css";
 const Requests = ({ user }) => {
   return (
     <Tabs defaultActiveKey='new' id='uncontrolled-tab-example' className='mb-3'>
-      {user.supervisor ? (
-        <Tab eventKey='box' title='Skrzynka'>
-          <ManageRequests user={user} />
-        </Tab>
-      ) : null}
+      <Tab eventKey='box' title='Skrzynka' disabled={!user.supervisor}>
+        <ManageRequests user={user} />
+      </Tab>
+
       <Tab
         eventKey='new'
         title='Nowy Wniosek'

@@ -125,7 +125,16 @@ const Employees = ({ user, setMenuItems, subordinates }) => {
           <EmployeeAbsenceInf date={date} />
         </EmployeesList>
       </Tab>
-      <Tab eventKey='Excel' title='Export'>
+      <Tab
+        eventKey='Excel'
+        title='Export'
+        disabled={
+          user.Uprawnienia === 2 ||
+          user.Uprawnienia === 4 ||
+          subordinates.length
+            ? false
+            : true
+        }>
         {" "}
         <ExportExcel
           subordinates={

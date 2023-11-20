@@ -6,6 +6,7 @@ import { getECPAPI } from "../../../api/ecpApi";
 import FullCalender from "./FullCalender";
 import { SelectDzial } from "../../layout/Menu/MenuForms";
 import { useAuth } from "../Login/AuthContext";
+import { allEmployeesAPI } from "../../../api/employeesApi";
 
 const MenuItems = ({ date, setDate, dzial, dzialy, setDzial }) => {
   return (
@@ -26,8 +27,8 @@ const Calender = (props) => {
   const { setShowPopUpLogout } = useAuth();
   const [date, setDate] = useState(getCurrentDateYearMonth());
   const [events, setEvents] = useState([]);
-  const dzialy = Array.from(
-    new Set(props.subordinates.map((item) => item.Dzial))
+  const [dzialy, setDzialy] = useState(
+    Array.from(new Set(props.subordinates.map((item) => item.Dzial)))
   );
   const [dzial, setDzial] = useState(dzialy[0]);
   const changeDate = (event) => {
@@ -48,18 +49,25 @@ const Calender = (props) => {
     }
   };
 
-  const getEmployeesID = () => {
+  const getEmployeesID = (employees) => {
     const employeesID =
       dzial === "Każdy"
-        ? props.subordinates.map((employee) => employee.ID)
-        : props.subordinates
+        ? employees.map((employee) => employee.ID)
+        : employees
             .filter((employee) => employee.Dzial === dzial)
             .map((employee) => employee.ID);
     return employeesID;
   };
 
   const fetchData = async () => {
-    const employeesID = getEmployeesID();
+    let employeesID;
+    if (props.user.Uprawnienia === 2 || props.user.Uprawnienia === 4) {
+      const employees = await allEmployeesAPI();
+      setDzialy(Array.from(new Set(employees.map((item) => item.Dzial))));
+      employeesID = getEmployeesID(employees);
+    } else {
+      employeesID = getEmployeesID(props.subordinates);
+    }
     const data = await getAbsence(employeesID);
     setEvents(data);
   };
@@ -74,7 +82,7 @@ const Calender = (props) => {
         dzialy={dzialy}
         setDzial={setDzial}></MenuItems>
     );
-  }, [date, dzial]);
+  }, [date, dzial, dzialy]);
   return <FullCalender events={events} setDate={setDate}></FullCalender>;
 };
 
