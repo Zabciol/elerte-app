@@ -8,6 +8,7 @@ import EmployeeInf from "./EmployeeInf";
 import NewEmployee from "./NewEmployee/NewEmployee";
 import ExportExcel from "./ExportExcel";
 import EmployeeAbsenceInf from "./EmployeeAbsenceInf";
+import NewMain from "./New/NewMain";
 import { getCurrentDateYearMonth } from "../../common/CommonFunctions";
 import { allEmployeesAPI } from "../../../api/employeesApi";
 import { useAuth } from "../Login/AuthContext";
@@ -156,7 +157,7 @@ const Employees = ({ user, setMenuItems, subordinates }) => {
         disabled={
           user.Uprawnienia === 3 || user.Uprawnienia === 4 ? false : true
         }>
-        <NewEmployee dzial={dzial} />
+        <NewMain dzial={dzial} />
       </Tab>
     </Tabs>
   );

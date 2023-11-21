@@ -20,3 +20,19 @@ export const positionApi = async (id) => {
     handleError(error);
   }
 };
+
+export const addPositionApi = async (newPosition) => {
+  try {
+    if (newPosition.name === "" || newPosition.Dzial_ID === null)
+      throw new Error("Wprowadz poprawne dane");
+    const token = sessionStorage.getItem("userToken");
+    const response = await axios.post(`${API_URL}/add`, newPosition, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    handleError(error);
+  }
+};

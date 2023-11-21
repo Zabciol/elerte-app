@@ -72,6 +72,8 @@ export const handleError = (error) => {
     );
   } else if (error.request) {
     throw new Error("Brak odpowiedzi od serwera");
+  } else if (error.message) {
+    throw new Error(error.message);
   } else {
     throw new Error("API not available");
   }

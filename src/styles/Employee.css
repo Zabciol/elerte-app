@@ -33,3 +33,13 @@
     width: auto;
   }
 }
+@media (max-width: 576px) {
+  .new-home {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .new-home > button {
+    width: 200px;
+  }
+}

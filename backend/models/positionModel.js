@@ -14,6 +14,17 @@ const getPositionByID = (Dzial_ID) => {
   });
 };
 
+const addPosition = async (newPosition) => {
+  try {
+    const query = `INSERT INTO stanowisko (Nazwa, Dzial_ID) VALUES (?,?)`;
+    await queryDatabasePromise(query, [newPosition.name, newPosition.Dzial_ID]);
+    return { success: true, message: "Dodano stanowisko." };
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
 module.exports = {
   getPositionByID,
+  addPosition,
 };

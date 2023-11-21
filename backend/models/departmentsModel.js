@@ -13,6 +13,19 @@ const getDepartments = () => {
     });
   });
 };
+
+const addDepartment = async (name) => {
+  try {
+    const query = `INSERT INTO dzialy (nazwa) VALUES (?)`;
+    await queryDatabasePromise(query, name);
+  } catch (error) {
+    throw new Error(error);
+  }
+  co;
+  queryDatabasePromise;
+};
+
 module.exports = {
   getDepartments,
+  addDepartment,
 };

@@ -18,4 +18,16 @@ router.get("/", verifyToken, async (req, res) => {
   }
 });
 
+router.post("/add", verifyToken, async (req, res) => {
+  try {
+    const newPosition = req.body;
+
+    const result = await positionModel.addPosition(newPosition);
+    res.json(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send(error);
+  }
+});
+
 module.exports = router;
