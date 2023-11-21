@@ -1,3 +1,4 @@
+const { query } = require("express");
 const db = require("../db");
 const { queryDatabase, queryDatabasePromise } = require("../db");
 
@@ -18,11 +19,10 @@ const addDepartment = async (name) => {
   try {
     const query = `INSERT INTO dzialy (nazwa) VALUES (?)`;
     await queryDatabasePromise(query, name);
+    return { success: true, message: "Dodano dział." };
   } catch (error) {
     throw new Error(error);
   }
-  co;
-  queryDatabasePromise;
 };
 
 module.exports = {

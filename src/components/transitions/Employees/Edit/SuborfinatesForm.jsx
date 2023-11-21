@@ -46,6 +46,7 @@ const SubordinatesForm = (props) => {
         setSupervisors(supervisorsData.data);
       }
     } catch (error) {
+      console.log(error.message);
       setMessage(error.message);
       setShowPopUpLogout(true);
     }

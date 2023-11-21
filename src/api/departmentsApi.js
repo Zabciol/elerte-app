@@ -17,3 +17,18 @@ export const departmentsApi = async () => {
     handleError(error);
   }
 };
+
+export const addDepartmentApi = async (newDepartment) => {
+  try {
+    if (newDepartment.name === "") throw new Error("Wprowadz poprawne dane");
+    const token = sessionStorage.getItem("userToken");
+    const response = await axios.post(`${API_URL}/add`, newDepartment, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    handleError(error);
+  }
+};
