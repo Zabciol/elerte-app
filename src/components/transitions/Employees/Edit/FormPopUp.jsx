@@ -44,11 +44,12 @@ const FormPopUp = ({ show, setShow, employee }) => {
       phoneNumber: phoneNumberRef.current?.value || employee.NrTelefonu,
       departmentID: department,
       positionID: position,
-      supervisorID: supervisor !== employee.ID ? supervisor : null,
+      supervisorID: supervisor !== employee.ID ? Number(supervisor) : null,
       workingTimeID: workingTime,
       subordinates: subordinates,
     };
     try {
+      console.log(employeeData);
       const response = await updateEmployeeApi(employeeData);
       if (shouldShowPopUp) {
         setShow(false);
@@ -88,13 +89,8 @@ const FormPopUp = ({ show, setShow, employee }) => {
 
   const getSubordinates = async () => {
     try {
-      console.log("asdasdasd");
       const data = await subordinatesApi(employee.ID);
-      console.log("Podwładni: ", data);
       const subordinatesID = data.data.map((employee) => employee.ID);
-      console.log(employee);
-      console.log("Wszyscy podwładni");
-      console.log(subordinatesID);
       setSubordinates(subordinatesID);
     } catch (error) {
       console.error(error);
@@ -107,11 +103,9 @@ const FormPopUp = ({ show, setShow, employee }) => {
     try {
       const data = await myDirectSubordinatesAPI(employee.ID);
       const directSubordinatesID = data.map((employee) => employee.ID);
-      console.log(employee);
-      console.log("Direct subordinates");
-      console.log(directSubordinatesID);
       setDirectSubordinates(directSubordinatesID);
     } catch (error) {
+      console.log(error.message);
       setMessage(error.message);
       setShowPopUpLogout(true);
     }

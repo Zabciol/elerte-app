@@ -65,7 +65,7 @@ const PositionForm = (props) => {
       if (employee.ID !== 1) {
         newTab = newTab.filter((supervisor) => supervisor.ID !== employee.ID);
       }
-
+      console.log("Moliwi przełozeni");
       console.log(newTab);
       setSupervisors(newTab);
     } catch (error) {
@@ -80,14 +80,13 @@ const PositionForm = (props) => {
     getFromApi(setDepartments, departmentsApi);
     //getFromApi(setSupervisors, supervisorsApi);
     getFromApi(setWorkingTimes, workingTimeApi);
-
     if (employee) {
       setDepartment(employee.DzialID);
       setPosition(employee.StanowiskoID);
       setWorkingTime(employee.WymiarPracy_ID);
       setSupervisor(employee.PrzelozonyID);
     }
-  }, []);
+  }, [subordinates]);
 
   useEffect(() => {
     department !== undefined

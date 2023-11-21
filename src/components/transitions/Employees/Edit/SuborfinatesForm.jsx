@@ -9,7 +9,7 @@ import { useAuth } from "../../Login/AuthContext";
 import { subordinatesApi } from "../../../../api/employeesApi";
 
 const SubordinatesForm = (props) => {
-  const { setShowPopUpLogoutm, setMessage } = useAuth();
+  const { setShowPopUpLogout, setMessage } = useAuth();
   const [departments, setDepartments] = useState([]);
   const [department, setDepartment] = useState();
   const [employees, setEmployees] = useState([]);
@@ -47,7 +47,7 @@ const SubordinatesForm = (props) => {
       }
     } catch (error) {
       setMessage(error.message);
-      setShowPopUpLogoutm(true);
+      setShowPopUpLogout(true);
     }
   };
 
@@ -57,7 +57,7 @@ const SubordinatesForm = (props) => {
       setDepartments(data);
     } catch (error) {
       setMessage(error.message);
-      setShowPopUpLogoutm(true);
+      setShowPopUpLogout(true);
     }
   };
 
