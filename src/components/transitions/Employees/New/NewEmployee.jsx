@@ -46,6 +46,11 @@ const NewEmployee = ({ show, cancel }) => {
     StanowiskoID: null,
     WymiarPracy_ID: null,
   };
+  function isAnyValueEmpty(obj) {
+    return Object.values(obj).some(
+      (value) => value === null || value === undefined || value === ""
+    );
+  }
 
   const submit = async () => {
     const newEmployee = {
@@ -63,7 +68,17 @@ const NewEmployee = ({ show, cancel }) => {
         usedDays: usedDays,
       },
     };
-    console.log(newEmployee);
+    try {
+      const { mail, phoneNumber, ...toCheck } = newEmployee;
+      if (isAnyValueEmpty(toCheck)) throw new Error("Uzupełnij dane");
+      if (isAnyValueEmpty(toCheck.vacation))
+        throw new Error("Uzupełnij dane urlopowe");
+      console.log(newEmployee);
+    } catch (error) {
+      console.error(error);
+      setMessage(error.message);
+      setShowPopUp(true);
+    }
   };
 
   return (
