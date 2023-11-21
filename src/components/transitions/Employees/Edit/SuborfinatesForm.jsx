@@ -102,7 +102,7 @@ const SubordinatesForm = (props) => {
 
   useEffect(() => {
     filterEmployees();
-  }, [department, employees]);
+  }, [employees]);
 
   useEffect(() => {
     if (departments && departments.length > 0) {

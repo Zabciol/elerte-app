@@ -69,10 +69,12 @@ const PositionForm = (props) => {
   }, [subordinates]);
 
   useEffect(() => {
-    setDepartment(employee?.DzialID || departments[2]?.ID);
-    setPosition(employee?.StanowiskoID || positions[0]?.ID);
-    setWorkingTime(employee?.WymiarPracy_ID || workingTimes[0]?.ID);
-    setSupervisor(employee?.PrzelozonyID || supervisors[0]?.ID);
+    setDepartment(department || employee?.DzialID || departments[2]?.ID);
+    setPosition(position || employee?.StanowiskoID || positions[0]?.ID);
+    setWorkingTime(
+      workingTime || employee?.WymiarPracy_ID || workingTimes[0]?.ID
+    );
+    setSupervisor(supervisor || employee?.PrzelozonyID || supervisors[0]?.ID);
   }, [subordinates, departments, positions, workingTimes, supervisors]);
 
   const renderSelect = (label, value, onChange, options, formatOption) => (
