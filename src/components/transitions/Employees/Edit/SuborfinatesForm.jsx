@@ -6,6 +6,7 @@ import ListGroup from "react-bootstrap/ListGroup";
 import { departmentsApi } from "../../../../api/departmentsApi";
 import { mySupervisorsAPI } from "../../../../api/employeesApi";
 import { useAuth } from "../../Login/AuthContext";
+import { subordinatesApi } from "../../../../api/employeesApi";
 
 const SubordinatesForm = (props) => {
   const { setShowPopUpLogoutm, setMessage } = useAuth();
@@ -60,6 +61,13 @@ const SubordinatesForm = (props) => {
     }
   };
 
+  const getMySubordinates = async () => {
+    console.log("aadsda");
+    console.log(props.employee);
+    const data = await subordinatesApi(props.employee.ID);
+    console.log(data);
+  };
+
   const updateHierarchy = (employee) => {
     const directSubordinates = [...props.directSubordinates];
     const allSubordinates = [...props.subordinates];
@@ -81,13 +89,15 @@ const SubordinatesForm = (props) => {
     }
     props.updateData(directSubordinates);
   };
+
   useEffect(() => {
     const fetchData = async () => {
       await getAllEmployees();
       await getAllDepartments();
+      //await getMySubordinates();
     };
     fetchData();
-  }, []);
+  }, [props.employee]);
 
   useEffect(() => {
     filterEmployees();

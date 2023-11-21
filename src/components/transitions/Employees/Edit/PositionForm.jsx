@@ -74,6 +74,7 @@ const PositionForm = (props) => {
       setShowPopUpLogout(true);
     }
   };
+
   useEffect(() => {
     getSupervisors();
     getFromApi(setDepartments, departmentsApi);

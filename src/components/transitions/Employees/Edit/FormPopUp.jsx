@@ -80,7 +80,6 @@ const FormPopUp = ({ show, setShow, employee }) => {
       setReloadPopUp(false);
     } catch (error) {
       console.error("Wystąpił błąd:", error);
-      setMessage("Wystąpił błąd podczas komunikacji z serwerem.");
       setMessage(error.message);
       setShowPopUpLogout(true);
       setShow(false);
@@ -89,7 +88,9 @@ const FormPopUp = ({ show, setShow, employee }) => {
 
   const getSubordinates = async () => {
     try {
+      console.log("asdasdasd");
       const data = await subordinatesApi(employee.ID);
+      console.log("Podwładni: ", data);
       const subordinatesID = data.data.map((employee) => employee.ID);
       console.log(employee);
       console.log("Wszyscy podwładni");
@@ -117,9 +118,11 @@ const FormPopUp = ({ show, setShow, employee }) => {
   };
 
   useEffect(() => {
-    getSubordinates();
-    getDirectSubordinates();
-  }, []);
+    if (show) {
+      getSubordinates();
+      getDirectSubordinates();
+    }
+  }, [show, employee]);
 
   const updateData = async (directSubordinates) => {
     await save(false, directSubordinates); // Wywołaj save bez pokazywania PopUp
