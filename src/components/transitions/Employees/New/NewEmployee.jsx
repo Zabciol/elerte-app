@@ -9,6 +9,7 @@ import Tab from "react-bootstrap/Tab";
 import Tabs from "react-bootstrap/Tabs";
 import ContactForm from "../Edit/ContactForm";
 import PositionForm from "../Edit/PositionForm";
+import NewVacation from "./NewVacation";
 import SubordinatesForm from "../Edit/SuborfinatesForm";
 import { subordinatesApi, supervisorsApi } from "../../../../api/employeesApi";
 import { updateEmployeeApi } from "../../../../api/employeesApi";
@@ -31,22 +32,38 @@ const NewEmployee = ({ show, cancel }) => {
   const [workingTime, setWorkingTime] = useState();
   const [subordinates, setSubordinates] = useState([]);
   const [directSubordinates, setDirectSubordinates] = useState([]);
+  const [usedDays, setUsedDays] = useState(0);
+  const [pastDays, setPastDays] = useState(0);
+  const [maxCountOfDays, setMaxCountOfDays] = useState(26);
 
   const employee = {
     DzialID: 2,
-    DzialNazwa: "Magazyn",
-    DzialPrzelozonyNazwa: null,
     Imie: "Jan",
     Mail: "jan.kowalski@elerte.pl",
     Nazwisko: "Kowalski",
     NrTelefonu: "123-456-789",
     PrzelozonyID: null,
-    PrzelozonyImie: null,
-    PrzelozonyMail: null,
-    PrzelozonyNazwisko: null,
     StanowiskoID: null,
-    StanowiskoNazwa: null,
     WymiarPracy_ID: null,
+  };
+
+  const submit = async () => {
+    const newEmployee = {
+      name: nameRef.current.value,
+      lastname: lastNameRef.current.value,
+      mail: mailRef.current.value,
+      phoneNumber: phoneNumberRef.current.value,
+      positionID: position,
+      departmentID: department,
+      workingTime: workingTime,
+      supervisorID: supervisor,
+      vacation: {
+        maxCountOfDays: maxCountOfDays,
+        pastDays: pastDays,
+        usedDays: usedDays,
+      },
+    };
+    console.log(newEmployee);
   };
 
   return (
@@ -56,7 +73,8 @@ const NewEmployee = ({ show, cancel }) => {
       title={"Nowy pracownik"}
       decline={cancel}
       declineText={"Anuluj"}
-      confirmText={"Zapisz"}>
+      confirmText={"Zapisz"}
+      confirm={submit}>
       <Tabs
         defaultActiveKey='main'
         id='uncontrolled-tab-example'
@@ -82,6 +100,16 @@ const NewEmployee = ({ show, cancel }) => {
             subordinates={subordinates}
             workingTime={workingTime}
             setWorkingTime={setWorkingTime}
+          />
+        </Tab>
+        <Tab eventKey='vacation' title='Urlop'>
+          <NewVacation
+            usedDays={usedDays}
+            setUsedDays={setUsedDays}
+            pastDays={pastDays}
+            setPastDays={setPastDays}
+            maxCountOfDays={maxCountOfDays}
+            setMaxCountOfDays={setMaxCountOfDays}
           />
         </Tab>
       </Tabs>

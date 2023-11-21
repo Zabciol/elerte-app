@@ -73,7 +73,7 @@ const PositionForm = (props) => {
     setPosition(employee?.StanowiskoID || positions[0]?.ID);
     setWorkingTime(employee?.WymiarPracy_ID || workingTimes[0]?.ID);
     setSupervisor(employee?.PrzelozonyID || supervisors[0]?.ID);
-  }, [subordinates]);
+  }, [subordinates, departments, positions, workingTimes, supervisors]);
 
   const renderSelect = (label, value, onChange, options, formatOption) => (
     <FloatingLabel controlId={`floatingSelect-${label}`} label={label}>
