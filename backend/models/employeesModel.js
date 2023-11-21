@@ -12,7 +12,7 @@ const getSubordinates = async (id) => {
 
 const getSupervisors = async () => {
   const query =
-    "SELECT Pracownicy.ID, Imie, Nazwisko, Dzialy.Nazwa FROM Pracownicy LEFT JOIN Hierarchia ON Pracownicy.ID = Hierarchia.Przelozony_ID " +
+    "SELECT Pracownicy.ID, Imie, Nazwisko, Dzialy.Nazwa, Dzialy.ID AS `Dzial_ID` FROM Pracownicy LEFT JOIN Hierarchia ON Pracownicy.ID = Hierarchia.Przelozony_ID " +
     "LEFT JOIN Stanowisko ON Pracownicy.Stanowisko_ID = Stanowisko.ID LEFT JOIN Dzialy ON Stanowisko.Dzial_ID = Dzialy.ID " +
     "GROUP BY Hierarchia.Przelozony_ID";
   return await queryDatabasePromise(query, []);

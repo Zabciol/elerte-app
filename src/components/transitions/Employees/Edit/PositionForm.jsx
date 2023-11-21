@@ -35,6 +35,7 @@ const PositionForm = (props) => {
     setPosition(event.target.value);
   };
   const onChangeSupervisor = (event) => {
+    console.log(event.target.value);
     setSupervisor(event.target.value);
   };
   const onChangeWorkingTime = (event) => {
@@ -55,18 +56,20 @@ const PositionForm = (props) => {
 
   const getSupervisors = async () => {
     try {
-      console.log(employee);
       const data = await supervisorsApi();
-      console.log("Twoi podwładni: ", subordinates);
-      console.log("Przełozeni w całej firmie: ", data);
       let newTab = data.filter(
         (supervisor) => !subordinates.includes(supervisor.ID)
       );
       if (employee.ID !== 1) {
         newTab = newTab.filter((supervisor) => supervisor.ID !== employee.ID);
       }
-      console.log("Moliwi przełozeni");
-      console.log(newTab);
+      if (employee.PrzelozonyID === null) {
+        const supervisorsInSpecificDepartment = newTab.filter(
+          (supervisor) => supervisor.Dzial_ID === department
+        );
+        if (supervisorsInSpecificDepartment.length)
+          setSupervisor(supervisorsInSpecificDepartment[0].ID);
+      }
       setSupervisors(newTab);
     } catch (error) {
       console.error(error);
@@ -76,19 +79,20 @@ const PositionForm = (props) => {
   };
 
   useEffect(() => {
-    getSupervisors();
     getFromApi(setDepartments, departmentsApi);
-    //getFromApi(setSupervisors, supervisorsApi);
     getFromApi(setWorkingTimes, workingTimeApi);
     if (employee) {
       setDepartment(employee.DzialID);
       setPosition(employee.StanowiskoID);
       setWorkingTime(employee.WymiarPracy_ID);
       setSupervisor(employee.PrzelozonyID);
+    } else {
+      setDepartment(departments[2].ID);
     }
   }, [subordinates]);
 
   useEffect(() => {
+    getSupervisors();
     department !== undefined
       ? getFromApi(setPositions, positionApi, department)
       : getFromApi(setPositions, positionApi, 1);
