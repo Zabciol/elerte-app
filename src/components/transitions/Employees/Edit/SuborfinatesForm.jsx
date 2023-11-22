@@ -40,6 +40,7 @@ const SubordinatesForm = (props) => {
       if (props.employee) {
         data = data.filter((employee) => employee.ID !== props.employee.ID);
       }
+      console.log(data);
       setEmployees(data);
       const supervisorsData = await mySupervisorsAPI(props.employee.ID);
       if (supervisorsData.data.length) {
