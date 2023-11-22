@@ -68,7 +68,7 @@ const PositionForm = (props) => {
     fetchData(supervisorsApi).then((data) => {
       const filtered = filterSupervisors(data);
       setSupervisors(filtered);
-
+      console.log(filtered);
       const initialSupervisors = filtered.filter((supervisor) =>
         directSupervisors.some((ds) => ds.ID === supervisor.ID)
       );

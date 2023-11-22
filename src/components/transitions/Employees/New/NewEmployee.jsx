@@ -28,7 +28,7 @@ const NewEmployee = ({ show, cancel }) => {
   const phoneNumberRef = useRef();
   const [department, setDepartment] = useState();
   const [position, setPosition] = useState();
-  const [supervisor, setSupervisor] = useState();
+  const [directSupervisors, setDirectSupervisors] = useState([]);
   const [workingTime, setWorkingTime] = useState();
   const [subordinates, setSubordinates] = useState([]);
   const [directSubordinates, setDirectSubordinates] = useState([]);
@@ -61,13 +61,15 @@ const NewEmployee = ({ show, cancel }) => {
       positionID: position,
       departmentID: department,
       workingTime: workingTime,
-      supervisorID: supervisor,
+      supervisorsID: directSupervisors,
       vacation: {
         maxCountOfDays: maxCountOfDays,
         pastDays: pastDays,
         usedDays: usedDays,
       },
     };
+    console.log(newEmployee);
+
     try {
       const { mail, phoneNumber, ...toCheck } = newEmployee;
       if (isAnyValueEmpty(toCheck)) throw new Error("Uzupełnij dane");
@@ -110,8 +112,8 @@ const NewEmployee = ({ show, cancel }) => {
             setDepartment={setDepartment}
             position={position}
             setPosition={setPosition}
-            supervisor={supervisor}
-            setSupervisor={setSupervisor}
+            directSupervisors={directSupervisors}
+            setDirectSupervisors={setDirectSupervisors}
             subordinates={subordinates}
             workingTime={workingTime}
             setWorkingTime={setWorkingTime}

@@ -46,24 +46,20 @@ const FormPopUp = ({ show, setShow, employee }) => {
       phoneNumber: phoneNumberRef.current?.value || employee.NrTelefonu,
       departmentID: department,
       positionID: position,
-      supervisorsID: !directSupervisors.some(
-        (element) => element.ID === employee.ID
-      )
-        ? directSupervisors
-        : null,
+      supervisors: directSupervisors,
       workingTimeID: workingTime,
       subordinates: subordinates,
     };
     try {
       console.log(employeeData);
-      /*
+
       const response = await updateEmployeeApi(employeeData);
       if (shouldShowPopUp) {
         setShow(false);
         setReloadPopUp(true);
         setMessage(response.message);
         setShowPopUp(true);
-      }*/
+      }
     } catch (error) {
       console.error("Wystąpił błąd:", error);
       setMessage(error.message);

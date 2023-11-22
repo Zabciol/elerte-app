@@ -117,8 +117,10 @@ const addNewEmployee = async (data) => {
 
     await addLoginAndPassword(pracownikID, login);
 
-    if (data.supervisor) {
-      await addToHierarchy(data.supervisor, pracownikID);
+    if (data.supervisors.length) {
+      for (const supervisor of data.supervisors) {
+        await addToHierarchy(supervisor.ID, ID);
+      }
     }
 
     if (data.subordinates && data.subordinates.length) {
@@ -223,6 +225,33 @@ const updateEmployeeMainData = async (employee) => {
   );
 };
 
+const compareSupervisorsIfDiffrent = (currentSupervisors, supervisors) => {
+  const currentIDs = currentSupervisors.map((supervisor) => supervisor.ID);
+  const newIDs = supervisors.map((supervisor) => supervisor.ID);
+
+  // Sprawdzenie, czy długości tablic są różne
+  if (currentIDs.length !== newIDs.length) {
+    return true;
+  }
+
+  // Sprawdzenie, czy wszystkie ID z jednej tablicy znajdują się w drugiej
+  for (let id of currentIDs) {
+    if (!newIDs.includes(id)) {
+      return true;
+    }
+  }
+
+  // Sprawdzenie w drugą stronę
+  for (let id of newIDs) {
+    if (!currentIDs.includes(id)) {
+      return true;
+    }
+  }
+
+  // Tablice są identyczne
+  return false;
+};
+
 const updateEmployee = async (employeeData) => {
   const {
     ID,
@@ -233,11 +262,12 @@ const updateEmployee = async (employeeData) => {
     phoneNumber,
     positionID,
     subordinates,
-    supervisorID,
+    supervisors,
     workingTimeID,
   } = employeeData;
 
   try {
+    await queryDatabase("START TRANSACTION");
     const currentEmployee = await getEmployeeInf(ID);
     const currentDataEmployee = currentEmployee[0];
 
@@ -254,15 +284,17 @@ const updateEmployee = async (employeeData) => {
       await updateEmployeeMainData(employeeData);
     }
 
-    const currentSupervisor = await getMySupervisor(ID);
-    const currentSupervisorID = currentSupervisor.ID;
+    const currentSupervisors = await getMyDirectSupervisors(ID);
+    console.log("Poprzedni przelozeni: ", currentSupervisors);
+    console.log("Nowi przelozeni: ", supervisors);
 
-    if (
-      currentSupervisorID &&
-      Number(currentSupervisorID) !== Number(supervisorID)
-    ) {
-      await removeFromHierarchy(currentSupervisorID, ID);
-      await addToHierarchy(supervisorID, ID);
+    if (compareSupervisorsIfDiffrent(currentSupervisors, supervisors)) {
+      console.log("Dane róznią się");
+      const removeQuery = `DELETE FROM Hierarchia WHERE Podwladny_ID = ?`;
+      await queryDatabasePromise(removeQuery, ID);
+      for (const supervisor of supervisors) {
+        await addToHierarchy(supervisor.ID, ID);
+      }
     }
 
     const currentSubordinates = await getSubordinates(ID);
@@ -290,8 +322,10 @@ const updateEmployee = async (employeeData) => {
         await removeFromHierarchy(ID, subordinateId);
       }
     }
+    await queryDatabase("COMMIT");
     return { success: true, message: "Employee updated successfully." };
   } catch (error) {
+    await queryDatabase("ROLLBACK");
     // W przypadku błędu, wycofaj transakcję
     console.error("Error during employee update:", error);
     throw error;
