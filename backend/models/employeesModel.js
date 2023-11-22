@@ -135,7 +135,6 @@ const addNewEmployee = async (data) => {
     };
   }
 };
-
 const getMySupervisor = async (id) => {
   return new Promise((resolve, reject) => {
     const query =
@@ -153,32 +152,48 @@ const getMySupervisor = async (id) => {
   });
 };
 
-const getMySupervisors = async (id) => {
-  let supervisors = [];
-  let supervisorID = id;
-  let result;
-  while (supervisorID) {
-    try {
-      result = await getMySupervisor(supervisorID);
-      if (result.ID) {
-        supervisors.push(result);
-        supervisorID = result.ID;
-      } else {
-        supervisorID = null;
+const getMyDirectSupervisors = async (id) => {
+  return new Promise((resolve, reject) => {
+    const query =
+      "SELECT Imie,Nazwisko,Mail, Pracownicy.ID FROM Hierarchia LEFT JOIN Pracownicy ON Pracownicy.ID = Hierarchia.Przelozony_ID WHERE Podwladny_ID = ?";
+    queryDatabase(query, [id], (err, results) => {
+      if (err) {
+        reject(err);
+        return {
+          success: false,
+          message: "Wystąpił błąd podczas dodawania pracownika i zależności.",
+        };
       }
-    } catch (error) {
-      return {
-        success: false,
-        message: "Wystąpił błąd podczas pobierania przełożonego.",
-        error: error,
-      };
+      resolve(results);
+    });
+  });
+};
+const getAllMySupervisors = async (employeeId, allSupervisors = []) => {
+  try {
+    const supervisors = await getMyDirectSupervisors(employeeId);
+
+    if (supervisors.length === 0) {
+      // Brak dalszych przełożonych, zwróć zebrane wyniki
+      return allSupervisors;
     }
+
+    for (let supervisor of supervisors) {
+      if (!allSupervisors.some((s) => s.ID === supervisor.ID)) {
+        allSupervisors.push(supervisor);
+        await getAllMySupervisors(supervisor.ID, allSupervisors);
+      }
+    }
+
+    //return allSupervisors;
+    return {
+      success: true,
+      message: "Poprawnie pobrano twoich wszystkich przełozonych",
+      data: allSupervisors,
+    };
+  } catch (error) {
+    console.error("Błąd podczas pobierania przełożonych:", error);
+    return [];
   }
-  return {
-    success: true,
-    message: "Przełożeni pobrani pomyślnie.",
-    data: supervisors,
-  };
 };
 
 const updateEmployeeMainData = async (employee) => {
@@ -338,10 +353,10 @@ module.exports = {
   getWorkedHoursByEmployee,
   getEmployeeInf,
   getSupervisors,
-  getMySupervisors,
+  getMyDirectSupervisors,
+  getAllMySupervisors,
   getAllEmployees,
   addNewEmployee,
-  getMySupervisor,
   updateEmployee,
   deleteEmployee,
   getMyDirectSubordinates,

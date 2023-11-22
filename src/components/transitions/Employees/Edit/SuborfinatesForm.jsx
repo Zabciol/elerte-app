@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback, useMemo } from "react";
 import { allEmployeesAPI } from "../../../../api/employeesApi";
 import FloatingLabel from "react-bootstrap/FloatingLabel";
 import Form from "react-bootstrap/Form";
@@ -16,44 +16,39 @@ const SubordinatesForm = (props) => {
   const [filteredEmployees, setFilteredEmployees] = useState([]);
   const [supervisors, setSupervisors] = useState([]);
 
-  const onChangeDepartment = (event) => {
+  const onChangeDepartment = useCallback((event) => {
     setDepartment(event.target.value);
-  };
+  }, []);
 
-  const filterEmployees = () => {
+  const filterEmployees = useCallback(() => {
     if (employees.length && department) {
-      const tab = employees
-        .filter((employee) => employee.Dzial === department)
-        .filter(
-          (employee) =>
-            !supervisors.some((supervisor) => supervisor.ID === employee.ID)
-        );
-      console.log("Przefiltrowani mozliwi podwładni");
+      const tab = employees.filter(
+        (employee) =>
+          employee.Dzial === department &&
+          !supervisors.some((supervisor) => supervisor.ID === employee.ID)
+      );
       console.log(tab);
       setFilteredEmployees(tab);
     }
-  };
+  }, [employees, department, supervisors]);
 
-  const getAllEmployees = async () => {
+  const getAllEmployees = useCallback(async () => {
     try {
       let data = await allEmployeesAPI();
       if (props.employee) {
         data = data.filter((employee) => employee.ID !== props.employee.ID);
       }
-      console.log(data);
       setEmployees(data);
       const supervisorsData = await mySupervisorsAPI(props.employee.ID);
-      if (supervisorsData.data.length) {
-        setSupervisors(supervisorsData.data);
-      }
+      console.log("Moi przełozeni: ", supervisorsData);
+      setSupervisors(supervisorsData.data.length ? supervisorsData.data : []);
     } catch (error) {
-      console.log(error.message);
       setMessage(error.message);
       setShowPopUpLogout(true);
     }
-  };
+  }, [props.employee, setMessage, setShowPopUpLogout]);
 
-  const getAllDepartments = async () => {
+  const getAllDepartments = useCallback(async () => {
     try {
       const data = await departmentsApi();
       setDepartments(data);
@@ -61,56 +56,42 @@ const SubordinatesForm = (props) => {
       setMessage(error.message);
       setShowPopUpLogout(true);
     }
-  };
+  }, [setMessage, setShowPopUpLogout]);
 
-  const getMySubordinates = async () => {
-    console.log("aadsda");
-    console.log(props.employee);
-    const data = await subordinatesApi(props.employee.ID);
-    console.log(data);
-  };
+  const updateHierarchy = useCallback(
+    (employee) => {
+      const directSubordinates = props.directSubordinates.filter(
+        (id) => id !== employee.ID
+      );
+      const allSubordinates = props.subordinates.filter(
+        (id) => id !== employee.ID
+      );
 
-  const updateHierarchy = (employee) => {
-    const directSubordinates = [...props.directSubordinates];
-    const allSubordinates = [...props.subordinates];
+      if (!props.subordinates.includes(employee.ID)) {
+        directSubordinates.push(employee.ID);
+        allSubordinates.push(employee.ID);
+      }
 
-    if (
-      !props.subordinates.includes(employee.ID) &&
-      !props.directSubordinates.includes(employee.ID)
-    ) {
-      directSubordinates.push(employee.ID);
-      allSubordinates.push(employee.ID);
-    } else if (
-      props.subordinates.includes(employee.ID) &&
-      props.directSubordinates.includes(employee.ID)
-    ) {
-      const index = directSubordinates.indexOf(employee.ID);
-      if (index > -1) directSubordinates.splice(index, 1);
-      const index2 = allSubordinates.indexOf(employee.ID);
-      if (index2 > -1) allSubordinates.splice(index2, 1);
-    }
-    props.updateData(directSubordinates);
-  };
+      props.updateData(directSubordinates, allSubordinates);
+    },
+    [props]
+  );
 
   useEffect(() => {
-    const fetchData = async () => {
-      await getAllEmployees();
-      await getAllDepartments();
-      //await getMySubordinates();
-    };
-    fetchData();
-  }, [props.employee]);
+    getAllEmployees();
+    getAllDepartments();
+  }, [getAllEmployees, getAllDepartments, props.employee]);
 
   useEffect(() => {
     filterEmployees();
-  }, [employees]);
+  }, [filterEmployees, employees, department]);
 
   useEffect(() => {
-    if (departments && departments.length > 0) {
-      const dep = departments.filter(
+    if (departments.length > 0) {
+      const dep = departments.find(
         (department) => department.ID === Number(props.department)
       );
-      setDepartment(dep[0].Nazwa);
+      setDepartment(dep ? dep.Nazwa : null);
     }
   }, [props.department, departments]);
 
