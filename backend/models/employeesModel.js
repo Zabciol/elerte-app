@@ -180,10 +180,8 @@ const getMyDirectSupervisors = async (id) => {
 const getAllMySupervisors = async (employeeId, allSupervisors = []) => {
   try {
     const supervisors = await getMyDirectSupervisors(employeeId);
-    console.log(supervisors);
+
     if (supervisors.length === 0) {
-      console.log("Koniec przełozonych");
-      // Brak dalszych przełożonych, zwróć zebrane wyniki
       return allSupervisors;
     }
 
@@ -284,11 +282,8 @@ const updateEmployee = async (employeeData) => {
     }
 
     const currentSupervisors = await getMyDirectSupervisors(ID);
-    console.log("Poprzedni przelozeni: ", currentSupervisors);
-    console.log("Nowi przelozeni: ", supervisors);
 
     if (compareSupervisorsIfDiffrent(currentSupervisors, supervisors)) {
-      console.log("Dane róznią się");
       const removeQuery = `DELETE FROM Hierarchia WHERE Podwladny_ID = ?`;
       await queryDatabasePromise(removeQuery, ID);
       for (const supervisor of supervisors) {

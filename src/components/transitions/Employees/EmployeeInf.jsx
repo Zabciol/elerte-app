@@ -13,8 +13,6 @@ const EmployeeInf = (props) => {
   const getInformation = async () => {
     try {
       const response = await infApi(props.employee.ID);
-      console.log(response);
-      console.log(response.przelozeni);
       if (response) {
         setInf(response);
       } else setInf(null);
@@ -41,7 +39,9 @@ const EmployeeInf = (props) => {
             Przełożeni:{" "}
             {inf.przelozeni.map((supervisor) =>
               supervisor.ID ? (
-                <i>{supervisor.Imie + " " + supervisor.Nazwisko + " "}</i>
+                <i key={supervisor.ID}>
+                  {supervisor.Imie + " " + supervisor.Nazwisko + " "}
+                </i>
               ) : null
             )}
             <i>

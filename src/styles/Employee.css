@@ -24,6 +24,56 @@
   position: relative;
   margin: 5px 0;
 }
+.css-13cymwt-control {
+  padding: 0.5em;
+}
+
+.select-react-position {
+  position: relative;
+}
+
+.select-react-position-label {
+  position: absolute;
+  z-index: 11;
+  font-size: small;
+  left: 14px;
+  top: 7px;
+  color: rgba(var(--bs-body-color-rgb), 0.65);
+}
+.css-13cymwt-control,
+.css-t3ipsp-control,
+.css-1nmdiq5-menu {
+  z-index: 10 !important;
+  background-color: var(--bs-body-bg) !important;
+  border: var(--bs-border-width) solid var(--bs-border-color) !important;
+}
+.css-1nmdiq5-menu .css-1jqq78o-placeholder {
+  color: var(--bs-body-color) !important;
+}
+.css-d7l1ni-option {
+  background-color: transparent !important;
+}
+
+.css-1n6sfyn-MenuList > div {
+  cursor: pointer;
+}
+.css-1p3m7a8-multiValue {
+  background-color: rgba(100, 100, 100, 0.534) !important;
+}
+.css-1p3m7a8-multiValue,
+.css-1p3m7a8-multiValue > div {
+  color: var(--bs-body-color) !important;
+  border-radius: 10px !important;
+}
+.css-1fdsijx-ValueContainer {
+  padding: 10px 0 0 3px !important;
+}
+.css-1fdsijx-ValueContainer > div {
+  color: var(--bs-body-color) !important;
+}
+.css-3w2yfm-ValueContainer {
+  padding: 15px 8px 0 !important;
+}
 
 @media (min-width: 500px) {
   .add-new-employee-btn {

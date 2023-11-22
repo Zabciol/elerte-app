@@ -26,7 +26,6 @@ const SubordinatesForm = (props) => {
         (employee) => employee.Dzial === department
         //&&!supervisors.some((supervisor) => supervisor.ID === employee.ID)
       );
-      console.log(tab);
       setFilteredEmployees(tab);
     }
   }, [employees, department, supervisors]);
@@ -39,7 +38,6 @@ const SubordinatesForm = (props) => {
       }
       setEmployees(data);
       const supervisorsData = await mySupervisorsAPI(props.employee.ID);
-      console.log("Moi przełozeni: ", supervisorsData);
       setSupervisors(supervisorsData.data.length ? supervisorsData.data : []);
     } catch (error) {
       setMessage(error.message);

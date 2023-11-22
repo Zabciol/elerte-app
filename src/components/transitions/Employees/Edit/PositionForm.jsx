@@ -47,11 +47,11 @@ const PositionForm = (props) => {
     let filteredSupervisors = data.filter(
       (supervisor) => !subordinates.includes(supervisor.ID)
     );
-    if (employee.ID !== 1) {
-      filteredSupervisors = filteredSupervisors.filter(
-        (supervisor) => supervisor.ID !== employee.ID
-      );
-    }
+
+    filteredSupervisors = filteredSupervisors.filter(
+      (supervisor) => supervisor.ID !== employee.ID
+    );
+
     return filteredSupervisors;
   };
 
@@ -68,7 +68,7 @@ const PositionForm = (props) => {
     fetchData(supervisorsApi).then((data) => {
       const filtered = filterSupervisors(data);
       setSupervisors(filtered);
-      console.log(filtered);
+
       const initialSupervisors = filtered.filter((supervisor) =>
         directSupervisors.some((ds) => ds.ID === supervisor.ID)
       );
@@ -135,8 +135,10 @@ const PositionForm = (props) => {
         positions,
         (p) => p.Nazwa
       )}
-      <div className='mb-3 select-react-position form-group'>
-        <label htmlFor='supervisorSelect' className='form-label'>
+      <div className='mb-3 select-react-position form-group '>
+        <label
+          htmlFor='supervisorSelect'
+          className='form-label select-react-position-label'>
           Przełożony
         </label>
         <Select

@@ -5,6 +5,7 @@ import Presence from "./Presence";
 import Leaves from "./Leaves";
 import { getCurrentDateYearMonth } from "../../common/CommonFunctions";
 import ElerteFooter from "../../../assets/Carousel/elerte-bottom.png";
+import "../../../styles/Home/home.css";
 
 const MenuItems = ({ date, setDate }) => {
   return (

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { HashRouter as Router, Route, Routes } from "react-router-dom";
-import "../../styles/Home/home.css";
+import "../../styles/pageHandler.css";
 import Home from "../transitions/Home/Home.jsx";
 import ECP from "../transitions/ECP/ECP.jsx";
 import Employees from "../transitions/Employees/Employees";
