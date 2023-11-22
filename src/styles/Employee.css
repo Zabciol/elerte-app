@@ -75,6 +75,10 @@
   padding: 15px 8px 0 !important;
 }
 
+.css-t3ipsp-control {
+  min-height: 55px !important;
+}
+
 @media (min-width: 500px) {
   .add-new-employee-btn {
     position: absolute;
