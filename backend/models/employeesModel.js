@@ -268,9 +268,6 @@ const updateEmployee = async (employeeData) => {
   try {
     await queryDatabase("START TRANSACTION");
     const currentDataEmployee = await getEmployeeInf(ID);
-    console.log("update employee");
-    console.log(employeeData);
-    console.log(currentDataEmployee);
     if (
       currentDataEmployee &&
       (currentDataEmployee.DzialID !== departmentID ||
