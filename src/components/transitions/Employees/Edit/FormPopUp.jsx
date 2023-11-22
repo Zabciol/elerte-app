@@ -25,7 +25,9 @@ const FormPopUp = ({ show, setShow, employee }) => {
   const phoneNumberRef = useRef();
   const [department, setDepartment] = useState();
   const [position, setPosition] = useState();
-  const [supervisor, setSupervisor] = useState();
+  const [directSupervisors, setDirectSupervisors] = useState(
+    employee.przelozeni
+  );
   const [workingTime, setWorkingTime] = useState();
   const [subordinates, setSubordinates] = useState([]);
   const [directSubordinates, setDirectSubordinates] = useState([]);
@@ -44,19 +46,24 @@ const FormPopUp = ({ show, setShow, employee }) => {
       phoneNumber: phoneNumberRef.current?.value || employee.NrTelefonu,
       departmentID: department,
       positionID: position,
-      supervisorID: supervisor !== employee.ID ? Number(supervisor) : null,
+      supervisorsID: !directSupervisors.some(
+        (element) => element.ID === employee.ID
+      )
+        ? directSupervisors
+        : null,
       workingTimeID: workingTime,
       subordinates: subordinates,
     };
     try {
       console.log(employeeData);
+      /*
       const response = await updateEmployeeApi(employeeData);
       if (shouldShowPopUp) {
         setShow(false);
         setReloadPopUp(true);
         setMessage(response.message);
         setShowPopUp(true);
-      }
+      }*/
     } catch (error) {
       console.error("Wystąpił błąd:", error);
       setMessage(error.message);
@@ -155,8 +162,8 @@ const FormPopUp = ({ show, setShow, employee }) => {
                 setDepartment={setDepartment}
                 position={position}
                 setPosition={setPosition}
-                supervisor={supervisor}
-                setSupervisor={setSupervisor}
+                directSupervisors={directSupervisors}
+                setDirectSupervisors={setDirectSupervisors}
                 subordinates={subordinates}
                 workingTime={workingTime}
                 setWorkingTime={setWorkingTime}

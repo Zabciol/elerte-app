@@ -13,8 +13,10 @@ const EmployeeInf = (props) => {
   const getInformation = async () => {
     try {
       const response = await infApi(props.employee.ID);
-      if (response.length) {
-        setInf(response[0]);
+      console.log(response);
+      console.log(response.przelozeni);
+      if (response) {
+        setInf(response);
       } else setInf(null);
     } catch (error) {
       console.error(error);
@@ -36,7 +38,12 @@ const EmployeeInf = (props) => {
             Nr telefonu: <i>{inf.NrTelefonu}</i>
           </p>
           <p>
-            Przełożony:{" "}
+            Przełożeni:{" "}
+            {inf.przelozeni.map((supervisor) =>
+              supervisor.ID ? (
+                <i>{supervisor.Imie + " " + supervisor.Nazwisko + " "}</i>
+              ) : null
+            )}
             <i>
               {inf.PrzelozonyImie} {inf.PrzelozonyNazwisko}
             </i>

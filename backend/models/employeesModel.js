@@ -37,16 +37,24 @@ const getEmployeeCasualInf = async (id) => {
 };
 
 const getEmployeeInf = async (employeeId) => {
-  const query =
-    "SELECT DISTINCT p.ID, p.Imie,p.Nazwisko, p.Mail, p.NrTelefonu,s.ID AS StanowiskoID, s.Nazwa AS StanowiskoNazwa, p.WymiarPracy_ID, d.ID AS DzialID, d.Nazwa AS DzialNazwa," +
-    "przelozony.ID AS PrzelozonyID,przelozony.Imie AS PrzelozonyImie, przelozony.Nazwisko AS PrzelozonyNazwisko, przelozony.Mail AS PrzelozonyMail, dzialPrzelozony.Nazwa AS DzialPrzelozonyNazwa " +
-    "FROM Pracownicy p LEFT JOIN Hierarchia h ON p.ID = h.Podwladny_ID LEFT JOIN Stanowisko s ON p.Stanowisko_ID = s.ID LEFT JOIN Dzialy d ON s.Dzial_ID = d.ID " +
-    "LEFT JOIN Pracownicy przelozony ON h.Przelozony_ID = przelozony.ID LEFT JOIN Stanowisko stanowiskoPrzelozony ON przelozony.Stanowisko_ID = stanowiskoPrzelozony.ID " +
-    "LEFT JOIN Dzialy dzialPrzelozony ON stanowiskoPrzelozony.Dzial_ID = dzialPrzelozony.ID " +
+  // Pobranie informacji podstawowych o pracowniku
+  const employeeQuery =
+    "SELECT DISTINCT p.ID, p.Imie, p.Nazwisko, p.Mail, p.NrTelefonu, s.ID AS StanowiskoID, s.Nazwa AS StanowiskoNazwa, p.WymiarPracy_ID, d.ID AS DzialID, d.Nazwa AS DzialNazwa " +
+    "FROM Pracownicy p LEFT JOIN Stanowisko s ON p.Stanowisko_ID = s.ID LEFT JOIN Dzialy d ON s.Dzial_ID = d.ID " +
     "WHERE p.ID = ?;";
 
-  return await queryDatabasePromise(query, [employeeId]);
+  const employeeInfo = await queryDatabasePromise(employeeQuery, [employeeId]);
+
+  // Pobranie informacji o przełożonych pracownika
+  const supervisorsInfo = await getMyDirectSupervisors(employeeId);
+
+  // Tworzenie obiektu pracownika z dodaną tablicą przełożonych
+  let employee = employeeInfo[0] || {};
+  employee.przelozeni = supervisorsInfo;
+
+  return employee;
 };
+
 const getAllEmployees = async () => {
   const query =
     "SELECT Pracownicy.ID, Imie, Nazwisko ,Stanowisko.Nazwa AS `Stanowisko`, Dzialy.ID AS `DzialID`,  Dzialy.Nazwa AS `Dzial` FROM Pracownicy LEFT JOIN Stanowisko ON Pracownicy.Stanowisko_ID = Stanowisko.ID LEFT JOIN Dzialy ON Stanowisko.Dzial_ID = Dzialy.ID";

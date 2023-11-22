@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
+import Select from "react-select";
 import { supervisorsApi } from "../../../../api/employeesApi";
 import { departmentsApi } from "../../../../api/departmentsApi";
 import { positionApi } from "../../../../api/positionApi";
@@ -14,8 +15,8 @@ const PositionForm = (props) => {
     setDepartment,
     position,
     setPosition,
-    supervisor,
-    setSupervisor,
+    directSupervisors,
+    setDirectSupervisors,
     subordinates,
     workingTime,
     setWorkingTime,
@@ -24,6 +25,7 @@ const PositionForm = (props) => {
   const [departments, setDepartments] = useState([]);
   const [positions, setPositions] = useState([]);
   const [supervisors, setSupervisors] = useState([]);
+  const [selectedSupervisors, setSelectedSupervisors] = useState([]);
   const [workingTimes, setWorkingTimes] = useState([]);
 
   const onChange = useCallback((event, setter) => {
@@ -63,19 +65,44 @@ const PositionForm = (props) => {
   }, [department]);
 
   useEffect(() => {
-    fetchData(supervisorsApi).then((data) =>
-      setSupervisors(filterSupervisors(data))
-    );
-  }, [subordinates]);
+    fetchData(supervisorsApi).then((data) => {
+      const filtered = filterSupervisors(data);
+      setSupervisors(filtered);
+
+      const initialSupervisors = filtered.filter((supervisor) =>
+        directSupervisors.some((ds) => ds.ID === supervisor.ID)
+      );
+
+      setSelectedSupervisors(
+        initialSupervisors.map((s) => ({
+          value: s.ID,
+          label: `${s.Imie} ${s.Nazwisko}`,
+          ID: s.ID,
+          Imie: s.Imie,
+          Nazwisko: s.Nazwisko,
+        }))
+      );
+    });
+  }, [subordinates, directSupervisors]);
 
   useEffect(() => {
-    setDepartment(department || employee?.DzialID || departments[2]?.ID);
+    setDepartment(department || employee?.DzialID || departments[0]?.ID);
     setPosition(position || employee?.StanowiskoID || positions[0]?.ID);
     setWorkingTime(
       workingTime || employee?.WymiarPracy_ID || workingTimes[0]?.ID
     );
-    setSupervisor(supervisor || employee?.PrzelozonyID || supervisors[0]?.ID);
   }, [subordinates, departments, positions, workingTimes, supervisors]);
+
+  const handleSupervisorsChange = (selectedOptions) => {
+    setSelectedSupervisors((prevSelected) => selectedOptions);
+    setDirectSupervisors((prevDirect) =>
+      selectedOptions.map((option) => ({
+        ID: option.value, // upewnij się, że używasz właściwego klucza
+        Imie: option.Imie, // sprawdź, czy te klucze są poprawne
+        Nazwisko: option.Nazwisko,
+      }))
+    );
+  };
 
   const renderSelect = (label, value, onChange, options, formatOption) => (
     <FloatingLabel controlId={`floatingSelect-${label}`} label={label}>
@@ -108,13 +135,23 @@ const PositionForm = (props) => {
         positions,
         (p) => p.Nazwa
       )}
-      {renderSelect(
-        "Przełożony",
-        supervisor || employee.ID,
-        (e) => onChange(e, setSupervisor),
-        supervisors,
-        (s) => `${s.Imie} ${s.Nazwisko} - ${s.Nazwa}`
-      )}
+      <div className='mb-3'>
+        <label htmlFor='supervisorSelect' className='form-label'>
+          Przełożony
+        </label>
+        <Select
+          id='supervisorSelect'
+          isMulti
+          options={supervisors.map((s) => ({
+            value: s.ID,
+            label: `${s.Imie} ${s.Nazwisko}`,
+            Imie: s.Imie,
+            Nazwisko: s.Nazwisko,
+          }))}
+          value={selectedSupervisors}
+          onChange={handleSupervisorsChange}
+        />
+      </div>
       {renderSelect(
         "Czas pracy",
         workingTime,
