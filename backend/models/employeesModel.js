@@ -1,3 +1,4 @@
+const e = require("express");
 const { connection, queryDatabase, queryDatabasePromise } = require("../db");
 const bcrypt = require("bcrypt");
 
@@ -208,6 +209,7 @@ const getAllMySupervisors = async (employeeId, allSupervisors = []) => {
 };
 
 const updateEmployeeMainData = async (employee) => {
+  console.log(employee);
   return await queryDatabasePromise(
     "UPDATE Pracownicy SET Imie = ?, Nazwisko = ?, Mail = ?, NrTelefonu = ?, Stanowisko_ID = ?, WymiarPracy_ID = ? WHERE ID = ?",
     [
@@ -265,9 +267,10 @@ const updateEmployee = async (employeeData) => {
 
   try {
     await queryDatabase("START TRANSACTION");
-    const currentEmployee = await getEmployeeInf(ID);
-    const currentDataEmployee = currentEmployee[0];
-
+    const currentDataEmployee = await getEmployeeInf(ID);
+    console.log("update employee");
+    console.log(employeeData);
+    console.log(currentDataEmployee);
     if (
       currentDataEmployee &&
       (currentDataEmployee.DzialID !== departmentID ||
@@ -278,6 +281,7 @@ const updateEmployee = async (employeeData) => {
         currentDataEmployee.Stanowisko_ID !== positionID ||
         currentDataEmployee.WymiarPracy_ID !== workingTimeID)
     ) {
+      console.log("Weszła aktualizacja");
       await updateEmployeeMainData(employeeData);
     }
 

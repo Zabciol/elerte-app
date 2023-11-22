@@ -45,9 +45,9 @@ const FormPopUp = ({ show, setShow, employee }) => {
         : employee.Mail,
       phoneNumber: phoneNumberRef.current?.value || employee.NrTelefonu,
       departmentID: department,
-      positionID: position,
+      positionID: Number(position),
       supervisors: directSupervisors,
-      workingTimeID: workingTime,
+      workingTimeID: Number(workingTime),
       subordinates: subordinates,
     };
     try {
