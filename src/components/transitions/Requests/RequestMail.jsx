@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useCallback } from "react";
 import Form from "react-bootstrap/Form";
 import InputGroup from "react-bootstrap/InputGroup";
 import CloseButton from "react-bootstrap/CloseButton";
@@ -10,6 +10,8 @@ const RequestMail = (props) => {
   const {
     sender,
     reciver,
+    setReciver,
+    recivers,
     reason,
     reasons,
     setReason,
@@ -26,10 +28,14 @@ const RequestMail = (props) => {
   } = props;
 
   const changeReason = (e) => {
-    console.log("dasdas");
     console.log(e.target.value);
     setReason(e.target.value);
   };
+
+  const onChange = useCallback((event, setter) => {
+    console.log(event.target.value);
+    setter(event.target.value);
+  }, []);
 
   const handleStartDateChange = (e) => {
     const startDateValue = new Date(e.target.value);
@@ -78,11 +84,23 @@ const RequestMail = (props) => {
           </InputGroup>
           <InputGroup className='mb-3'>
             <InputGroup.Text id='basic-addon1'>Do:</InputGroup.Text>
-            <Form.Control
-              aria-label='Text input with dropdown button'
-              value={reciver.Mail}
-              readOnly={true}
-            />
+            {readOnly ? (
+              <Form.Control
+                aria-label='Text input with dropdown button'
+                value={reciver.Mail}
+                readOnly={true}
+              />
+            ) : (
+              <Form.Select
+                aria-label='Recivers'
+                onChange={(e) => onChange(e, setReciver)}>
+                {recivers.map((reciver) => (
+                  <option value={reciver.ID} readOnly={readOnly}>
+                    {reciver.Mail}
+                  </option>
+                ))}
+              </Form.Select>
+            )}
           </InputGroup>
           <Form>
             <Form.Group
@@ -93,7 +111,7 @@ const RequestMail = (props) => {
                 as='textarea'
                 rows={3}
                 value={message}
-                onChange={(e) => setMessage(e.target.value)}
+                onChange={(e) => onChange(e, setMessage)}
                 readOnly={readOnly}
               />
             </Form.Group>
@@ -124,7 +142,7 @@ const RequestMail = (props) => {
             <Form.Select
               aria-label='Default select example'
               value={reason.Nazwa}
-              onChange={changeReason}
+              onChange={(e) => onChange(e, setReason)}
               className='request-select'
               readOnly={readOnly}>
               {reasons.map((item, index) => (

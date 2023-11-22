@@ -9,7 +9,8 @@ import { useAuth } from "../Login/AuthContext";
 
 const NewRequest = ({ user }) => {
   const { setShowPopUpLogout, setMessage } = useAuth();
-  const [mySupervisor, setMySupervisor] = useState();
+  const [mySupervisors, setMySupervisors] = useState();
+  const [mySupervisorID, setMySupervisorID] = useState();
   const [reasons, setReasons] = useState([]);
   const [reason, setReason] = useState({});
   const [message, setMessageHere] = useState("");
@@ -17,10 +18,12 @@ const NewRequest = ({ user }) => {
   const [endDate, setEndDate] = useState("");
   const [loading, setLoading] = useState(true);
 
-  const getMySupervisor = async () => {
+  const getMySupervisors = async () => {
     setLoading(true);
     const data = await mySupervisorAPI(user.ID);
-    setMySupervisor(data);
+    console.log(data.message);
+    setMySupervisors(data.data);
+    setMySupervisorID(data.data[0].ID);
     setLoading(false);
   };
   const getReasons = async () => {
@@ -40,7 +43,7 @@ const NewRequest = ({ user }) => {
   const sentRequest = async () => {
     const request = {
       senderID: user.ID,
-      reciverID: mySupervisor.ID,
+      reciverID: mySupervisorID,
       message: message,
       reasonID: reason,
       dataOd: startDate,
@@ -58,15 +61,17 @@ const NewRequest = ({ user }) => {
   };
 
   useEffect(() => {
-    getMySupervisor();
+    getMySupervisors();
     getReasons();
   }, []);
   return (
     <>
-      {!loading && mySupervisor ? (
+      {!loading && mySupervisorID ? (
         <RequestMail
           sender={user}
-          reciver={mySupervisor}
+          reciver={mySupervisorID}
+          setReciver={setMySupervisorID}
+          recivers={mySupervisors}
           reasons={reasons}
           reason={reason}
           setReason={setReason}

@@ -98,7 +98,7 @@ router.post("/add", verifyToken, async (req, res) => {
 router.get("/mySupervisor", verifyToken, async (req, res) => {
   try {
     const myID = req.query.myID;
-    const result = await employeesModel.getMySupervisor(myID);
+    const result = await employeesModel.getAllMySupervisors(myID);
     res.json(result);
   } catch (error) {
     console.error(error);

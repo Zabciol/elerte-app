@@ -171,14 +171,18 @@ const getMyDirectSupervisors = async (id) => {
 const getAllMySupervisors = async (employeeId, allSupervisors = []) => {
   try {
     const supervisors = await getMyDirectSupervisors(employeeId);
-
+    console.log(supervisors);
     if (supervisors.length === 0) {
+      console.log("Koniec przełozonych");
       // Brak dalszych przełożonych, zwróć zebrane wyniki
       return allSupervisors;
     }
 
     for (let supervisor of supervisors) {
-      if (!allSupervisors.some((s) => s.ID === supervisor.ID)) {
+      if (
+        supervisor.ID &&
+        !allSupervisors.some((s) => s.ID === supervisor.ID)
+      ) {
         allSupervisors.push(supervisor);
         await getAllMySupervisors(supervisor.ID, allSupervisors);
       }
