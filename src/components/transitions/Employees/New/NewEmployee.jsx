@@ -10,11 +10,7 @@ import Tabs from "react-bootstrap/Tabs";
 import ContactForm from "../Edit/ContactForm";
 import PositionForm from "../Edit/PositionForm";
 import NewVacation from "./NewVacation";
-import SubordinatesForm from "../Edit/SuborfinatesForm";
-import { subordinatesApi, supervisorsApi } from "../../../../api/employeesApi";
-import { updateEmployeeApi } from "../../../../api/employeesApi";
-import { deleteEmployeeApi } from "../../../../api/employeesApi";
-import { myDirectSubordinatesAPI } from "../../../../api/employeesApi";
+import { addEmployeeApi } from "../../../../api/employeesApi";
 import PopUp from "../../../common/PopUp";
 import { useAuth } from "../../Login/AuthContext";
 
@@ -46,6 +42,7 @@ const NewEmployee = ({ show, cancel }) => {
     StanowiskoID: null,
     WymiarPracy_ID: null,
   };
+
   function isAnyValueEmpty(obj) {
     return Object.values(obj).some(
       (value) => value === null || value === undefined || value === ""
@@ -58,10 +55,10 @@ const NewEmployee = ({ show, cancel }) => {
       lastname: lastNameRef.current.value,
       mail: mailRef.current.value,
       phoneNumber: phoneNumberRef.current.value,
-      positionID: position,
-      departmentID: department,
-      workingTime: workingTime,
-      supervisorsID: directSupervisors,
+      positionID: Number(position),
+      departmentID: Number(department),
+      workingTime: Number(workingTime),
+      supervisors: directSupervisors,
       vacation: {
         maxCountOfDays: maxCountOfDays,
         pastDays: pastDays,
@@ -76,6 +73,9 @@ const NewEmployee = ({ show, cancel }) => {
       if (isAnyValueEmpty(toCheck.vacation))
         throw new Error("Uzupełnij dane urlopowe");
       console.log(newEmployee);
+      const results = await addEmployeeApi(newEmployee);
+      setMessage(results.message);
+      setShowPopUp(true);
     } catch (error) {
       console.error(error);
       setMessage(error.message);

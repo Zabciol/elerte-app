@@ -82,6 +82,23 @@
   backdrop-filter: blur(20px) !important;
   border-radius: 5px;
 }
+.css-13cymwt-control,
+.css-t3ipsp-control,
+.css-1nmdiq5-menu {
+  z-index: 10 !important;
+  background-color: var(--bs-body-bg) !important;
+  border: var(--bs-border-width) solid var(--bs-border-color) !important;
+}
+.css-1nmdiq5-menu .css-1jqq78o-placeholder {
+  color: var(--bs-body-color) !important;
+}
+.css-d7l1ni-option {
+  background-color: transparent !important;
+}
+
+.css-1n6sfyn-MenuList > div {
+  cursor: pointer;
+}
 @media (max-width: 575px) {
   .home-presence_data {
     padding: 0;

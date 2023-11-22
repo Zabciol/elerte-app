@@ -83,8 +83,6 @@ const removeFromHierarchy = async (supervisorID, suburdinateID) => {
 
 const addLoginAndPassword = async (idPracownika, login) => {
   try {
-    console.log("id pracownika:", idPracownika);
-    console.log("login: ", login);
     const plainPassword = "a";
     const hashedPassword = await bcrypt.hash(plainPassword, 10);
     const query =
@@ -108,7 +106,7 @@ const addNewEmployee = async (data) => {
       Nazwisko: data.lastname,
       Mail: data.email,
       NrTelefonu: data.telephoneNumber,
-      Stanowisko_ID: data.position,
+      Stanowisko_ID: data.positionID,
       WymiarPracy_ID: data.workingTime,
     });
     const login = deletePolishChars(
@@ -119,15 +117,16 @@ const addNewEmployee = async (data) => {
 
     if (data.supervisors.length) {
       for (const supervisor of data.supervisors) {
-        await addToHierarchy(supervisor.ID, ID);
+        await addToHierarchy(supervisor.ID, pracownikID);
       }
     }
-
+    /*
     if (data.subordinates && data.subordinates.length) {
       for (let subID of data.subordinates) {
         await addToHierarchy(pracownikID, subID);
       }
     }
+    */
     if (
       data.isManager &&
       (!data.subordinates || data.subordinates.length === 0)

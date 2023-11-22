@@ -4,7 +4,7 @@ import NewEmployeeSubordinates from "./NewEmployeeSubordinates";
 import PopUp from "../../../common/PopUp";
 import ConfirmPupUp from "../../../common/ConfirmPopUp";
 import Spinner from "react-bootstrap/Spinner";
-import { addEmployee } from "../../../../api/employeesApi";
+import { addEmployeeApi } from "../../../../api/employeesApi";
 import { useAuth } from "../../Login/AuthContext";
 
 const NewEmployee = (props) => {
@@ -35,7 +35,7 @@ const NewEmployee = (props) => {
     };
     console.log(employeeData);
     try {
-      const response = await addEmployee(employeeData);
+      const response = await addEmployeeApi(employeeData);
       setMessage(response.message);
       setReloadPopUp(true);
       setShowPopUp(true);

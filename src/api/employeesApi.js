@@ -84,7 +84,7 @@ export const allEmployeesAPI = async () => {
   }
 };
 
-export const addEmployee = async (data) => {
+export const addEmployeeApi = async (data) => {
   try {
     const token = sessionStorage.getItem("userToken");
     const response = await axios.post(`${API_URL}/add`, data, {

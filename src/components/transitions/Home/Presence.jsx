@@ -51,7 +51,8 @@ const Presence = ({ user, date }) => {
         <div className='home-presence_data'>
           {" "}
           <label>
-            Przepracowany czas w tym miesiącu ({workedHours} godzin/y)
+            Przepracowany czas w tym miesiącu ({workedHours} godzin/y na{" "}
+            {workingHoursInMonth})
           </label>
           <ProgressBar
             now={((workedHours / workingHoursInMonth) * 100).toFixed(1)}

@@ -135,7 +135,7 @@ const PositionForm = (props) => {
         positions,
         (p) => p.Nazwa
       )}
-      <div className='mb-3'>
+      <div className='mb-3 select-react-position form-group'>
         <label htmlFor='supervisorSelect' className='form-label'>
           Przełożony
         </label>
@@ -150,6 +150,7 @@ const PositionForm = (props) => {
           }))}
           value={selectedSupervisors}
           onChange={handleSupervisorsChange}
+          className=''
         />
       </div>
       {renderSelect(
