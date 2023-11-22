@@ -23,9 +23,8 @@ const SubordinatesForm = (props) => {
   const filterEmployees = useCallback(() => {
     if (employees.length && department) {
       const tab = employees.filter(
-        (employee) =>
-          employee.Dzial === department &&
-          !supervisors.some((supervisor) => supervisor.ID === employee.ID)
+        (employee) => employee.Dzial === department
+        //&&!supervisors.some((supervisor) => supervisor.ID === employee.ID)
       );
       console.log(tab);
       setFilteredEmployees(tab);
@@ -115,7 +114,11 @@ const SubordinatesForm = (props) => {
               <ListGroup.Item
                 key={employee.ID}
                 as='li'
+                style={{ cursor: "pointer" }}
                 className='d-flex justify-content-between align-items-start'
+                disabled={supervisors.some(
+                  (supervisor) => supervisor.ID === employee.ID
+                )}
                 onClick={() => updateHierarchy(employee)}>
                 <div className='ms-2 me-auto text-start'>
                   <div className='fw-bold'>
