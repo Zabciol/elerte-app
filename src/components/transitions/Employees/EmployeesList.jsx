@@ -2,18 +2,16 @@ import React, { Children, useState } from "react";
 import Accordion from "react-bootstrap/Accordion";
 import EmployeeListItem from "./EmployeeListItem";
 import EmployeeInf from "./EmployeeInf";
-const EmployeesList = (props) => {
+const EmployeesList = React.memo((props) => {
   const { subordinates, date, children, showWorkedHours } = props;
-
-  console.log(subordinates);
   return (
     <Accordion className='scroll'>
       {subordinates.length > 0 ? (
-        subordinates.map((employee) => (
+        subordinates.map((employee, index) => (
           <EmployeeListItem
             employee={employee}
             date={date}
-            key={employee.ID}
+            key={index}
             showWorkedHours={showWorkedHours}>
             {React.Children.map(children, (child) => {
               if (React.isValidElement(child)) {
@@ -28,6 +26,6 @@ const EmployeesList = (props) => {
       )}
     </Accordion>
   );
-};
+});
 
 export default EmployeesList;

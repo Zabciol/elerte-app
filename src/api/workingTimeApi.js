@@ -20,7 +20,6 @@ export const workingTimeApi = async () => {
 export const holidaysApi = async (data) => {
   try {
     const date = new Date(data);
-    console.log(date);
     const year = date.getFullYear();
     const month = date.getMonth();
     const token = sessionStorage.getItem("userToken");

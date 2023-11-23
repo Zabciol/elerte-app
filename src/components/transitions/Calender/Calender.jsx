@@ -68,7 +68,6 @@ const Calender = (props) => {
     console.log(holidays);
     const employeesID = getEmployeesID(employees);
     const data = await getAbsence(employeesID);
-    console.log([...data, ...holidays]);
     setEvents([...data, ...holidays]);
   };
 

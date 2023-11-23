@@ -5,7 +5,8 @@ import "../../../styles/absence.css";
 import { getAbsenceAPI } from "../../../api/ecpApi";
 import { getAcceptedRequestsApi } from "../../../api/requestsApi";
 import { useAuth } from "../Login/AuthContext";
-const EmployeeAbsenceInf = ({ employee, date }) => {
+
+const EmployeeAbsenceInf = React.memo(({ employee, date }) => {
   const { setShowPopUpLogout, setMessage } = useAuth();
   const [employeeData, setEmployeeData] = useState(null);
 
@@ -97,7 +98,6 @@ const EmployeeAbsenceInf = ({ employee, date }) => {
     const absenceData = await getAbsence();
     const holidaysData = await getHolidays();
     const employeeData = uniteTabs(absenceData, holidaysData);
-    console.log(employeeData[0]);
     setEmployeeData(employeeData[0]);
   };
   useEffect(() => {
@@ -167,6 +167,6 @@ const EmployeeAbsenceInf = ({ employee, date }) => {
       )}
     </div>
   );
-};
+});
 
 export default EmployeeAbsenceInf;

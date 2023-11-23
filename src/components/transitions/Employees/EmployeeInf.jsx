@@ -6,7 +6,7 @@ import "../../../styles/Employee.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import { useAuth } from "../Login/AuthContext";
 
-const EmployeeInf = (props) => {
+const EmployeeInf = React.memo((props) => {
   const [inf, setInf] = useState();
   const [show, setShow] = useState(false);
   const { setShowPopUpLogout, setMessage } = useAuth();
@@ -72,6 +72,6 @@ const EmployeeInf = (props) => {
       )}
     </>
   );
-};
+});
 
 export default EmployeeInf;
