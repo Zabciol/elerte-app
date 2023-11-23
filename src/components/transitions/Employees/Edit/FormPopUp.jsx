@@ -1,24 +1,21 @@
 import { useState, useRef, useEffect } from "react";
 import Button from "react-bootstrap/Button";
-import Form from "react-bootstrap/Form";
-import InputGroup from "react-bootstrap/InputGroup";
 import Modal from "react-bootstrap/Modal";
 import Tab from "react-bootstrap/Tab";
 import Tabs from "react-bootstrap/Tabs";
 import ContactForm from "./ContactForm";
 import PositionForm from "./PositionForm";
 import SubordinatesForm from "./SuborfinatesForm";
+import DeleteEmployee from "./DeleteEmployee";
 import { subordinatesApi } from "../../../../api/employeesApi";
 import { updateEmployeeApi } from "../../../../api/employeesApi";
 import { deleteEmployeeApi } from "../../../../api/employeesApi";
 import { myDirectSubordinatesAPI } from "../../../../api/employeesApi";
-import PopUp from "../../../common/PopUp";
 import { useAuth } from "../../Login/AuthContext";
 
 const FormPopUp = ({ show, setShow, employee }) => {
   const { setShowPopUp, setReloadPopUp, setShowPopUpLogout, setMessage } =
     useAuth();
-
   const nameRef = useRef();
   const lastNameRef = useRef();
   const mailRef = useRef();
@@ -31,6 +28,7 @@ const FormPopUp = ({ show, setShow, employee }) => {
   const [workingTime, setWorkingTime] = useState();
   const [subordinates, setSubordinates] = useState([]);
   const [directSubordinates, setDirectSubordinates] = useState([]);
+  const [showDeletePopUp, setShowDeletePopUp] = useState(false);
 
   const save = async (
     shouldShowPopUp = true,
@@ -75,19 +73,9 @@ const FormPopUp = ({ show, setShow, employee }) => {
     }
   };
 
-  const deleteEmployee = async () => {
-    try {
-      const response = await deleteEmployeeApi(employee.ID);
-      setMessage(response.message);
-      setShow(false);
-      setShowPopUp(true);
-      setReloadPopUp(false);
-    } catch (error) {
-      console.error("Wystąpił błąd:", error);
-      setMessage(error.message);
-      setShowPopUpLogout(true);
-      setShow(false);
-    }
+  const toggleDeleteEmployee = async () => {
+    setShowDeletePopUp(!showDeletePopUp);
+    setShow(showDeletePopUp);
   };
 
   const getSubordinates = async () => {
@@ -179,7 +167,7 @@ const FormPopUp = ({ show, setShow, employee }) => {
           </Tabs>
         </Modal.Body>
         <Modal.Footer className='d-flex justify-content-between'>
-          <Button variant='secondary' onClick={deleteEmployee}>
+          <Button variant='secondary' onClick={toggleDeleteEmployee}>
             Usuń
           </Button>
           <div>
@@ -195,6 +183,11 @@ const FormPopUp = ({ show, setShow, employee }) => {
           </div>
         </Modal.Footer>
       </Modal>
+      <DeleteEmployee
+        show={showDeletePopUp}
+        setShow={setShowDeletePopUp}
+        hide={toggleDeleteEmployee}
+      />
     </>
   );
 };

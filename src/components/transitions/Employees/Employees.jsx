@@ -5,7 +5,6 @@ import Tabs from "react-bootstrap/Tabs";
 import Form from "react-bootstrap/Form";
 import EmployeesList from "./EmployeesList";
 import EmployeeInf from "./EmployeeInf";
-import NewEmployee from "./NewEmployee/NewEmployee";
 import ExportExcel from "./ExportExcel";
 import EmployeeAbsenceInf from "./EmployeeAbsenceInf";
 import NewMain from "./New/NewMain";

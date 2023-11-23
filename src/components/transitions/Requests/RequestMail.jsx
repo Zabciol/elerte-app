@@ -53,13 +53,23 @@ const RequestMail = (props) => {
   };
 
   useEffect(() => {
-    if (readOnly === false) {
-      const nextWorkDay = getNextWorkDay();
-      const dayAfter = new Date(nextWorkDay);
-      dayAfter.setDate(dayAfter.getDate() + 1);
+    if (!readOnly) {
+      let nextWorkDay = getNextWorkDay();
+      let dayAfter = new Date(nextWorkDay);
+      if (dayAfter.getDay() === 5) {
+        dayAfter.setDate(dayAfter.getDate() + 3);
+        nextWorkDay = dayAfter.toISOString().split("T")[0];
+        dayAfter.setDate(dayAfter.getDate() + 1);
+      } else {
+        dayAfter.setDate(dayAfter.getDate() + 1);
+        while (dayAfter.getDay() === 0 || dayAfter.getDay() === 6) {
+          dayAfter.setDate(dayAfter.getDate() + 1);
+        }
+      }
 
-      setStartDate(nextWorkDay.toISOString().split("T")[0]);
-      setEndDate(dayAfter.toISOString().split("T")[0]);
+      const formattedDayAfter = dayAfter.toISOString().split("T")[0];
+      setStartDate(nextWorkDay);
+      setEndDate(formattedDayAfter);
     }
   }, [sender, reciver]);
 

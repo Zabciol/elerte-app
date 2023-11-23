@@ -61,7 +61,8 @@ export const getNextWorkDay = () => {
   else if (date.getDay() === 0) {
     date.setDate(date.getDate() + 1);
   }
-  return date;
+  const formattedDate = date.toISOString().split("T")[0];
+  return formattedDate;
 };
 
 export const handleError = (error) => {
