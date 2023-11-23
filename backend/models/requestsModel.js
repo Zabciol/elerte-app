@@ -22,8 +22,11 @@ const transporter = nodemailer.createTransport({
 
 const sentMail = async (request, token) => {
   try {
+    let reciver;
+    config.useHttps
+      ? (reciver = await employeeModel.getEmployeeCasualInf(request.reciverID))
+      : (reciver = { Mail: "jan.zaborowicz@elerte.pl" });
     const sender = await employeeModel.getEmployeeCasualInf(request.senderID);
-    const reciver = await employeeModel.getEmployeeCasualInf(request.reciverID);
     const reason = await reasonsModel.getReasonByID(request.reasonID);
 
     const API_URL = `${config.protocol}://${config.dbConnectionStr.host}:${config.port}/requests`;
@@ -56,9 +59,7 @@ const sentMail = async (request, token) => {
 
     const mailOptions = {
       from: "noreply@elerte.pl", // adres nadawcy
-      //to: reciver.Mail, // lista odbiorców
-      //dev
-      to: "jan.zaborowicz@elerte.pl",
+      to: reciver.Mail, // lista odbiorców
       subject: "Urlop", // Temat wiadomości
       text: message, // treść wiadomości w formie tekstowej
       html: message, // treść wiadomości w formie HTML
