@@ -92,4 +92,23 @@ router.post("/fillECPforDeletedEmployee", verifyToken, async (req, res) => {
     res.status(500).send("Wystąpił błąd podczas uzupełniania ECP");
   }
 });
+
+router.get("/countAbsence", verifyToken, async (req, res) => {
+  try {
+    const date = new Date(req.query.date); // Użyj bieżącej daty lub stwórz nową datę
+    const year = date.getFullYear(); // Zwraca rok
+    const month = date.getMonth() + 1;
+    const employeeID = req.query.employeeID;
+    if (!date || !employeeID) {
+      return res.status(400).send("Brak wymaganych parametrów: data");
+    }
+
+    const result = await ecpModel.countAbsence(employeeID, year, month);
+    res.json(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Wystąpił błąd podczas pobierania danych.");
+  }
+});
+
 module.exports = router;

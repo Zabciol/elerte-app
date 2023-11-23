@@ -183,7 +183,7 @@ const getAbsenceNotIncludeRequests = async (date, IDs) => {
       "LEFT JOIN PowodyNieobecnosci ON ECP.Powod_ID = PowodyNieobecnosci.ID " +
       "LEFT JOIN Stanowisko ON Pracownicy.Stanowisko_ID = Stanowisko.ID " +
       "LEFT JOIN Dzialy ON Stanowisko.Dzial_ID = Dzialy.ID " +
-      "WHERE ECP.IloscGodzin < 8 AND YEAR(Data) = ? " +
+      "WHERE ECP.IloscGodzin < 8 AND YEAR(Data) = ? AND Powod_ID != 40 " +
       "AND MONTH(Data) = ? AND PracowniCY.ID in (?) AND NOT EXISTS ( " +
       "SELECT 1 FROM Wnioski W WHERE W.Nadawca_ID = ECP.Pracownik_ID " +
       "AND W.Status = 'Zaakceptowano' AND ECP.Data BETWEEN W.Data_Od AND W.Data_Do)";
@@ -257,6 +257,31 @@ const fillECPforDeletedEmployee = async (
   }
 };
 
+const countAbsence = async (employeeID, year, month) => {
+  try {
+    const query =
+      "SELECT (SELECT COUNT(*) * 8 FROM ecp WHERE Pracownik_ID = ? AND IloscGodzin < 8 AND YEAR(Data) = ? AND MONTH(Data) = ? AND Powod_ID != 40 ) - " +
+      "(SELECT SUM(IloscGodzin) FROM ecp WHERE Pracownik_ID = ? AND IloscGodzin < 8 AND YEAR(Data) = ? AND MONTH(Data) = ? AND Powod_ID != 40) AS SumaGodzin " +
+      "FROM ecp WHERE Pracownik_ID = ? AND IloscGodzin < 8 AND YEAR(Data) = ? AND MONTH(Data) = ? AND Powod_ID != 40;";
+    const values = [
+      employeeID,
+      year,
+      month,
+      employeeID,
+      year,
+      month,
+      employeeID,
+      year,
+      month,
+    ];
+
+    return await queryDatabasePromise(query, values);
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
+
 module.exports = {
   SentECPToDatabase,
   checkECPForEmployeeOnDate,
@@ -264,4 +289,5 @@ module.exports = {
   exportECPForMonth,
   getAbsenceNotIncludeRequests,
   fillECPforDeletedEmployee,
+  countAbsence,
 };

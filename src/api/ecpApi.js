@@ -114,3 +114,21 @@ export const fillECPforDeletedEmployeeApi = async (data) => {
     handleError(error);
   }
 };
+
+export const getAbsenceCountAPI = async (employeeID, data) => {
+  try {
+    const token = sessionStorage.getItem("userToken");
+    const response = await axios.get(`${API_URL}/countAbsence`, {
+      params: {
+        date: data,
+        employeeID: employeeID,
+      },
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    handleError(error);
+  }
+};

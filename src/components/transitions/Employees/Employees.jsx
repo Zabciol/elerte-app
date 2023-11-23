@@ -114,7 +114,7 @@ const Employees = ({ user, setMenuItems, subordinates }) => {
       <Tab
         eventKey='Nieobecnosci'
         title='Nieobecności'
-        disabled={!hasAdminView(user) || subordinates.length ? false : true}>
+        disabled={hasAdminView(user) || subordinates.length ? false : true}>
         <EmployeesList subordinates={filteredSubordinates} date={date}>
           {" "}
           <EmployeeAbsenceInf date={date} />
@@ -123,7 +123,7 @@ const Employees = ({ user, setMenuItems, subordinates }) => {
       <Tab
         eventKey='Excel'
         title='Export'
-        disabled={!hasAdminView(user) || subordinates.length ? false : true}>
+        disabled={hasAdminView(user) || subordinates.length ? false : true}>
         {" "}
         <ExportExcel
           subordinates={hasAdminView(user) ? employees : subordinates}

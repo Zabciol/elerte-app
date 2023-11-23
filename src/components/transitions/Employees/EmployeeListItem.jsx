@@ -2,6 +2,7 @@ import React, { Children, useState } from "react";
 import UserCard from "../../common/UserCard";
 import { useEffect } from "react";
 import { hoursWorkedApi } from "../../../api/employeesApi";
+import { getAbsenceCountAPI } from "../../../api/ecpApi";
 import { useAuth } from "../Login/AuthContext";
 
 const EmployeeListItem = React.memo(
@@ -11,8 +12,11 @@ const EmployeeListItem = React.memo(
     const getWorkedHours = async () => {
       if (employee.ID && date) {
         try {
-          const response = await hoursWorkedApi(employee.ID, date);
+          const response = showWorkedHours
+            ? await hoursWorkedApi(employee.ID, date)
+            : await getAbsenceCountAPI(employee.ID, date);
           if (response.length) {
+            console.log(response);
             setWorkedHours(response[0].SumaGodzin);
           } else setWorkedHours(0);
         } catch (error) {
@@ -24,7 +28,7 @@ const EmployeeListItem = React.memo(
     };
 
     useEffect(() => {
-      if (showWorkedHours) getWorkedHours();
+      getWorkedHours();
     }, [date, employee]);
     return (
       <UserCard key={employee.ID} employee={employee} inf={workedHours}>
