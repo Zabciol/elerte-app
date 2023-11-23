@@ -19,12 +19,17 @@ const NewRequest = ({ user }) => {
   const [loading, setLoading] = useState(true);
 
   const getMySupervisors = async () => {
-    setLoading(true);
-    const data = await mySupervisorAPI(user.ID);
-    console.log(data.message);
-    setMySupervisors(data.data);
-    setMySupervisorID(data.data[0].ID);
-    setLoading(false);
+    try {
+      setLoading(true);
+      const data = await mySupervisorAPI(user.ID);
+      console.log(data.message);
+      setMySupervisors(data.data);
+      setMySupervisorID(data.data[0].ID);
+      setLoading(false);
+    } catch (error) {
+      setMessage(error.message);
+      setShowPopUpLogout(true);
+    }
   };
   const getReasons = async () => {
     try {
