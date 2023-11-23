@@ -247,7 +247,7 @@ const fillECPforDeletedEmployee = async (
 
     const queryToSetAcive = `Update Pracownicy set Aktywny = 'Nie' WHERE ID = ?`;
 
-    await queryDatabasePromise(queryToSetAcive, [employeeID]);
+    //await queryDatabasePromise(queryToSetAcive, [employeeID]);
     await queryDatabase("COMMIT");
     return { success: true, message: "Uzupełniono ECP" };
   } catch (error) {

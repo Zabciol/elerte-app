@@ -78,6 +78,7 @@ const Employees = ({ user, setMenuItems, subordinates }) => {
           ? subordinates
           : subordinates.filter((employee) => employee.Dzial === dzial);
     }
+    console.log(newFilteredSubordinates);
     setFilteredSubordinates(newFilteredSubordinates);
   }, [dzial]);
 

@@ -74,7 +74,7 @@ const EmployeeAbsenceInf = ({ employee, date }) => {
   const getAbsence = async () => {
     try {
       const data = await getAbsenceAPI(date, employee.ID);
-      console.log(data.message);
+
       return data.data;
     } catch (error) {
       setMessage(error.message);
@@ -85,7 +85,7 @@ const EmployeeAbsenceInf = ({ employee, date }) => {
   const getHolidays = async () => {
     try {
       const data = await getAcceptedRequestsApi(date, employee.ID);
-      console.log(data.message);
+
       return data.data;
     } catch (error) {
       setMessage(error.message);

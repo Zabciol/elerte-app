@@ -5,6 +5,7 @@ import EmployeeInf from "./EmployeeInf";
 const EmployeesList = (props) => {
   const { subordinates, date, children, showWorkedHours } = props;
 
+  console.log(subordinates);
   return (
     <Accordion className='scroll'>
       {subordinates.length > 0 ? (
