@@ -5,6 +5,7 @@ import { getCurrentDateYearMonthDay } from "../../common/CommonFunctions";
 import ECPList from "./ECPList";
 import "./../../../styles/ECP.css";
 import { GetDataProvider } from "./ECPDataContext";
+import { getNextWorkDay } from "../../common/CommonFunctions";
 
 const MenuItems = ({ date, setDate, dzial, dzialy, setDzial }) => {
   return (
@@ -26,7 +27,13 @@ const ECP = ({ user, setMenuItems, subordinates }) => {
   const [date, setDate] = useState(getCurrentDateYearMonthDay());
 
   const changeDate = (event) => {
-    setDate(event.target.value);
+    const today = new Date();
+    const twoDaysAgo = new Date();
+    twoDaysAgo.setDate(twoDaysAgo.getDate() - 2);
+    const inserted = new Date(event.target.value);
+    if (inserted < today && inserted > twoDaysAgo) {
+      setDate(event.target.value);
+    }
   };
 
   useEffect(() => {
