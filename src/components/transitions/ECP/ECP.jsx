@@ -32,8 +32,8 @@ const ECP = ({ user, setMenuItems, subordinates }) => {
     twoDaysAgo.setDate(twoDaysAgo.getDate() - 2);
     const inserted = new Date(event.target.value);
     if (inserted < today && inserted > twoDaysAgo) {
-      setDate(event.target.value);
     }
+    setDate(event.target.value);
   };
 
   useEffect(() => {
