@@ -16,7 +16,6 @@ const EmployeeListItem = React.memo(
             ? await hoursWorkedApi(employee.ID, date)
             : await getAbsenceCountAPI(employee.ID, date);
           if (response.length) {
-            console.log(response);
             setWorkedHours(response[0].SumaGodzin);
           } else setWorkedHours(0);
         } catch (error) {
