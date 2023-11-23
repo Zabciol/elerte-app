@@ -13,7 +13,7 @@ import { deleteEmployeeApi } from "../../../../api/employeesApi";
 import { myDirectSubordinatesAPI } from "../../../../api/employeesApi";
 import { useAuth } from "../../Login/AuthContext";
 
-const FormPopUp = ({ show, setShow, employee }) => {
+const FormPopUp = ({ show, setShow, employee, user }) => {
   const { setShowPopUp, setReloadPopUp, setShowPopUpLogout, setMessage } =
     useAuth();
   const nameRef = useRef();
@@ -167,9 +167,13 @@ const FormPopUp = ({ show, setShow, employee }) => {
           </Tabs>
         </Modal.Body>
         <Modal.Footer className='d-flex justify-content-between'>
-          <Button variant='secondary' onClick={toggleDeleteEmployee}>
-            Usuń
-          </Button>
+          {employee.Aktywny === "Tak" ? (
+            <Button variant='secondary' onClick={toggleDeleteEmployee}>
+              Usuń
+            </Button>
+          ) : (
+            <div></div>
+          )}
           <div>
             <Button
               variant='secondary'
@@ -187,6 +191,8 @@ const FormPopUp = ({ show, setShow, employee }) => {
         show={showDeletePopUp}
         setShow={setShowDeletePopUp}
         hide={toggleDeleteEmployee}
+        employee={employee}
+        user={user}
       />
     </>
   );

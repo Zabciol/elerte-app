@@ -51,6 +51,7 @@ const insertRecordsInDB = async (toInsert, date, editDate, editUser) => {
 const SentECPToDatabase = async (records) => {
   const { ecpList, date, editDate, editUser } = records;
   try {
+    await queryDatabase("START TRANSACTION");
     const existingRecords = await findExistingRecords(ecpList, date);
     const toUpdate = [];
     const toInsert = [];
@@ -77,12 +78,14 @@ const SentECPToDatabase = async (records) => {
     if (toInsert.length > 0) {
       await insertRecordsInDB(toInsert, date, editDate, editUser);
     }
+    await queryDatabase("COMMIT");
     return {
       updated: toUpdate.length,
       inserted: toInsert.length,
       message: "Poprawnie wysłano ECP",
     };
   } catch (error) {
+    await queryDatabase("ROLLBACK");
     console.error("Error in updateOrCreate function:", error);
     throw new Error("Nie udało się przetworzyć żądania ECP");
   }
@@ -192,10 +195,73 @@ const getAbsenceNotIncludeRequests = async (date, IDs) => {
   }
 };
 
+const generateDateRange = (startDate, endDate) => {
+  let dates = [];
+  let currentDate = new Date(startDate);
+  let end = new Date(endDate);
+
+  while (currentDate <= end) {
+    dates.push(currentDate.toISOString().split("T")[0]);
+    currentDate.setDate(currentDate.getDate() + 1);
+  }
+
+  return dates;
+};
+
+const formatDate = (date) => {
+  const year = date.getFullYear();
+  const month = (date.getMonth() + 1).toString().padStart(2, "0");
+  const day = date.getDate().toString().padStart(2, "0");
+  const hours = date.getHours().toString().padStart(2, "0");
+  const minutes = date.getMinutes().toString().padStart(2, "0");
+  const seconds = date.getSeconds().toString().padStart(2, "0");
+
+  return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+};
+
+const fillECPforDeletedEmployee = async (
+  startDate,
+  endDate,
+  employeeID,
+  editEmployeeID
+) => {
+  try {
+    await queryDatabase("START TRANSACTION");
+    const dates = generateDateRange(startDate, endDate);
+    const editDate = formatDate(new Date());
+
+    const query = `INSERT INTO ECP (Data, Od_godz, Do_godz, Pracownik_ID,
+     Powod_ID, IloscGodzin, DataZapisu, ID_Edytora) VALUES ?`;
+
+    const values = dates.map((date) => [
+      date,
+      "00:00",
+      "00:00",
+      employeeID,
+      40,
+      0,
+      editDate,
+      editEmployeeID,
+    ]);
+    await queryDatabasePromise(query, [values]);
+
+    const queryToSetAcive = `Update Pracownicy set Aktywny = 'Nie' WHERE ID = ?`;
+
+    await queryDatabasePromise(queryToSetAcive, [employeeID]);
+    await queryDatabase("COMMIT");
+    return { success: true, message: "Uzupełniono ECP" };
+  } catch (error) {
+    await queryDatabase("ROLLBACK");
+    console.error(error);
+    throw error;
+  }
+};
+
 module.exports = {
   SentECPToDatabase,
   checkECPForEmployeeOnDate,
   getECPForMonth,
   exportECPForMonth,
   getAbsenceNotIncludeRequests,
+  fillECPforDeletedEmployee,
 };

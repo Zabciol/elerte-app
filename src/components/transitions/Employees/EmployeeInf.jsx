@@ -60,7 +60,12 @@ const EmployeeInf = (props) => {
             <i className='bi bi-pencil-square'></i> Edytuj
           </Button>
 
-          <FormPopUp show={show} setShow={setShow} employee={inf} />
+          <FormPopUp
+            show={show}
+            setShow={setShow}
+            employee={inf}
+            user={props.user}
+          />
         </div>
       ) : (
         <>Brak danych</>

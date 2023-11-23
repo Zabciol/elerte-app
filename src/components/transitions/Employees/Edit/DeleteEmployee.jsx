@@ -1,14 +1,34 @@
 import React, { useState } from "react";
 import ConfirmPupUp from "../../../common/ConfirmPopUp";
 import Form from "react-bootstrap/Form";
-import { getNextWorkDay } from "../../../common/CommonFunctions";
+import {
+  getNextWorkDay,
+  getLastDayOfThisMonth,
+} from "../../../common/CommonFunctions";
+import { fillECPforDeletedEmployeeApi } from "../../../../api/ecpApi";
+import { useAuth } from "../../Login/AuthContext";
 
-const DeleteEmployee = ({ show, setShow, hide }) => {
-  const [date, setDate] = useState(getNextWorkDay());
-
-  console.log(date);
+const DeleteEmployee = ({ show, setShow, hide, employee, user }) => {
+  const { setShowPopUp, setShowPopUpLogout, setMessage } = useAuth();
+  const [date, setDate] = useState(getLastDayOfThisMonth);
   const confirm = async () => {
     setShow(false);
+    const data = {
+      startDate: getNextWorkDay(),
+      endDate: date,
+      employeeID: employee.ID,
+      editEmployeeID: user.ID,
+    };
+    console.log(data);
+    try {
+      const result = await fillECPforDeletedEmployeeApi(data);
+      console.log(result);
+      setMessage(result.message);
+      setShowPopUp(true);
+    } catch (error) {
+      setMessage(error.message);
+      setShowPopUpLogout(true);
+    }
   };
 
   return (
@@ -20,15 +40,15 @@ const DeleteEmployee = ({ show, setShow, hide }) => {
       confirmText='Potwierdź'
       decline={hide}
       declineText='Anuluj'>
-      <>
-        {" "}
+      <div className='d-flex align-items-center justify-content-around'>
+        <h5 className='m-1'>Z dniem</h5>
         <Form.Control
           type='date'
           value={date}
           onChange={(e) => setDate(e.target.value)}
-          className='menu-select'
+          className='menu-select m-1'
         />
-      </>
+      </div>
     </ConfirmPupUp>
   );
 };

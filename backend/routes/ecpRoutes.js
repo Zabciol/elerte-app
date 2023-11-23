@@ -74,4 +74,22 @@ router.get("/absence", verifyToken, async (req, res) => {
     res.status(500).send("Wystąpił błąd podczas pobierania danych.");
   }
 });
+
+router.post("/fillECPforDeletedEmployee", verifyToken, async (req, res) => {
+  try {
+    const { startDate, endDate, employeeID, editEmployeeID } = req.body;
+    const result = await ecpModel.fillECPforDeletedEmployee(
+      startDate,
+      endDate,
+      employeeID,
+      editEmployeeID
+    );
+    res.send({
+      message: "Poprawnie usunięto pracownika",
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Wystąpił błąd podczas uzupełniania ECP");
+  }
+});
 module.exports = router;

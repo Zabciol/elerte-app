@@ -130,17 +130,6 @@ router.post("/updateEmployee", verifyToken, async (req, res) => {
   }
 });
 
-router.delete("/deleteEmployee/:id", verifyToken, async (req, res) => {
-  try {
-    await employeesModel.deleteEmployee(req.params.id);
-    res
-      .status(200)
-      .send({ message: "Poprawnie usunięto pracownika z listy ECP" });
-  } catch (error) {
-    console.error("Error during employee deletion:", error);
-    res.status(500).send({ message: "Napotkano problem podczas usuwania" });
-  }
-});
 router.get("/myDirectSubordinates", verifyToken, async (req, res) => {
   try {
     const myID = req.query.myID;

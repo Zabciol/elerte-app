@@ -99,3 +99,13 @@ export const calculateWorkingDays = (date, holidays) => {
 
   return workingDaysWithoutHolidays.length;
 };
+
+export const getLastDayOfThisMonth = () => {
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = now.getMonth();
+  const nextMonth = new Date(year, month + 1, 1);
+  nextMonth.setDate(nextMonth.getDate() - 1);
+  nextMonth.setHours(12);
+  return nextMonth.toISOString().split("T")[0];
+};

@@ -40,7 +40,7 @@ const getEmployeeCasualInf = async (id) => {
 const getEmployeeInf = async (employeeId) => {
   // Pobranie informacji podstawowych o pracowniku
   const employeeQuery =
-    "SELECT DISTINCT p.ID, p.Imie, p.Nazwisko, p.Mail, p.NrTelefonu, s.ID AS StanowiskoID, s.Nazwa AS StanowiskoNazwa, p.WymiarPracy_ID, d.ID AS DzialID, d.Nazwa AS DzialNazwa " +
+    "SELECT DISTINCT p.ID, p.Imie, p.Nazwisko, p.Mail, p.NrTelefonu, s.ID AS StanowiskoID, s.Nazwa AS StanowiskoNazwa, p.WymiarPracy_ID, d.ID AS DzialID, d.Nazwa AS DzialNazwa, p.Aktywny " +
     "FROM Pracownicy p LEFT JOIN Stanowisko s ON p.Stanowisko_ID = s.ID LEFT JOIN Dzialy d ON s.Dzial_ID = d.ID " +
     "WHERE p.ID = ?;";
 
@@ -328,19 +328,6 @@ const updateEmployee = async (employeeData) => {
   }
 };
 
-const deleteEmployee = (employeeID) => {
-  return new Promise((resolve, reject) => {
-    const query = "Update Pracownicy set Aktywny = 'Nie' WHERE ID = ?";
-    queryDatabase(query, [employeeID], (err) => {
-      if (err) {
-        console.error("Error during employee deleting:", err);
-        return reject(err); // Log the error and reject the promise
-      }
-      resolve(); // Resolve the promise when the update is successful
-    });
-  });
-};
-
 const getMyDirectSubordinates = async (id) => {
   return new Promise((resolve, reject) => {
     const query =
@@ -399,7 +386,6 @@ module.exports = {
   getAllEmployees,
   addNewEmployee,
   updateEmployee,
-  deleteEmployee,
   getMyDirectSubordinates,
   getEmployeeCasualInf,
 };
