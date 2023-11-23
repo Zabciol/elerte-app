@@ -104,8 +104,8 @@ const RequestMail = (props) => {
               <Form.Select
                 aria-label='Recivers'
                 onChange={(e) => onChange(e, setReciver)}>
-                {recivers.map((reciver) => (
-                  <option value={reciver.ID} readOnly={readOnly}>
+                {recivers.map((reciver, index) => (
+                  <option value={reciver.ID} readOnly={readOnly} key={index}>
                     {reciver.Mail}
                   </option>
                 ))}
