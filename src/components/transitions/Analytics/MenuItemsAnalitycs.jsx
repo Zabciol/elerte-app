@@ -14,6 +14,10 @@ const MenuItemsAnalitycs = React.memo(
     setPosition,
     handleChange,
   }) => {
+    console.log(position);
+    console.log(dzial);
+    console.log(positions);
+    console.log(dzialy);
     const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
     const [menuItems, setmenuItems] = useState();
 
@@ -34,12 +38,36 @@ const MenuItemsAnalitycs = React.memo(
     const MenuRender = (
       <div className='analytics-filter'>
         {position ? (
-          <SelectItems
-            item={position}
-            items={positions}
-            setItem={setPosition}
-          />
+          <div className='mb-3 select-react-position form-group'>
+            <label
+              htmlFor='supervisorSelect'
+              className='form-label select-react-position-label'>
+              Stanowiska
+            </label>
+            <Select
+              id='supervisorSelect'
+              isMulti
+              options={positions.map((s, index) => ({
+                value: s.ID,
+                label: s.Nazwa,
+                dzial: s.Dzial_ID,
+              }))}
+              value={
+                Array.isArray(position)
+                  ? position.map((d) => ({ value: d.ID, label: d.Nazwa }))
+                  : []
+              }
+              onChange={(selected) =>
+                handleChange(selected, setPosition, (option) => ({
+                  ID: option.value,
+                  Nazwa: option.label,
+                  Dzial_ID: option.dzial,
+                }))
+              }
+            />
+          </div>
         ) : null}
+
         <div className='mb-3 select-react-position form-group'>
           <label
             htmlFor='supervisorSelect'

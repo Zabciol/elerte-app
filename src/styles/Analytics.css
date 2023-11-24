@@ -32,3 +32,7 @@ hr.solid {
 .offcanvas-body > .analytics-filter > div {
   margin: 30px 0;
 }
+
+.css-1nmdiq5-menu {
+  z-index: 100 !important;
+}

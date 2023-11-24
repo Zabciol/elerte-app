@@ -18,16 +18,12 @@ const AnalyticsPage = ({ user, subordinates, setMenuItems }) => {
   const { setShowPopUpLogout, setMessage } = useAuth();
   const [employees, setEmployees] = useState(subordinates);
   const [date, setDate] = useState(getCurrentDateYearMonth());
-  const [allDepartments, setAllDepartments] = useState([
-    ...new Set(subordinates.map((e) => e.Dzial)),
-  ]);
-  const [selectedDepartments, setSelectedDepartments] = useState([
-    allDepartments[0],
-  ]);
+  const [allDepartments, setAllDepartments] = useState([]);
+  const [selectedDepartments, setSelectedDepartments] = useState([]);
   console.log(selectedDepartments);
   const [allPositions, setAllPositions] = useState([]);
   const [selectedPositions, setSelectedPositions] = useState();
-  const [filteredEmployees, setFilteredEmployees] = useState(employees);
+  //const [filteredEmployees, setFilteredEmployees] = useState(employees);
 
   const changeDate = useCallback(
     (event) => {
@@ -73,28 +69,27 @@ const AnalyticsPage = ({ user, subordinates, setMenuItems }) => {
       setSelectedDepartments(newDepartments[0]);
     }
   }, [employees, user]);
-
   useEffect(() => {
-    if (selectedDepartments === "Każdy") {
-      setSelectedPositions(null);
-      return;
-    }
-    const dep = employees.find(
-      (employee) => employee.Dzial === selectedDepartments
+    const deps = employees.filter((employee) =>
+      selectedDepartments.includes(employee.Dzial)
     );
-    if (dep) {
-      fetchData(positionApi, dep.DzialID).then((fetchedPositions) => {
-        setAllPositions(fetchedPositions);
-        if (fetchedPositions.length > 0) {
-          setSelectedPositions(fetchedPositions[0]);
+    const uniqueDepartmentIds = [...new Set(deps.map((emp) => emp.DzialID))];
+    if (uniqueDepartmentIds.length > 0) {
+      Promise.all(
+        uniqueDepartmentIds.map((deptId) => fetchData(positionApi, deptId))
+      ).then((responses) => {
+        const allPositions = responses.flat();
+        setAllPositions(allPositions);
+        if (allPositions.length > 0) {
+          setSelectedPositions([allPositions[0]]);
         }
       });
     } else {
-      console.log("Nie znaleziono działu o nazwie:", selectedDepartments);
+      console.log("Nie znaleziono działów o nazwach:", selectedDepartments);
       fetchData(positionApi, 1).then((fetchedPositions) => {
         setAllPositions(fetchedPositions);
         if (fetchedPositions.length > 0) {
-          setSelectedPositions(fetchedPositions[0]);
+          setSelectedPositions([fetchedPositions[0]]);
         }
       });
     }
@@ -119,6 +114,16 @@ const AnalyticsPage = ({ user, subordinates, setMenuItems }) => {
       console.log(filtered);
     }
   }, [selectedPositions]);
+
+  useEffect(() => {
+    setAllDepartments([...new Set(employees.map((e) => e.Dzial))]);
+  }, [employees]);
+
+  useEffect(() => {
+    if (allDepartments.length > 0) {
+      setSelectedDepartments([allDepartments[0]]);
+    }
+  }, [allDepartments]);
 
   const handleMultiSelectChange = (
     selectedOptions,
@@ -151,7 +156,7 @@ const AnalyticsPage = ({ user, subordinates, setMenuItems }) => {
   ]);
 
   return (
-    <div className='analytics w-100 d-flex flex-direction-row'>
+    <div className='analytics w-100 '>
       <div className=''></div>
       <div></div>
     </div>
