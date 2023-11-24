@@ -4,7 +4,7 @@ import generujEventy from "./getEvents";
 import { getCurrentDateYearMonth } from "../../common/CommonFunctions";
 import { getECPAPI } from "../../../api/ecpApi";
 import FullCalender from "./FullCalender";
-import { SelectDzial } from "../../layout/Menu/MenuForms";
+import { SelectItems } from "../../layout/Menu/MenuForms";
 import { useAuth } from "../Login/AuthContext";
 import { allEmployeesAPI } from "../../../api/employeesApi";
 import { holidaysApi } from "../../../api/workingTimeApi";
@@ -13,7 +13,7 @@ import { generujEventySwieta } from "./getEvents";
 const MenuItems = ({ date, setDate, dzial, dzialy, setDzial }) => {
   return (
     <>
-      <SelectDzial dzial={dzial} dzialy={dzialy} setDzial={setDzial} />
+      <SelectItems item={dzial} items={dzialy} setItem={setDzial} />
       <Form.Control
         type='month'
         value={date}

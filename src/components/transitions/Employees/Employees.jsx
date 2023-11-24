@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { SelectDzial } from "../../layout/Menu/MenuForms";
+import { SelectItems } from "../../layout/Menu/MenuForms";
 import Tab from "react-bootstrap/Tab";
 import Tabs from "react-bootstrap/Tabs";
 import Form from "react-bootstrap/Form";
@@ -20,7 +20,7 @@ const hasAdminView = (user) => user.Uprawnienia === 2 || user.Uprawnienia === 4;
 const MenuItems = React.memo(({ dzial, dzialy, setDzial, date, setDate }) => {
   return (
     <>
-      <SelectDzial dzial={dzial} dzialy={dzialy} setDzial={setDzial} />
+      <SelectItems item={dzial} items={dzialy} setItem={setDzial} />
       <Form.Control
         type='month'
         value={date}

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Form from "react-bootstrap/Form";
-import { SelectDzial } from "../../layout/Menu/MenuForms";
+import { SelectItems } from "../../layout/Menu/MenuForms";
 import { getCurrentDateYearMonthDay } from "../../common/CommonFunctions";
 import ECPList from "./ECPList";
 import "./../../../styles/ECP.css";
@@ -10,7 +10,7 @@ import { getNextWorkDay } from "../../common/CommonFunctions";
 const MenuItems = ({ date, setDate, dzial, dzialy, setDzial }) => {
   return (
     <>
-      <SelectDzial dzial={dzial} dzialy={dzialy} setDzial={setDzial} />
+      <SelectItems item={dzial} items={dzialy} setItem={setDzial} />
       <Form.Control
         type='date'
         value={date}
