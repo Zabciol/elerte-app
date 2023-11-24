@@ -107,6 +107,7 @@ const MenuItemsAnalitycs = React.memo(
                 height: "10px",
                 width: "50px",
                 transform: "scale(3)",
+                cursor: "pointer",
               }}></i>
             <Offcanvas
               show={show}

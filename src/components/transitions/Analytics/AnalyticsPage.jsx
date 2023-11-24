@@ -54,8 +54,7 @@ const AnalyticsPage = ({ user, subordinates, setMenuItems }) => {
 
   const getEmployees = useCallback(async () => {
     try {
-      if (hasAdminView(user) || hasAdminPermissions(user))
-        setEmployees(await allEmployeesAPI());
+      if (hasAdminView(user)) setEmployees(await allEmployeesAPI());
     } catch (error) {
       setMessage(error.message);
       setShowPopUpLogout(true);
