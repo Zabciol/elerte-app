@@ -1,0 +1,34 @@
+.analytics {
+  min-height: 600px;
+}
+.menu {
+  z-index: 10;
+  top: 10px;
+  padding: 15px !important;
+  border-radius: 10px;
+}
+
+.background {
+  background-color: transparent !important;
+  backdrop-filter: blur(30px) !important;
+}
+
+.logo {
+  height: 40px;
+  padding: 0;
+}
+
+.menu-select {
+  width: 200px !important;
+}
+hr.solid {
+  border-top: 3px solid #bbb;
+}
+
+.offcanvas {
+  width: 30% !important;
+}
+
+.offcanvas-body > .analytics-filter > div {
+  margin: 30px 0;
+}

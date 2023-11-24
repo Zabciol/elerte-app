@@ -5,23 +5,9 @@ import { getCurrentDateYearMonth } from "../../common/CommonFunctions";
 import { useAuth } from "../Login/AuthContext";
 import { positionApi } from "../../../api/positionApi";
 import { allEmployeesAPI } from "../../../api/employeesApi";
-
-const MenuItems = React.memo(
-  ({ dzial, dzialy, setDzial, position, positions, setPosition }) => {
-    return (
-      <>
-        {position ? (
-          <SelectItems
-            item={position}
-            items={positions}
-            setItem={setPosition}
-          />
-        ) : null}
-        <SelectItems item={dzial} items={dzialy} setItem={setDzial} />
-      </>
-    );
-  }
-);
+import Select from "react-select";
+import "../../../styles/Analytics.css";
+import MenuItemsAnalitycs from "./MenuItemsAnalitycs";
 
 const hasAdminPermissions = (user) =>
   user.Uprawnienia === 3 || user.Uprawnienia === 4;
@@ -32,12 +18,15 @@ const AnalyticsPage = ({ user, subordinates, setMenuItems }) => {
   const { setShowPopUpLogout, setMessage } = useAuth();
   const [employees, setEmployees] = useState(subordinates);
   const [date, setDate] = useState(getCurrentDateYearMonth());
-  const [departments, setDepartments] = useState([
+  const [allDepartments, setAllDepartments] = useState([
     ...new Set(subordinates.map((e) => e.Dzial)),
   ]);
-  const [department, setDepartment] = useState(departments[0]);
-  const [positions, setPositions] = useState([]);
-  const [position, setPosition] = useState();
+  const [selectedDepartments, setSelectedDepartments] = useState([
+    allDepartments[0],
+  ]);
+  console.log(selectedDepartments);
+  const [allPositions, setAllPositions] = useState([]);
+  const [selectedPositions, setSelectedPositions] = useState();
   const [filteredEmployees, setFilteredEmployees] = useState(employees);
 
   const changeDate = useCallback(
@@ -80,71 +69,93 @@ const AnalyticsPage = ({ user, subordinates, setMenuItems }) => {
             : subordinates.map((e) => e.Dzial)
         )
       );
-      setDepartments(newDepartments);
-      setDepartment(newDepartments[0]);
+      setAllDepartments(newDepartments);
+      setSelectedDepartments(newDepartments[0]);
     }
   }, [employees, user]);
 
   useEffect(() => {
-    if (department === "Każdy") {
-      setPosition(null);
+    if (selectedDepartments === "Każdy") {
+      setSelectedPositions(null);
       return;
     }
-    const dep = employees.find((employee) => employee.Dzial === department);
+    const dep = employees.find(
+      (employee) => employee.Dzial === selectedDepartments
+    );
     if (dep) {
       fetchData(positionApi, dep.DzialID).then((fetchedPositions) => {
-        setPositions(fetchedPositions);
+        setAllPositions(fetchedPositions);
         if (fetchedPositions.length > 0) {
-          setPosition(fetchedPositions[0]);
+          setSelectedPositions(fetchedPositions[0]);
         }
       });
     } else {
-      console.log("Nie znaleziono działu o nazwie:", department);
+      console.log("Nie znaleziono działu o nazwie:", selectedDepartments);
       fetchData(positionApi, 1).then((fetchedPositions) => {
-        setPositions(fetchedPositions);
+        setAllPositions(fetchedPositions);
         if (fetchedPositions.length > 0) {
-          setPosition(fetchedPositions[0]);
+          setSelectedPositions(fetchedPositions[0]);
         }
       });
     }
-  }, [department, employees]);
+  }, [selectedDepartments, employees]);
 
   useEffect(() => {
     //console.log(employees);
-    console.log(department);
-    console.log(position);
-    console.log(positions);
-    if (position) {
+    console.log(selectedDepartments);
+    console.log(selectedPositions);
+    console.log(allPositions);
+    if (selectedPositions) {
       let filtered;
-      if (position.Nazwa === "Każdy") {
+      if (selectedPositions.Nazwa === "Każdy") {
         filtered = employees.filter(
-          (employee) => employee.Dzial === department
+          (employee) => employee.Dzial === selectedDepartments
         );
       } else {
         filtered = employees.filter(
-          (employee) => employee.StanowiskoID === position.ID
+          (employee) => employee.StanowiskoID === selectedPositions.ID
         );
       }
       console.log(filtered);
     }
-  }, [position]);
+  }, [selectedPositions]);
+
+  const handleMultiSelectChange = (
+    selectedOptions,
+    setState,
+    mapOptionToState
+  ) => {
+    setState(selectedOptions.map(mapOptionToState));
+  };
 
   useEffect(() => {
     setMenuItems(
-      <MenuItems
-        dzial={department}
-        dzialy={departments}
-        setDzial={setDepartment}
+      <MenuItemsAnalitycs
+        dzial={selectedDepartments}
+        dzialy={allDepartments}
+        setDzial={setSelectedDepartments}
         date={date}
         setDate={changeDate}
-        position={position}
-        positions={positions}
-        setPosition={setPosition}
+        position={selectedPositions}
+        positions={allPositions}
+        setPosition={setSelectedPositions}
+        handleChange={handleMultiSelectChange}
       />
     );
-  }, [department, date, departments, position, positions]);
+  }, [
+    selectedDepartments,
+    date,
+    allDepartments,
+    selectedPositions,
+    allPositions,
+  ]);
 
-  return <div>AnalyticsPage</div>;
+  return (
+    <div className='analytics w-100 d-flex flex-direction-row'>
+      <div className=''></div>
+      <div></div>
+    </div>
+  );
 };
 
 export default AnalyticsPage;
