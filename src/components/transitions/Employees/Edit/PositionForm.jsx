@@ -152,7 +152,6 @@ const PositionForm = (props) => {
           }))}
           value={selectedSupervisors}
           onChange={handleSupervisorsChange}
-          className=''
         />
       </div>
       {renderSelect(

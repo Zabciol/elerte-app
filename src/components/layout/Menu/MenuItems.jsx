@@ -18,9 +18,9 @@ const MenuItems = (props) => {
     let newItems = [];
 
     if (props.user.supervisor) {
-      newItems.push("ECP", "Pracownicy");
+      newItems.push("ECP", "Pracownicy", "Analityka");
     } else if (props.user.Uprawnienia !== 1) {
-      newItems.push("Pracownicy");
+      newItems.push("Pracownicy", "Analityka");
     }
     newItems = newItems.concat(nav_items);
     const uniqueItems = Array.from(new Set(newItems));

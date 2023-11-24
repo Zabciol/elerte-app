@@ -34,7 +34,9 @@ const MenuItems = React.memo(({ dzial, dzialy, setDzial, date, setDate }) => {
 const Employees = ({ user, setMenuItems, subordinates }) => {
   const { setShowPopUpLogout, setMessage } = useAuth();
   const [key, setKey] = useState("Lista");
-  const [dzialy, setDzialy] = useState(subordinates.map((e) => e.Dzial));
+  const [dzialy, setDzialy] = useState([
+    ...new Set(subordinates.map((e) => e.Dzial)),
+  ]);
   const [dzial, setDzial] = useState(dzialy[0]);
   const [date, setDate] = useState(getCurrentDateYearMonth());
   const [employees, setEmployees] = useState(subordinates);

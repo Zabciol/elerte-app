@@ -7,6 +7,7 @@ import Employees from "../transitions/Employees/Employees";
 import Calender from "../transitions/Calender/Calender";
 import Container from "react-bootstrap/Container";
 import Requests from "../transitions/Requests/Requests";
+import AnalyticsPage from "../transitions/Analytics/AnalyticsPage.jsx";
 import { subordinatesApi } from "../../api/employeesApi";
 import { useAuth } from "../transitions/Login/AuthContext.jsx";
 import Menu from "./Menu/Menu";
@@ -81,6 +82,16 @@ const PageHandler = (props) => {
                   user={user}
                   setMenuItems={setMenuItems}
                   subordinates={[user, ...subordinates]}
+                />
+              }
+            />
+            <Route
+              path='/analityka'
+              element={
+                <AnalyticsPage
+                  user={user}
+                  subordinates={subordinates}
+                  setMenuItems={setMenuItems}
                 />
               }
             />
