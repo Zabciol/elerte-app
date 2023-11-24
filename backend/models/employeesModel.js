@@ -4,7 +4,7 @@ const bcrypt = require("bcrypt");
 
 const getSubordinates = async (id) => {
   const query =
-    "SELECT Pracownicy.ID, Imie, Nazwisko, Stanowisko.Nazwa AS `Stanowisko`, Dzialy.Nazwa AS `Dzial`, WymiarPracy.Od, WymiarPracy.`Do` , Aktywny" +
+    "SELECT Pracownicy.ID, Imie, Nazwisko,Stanowisko.ID AS `StanowiskoID`, Stanowisko.Nazwa AS `Stanowisko`, Dzialy.Nazwa AS `Dzial`, WymiarPracy.Od, WymiarPracy.`Do` , Aktywny" +
     " FROM Pracownicy LEFT JOIN Hierarchia ON Pracownicy.ID = Hierarchia.Podwladny_ID LEFT JOIN Stanowisko" +
     " ON Pracownicy.Stanowisko_ID = Stanowisko.ID LEFT JOIN Dzialy ON Stanowisko.Dzial_ID = Dzialy.ID" +
     " LEFT JOIN WymiarPracy ON Pracownicy.WymiarPracy_ID = WymiarPracy.ID WHERE Przelozony_ID = ?";
@@ -58,7 +58,7 @@ const getEmployeeInf = async (employeeId) => {
 
 const getAllEmployees = async () => {
   const query =
-    "SELECT Pracownicy.ID, Imie, Nazwisko ,Stanowisko.Nazwa AS `Stanowisko`, Dzialy.ID AS `DzialID`,  Dzialy.Nazwa AS `Dzial` FROM Pracownicy LEFT JOIN Stanowisko ON Pracownicy.Stanowisko_ID = Stanowisko.ID LEFT JOIN Dzialy ON Stanowisko.Dzial_ID = Dzialy.ID";
+    "SELECT Pracownicy.ID, Imie, Nazwisko , Stanowisko.ID AS `StanowiskoID`,Stanowisko.Nazwa AS `Stanowisko`, Dzialy.ID AS `DzialID`,  Dzialy.Nazwa AS `Dzial` FROM Pracownicy LEFT JOIN Stanowisko ON Pracownicy.Stanowisko_ID = Stanowisko.ID LEFT JOIN Dzialy ON Stanowisko.Dzial_ID = Dzialy.ID";
 
   return await queryDatabasePromise(query, []);
 };
