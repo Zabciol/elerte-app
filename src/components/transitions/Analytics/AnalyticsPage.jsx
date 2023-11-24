@@ -8,6 +8,8 @@ import { allEmployeesAPI } from "../../../api/employeesApi";
 import Select from "react-select";
 import "../../../styles/Analytics.css";
 import MenuItemsAnalitycs from "./MenuItemsAnalitycs";
+import Carousel from "react-bootstrap/Carousel";
+import ElerteFooter from "../../../assets/Carousel/elerte-bottom.png";
 
 const hasAdminPermissions = (user) =>
   user.Uprawnienia === 3 || user.Uprawnienia === 4;
@@ -24,6 +26,14 @@ const AnalyticsPage = ({ user, subordinates, setMenuItems }) => {
   const [allPositions, setAllPositions] = useState([]);
   const [selectedPositions, setSelectedPositions] = useState();
   //const [filteredEmployees, setFilteredEmployees] = useState(employees);
+
+  const importAllImages = (r) => {
+    return r.keys().map(r);
+  };
+
+  const images = importAllImages(
+    require.context("../../../assets/Carousel", false, /\.(png|jpe?g|svg)$/)
+  );
 
   const changeDate = useCallback(
     (event) => {
@@ -157,8 +167,40 @@ const AnalyticsPage = ({ user, subordinates, setMenuItems }) => {
 
   return (
     <div className='analytics w-100 '>
-      <div className=''></div>
-      <div></div>
+      <Carousel>
+        <Carousel.Item>
+          <img
+            className='d-block w-100 h-100 background'
+            src={images[0]}
+            alt='First slide'
+          />
+          <Carousel.Caption></Carousel.Caption>
+          <img src={ElerteFooter} className='background-footer' />
+        </Carousel.Item>
+        <Carousel.Item>
+          <img
+            className='d-block w-100 h-100 background'
+            src={images[5]}
+            alt='Second slide'
+          />
+          <Carousel.Caption></Carousel.Caption>
+          <img src={ElerteFooter} className='background-footer' />
+        </Carousel.Item>
+        <Carousel.Item>
+          <img
+            className='d-block w-100 h-100 background'
+            src={images[3]}
+            alt='Third slide'
+          />
+          <Carousel.Caption>
+            <h3>Third slide label</h3>
+            <p>
+              Praesent commodo cursus magna, vel scelerisque nisl consectetur.
+            </p>
+          </Carousel.Caption>
+          <img src={ElerteFooter} className='background-footer' />
+        </Carousel.Item>
+      </Carousel>
     </div>
   );
 };

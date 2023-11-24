@@ -100,9 +100,14 @@ const MenuItemsAnalitycs = React.memo(
           <> {MenuRender}</>
         ) : (
           <>
-            <Button variant='secondary' onClick={handleShow} className='me-2'>
-              Filtruj
-            </Button>
+            <i
+              class='bi bi-filter-right'
+              onClick={handleShow}
+              style={{
+                height: "10px",
+                width: "50px",
+                transform: "scale(3)",
+              }}></i>
             <Offcanvas
               show={show}
               onHide={handleClose}
