@@ -112,7 +112,8 @@ const MenuItemsAnalitycs = React.memo(
               show={show}
               onHide={handleClose}
               placement={"end"}
-              className='background text-white'>
+              className='background text-white'
+              style={{ width: "30%" }}>
               <Offcanvas.Header closeButton>
                 <Offcanvas.Title>Filtruj</Offcanvas.Title>
               </Offcanvas.Header>

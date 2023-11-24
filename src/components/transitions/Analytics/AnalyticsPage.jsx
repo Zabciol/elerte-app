@@ -166,7 +166,7 @@ const AnalyticsPage = ({ user, subordinates, setMenuItems }) => {
   ]);
 
   return (
-    <div className='analytics w-100 '>
+    <div className='analytics w-100 text-white '>
       <Carousel>
         <Carousel.Item>
           <img
@@ -174,7 +174,9 @@ const AnalyticsPage = ({ user, subordinates, setMenuItems }) => {
             src={images[0]}
             alt='First slide'
           />
-          <Carousel.Caption></Carousel.Caption>
+          <Carousel.Caption className=' text-white'>
+            <h3>Liczba pracowników</h3>
+          </Carousel.Caption>
           <img src={ElerteFooter} className='background-footer' />
         </Carousel.Item>
         <Carousel.Item>
@@ -183,7 +185,9 @@ const AnalyticsPage = ({ user, subordinates, setMenuItems }) => {
             src={images[5]}
             alt='Second slide'
           />
-          <Carousel.Caption></Carousel.Caption>
+          <Carousel.Caption className=' text-white'>
+            <h3>Ilość roboczogodzin</h3>
+          </Carousel.Caption>
           <img src={ElerteFooter} className='background-footer' />
         </Carousel.Item>
         <Carousel.Item>
@@ -192,11 +196,8 @@ const AnalyticsPage = ({ user, subordinates, setMenuItems }) => {
             src={images[3]}
             alt='Third slide'
           />
-          <Carousel.Caption>
-            <h3>Third slide label</h3>
-            <p>
-              Praesent commodo cursus magna, vel scelerisque nisl consectetur.
-            </p>
+          <Carousel.Caption className=' text-white'>
+            <h3>Ilość nadgodzin</h3>
           </Carousel.Caption>
           <img src={ElerteFooter} className='background-footer' />
         </Carousel.Item>
