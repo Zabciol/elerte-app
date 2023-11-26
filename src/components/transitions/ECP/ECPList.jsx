@@ -15,10 +15,27 @@ const ECPList = ({ user, subordinates, dzial, date }) => {
   const activeSubordinates = subordinates.filter(
     (employee) => employee.Aktywny === "Tak"
   );
+
+  const getUniqueSubordinates = (subordinates) => {
+    const uniqueIds = new Set();
+    const uniqueSubordinates = [];
+
+    subordinates.forEach((employee) => {
+      if (!uniqueIds.has(employee.ID)) {
+        uniqueIds.add(employee.ID);
+        uniqueSubordinates.push(employee);
+      }
+    });
+
+    return uniqueSubordinates;
+  };
+
   const filteredSubordinates =
     dzial === "Każdy"
-      ? activeSubordinates
-      : activeSubordinates.filter((employee) => employee.Dzial === dzial);
+      ? getUniqueSubordinates(activeSubordinates)
+      : getUniqueSubordinates(
+          activeSubordinates.filter((employee) => employee.Dzial === dzial)
+        );
 
   const getReasons = async () => {
     try {

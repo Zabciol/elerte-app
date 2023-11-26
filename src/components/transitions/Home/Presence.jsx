@@ -16,13 +16,9 @@ const Presence = ({ user, date }) => {
       const data = await hoursWorkedApi(user.ID, date);
       console.log(data);
       if (data[0]) {
-        console.log(data[0]);
         setWorkedHours(data[0].SumaGodzin);
       } else {
         setWorkedHours(0);
-        console.log(
-          "Brak danych o przeprawcowanych godzinach dla tego pracownika"
-        );
       }
     } catch (error) {
       console.log(error);

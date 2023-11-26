@@ -17,19 +17,23 @@ const hasAdminPermissions = (user) =>
 
 const hasAdminView = (user) => user.Uprawnienia === 2 || user.Uprawnienia === 4;
 
-const MenuItems = React.memo(({ dzial, dzialy, setDzial, date, setDate }) => {
-  return (
-    <>
-      <SelectDzial dzial={dzial} dzialy={dzialy} setDzial={setDzial} />
-      <Form.Control
-        type='month'
-        value={date}
-        onChange={setDate}
-        className='menu-select'
-      />
-    </>
-  );
-});
+const MenuItems = React.memo(
+  ({ dzial, dzialy, setDzial, date, setDate, menukey }) => {
+    return (
+      <>
+        {menukey !== "Excel" && menukey !== "Nowy" ? (
+          <SelectDzial dzial={dzial} dzialy={dzialy} setDzial={setDzial} />
+        ) : null}
+        <Form.Control
+          type='month'
+          value={date}
+          onChange={setDate}
+          className='menu-select'
+        />
+      </>
+    );
+  }
+);
 
 const Employees = ({ user, setMenuItems, subordinates }) => {
   const { setShowPopUpLogout, setMessage } = useAuth();
@@ -92,9 +96,10 @@ const Employees = ({ user, setMenuItems, subordinates }) => {
         setDzial={setDzial}
         date={date}
         setDate={changeDate}
+        menukey={key}
       />
     );
-  }, [dzial, date, dzialy]);
+  }, [dzial, date, dzialy, key]);
   return (
     <Tabs
       id='controlled-tab-example'
@@ -108,7 +113,7 @@ const Employees = ({ user, setMenuItems, subordinates }) => {
           user={user}
           date={date}
           showWorkedHours={true}>
-          <EmployeeInf user={user} />
+          <EmployeeInf user={user} menukey={key} />
         </EmployeesList>
       </Tab>
       <Tab
@@ -117,7 +122,7 @@ const Employees = ({ user, setMenuItems, subordinates }) => {
         disabled={hasAdminView(user) || subordinates.length ? false : true}>
         <EmployeesList subordinates={filteredSubordinates} date={date}>
           {" "}
-          <EmployeeAbsenceInf date={date} />
+          <EmployeeAbsenceInf date={date} menukey={key} />
         </EmployeesList>
       </Tab>
       <Tab
