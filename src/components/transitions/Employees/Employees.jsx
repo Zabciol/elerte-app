@@ -19,10 +19,21 @@ const hasAdminPermissions = (user) =>
 const hasAdminView = (user) => user.Uprawnienia === 2 || user.Uprawnienia === 4;
 
 const MenuItems = React.memo(
-  ({ dzial, dzialy, setDzial, date, setDate, menukey }) => {
+  ({
+    dzial,
+    dzialy,
+    setDzial,
+    date,
+    setDate,
+    menukey,
+    searchValue,
+    setSearchValue,
+  }) => {
     return (
       <>
-        <Search></Search>
+        <Search
+          searchValue={searchValue}
+          setSearchValue={setSearchValue}></Search>
         {menukey !== "Nowy" ? (
           <SelectDzial dzial={dzial} dzialy={dzialy} setDzial={setDzial} />
         ) : null}
@@ -46,6 +57,7 @@ const Employees = ({ user, setMenuItems, subordinates }) => {
   const [employees, setEmployees] = useState(subordinates);
   const [filteredSubordinates, setFilteredSubordinates] =
     useState(subordinates);
+  const [searchValue, setSearchValue] = useState("");
 
   const changeDate = useCallback(
     (event) => {
@@ -90,6 +102,21 @@ const Employees = ({ user, setMenuItems, subordinates }) => {
   }, [dzial]);
 
   useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      const filtered = employees.filter(
+        (employee) =>
+          (employee.Imie.toLowerCase().includes(searchValue) ||
+            employee.Nazwisko.toLowerCase().includes(searchValue)) &&
+          employee.Dzial === dzial
+      );
+
+      setFilteredSubordinates(filtered);
+    }, 500);
+
+    return () => clearTimeout(timeoutId); // Wyczyszczenie timeoutu przy zmianie searchValue
+  }, [searchValue]);
+
+  useEffect(() => {
     setMenuItems(
       <MenuItems
         dzial={dzial}
@@ -98,9 +125,11 @@ const Employees = ({ user, setMenuItems, subordinates }) => {
         date={date}
         setDate={changeDate}
         menukey={key}
+        searchValue={searchValue}
+        setSearchValue={setSearchValue}
       />
     );
-  }, [dzial, date, dzialy, key]);
+  }, [dzial, date, dzialy, key, searchValue]);
   return (
     <Tabs
       id='controlled-tab-example'

@@ -1,20 +1,20 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Form } from "react-bootstrap";
 import "../../../styles/Home/search.css";
-const Search = () => {
+
+const Search = ({ searchValue, setSearchValue }) => {
   const max_width = 1200;
-
-  const [searchValue, setSearchValue] = useState("");
   const [isExpanded, setIsExpanded] = useState(false);
+  const [isFocused, setIsFocused] = useState(false);
   const searchRef = useRef(null);
-
-  const handleInputChange = (event) => {
-    setSearchValue(event.target.value);
-  };
+  const inputRef = useRef(null);
 
   const handleClickOutside = (event) => {
-    if (searchRef.current && !searchRef.current.contains(event.target)) {
-      setSearchValue("");
+    if (
+      searchRef.current &&
+      !searchRef.current.contains(event.target) &&
+      !searchValue
+    ) {
       setIsExpanded(false);
     }
   };
@@ -22,7 +22,23 @@ const Search = () => {
   const handleSearchIconClick = () => {
     if (window.matchMedia(`(min-width: ${max_width}px)`).matches) {
       setIsExpanded(true);
+      if (inputRef.current) {
+        inputRef.current.focus();
+      }
     }
+  };
+
+  const handleInputFocus = () => {
+    if (searchValue) setIsFocused(true);
+  };
+
+  const handleInputBlur = () => {
+    setIsFocused(false);
+  };
+
+  const changeHandler = (e) => {
+    setSearchValue(e.target.value);
+    if (!isFocused) setIsFocused(true);
   };
 
   useEffect(() => {
@@ -30,7 +46,7 @@ const Search = () => {
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, []);
+  }, [searchValue]);
 
   return (
     <div className='search-bar' ref={searchRef} onClick={handleSearchIconClick}>
@@ -40,11 +56,17 @@ const Search = () => {
         className={`search-input ${isExpanded ? "expanded" : ""}`}
         aria-label='Search'
         value={searchValue}
-        onChange={handleInputChange}
+        onChange={changeHandler}
+        onFocus={handleInputFocus}
+        onBlur={handleInputBlur}
+        ref={inputRef}
       />
-      <i
-        className={`bi bi-search search-icon ${searchValue ? "hidden" : ""}
-        ${isExpanded ? "p-0" : "p-3 pe-0 "}`}></i>
+      {!isFocused && (
+        <i
+          className={`bi bi-search search-icon ${
+            isExpanded ? "p-0" : "p-3 pe-0 "
+          }`}></i>
+      )}
     </div>
   );
 };

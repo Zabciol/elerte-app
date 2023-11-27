@@ -31,8 +31,9 @@
 .search-icon.active {
   right: calc(100% - 40px);
 }
-.search-icon.hidden {
-  display: none; /* Ukrywa ikonę lupy */
+
+.search-bar.expanded .search-input:focus + .search-icon {
+  display: none; /* Ukrywa ikonę lupy podczas hover lub focus na rozwiniętym pasku wyszukiwania */
 }
 
 @media (max-width: 1200px) {
