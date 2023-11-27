@@ -18,6 +18,10 @@
 .menu-select {
   width: 200px !important;
 }
+
+.menu-search {
+  width: 100px !important;
+}
 hr.solid {
   border-top: 3px solid #bbb;
 }

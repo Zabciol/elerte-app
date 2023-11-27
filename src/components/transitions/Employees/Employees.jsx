@@ -8,6 +8,7 @@ import EmployeeInf from "./EmployeeInf";
 import ExportExcel from "./ExportExcel";
 import EmployeeAbsenceInf from "./EmployeeAbsenceInf";
 import NewMain from "./New/NewMain";
+import Search from "../../layout/Menu/Search";
 import { getCurrentDateYearMonth } from "../../common/CommonFunctions";
 import { allEmployeesAPI } from "../../../api/employeesApi";
 import { useAuth } from "../Login/AuthContext";
@@ -21,6 +22,7 @@ const MenuItems = React.memo(
   ({ dzial, dzialy, setDzial, date, setDate, menukey }) => {
     return (
       <>
+        <Search></Search>
         {menukey !== "Nowy" ? (
           <SelectDzial dzial={dzial} dzialy={dzialy} setDzial={setDzial} />
         ) : null}
