@@ -54,7 +54,7 @@ const Employees = ({ user, setMenuItems, subordinates }) => {
   const [dzialy, setDzialy] = useState(subordinates.map((e) => e.Dzial));
   const [dzial, setDzial] = useState(dzialy[0]);
   const [date, setDate] = useState(getCurrentDateYearMonth());
-  const [employees, setEmployees] = useState(subordinates);
+  const [employees, setEmployees] = useState([]);
   const [filteredSubordinates, setFilteredSubordinates] =
     useState(subordinates);
   const [searchValue, setSearchValue] = useState("");
@@ -69,6 +69,9 @@ const Employees = ({ user, setMenuItems, subordinates }) => {
     try {
       if (hasAdminView(user) || hasAdminPermissions(user))
         setEmployees(await allEmployeesAPI());
+      else {
+        setEmployees(subordinates);
+      }
     } catch (error) {
       setMessage(error.message);
       setShowPopUpLogout(true);
@@ -80,6 +83,7 @@ const Employees = ({ user, setMenuItems, subordinates }) => {
   }, [getEmployees]);
 
   useEffect(() => {
+    console.log(employees);
     if (employees.length > 0) {
       const noweDzialy = Array.from(
         new Set(
@@ -94,11 +98,13 @@ const Employees = ({ user, setMenuItems, subordinates }) => {
   }, [employees, user, key]);
 
   const filterByDepartment = (employees) => {
-    const newFilteredSubordinates =
-      dzial === "Każdy"
-        ? employees
-        : employees.filter((e) => e.Dzial === dzial);
-    setFilteredSubordinates(newFilteredSubordinates);
+    if (employees.length) {
+      const newFilteredSubordinates =
+        dzial === "Każdy"
+          ? employees
+          : employees.filter((e) => e.Dzial === dzial);
+      setFilteredSubordinates(newFilteredSubordinates);
+    }
   };
 
   useEffect(() => {
