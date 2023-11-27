@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { SelectDzial } from "../../layout/Menu/MenuForms";
 import Tab from "react-bootstrap/Tab";
 import Tabs from "react-bootstrap/Tabs";
@@ -31,12 +31,10 @@ const MenuItems = React.memo(
   }) => {
     return (
       <>
-        <Search
-          searchValue={searchValue}
-          setSearchValue={setSearchValue}></Search>
-        {menukey !== "Nowy" ? (
+        <Search searchValue={searchValue} setSearchValue={setSearchValue} />
+        {menukey !== "Nowy" && (
           <SelectDzial dzial={dzial} dzialy={dzialy} setDzial={setDzial} />
-        ) : null}
+        )}
         <Form.Control
           type='month'
           value={date}
@@ -51,85 +49,81 @@ const MenuItems = React.memo(
 const Employees = ({ user, setMenuItems, subordinates }) => {
   const { setShowPopUpLogout, setMessage } = useAuth();
   const [key, setKey] = useState("Lista");
-  const [dzialy, setDzialy] = useState(subordinates.map((e) => e.Dzial));
-  const [dzial, setDzial] = useState(dzialy[0]);
+  const [dzial, setDzial] = useState(subordinates[0]?.Dzial || "");
   const [date, setDate] = useState(getCurrentDateYearMonth());
   const [employees, setEmployees] = useState([]);
-  const [filteredSubordinates, setFilteredSubordinates] =
-    useState(subordinates);
   const [searchValue, setSearchValue] = useState("");
+  const [delayedSearchValue, setDelayedSearchValue] = useState(searchValue);
 
-  const changeDate = useCallback(
-    (event) => {
-      setDate(event.target.value);
-    },
-    [setDate]
-  );
-  const getEmployees = useCallback(async () => {
-    try {
-      if (hasAdminView(user) || hasAdminPermissions(user))
-        setEmployees(await allEmployeesAPI());
-      else {
-        setEmployees(subordinates);
+  useEffect(() => {
+    const fetchEmployees = async () => {
+      try {
+        let newEmployees;
+        if (hasAdminView(user) || hasAdminPermissions(user)) {
+          newEmployees = await allEmployeesAPI();
+        } else {
+          newEmployees = subordinates;
+        }
+        setEmployees(newEmployees);
+      } catch (error) {
+        setMessage(error.message);
+        setShowPopUpLogout(true);
       }
-    } catch (error) {
-      setMessage(error.message);
-      setShowPopUpLogout(true);
-    }
+    };
+
+    fetchEmployees();
   }, [user, subordinates]);
 
-  useEffect(() => {
-    getEmployees();
-  }, [getEmployees]);
+  const noweDzialy = useMemo(
+    () => Array.from(new Set(employees.map((e) => e.Dzial))),
+    [employees]
+  );
 
   useEffect(() => {
-    console.log(employees);
-    if (employees.length > 0) {
-      const noweDzialy = Array.from(
-        new Set(
-          hasAdminView(user) || hasAdminPermissions
-            ? employees.map((e) => e.Dzial)
-            : subordinates.map((e) => e.Dzial)
-        )
-      );
-      setDzialy(noweDzialy);
+    if (noweDzialy.length > 0) {
       setDzial(noweDzialy[0]);
     }
-  }, [employees, user, key]);
-
-  const filterByDepartment = (employees) => {
-    if (employees.length) {
-      const newFilteredSubordinates =
-        dzial === "Każdy"
-          ? employees
-          : employees.filter((e) => e.Dzial === dzial);
-      setFilteredSubordinates(newFilteredSubordinates);
-    }
-  };
-
-  useEffect(() => {
-    setSearchValue("");
-    filterByDepartment(employees);
-  }, [dzial]);
+  }, [noweDzialy]);
 
   useEffect(() => {
     const timeoutId = setTimeout(() => {
-      const filtered = employees.filter(
-        (employee) =>
-          employee.Imie.toLowerCase().includes(searchValue) ||
-          employee.Nazwisko.toLowerCase().includes(searchValue)
-      );
-      filterByDepartment(filtered);
-    }, 500);
+      setDelayedSearchValue(searchValue);
+    }, 500); // Opóźnienie 0,5 sekundy
 
-    return () => clearTimeout(timeoutId); // Wyczyszczenie timeoutu przy zmianie searchValue
+    return () => clearTimeout(timeoutId);
   }, [searchValue]);
+
+  const filteredSubordinates = useMemo(() => {
+    let result = employees;
+
+    if (delayedSearchValue) {
+      result = result.filter(
+        (employee) =>
+          employee.Imie.toLowerCase().includes(
+            delayedSearchValue.toLowerCase()
+          ) ||
+          employee.Nazwisko.toLowerCase().includes(
+            delayedSearchValue.toLowerCase()
+          )
+      );
+    }
+
+    if (dzial !== "Każdy") {
+      result = result.filter((e) => e.Dzial === dzial);
+    }
+
+    return result;
+  }, [dzial, employees, delayedSearchValue]);
+
+  const changeDate = (event) => {
+    setDate(event.target.value);
+  };
 
   useEffect(() => {
     setMenuItems(
       <MenuItems
         dzial={dzial}
-        dzialy={dzialy}
+        dzialy={noweDzialy}
         setDzial={setDzial}
         date={date}
         setDate={changeDate}
@@ -138,12 +132,13 @@ const Employees = ({ user, setMenuItems, subordinates }) => {
         setSearchValue={setSearchValue}
       />
     );
-  }, [dzial, date, dzialy, key, searchValue]);
+  }, [dzial, date, noweDzialy, key, searchValue, setMenuItems]);
+
   return (
     <Tabs
       id='controlled-tab-example'
       activeKey={key}
-      onSelect={(k) => setKey(k)}
+      onSelect={setKey}
       className='mb-3'>
       <Tab eventKey='Lista' title='Lista'>
         <EmployeesList
@@ -158,17 +153,15 @@ const Employees = ({ user, setMenuItems, subordinates }) => {
       <Tab
         eventKey='Nieobecnosci'
         title='Nieobecności'
-        disabled={hasAdminView(user) || subordinates.length ? false : true}>
+        disabled={!hasAdminView(user) && !subordinates.length}>
         <EmployeesList subordinates={filteredSubordinates} date={date}>
-          {" "}
           <EmployeeAbsenceInf date={date} menukey={key} />
         </EmployeesList>
       </Tab>
       <Tab
         eventKey='Excel'
         title='Export'
-        disabled={hasAdminView(user) || subordinates.length ? false : true}>
-        {" "}
+        disabled={!hasAdminView(user) && !subordinates.length}>
         <ExportExcel
           subordinates={filteredSubordinates}
           user={user}
@@ -176,11 +169,8 @@ const Employees = ({ user, setMenuItems, subordinates }) => {
           date={date}
         />
       </Tab>
-      <Tab
-        eventKey='Nowy'
-        title='Nowy'
-        disabled={hasAdminPermissions ? false : true}>
-        <NewMain dzial={dzial} />
+      <Tab eventKey='Nowy' title='Nowy' disabled={!hasAdminPermissions(user)}>
+        <NewMain />
       </Tab>
     </Tabs>
   );
