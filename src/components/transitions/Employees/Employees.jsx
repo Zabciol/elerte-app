@@ -21,7 +21,7 @@ const MenuItems = React.memo(
   ({ dzial, dzialy, setDzial, date, setDate, menukey }) => {
     return (
       <>
-        {menukey !== "Excel" && menukey !== "Nowy" ? (
+        {menukey !== "Nowy" ? (
           <SelectDzial dzial={dzial} dzialy={dzialy} setDzial={setDzial} />
         ) : null}
         <Form.Control
@@ -69,8 +69,7 @@ const Employees = ({ user, setMenuItems, subordinates }) => {
     if (employees.length > 0) {
       const noweDzialy = Array.from(
         new Set(
-          (key === "Lista" || key === "Nieobecnosci") &&
-          (hasAdminView(user) || hasAdminPermissions)
+          hasAdminView(user) || hasAdminPermissions
             ? employees.map((e) => e.Dzial)
             : subordinates.map((e) => e.Dzial)
         )
@@ -131,7 +130,7 @@ const Employees = ({ user, setMenuItems, subordinates }) => {
         disabled={hasAdminView(user) || subordinates.length ? false : true}>
         {" "}
         <ExportExcel
-          subordinates={hasAdminView(user) ? employees : subordinates}
+          subordinates={filteredSubordinates}
           user={user}
           dzial={dzial}
           date={date}
