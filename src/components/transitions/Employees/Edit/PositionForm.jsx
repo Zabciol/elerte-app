@@ -44,6 +44,7 @@ const PositionForm = (props) => {
   };
 
   const filterSupervisors = (data) => {
+    console.log(data);
     let filteredSupervisors = data.filter(
       (supervisor) => !subordinates.includes(supervisor.ID)
     );
