@@ -93,24 +93,27 @@ const Employees = ({ user, setMenuItems, subordinates }) => {
     }
   }, [employees, user, key]);
 
-  useEffect(() => {
+  const filterByDepartment = (employees) => {
     const newFilteredSubordinates =
       dzial === "Każdy"
         ? employees
         : employees.filter((e) => e.Dzial === dzial);
     setFilteredSubordinates(newFilteredSubordinates);
+  };
+
+  useEffect(() => {
+    setSearchValue("");
+    filterByDepartment(employees);
   }, [dzial]);
 
   useEffect(() => {
     const timeoutId = setTimeout(() => {
       const filtered = employees.filter(
         (employee) =>
-          (employee.Imie.toLowerCase().includes(searchValue) ||
-            employee.Nazwisko.toLowerCase().includes(searchValue)) &&
-          employee.Dzial === dzial
+          employee.Imie.toLowerCase().includes(searchValue) ||
+          employee.Nazwisko.toLowerCase().includes(searchValue)
       );
-
-      setFilteredSubordinates(filtered);
+      filterByDepartment(filtered);
     }, 500);
 
     return () => clearTimeout(timeoutId); // Wyczyszczenie timeoutu przy zmianie searchValue

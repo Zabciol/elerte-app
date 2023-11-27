@@ -6,25 +6,30 @@ import ECPList from "./ECPList";
 import "./../../../styles/ECP.css";
 import { GetDataProvider } from "./ECPDataContext";
 import { getNextWorkDay } from "../../common/CommonFunctions";
+import Search from "../../layout/Menu/Search";
 
-const MenuItems = ({ date, setDate, dzial, dzialy, setDzial }) => {
-  return (
-    <>
-      <SelectDzial dzial={dzial} dzialy={dzialy} setDzial={setDzial} />
-      <Form.Control
-        type='date'
-        value={date}
-        onChange={setDate}
-        className='menu-select'
-      />
-    </>
-  );
-};
+const MenuItems = React.memo(
+  ({ date, setDate, dzial, dzialy, setDzial, searchValue, setSearchValue }) => {
+    return (
+      <>
+        <Search searchValue={searchValue} setSearchValue={setSearchValue} />
+        <SelectDzial dzial={dzial} dzialy={dzialy} setDzial={setDzial} />
+        <Form.Control
+          type='date'
+          value={date}
+          onChange={setDate}
+          className='menu-select'
+        />
+      </>
+    );
+  }
+);
 
 const ECP = ({ user, setMenuItems, subordinates }) => {
   const dzialy = Array.from(new Set(subordinates.map((item) => item.Dzial)));
   const [dzial, setDzial] = useState(dzialy[0]);
   const [date, setDate] = useState(getCurrentDateYearMonthDay());
+  const [searchValue, setSearchValue] = useState("");
 
   const changeDate = (event) => {
     const today = new Date();
@@ -44,9 +49,15 @@ const ECP = ({ user, setMenuItems, subordinates }) => {
         setDzial={setDzial}
         date={date}
         setDate={changeDate}
+        searchValue={searchValue}
+        setSearchValue={setSearchValue}
       />
     );
-  }, [dzial, date]);
+  }, [dzial, date, searchValue]);
+
+  useEffect(() => {
+    setSearchValue("");
+  }, [dzial]);
 
   return (
     <GetDataProvider>
@@ -55,6 +66,7 @@ const ECP = ({ user, setMenuItems, subordinates }) => {
         subordinates={subordinates}
         dzial={dzial}
         date={date}
+        searchValue={searchValue}
       />
     </GetDataProvider>
   );
