@@ -65,15 +65,14 @@ const NewEmployee = ({ show, cancel }) => {
         usedDays: usedDays,
       },
     };
-    console.log(newEmployee);
 
     try {
       const { mail, phoneNumber, ...toCheck } = newEmployee;
       if (isAnyValueEmpty(toCheck)) throw new Error("Uzupełnij dane");
       if (isAnyValueEmpty(toCheck.vacation))
         throw new Error("Uzupełnij dane urlopowe");
-      console.log(newEmployee);
       const results = await addEmployeeApi(newEmployee);
+      cancel();
       setMessage(results.message);
       setShowPopUp(true);
     } catch (error) {
