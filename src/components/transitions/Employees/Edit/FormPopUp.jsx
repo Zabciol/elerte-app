@@ -7,9 +7,9 @@ import ContactForm from "./ContactForm";
 import PositionForm from "./PositionForm";
 import SubordinatesForm from "./SuborfinatesForm";
 import DeleteEmployee from "./DeleteEmployee";
+import Leaves from "./Leaves";
 import { subordinatesApi } from "../../../../api/employeesApi";
 import { updateEmployeeApi } from "../../../../api/employeesApi";
-import { deleteEmployeeApi } from "../../../../api/employeesApi";
 import { myDirectSubordinatesAPI } from "../../../../api/employeesApi";
 import { useAuth } from "../../Login/AuthContext";
 
@@ -20,6 +20,9 @@ const FormPopUp = ({ show, setShow, employee, user }) => {
   const lastNameRef = useRef();
   const mailRef = useRef();
   const phoneNumberRef = useRef();
+  const urlopMax = useRef(employee.urlopMaxIloscDni);
+  const urlopWykorzystane = useRef(employee.urlopWykorzystane);
+  const urlopZalegly = useRef(employee.urlopZalegly);
   const [department, setDepartment] = useState();
   const [position, setPosition] = useState();
   const [directSupervisors, setDirectSupervisors] = useState(
@@ -47,10 +50,12 @@ const FormPopUp = ({ show, setShow, employee, user }) => {
       supervisors: directSupervisors,
       workingTimeID: Number(workingTime),
       subordinates: subordinates,
+      leavesMax: urlopMax.current?.value || employee.urlopMaxIloscDni,
+      leavesUsed:
+        urlopWykorzystane.current?.value || employee.urlopWykorzystane,
+      leavesOutstanding: urlopZalegly.current?.value || employee.urlopZalegly,
     };
     try {
-      console.log(employeeData);
-
       const response = await updateEmployeeApi(employeeData);
       if (shouldShowPopUp) {
         setShow(false);
@@ -96,7 +101,7 @@ const FormPopUp = ({ show, setShow, employee, user }) => {
       const directSubordinatesID = data.map((employee) => employee.ID);
       setDirectSubordinates(directSubordinatesID);
     } catch (error) {
-      console.log(error.message);
+      console.error(error.message);
       setMessage(error.message);
       setShowPopUpLogout(true);
     }
@@ -162,6 +167,14 @@ const FormPopUp = ({ show, setShow, employee, user }) => {
                 setDirectSubordinates={setDirectSubordinates}
                 department={department}
                 updateData={updateData}
+              />
+            </Tab>
+            <Tab eventKey='leave' title='Urlop'>
+              <Leaves
+                employee={employee}
+                urlopMax={urlopMax}
+                urlopWykorzystane={urlopWykorzystane}
+                urlopZalegly={urlopZalegly}
               />
             </Tab>
           </Tabs>

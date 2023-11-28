@@ -10,7 +10,6 @@ const NewDepartment = ({ show, cancel }) => {
   const name = useRef();
 
   const submit = async () => {
-    console.log(name.current.value);
     try {
       const newDepartment = {
         name: name.current.value,

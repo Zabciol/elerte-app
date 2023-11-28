@@ -65,7 +65,6 @@ const Calender = (props) => {
 
   const fetchData = async () => {
     const holidays = generujEventySwieta(await holidaysApi(date));
-    console.log(holidays);
     const employeesID = getEmployeesID(employees);
     const data = await getAbsence(employeesID);
     setEvents([...data, ...holidays]);

@@ -104,7 +104,6 @@ const ECPInput = (props) => {
       reason: reason,
       date: date,
     });
-    setReason(reason); // dla pewności ustawiam jeszcze raz bo na frocie nie zmieniała się wartość
     addCollector(collector);
     return () => {
       removeCollector(collector);

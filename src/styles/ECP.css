@@ -1,10 +1,8 @@
 .ECP {
   overflow-y: scroll;
-  max-height: 800px;
+  max-height: 600px;
 }
-.list-group-item {
-  /* position: static !important; */
-}
+
 .ECP-input {
   display: flex;
   flex-direction: row;

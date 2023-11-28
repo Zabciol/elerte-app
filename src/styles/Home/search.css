@@ -1,0 +1,51 @@
+.search-bar {
+  position: relative;
+  width: 50px; /* Szerokość początkowa dla ikony */
+  transition: width 0.3s ease;
+}
+
+.search-input {
+  width: 0;
+  position: absolute;
+  right: 0;
+  opacity: 0;
+  transition: opacity 0.3s ease, width 0.3s ease !important;
+}
+
+.search-input.expanded {
+  width: 200px; /* Szerokość po rozszerzeniu */
+  opacity: 1;
+  padding-right: 0;
+}
+
+.search-icon {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  z-index: 2;
+  padding: 1rem;
+}
+
+.search-icon.active {
+  right: calc(100% - 40px);
+}
+
+.search-bar.expanded .search-input:focus + .search-icon {
+  display: none; /* Ukrywa ikonę lupy podczas hover lub focus na rozwiniętym pasku wyszukiwania */
+}
+
+@media (max-width: 1200px) {
+  .search-bar {
+    padding-right: 0;
+    width: 200px;
+    height: 40px;
+  }
+
+  .search-bar .search-input {
+    left: 0;
+    width: 200px;
+    opacity: 1;
+  }
+}

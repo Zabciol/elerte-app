@@ -8,17 +8,30 @@ import { useGetData } from "./ECPDataContext";
 import { getCurrentDateTime } from "../../common/CommonFunctions";
 import { useAuth } from "../Login/AuthContext";
 
-const ECPList = ({ user, subordinates, dzial, date }) => {
+const ECPList = ({ user, subordinates, dzial, date, searchValue }) => {
   const { setShowPopUpLogout, setMessage } = useAuth();
   const [reasons, setReasons] = useState([]);
   const { collectAll } = useGetData();
   const activeSubordinates = subordinates.filter(
     (employee) => employee.Aktywny === "Tak"
   );
-  const filteredSubordinates =
-    dzial === "Każdy"
-      ? activeSubordinates
-      : activeSubordinates.filter((employee) => employee.Dzial === dzial);
+  const [filteredSubordinates, setFilteredSubordinates] = useState(
+    subordinates.filter((employee) => employee.Aktywny === "Tak")
+  );
+
+  const getUniqueSubordinates = (subordinates) => {
+    const uniqueIds = new Set();
+    const uniqueSubordinates = [];
+
+    subordinates.forEach((employee) => {
+      if (!uniqueIds.has(employee.ID)) {
+        uniqueIds.add(employee.ID);
+        uniqueSubordinates.push(employee);
+      }
+    });
+
+    return uniqueSubordinates;
+  };
 
   const getReasons = async () => {
     try {
@@ -32,6 +45,32 @@ const ECPList = ({ user, subordinates, dzial, date }) => {
       setMessage(error.message);
     }
   };
+
+  const filterByDepartment = (employees) => {
+    const newFilteredSubordinates =
+      dzial === "Każdy"
+        ? getUniqueSubordinates(employees)
+        : getUniqueSubordinates(employees.filter((e) => e.Dzial === dzial));
+    setFilteredSubordinates(newFilteredSubordinates);
+  };
+
+  useEffect(() => {
+    filterByDepartment(activeSubordinates);
+  }, [dzial]);
+
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      const filtered = activeSubordinates.filter(
+        (employee) =>
+          employee.Imie.toLowerCase().includes(searchValue) ||
+          employee.Nazwisko.toLowerCase().includes(searchValue)
+      );
+      filterByDepartment(filtered);
+    }, 500);
+
+    return () => clearTimeout(timeoutId); // Wyczyszczenie timeoutu przy zmianie searchValue
+  }, [searchValue]);
+
   useEffect(() => {
     getReasons();
   }, []);

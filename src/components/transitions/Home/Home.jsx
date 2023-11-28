@@ -64,20 +64,6 @@ const Home = ({ user, setMenuItems }) => {
           </Carousel.Caption>
           <img src={ElerteFooter} className='background-footer' />
         </Carousel.Item>
-        <Carousel.Item>
-          <img
-            className='d-block w-100 h-100 background'
-            src={images[2]}
-            alt='Third slide'
-          />
-          <Carousel.Caption>
-            <h3>Third slide label</h3>
-            <p>
-              Praesent commodo cursus magna, vel scelerisque nisl consectetur.
-            </p>
-          </Carousel.Caption>
-          <img src={ElerteFooter} className='background-footer' />
-        </Carousel.Item>
       </Carousel>
     </>
   );

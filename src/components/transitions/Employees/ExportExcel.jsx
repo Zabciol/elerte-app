@@ -18,24 +18,9 @@ const ExportExcel = (props) => {
     }
   };
 
-  const getAllEmployees = async () => {
-    try {
-      const data = await allEmployeesAPI();
-      setEmployeesID(data.map((employee) => employee.ID));
-    } catch (error) {
-      console.error(error);
-      setMessage(error.message);
-      setShowPopUpLogout(true);
-    }
-  };
-
   useEffect(() => {
-    if (props.user.Uprawnienia === 2 || props.user.Uprawnienia === 4) {
-      getAllEmployees();
-    } else {
-      const IDs = props.subordinates.map((employee) => employee.ID);
-      setEmployeesID(IDs);
-    }
+    const IDs = props.subordinates.map((employee) => employee.ID);
+    setEmployeesID(IDs);
   }, [props]);
   return (
     <div>

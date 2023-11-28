@@ -6,7 +6,7 @@ import { getAbsenceAPI } from "../../../api/ecpApi";
 import { getAcceptedRequestsApi } from "../../../api/requestsApi";
 import { useAuth } from "../Login/AuthContext";
 
-const EmployeeAbsenceInf = React.memo(({ employee, date }) => {
+const EmployeeAbsenceInf = React.memo(({ employee, date, menukey }) => {
   const { setShowPopUpLogout, setMessage } = useAuth();
   const [employeeData, setEmployeeData] = useState(null);
 
@@ -101,8 +101,8 @@ const EmployeeAbsenceInf = React.memo(({ employee, date }) => {
     setEmployeeData(employeeData[0]);
   };
   useEffect(() => {
-    gatherData();
-  }, [date]);
+    if (menukey === "Nieobecnosci") gatherData();
+  }, [date, menukey]);
 
   return (
     <div className='d-flex absence w-100'>

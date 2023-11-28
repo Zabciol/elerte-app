@@ -4,7 +4,7 @@ module.exports = {
     host: "localhost",
     user: "root",
     password: "",
-    database: "elerte_app1",
+    database: "ewidencja_czasu_pracy",
     timezone: "Europe/Warsaw",
   },
   protocol: "http",

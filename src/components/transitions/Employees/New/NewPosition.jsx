@@ -15,7 +15,6 @@ const NewPosition = ({ show, cancel }) => {
 
   const getAllDepartments = async () => {
     const data = await departmentsApi();
-    console.log(data);
     setDepartments(data);
     setDepartment(data[0]);
   };
@@ -24,8 +23,6 @@ const NewPosition = ({ show, cancel }) => {
   };
 
   const submit = async () => {
-    console.log(department);
-    console.log(name.current.value);
     try {
       const newPosition = {
         name: name.current.value,

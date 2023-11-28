@@ -9,7 +9,6 @@ const Leaves = ({ user, date }) => {
 
   const getData = async () => {
     const data = await vacationApi(user.ID);
-    console.log(data);
     setZalegle(data.data.ZaleglyUrlop);
     setNieWykorzystane(data.data.NieWykorzystane);
     setWykorzystane(data.data.Wykorzystane);
@@ -19,7 +18,7 @@ const Leaves = ({ user, date }) => {
     getData();
   }, []);
   return (
-    <div className='p-5 pt-0 text-white'>
+    <div className='text-white leaves'>
       <h3>Urlopy</h3>
       <div className='d-flex flex-wrap justify-content-between align-items-top w-100'>
         <div className='home-presence_data'>

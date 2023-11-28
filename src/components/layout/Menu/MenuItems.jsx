@@ -60,6 +60,7 @@ const MenuItems = (props) => {
             </NavDropdown.Item>
           </NavDropdown>
         ) : null}
+
         {nav_items.map((item) => (
           <Nav.Link key={item} as={Link} to={`/${item}`}>
             {item}

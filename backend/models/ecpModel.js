@@ -183,7 +183,7 @@ const getAbsenceNotIncludeRequests = async (date, IDs) => {
       "LEFT JOIN PowodyNieobecnosci ON ECP.Powod_ID = PowodyNieobecnosci.ID " +
       "LEFT JOIN Stanowisko ON Pracownicy.Stanowisko_ID = Stanowisko.ID " +
       "LEFT JOIN Dzialy ON Stanowisko.Dzial_ID = Dzialy.ID " +
-      "WHERE ECP.IloscGodzin < 8 AND YEAR(Data) = ? AND Powod_ID != 40 AND Powod_ID != 41 " +
+      "WHERE ECP.IloscGodzin < 8 AND YEAR(Data) = ? AND Powod_ID != 40 AND Powod_ID != 41 AND Powod_ID != 42 " +
       "AND MONTH(Data) = ? AND PracowniCY.ID in (?) AND NOT EXISTS ( " +
       "SELECT 1 FROM Wnioski W WHERE W.Nadawca_ID = ECP.Pracownik_ID " +
       "AND W.Status = 'Zaakceptowano' AND ECP.Data BETWEEN W.Data_Od AND W.Data_Do)";
@@ -238,7 +238,7 @@ const fillECPforDeletedEmployee = async (
       "00:00",
       "00:00",
       employeeID,
-      40,
+      40, //zwolnienie z obowiązku świadczenia pracy
       0,
       editDate,
       editEmployeeID,
@@ -260,9 +260,9 @@ const fillECPforDeletedEmployee = async (
 const countAbsence = async (employeeID, year, month) => {
   try {
     const query =
-      "SELECT (SELECT COUNT(*) * 8 FROM ecp WHERE Pracownik_ID = ? AND IloscGodzin < 8 AND YEAR(Data) = ? AND MONTH(Data) = ? AND Powod_ID != 40 AND Powod_ID != 41 ) - " +
-      "(SELECT SUM(IloscGodzin) FROM ecp WHERE Pracownik_ID = ? AND IloscGodzin < 8 AND YEAR(Data) = ? AND MONTH(Data) = ? AND Powod_ID != 40 AND Powod_ID != 41) AS SumaGodzin " +
-      "FROM ecp WHERE Pracownik_ID = ? AND IloscGodzin < 8 AND YEAR(Data) = ? AND MONTH(Data) = ? AND Powod_ID != 40 AND Powod_ID != 41;";
+      "SELECT (SELECT COUNT(*) * 8 FROM ecp WHERE Pracownik_ID = ? AND IloscGodzin < 8 AND YEAR(Data) = ? AND MONTH(Data) = ? AND Powod_ID != 40 AND Powod_ID != 41 AND Powod_ID != 42 ) - " +
+      "(SELECT SUM(IloscGodzin) FROM ecp WHERE Pracownik_ID = ? AND IloscGodzin < 8 AND YEAR(Data) = ? AND MONTH(Data) = ? AND Powod_ID != 40 AND Powod_ID != 41 AND Powod_ID != 42) AS SumaGodzin " +
+      "FROM ecp WHERE Pracownik_ID = ? AND IloscGodzin < 8 AND YEAR(Data) = ? AND MONTH(Data) = ? AND Powod_ID != 40 AND Powod_ID != 41 AND Powod_ID != 42;";
     const values = [
       employeeID,
       year,
