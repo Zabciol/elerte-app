@@ -22,7 +22,6 @@ const FormPopUp = ({ show, setShow, employee, user }) => {
   const phoneNumberRef = useRef();
   const urlopMax = useRef(employee.urlopMaxIloscDni);
   const urlopWykorzystane = useRef(employee.urlopWykorzystane);
-  const urlopNiewykorzystane = useRef(employee.urlopNiewykorzystane);
   const urlopZalegly = useRef(employee.urlopZalegly);
   const [department, setDepartment] = useState();
   const [position, setPosition] = useState();
@@ -54,8 +53,6 @@ const FormPopUp = ({ show, setShow, employee, user }) => {
       leavesMax: urlopMax.current?.value || employee.urlopMaxIloscDni,
       leavesUsed:
         urlopWykorzystane.current?.value || employee.urlopWykorzystane,
-      leavesNotUsed:
-        urlopNiewykorzystane.current?.value || employee.urlopNiewykorzystane,
       leavesOutstanding: urlopZalegly.current?.value || employee.urlopZalegly,
     };
     try {
@@ -176,7 +173,6 @@ const FormPopUp = ({ show, setShow, employee, user }) => {
               <Leaves
                 employee={employee}
                 urlopMax={urlopMax}
-                urlopNiewykorzystane={urlopNiewykorzystane}
                 urlopWykorzystane={urlopWykorzystane}
                 urlopZalegly={urlopZalegly}
               />

@@ -72,6 +72,7 @@ const NewEmployee = ({ show, cancel }) => {
       if (isAnyValueEmpty(toCheck.vacation))
         throw new Error("Uzupełnij dane urlopowe");
       const results = await addEmployeeApi(newEmployee);
+      cancel();
       setMessage(results.message);
       setShowPopUp(true);
     } catch (error) {

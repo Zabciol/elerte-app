@@ -2,21 +2,12 @@ import React, { useEffect } from "react";
 import FloatingLabel from "react-bootstrap/FloatingLabel";
 import Form from "react-bootstrap/Form";
 
-const Leaves = ({
-  employee,
-  urlopMax,
-  urlopNiewykorzystane,
-  urlopWykorzystane,
-  urlopZalegly,
-}) => {
+const Leaves = ({ employee, urlopMax, urlopWykorzystane, urlopZalegly }) => {
   useEffect(() => {
     if (urlopMax.current) {
       urlopMax.current.value = Number(employee.urlopMaxIloscDni) || 0;
     }
-    if (urlopNiewykorzystane.current) {
-      urlopNiewykorzystane.current.value =
-        Number(employee.urlopNiewykorzystane) || 0;
-    }
+
     if (urlopWykorzystane.current) {
       urlopWykorzystane.current.value = Number(employee.urlopWykorzystane) || 0;
     }
@@ -38,20 +29,6 @@ const Leaves = ({
             max={26}
             placeholder='Max ilość dni'
             ref={urlopMax}
-          />
-        </FloatingLabel>
-      </div>
-      <div className='d-flex w-50 p-1'>
-        <FloatingLabel
-          controlId='floatingSelect-Niewykorzystane'
-          label='Niewykorzystane dni urlopu'
-          className='w-100'>
-          <Form.Control
-            type='number'
-            min={0}
-            max={26}
-            placeholder='Niewykorzystane dni'
-            ref={urlopNiewykorzystane}
           />
         </FloatingLabel>
       </div>

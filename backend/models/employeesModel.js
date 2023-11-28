@@ -101,6 +101,28 @@ const addLoginAndPassword = async (idPracownika, login) => {
     throw new Error(error);
   }
 };
+const addEmployeeDataToLeaves = async (data, employeeID) => {
+  // Obliczanie nie wykorzystanych dni urlopu
+  const notUsedDays = Number(data.maxCountOfDays) - Number(data.usedDays);
+  // Przygotowanie danych do zapisu w bazie danych
+  const vacation = {
+    maxCountOfDays: data.maxCountOfDays,
+    notUsedDays: isNaN(notUsedDays) ? 0 : notUsedDays, // Jeśli wynik jest NaN, użyj 0
+    pastDays: data.pastDays,
+    usedDays: data.usedDays,
+  };
+  // Wstawianie danych do bazy danych
+  await queryDatabasePromise(
+    `INSERT INTO UrlopyInf (MaxIloscDni, NieWykorzystane, ZaleglyUrlop, Wykorzystane, Pracownik_ID) VALUES (?, ?, ?, ?, ?)`,
+    [
+      vacation.maxCountOfDays,
+      vacation.notUsedDays,
+      vacation.pastDays,
+      vacation.usedDays,
+      employeeID,
+    ]
+  );
+};
 
 const addNewEmployee = async (data) => {
   try {
@@ -137,6 +159,9 @@ const addNewEmployee = async (data) => {
     ) {
       await addToHierarchy(pracownikID, null);
     }
+
+    await addEmployeeDataToLeaves(data.vacation, pracownikID);
+
     await queryDatabase("COMMIT");
     return { success: true, message: "Pracownik został dodany poprawnie" };
   } catch (error) {
@@ -227,14 +252,10 @@ const updateEmployeeMainData = async (employee) => {
 };
 
 const updateEmployeeLeavesData = async (data) => {
+  const leavesNotUsed = data.leavesMax - data.leavesUsed;
   return await queryDatabasePromise(
     `Update UrlopyInf Set MaxIloscDni = ?,Niewykorzystane = ?,ZaleglyUrlop = ?, Wykorzystane = ?`,
-    [
-      data.leavesMax,
-      data.leavesNotUsed,
-      data.leavesOutstanding,
-      data.leavesUsed,
-    ]
+    [data.leavesMax, leavesNotUsed, data.leavesOutstanding, data.leavesUsed]
   );
 };
 
@@ -282,7 +303,6 @@ const updateEmployee = async (employeeData) => {
   const leaves = {
     leavesMax: employeeData.leavesMax,
     leavesUsed: employeeData.leavesUsed,
-    leavesNotUsed: employeeData.leavesNotUsed,
     leavesOutstanding: employeeData.leavesOutstanding,
   };
 
@@ -343,7 +363,6 @@ const updateEmployee = async (employeeData) => {
       currentDataEmployee &&
       (currentDataEmployee.urlopMaxIoscDni !== leaves.leavesMax ||
         currentDataEmployee.urlopWykorzystane !== leaves.leavesUsed ||
-        currentDataEmployee.urlopNiewykorzystane !== leaves.leavesNotUsed ||
         currentDataEmployee.urlopZalegly !== leaves.leavesOutstanding)
     ) {
       console.log("Weszła aktualizacja danych urlopu pracownika");
