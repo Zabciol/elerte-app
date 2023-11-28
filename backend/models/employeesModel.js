@@ -319,7 +319,6 @@ const updateEmployee = async (employeeData) => {
         currentDataEmployee.Stanowisko_ID !== positionID ||
         currentDataEmployee.WymiarPracy_ID !== workingTimeID)
     ) {
-      console.log("Weszła aktualizacja głownych danych pracownika");
       await updateEmployeeMainData(employeeData);
     }
 
@@ -365,7 +364,6 @@ const updateEmployee = async (employeeData) => {
         currentDataEmployee.urlopWykorzystane !== leaves.leavesUsed ||
         currentDataEmployee.urlopZalegly !== leaves.leavesOutstanding)
     ) {
-      console.log("Weszła aktualizacja danych urlopu pracownika");
       await updateEmployeeLeavesData(leaves);
     }
 
