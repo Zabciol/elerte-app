@@ -7,9 +7,9 @@ import ContactForm from "./ContactForm";
 import PositionForm from "./PositionForm";
 import SubordinatesForm from "./SuborfinatesForm";
 import DeleteEmployee from "./DeleteEmployee";
+import Leaves from "./Leaves";
 import { subordinatesApi } from "../../../../api/employeesApi";
 import { updateEmployeeApi } from "../../../../api/employeesApi";
-import { deleteEmployeeApi } from "../../../../api/employeesApi";
 import { myDirectSubordinatesAPI } from "../../../../api/employeesApi";
 import { useAuth } from "../../Login/AuthContext";
 
@@ -164,6 +164,7 @@ const FormPopUp = ({ show, setShow, employee, user }) => {
                 updateData={updateData}
               />
             </Tab>
+            <Tab eventKey='leave' title='Urlop'></Tab>
           </Tabs>
         </Modal.Body>
         <Modal.Footer className='d-flex justify-content-between'>
