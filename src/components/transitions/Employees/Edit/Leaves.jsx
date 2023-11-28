@@ -20,20 +20,6 @@ const Leaves = ({ employee, urlopMax, urlopWykorzystane, urlopZalegly }) => {
     <div className='d-flex flex-wrap'>
       <div className='d-flex w-50 p-1'>
         <FloatingLabel
-          controlId='floatingSelect-MaxIloscDni'
-          label='Maksymalna ilość dni urlopu'
-          className='w-100'>
-          <Form.Control
-            type='number'
-            min={0}
-            max={26}
-            placeholder='Max ilość dni'
-            ref={urlopMax}
-          />
-        </FloatingLabel>
-      </div>
-      <div className='d-flex w-50 p-1'>
-        <FloatingLabel
           controlId='floatingSelect-Wykorzystane'
           label='Wykorzystane dni urlopu'
           className='w-100'>
@@ -57,6 +43,20 @@ const Leaves = ({ employee, urlopMax, urlopWykorzystane, urlopZalegly }) => {
             max={26}
             placeholder='Zaległy urlop'
             ref={urlopZalegly}
+          />
+        </FloatingLabel>
+      </div>
+      <div className='d-flex w-100 p-1'>
+        <FloatingLabel
+          controlId='floatingSelect-MaxIloscDni'
+          label='Ilość dni urlopu w ciągu roku'
+          className='w-100'>
+          <Form.Control
+            type='number'
+            min={0}
+            max={26}
+            placeholder='Max ilość dni'
+            ref={urlopMax}
           />
         </FloatingLabel>
       </div>

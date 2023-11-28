@@ -20,7 +20,7 @@ const NewVacation = (props) => {
     <div className='d-flex flex-wrap justify-content-center align-items-center w-100'>
       <FloatingLabel
         controlId='usedDays'
-        label='Wykorzystane dni'
+        label='Wykorzystane dni urlopu'
         className='m-1 w-auto flex-grow-1'>
         <Form.Control
           value={usedDays}
