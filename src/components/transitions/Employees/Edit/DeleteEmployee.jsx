@@ -19,10 +19,8 @@ const DeleteEmployee = ({ show, setShow, hide, employee, user }) => {
       employeeID: employee.ID,
       editEmployeeID: user.ID,
     };
-    console.log(data);
     try {
       const result = await fillECPforDeletedEmployeeApi(data);
-      console.log(result);
       setMessage(result.message);
       setShowPopUp(true);
     } catch (error) {

@@ -49,8 +49,6 @@ const FormPopUp = ({ show, setShow, employee, user }) => {
       subordinates: subordinates,
     };
     try {
-      console.log(employeeData);
-
       const response = await updateEmployeeApi(employeeData);
       if (shouldShowPopUp) {
         setShow(false);
@@ -96,7 +94,7 @@ const FormPopUp = ({ show, setShow, employee, user }) => {
       const directSubordinatesID = data.map((employee) => employee.ID);
       setDirectSubordinates(directSubordinatesID);
     } catch (error) {
-      console.log(error.message);
+      console.error(error.message);
       setMessage(error.message);
       setShowPopUpLogout(true);
     }
