@@ -1,10 +1,6 @@
-<<<<<<< HEAD
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useMemo } from "react";
 import { SelectItems } from "../../layout/Menu/MenuForms";
-=======
-import React, { useState, useEffect, useMemo } from "react";
-import { SelectDzial } from "../../layout/Menu/MenuForms";
->>>>>>> main
+
 import Tab from "react-bootstrap/Tab";
 import Tabs from "react-bootstrap/Tabs";
 import Form from "react-bootstrap/Form";
@@ -23,21 +19,6 @@ const hasAdminPermissions = (user) =>
 
 const hasAdminView = (user) => user.Uprawnienia === 2 || user.Uprawnienia === 4;
 
-<<<<<<< HEAD
-const MenuItems = React.memo(({ dzial, dzialy, setDzial, date, setDate }) => {
-  return (
-    <>
-      <SelectItems item={dzial} items={dzialy} setItem={setDzial} />
-      <Form.Control
-        type='month'
-        value={date}
-        onChange={setDate}
-        className='menu-select'
-      />
-    </>
-  );
-});
-=======
 const MenuItems = React.memo(
   ({
     dzial,
@@ -53,7 +34,7 @@ const MenuItems = React.memo(
       <>
         <Search searchValue={searchValue} setSearchValue={setSearchValue} />
         {menukey !== "Nowy" && (
-          <SelectDzial dzial={dzial} dzialy={dzialy} setDzial={setDzial} />
+          <SelectItems item={dzial} items={dzialy} setItem={setDzial} />
         )}
         <Form.Control
           type='month'
@@ -65,19 +46,16 @@ const MenuItems = React.memo(
     );
   }
 );
->>>>>>> main
 
 const Employees = ({ user, setMenuItems, subordinates }) => {
   const { setShowPopUpLogout, setMessage } = useAuth();
   const [key, setKey] = useState("Lista");
-<<<<<<< HEAD
+
   const [dzialy, setDzialy] = useState([
     ...new Set(subordinates.map((e) => e.Dzial)),
   ]);
   const [dzial, setDzial] = useState(dzialy[0]);
-=======
-  const [dzial, setDzial] = useState(subordinates[0]?.Dzial || "");
->>>>>>> main
+
   const [date, setDate] = useState(getCurrentDateYearMonth());
   const [employees, setEmployees] = useState([]);
   const [searchValue, setSearchValue] = useState("");

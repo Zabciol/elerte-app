@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import Form from "react-bootstrap/Form";
 import { SelectItems } from "../../layout/Menu/MenuForms";
 import { getCurrentDateYearMonthDay } from "../../common/CommonFunctions";
@@ -8,27 +8,12 @@ import { GetDataProvider } from "./ECPDataContext";
 import { getNextWorkDay } from "../../common/CommonFunctions";
 import Search from "../../layout/Menu/Search";
 
-<<<<<<< HEAD
-const MenuItems = ({ date, setDate, dzial, dzialy, setDzial }) => {
-  return (
-    <>
-      <SelectItems item={dzial} items={dzialy} setItem={setDzial} />
-      <Form.Control
-        type='date'
-        value={date}
-        onChange={setDate}
-        className='menu-select'
-      />
-    </>
-  );
-};
-=======
 const MenuItems = React.memo(
   ({ date, setDate, dzial, dzialy, setDzial, searchValue, setSearchValue }) => {
     return (
       <>
         <Search searchValue={searchValue} setSearchValue={setSearchValue} />
-        <SelectDzial dzial={dzial} dzialy={dzialy} setDzial={setDzial} />
+        <SelectItems item={dzial} items={dzialy} setItem={setDzial} />
         <Form.Control
           type='date'
           value={date}
@@ -39,7 +24,6 @@ const MenuItems = React.memo(
     );
   }
 );
->>>>>>> main
 
 const ECP = ({ user, setMenuItems, subordinates }) => {
   const dzialy = Array.from(new Set(subordinates.map((item) => item.Dzial)));
