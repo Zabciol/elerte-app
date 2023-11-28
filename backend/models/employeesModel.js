@@ -41,10 +41,11 @@ const getEmployeeCasualInf = async (id) => {
 
 const getEmployeeInf = async (employeeId) => {
   // Pobranie informacji podstawowych o pracowniku
-  const employeeQuery =
-    "SELECT DISTINCT p.ID, p.Imie, p.Nazwisko, p.Mail, p.NrTelefonu, s.ID AS StanowiskoID, s.Nazwa AS StanowiskoNazwa, p.WymiarPracy_ID, d.ID AS DzialID, d.Nazwa AS DzialNazwa, p.Aktywny " +
-    "FROM Pracownicy p LEFT JOIN Stanowisko s ON p.Stanowisko_ID = s.ID LEFT JOIN Dzialy d ON s.Dzial_ID = d.ID " +
-    "WHERE p.ID = ?;";
+  const employeeQuery = `SELECT DISTINCT p.ID, p.Imie, p.Nazwisko, p.Mail, p.NrTelefonu, s.ID AS StanowiskoID, s.Nazwa AS StanowiskoNazwa,
+    p.WymiarPracy_ID, d.ID AS DzialID, d.Nazwa AS DzialNazwa, p.Aktywny, 
+    u.MaxIloscDni AS urlopMaxIloscDni, u.Wykorzystane AS urlopWykorzystane, u.NieWykorzystane AS urlopNiewykorzystane, u.ZaleglyUrlop AS urlopZalegly 
+   FROM Pracownicy p LEFT JOIN Stanowisko s ON p.Stanowisko_ID = s.ID LEFT JOIN Dzialy d ON s.Dzial_ID = d.ID LEFT JOIN UrlopyInf u ON u.Pracownik_ID = p.ID 
+    WHERE p.ID = ?`;
 
   const employeeInfo = await queryDatabasePromise(employeeQuery, [employeeId]);
 
@@ -211,7 +212,6 @@ const getAllMySupervisors = async (employeeId, allSupervisors = []) => {
 };
 
 const updateEmployeeMainData = async (employee) => {
-  console.log(employee);
   return await queryDatabasePromise(
     "UPDATE Pracownicy SET Imie = ?, Nazwisko = ?, Mail = ?, NrTelefonu = ?, Stanowisko_ID = ?, WymiarPracy_ID = ? WHERE ID = ?",
     [
@@ -222,6 +222,18 @@ const updateEmployeeMainData = async (employee) => {
       employee.positionID,
       employee.workingTimeID,
       employee.ID,
+    ]
+  );
+};
+
+const updateEmployeeLeavesData = async (data) => {
+  return await queryDatabasePromise(
+    `Update UrlopyInf Set MaxIloscDni = ?,Niewykorzystane = ?,ZaleglyUrlop = ?, Wykorzystane = ?`,
+    [
+      data.leavesMax,
+      data.leavesNotUsed,
+      data.leavesOutstanding,
+      data.leavesUsed,
     ]
   );
 };
@@ -267,6 +279,13 @@ const updateEmployee = async (employeeData) => {
     workingTimeID,
   } = employeeData;
 
+  const leaves = {
+    leavesMax: employeeData.leavesMax,
+    leavesUsed: employeeData.leavesUsed,
+    leavesNotUsed: employeeData.leavesNotUsed,
+    leavesOutstanding: employeeData.leavesOutstanding,
+  };
+
   try {
     await queryDatabase("START TRANSACTION");
     const currentDataEmployee = await getEmployeeInf(ID);
@@ -280,7 +299,7 @@ const updateEmployee = async (employeeData) => {
         currentDataEmployee.Stanowisko_ID !== positionID ||
         currentDataEmployee.WymiarPracy_ID !== workingTimeID)
     ) {
-      console.log("Weszła aktualizacja");
+      console.log("Weszła aktualizacja głownych danych pracownika");
       await updateEmployeeMainData(employeeData);
     }
 
@@ -319,6 +338,18 @@ const updateEmployee = async (employeeData) => {
         await removeFromHierarchy(ID, subordinateId);
       }
     }
+
+    if (
+      currentDataEmployee &&
+      (currentDataEmployee.urlopMaxIoscDni !== leaves.leavesMax ||
+        currentDataEmployee.urlopWykorzystane !== leaves.leavesUsed ||
+        currentDataEmployee.urlopNiewykorzystane !== leaves.leavesNotUsed ||
+        currentDataEmployee.urlopZalegly !== leaves.leavesOutstanding)
+    ) {
+      console.log("Weszła aktualizacja danych urlopu pracownika");
+      await updateEmployeeLeavesData(leaves);
+    }
+
     await queryDatabase("COMMIT");
     return { success: true, message: "Employee updated successfully." };
   } catch (error) {

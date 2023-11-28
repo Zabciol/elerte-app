@@ -20,6 +20,10 @@ const FormPopUp = ({ show, setShow, employee, user }) => {
   const lastNameRef = useRef();
   const mailRef = useRef();
   const phoneNumberRef = useRef();
+  const urlopMax = useRef(employee.urlopMaxIloscDni);
+  const urlopWykorzystane = useRef(employee.urlopWykorzystane);
+  const urlopNiewykorzystane = useRef(employee.urlopNiewykorzystane);
+  const urlopZalegly = useRef(employee.urlopZalegly);
   const [department, setDepartment] = useState();
   const [position, setPosition] = useState();
   const [directSupervisors, setDirectSupervisors] = useState(
@@ -47,6 +51,12 @@ const FormPopUp = ({ show, setShow, employee, user }) => {
       supervisors: directSupervisors,
       workingTimeID: Number(workingTime),
       subordinates: subordinates,
+      leavesMax: urlopMax.current?.value || employee.urlopMaxIloscDni,
+      leavesUsed:
+        urlopWykorzystane.current?.value || employee.urlopWykorzystane,
+      leavesNotUsed:
+        urlopNiewykorzystane.current?.value || employee.urlopNiewykorzystane,
+      leavesOutstanding: urlopZalegly.current?.value || employee.urlopZalegly,
     };
     try {
       console.log(employeeData);
@@ -164,7 +174,15 @@ const FormPopUp = ({ show, setShow, employee, user }) => {
                 updateData={updateData}
               />
             </Tab>
-            <Tab eventKey='leave' title='Urlop'></Tab>
+            <Tab eventKey='leave' title='Urlop'>
+              <Leaves
+                employee={employee}
+                urlopMax={urlopMax}
+                urlopNiewykorzystane={urlopNiewykorzystane}
+                urlopWykorzystane={urlopWykorzystane}
+                urlopZalegly={urlopZalegly}
+              />
+            </Tab>
           </Tabs>
         </Modal.Body>
         <Modal.Footer className='d-flex justify-content-between'>
