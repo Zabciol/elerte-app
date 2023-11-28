@@ -6,7 +6,7 @@ module.exports = {
     host: "192.168.1.190",
     user: "dev",
     password: "Elerte123!",
-    database: "elerte_app",
+    database: "ewidencja_czasu_pracy",
     timezone: "Europe/Warsaw",
   },
   httpsOptions: {
