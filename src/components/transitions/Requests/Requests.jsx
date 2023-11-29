@@ -1,10 +1,13 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import NewRequest from "./NewRequest";
 import ManageRequests from "./ManageRequests";
 import Tab from "react-bootstrap/Tab";
 import Tabs from "react-bootstrap/Tabs";
 import "../../../styles/Request.css";
-const Requests = ({ user }) => {
+const Requests = ({ user, setMenuItems }) => {
+  useEffect(() => {
+    setMenuItems(<></>);
+  }, []);
   return (
     <Tabs defaultActiveKey='new' id='uncontrolled-tab-example' className='mb-3'>
       <Tab eventKey='box' title='Skrzynka' disabled={!user.supervisor}>
