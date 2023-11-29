@@ -1,5 +1,5 @@
 import { eachDayOfInterval, isWeekend } from "date-fns";
-const PORT = 8000;
+const PORT = 7999;
 
 const Variables = {
   port: PORT,
