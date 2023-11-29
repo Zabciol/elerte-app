@@ -46,15 +46,15 @@ const ECPInput = (props) => {
 
   const toggleCheckBox = (event) => {
     if (event.target.checked) {
-      let reason = importECP.reason;
-      setECPStates(`00:00`, `00:00`, 0, reason);
+      if (importECP.hours === 0) {
+        let reason = importECP.reason;
+        setECPStates(importECP.Od, importECP.Do, importECP.hours, reason);
+      } else {
+        let reason = importECP.reason;
+        setECPStates(`00:00`, `00:00`, 0, reason);
+      }
     } else {
-      setECPStates(
-        importECP.Od,
-        importECP.Do,
-        importECP.hours,
-        importECP.reason
-      );
+      setECPStates(employee.Od, employee.Do, properHours, null);
     }
     setChecked(!checked);
   };
@@ -87,9 +87,9 @@ const ECPInput = (props) => {
 
   useEffect(() => {
     const newHours = calculateHoursWorked(Od, Do);
-    if (newHours < properHours) {
+    if (newHours < properHours && !checked) {
       setReason(1);
-    } else {
+    } else if (!checked) {
       setReason(null);
     }
     setHours(newHours);

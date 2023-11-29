@@ -18,7 +18,7 @@ const Leaves = ({ user, date }) => {
     getData();
   }, []);
   return (
-    <div className='text-white leaves'>
+    <div className=' leaves'>
       <h3>Urlopy</h3>
       <div className='d-flex flex-wrap justify-content-between align-items-top w-100'>
         <div className='home-presence_data'>

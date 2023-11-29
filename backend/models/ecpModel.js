@@ -260,9 +260,9 @@ const fillECPforDeletedEmployee = async (
 const countAbsence = async (employeeID, year, month) => {
   try {
     const query =
-      "SELECT (SELECT COUNT(*) * 8 FROM ecp WHERE Pracownik_ID = ? AND IloscGodzin < 8 AND YEAR(Data) = ? AND MONTH(Data) = ? AND Powod_ID != 40 AND Powod_ID != 41 AND Powod_ID != 42 ) - " +
-      "(SELECT SUM(IloscGodzin) FROM ecp WHERE Pracownik_ID = ? AND IloscGodzin < 8 AND YEAR(Data) = ? AND MONTH(Data) = ? AND Powod_ID != 40 AND Powod_ID != 41 AND Powod_ID != 42) AS SumaGodzin " +
-      "FROM ecp WHERE Pracownik_ID = ? AND IloscGodzin < 8 AND YEAR(Data) = ? AND MONTH(Data) = ? AND Powod_ID != 40 AND Powod_ID != 41 AND Powod_ID != 42;";
+      "SELECT (SELECT COUNT(*) * 8 FROM ECP WHERE Pracownik_ID = ? AND IloscGodzin < 8 AND YEAR(Data) = ? AND MONTH(Data) = ? AND Powod_ID != 40 AND Powod_ID != 41 AND Powod_ID != 42 ) - " +
+      "(SELECT SUM(IloscGodzin) FROM ECP WHERE Pracownik_ID = ? AND IloscGodzin < 8 AND YEAR(Data) = ? AND MONTH(Data) = ? AND Powod_ID != 40 AND Powod_ID != 41 AND Powod_ID != 42) AS SumaGodzin " +
+      "FROM ECP WHERE Pracownik_ID = ? AND IloscGodzin < 8 AND YEAR(Data) = ? AND MONTH(Data) = ? AND Powod_ID != 40 AND Powod_ID != 41 AND Powod_ID != 42;";
     const values = [
       employeeID,
       year,
