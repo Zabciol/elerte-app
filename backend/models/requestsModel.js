@@ -22,15 +22,15 @@ const transporter = nodemailer.createTransport({
 
 const sentMail = async (request, token) => {
   try {
-    let reciver;
-    config.useHttps
+    const reciver = config.useHttps
       ? (reciver = await employeeModel.getEmployeeCasualInf(request.reciverID))
       : (reciver = { Mail: "jan.zaborowicz@elerte.pl" });
     const sender = await employeeModel.getEmployeeCasualInf(request.senderID);
     const reason = await reasonsModel.getReasonByID(request.reasonID);
-
-    const API_URL = `${config.protocol}://${config.dbConnectionStr.host}:${config.port}/requests`;
-    //const API_URL = `${config.api}/requests`;
+    const API_URL = config.useHttps
+      ? `${config.protocol}://${config.hostname}:${config.port}/requests`
+      : `${config.protocol}://${config.dbConnectionStr.host}:${config.port}/requests`;
+    // produkcja: API_URL = `https://ewidencja.elerte.local:7999/requests`;
     const acceptLink = `${API_URL}/accept?token=${token}`;
     const declineLink = `${API_URL}/decline?token=${token}`;
 

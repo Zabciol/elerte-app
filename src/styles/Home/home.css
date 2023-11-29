@@ -50,6 +50,7 @@
   top: 50%;
   transform: translate(-50%, -50%);
   overflow-y: scroll;
+  color: var(--bs-body-color) !important;
 }
 .carousel-indicators {
   bottom: -25px !important;

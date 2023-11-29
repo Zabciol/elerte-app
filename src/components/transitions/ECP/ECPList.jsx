@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import Accordion from "react-bootstrap/Accordion";
 import ECPListItem from "./ECPListItem";
 import { reasonsApi } from "../../../api/reasonsApi";
@@ -12,12 +12,6 @@ const ECPList = ({ user, subordinates, dzial, date, searchValue }) => {
   const { setShowPopUpLogout, setMessage } = useAuth();
   const [reasons, setReasons] = useState([]);
   const { collectAll } = useGetData();
-  const activeSubordinates = subordinates.filter(
-    (employee) => employee.Aktywny === "Tak"
-  );
-  const [filteredSubordinates, setFilteredSubordinates] = useState(
-    subordinates.filter((employee) => employee.Aktywny === "Tak")
-  );
 
   const getUniqueSubordinates = (subordinates) => {
     const uniqueIds = new Set();
@@ -33,6 +27,18 @@ const ECPList = ({ user, subordinates, dzial, date, searchValue }) => {
     return uniqueSubordinates;
   };
 
+  const activeSubordinates = useMemo(() => {
+    return subordinates.filter((employee) => employee.Aktywny === "Tak");
+  }, [subordinates]);
+
+  const filteredSubordinates = useMemo(() => {
+    return dzial === "Każdy"
+      ? getUniqueSubordinates(activeSubordinates)
+      : getUniqueSubordinates(
+          activeSubordinates.filter((e) => e.Dzial === dzial)
+        );
+  }, [dzial, activeSubordinates, searchValue]);
+
   const getReasons = async () => {
     try {
       const data = await reasonsApi();
@@ -45,31 +51,6 @@ const ECPList = ({ user, subordinates, dzial, date, searchValue }) => {
       setMessage(error.message);
     }
   };
-
-  const filterByDepartment = (employees) => {
-    const newFilteredSubordinates =
-      dzial === "Każdy"
-        ? getUniqueSubordinates(employees)
-        : getUniqueSubordinates(employees.filter((e) => e.Dzial === dzial));
-    setFilteredSubordinates(newFilteredSubordinates);
-  };
-
-  useEffect(() => {
-    filterByDepartment(activeSubordinates);
-  }, [dzial]);
-
-  useEffect(() => {
-    const timeoutId = setTimeout(() => {
-      const filtered = activeSubordinates.filter(
-        (employee) =>
-          employee.Imie.toLowerCase().includes(searchValue) ||
-          employee.Nazwisko.toLowerCase().includes(searchValue)
-      );
-      filterByDepartment(filtered);
-    }, 500);
-
-    return () => clearTimeout(timeoutId); // Wyczyszczenie timeoutu przy zmianie searchValue
-  }, [searchValue]);
 
   useEffect(() => {
     getReasons();
@@ -88,10 +69,11 @@ const ECPList = ({ user, subordinates, dzial, date, searchValue }) => {
       const response = await SentECPToDatabase(newAllData);
       return response;
     } catch (error) {
-      throw error;
       setShowPopUpLogout(true);
+      throw error;
     }
   };
+
   return (
     <>
       <div className='controls'>
