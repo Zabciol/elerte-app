@@ -14,10 +14,6 @@ const MenuItemsAnalitycs = React.memo(
     setPosition,
     handleChange,
   }) => {
-    console.log(position);
-    console.log(dzial);
-    console.log(positions);
-    console.log(dzialy);
     const [isMobile, setIsMobile] = useState(window.innerWidth < 1200);
     const [menuItems, setmenuItems] = useState();
 

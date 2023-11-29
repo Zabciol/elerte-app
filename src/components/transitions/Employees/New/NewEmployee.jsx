@@ -33,7 +33,7 @@ const NewEmployee = ({ show, cancel }) => {
   const [maxCountOfDays, setMaxCountOfDays] = useState(26);
 
   const employee = {
-    DzialID: 2,
+    Dzial_ID: 2,
     Imie: "Jan",
     Mail: "jan.kowalski@elerte.pl",
     Nazwisko: "Kowalski",

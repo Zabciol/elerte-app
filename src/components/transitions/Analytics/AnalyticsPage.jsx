@@ -79,11 +79,14 @@ const AnalyticsPage = ({ user, subordinates, setMenuItems }) => {
     }
   }, [employees, user]);
   useEffect(() => {
+    console.log(employees);
     const deps = employees.filter((employee) =>
       selectedDepartments.includes(employee.Dzial)
     );
-    const uniqueDepartmentIds = [...new Set(deps.map((emp) => emp.DzialID))];
-    if (uniqueDepartmentIds.length > 0) {
+    console.log(deps);
+    const uniqueDepartmentIds = [...new Set(deps.map((emp) => emp.Dzial_ID))];
+    console.log(uniqueDepartmentIds);
+    if (uniqueDepartmentIds.length > 0 && uniqueDepartmentIds[0]) {
       Promise.all(
         uniqueDepartmentIds.map((deptId) => fetchData(positionApi, deptId))
       ).then((responses) => {
