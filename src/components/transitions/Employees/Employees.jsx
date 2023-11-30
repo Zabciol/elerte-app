@@ -166,7 +166,11 @@ const Employees = ({ user, setMenuItems, subordinates }) => {
         eventKey='Nieobecnosci'
         title='Nieobecności'
         disabled={!hasAdminView(user) && !subordinates.length}>
-        <EmployeesList subordinates={filteredSubordinates} date={date}>
+        <EmployeesList
+          subordinates={filteredSubordinates}
+          date={date}
+          dzial={dzial}
+          dzialy={dzialy}>
           <EmployeeAbsenceInf date={date} menukey={key} />
         </EmployeesList>
       </Tab>

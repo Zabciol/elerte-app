@@ -36,11 +36,13 @@ const EmployeeListItem = React.memo(
     return (
       <Accordion.Item eventKey={employeeEventKey}>
         <Accordion.Header>
-          <div className='ms-2 me-auto'>
-            <div className='fw-bold'>{`${employee.Imie} ${employee.Nazwisko}`}</div>
-            {employee.Stanowisko}
+          <div className='d-flex w-100 pt-1 pe-2 justify-content-between'>
+            <div className='ms-2 me-auto'>
+              <div className='fw-bold'>{`${employee.Imie} ${employee.Nazwisko}`}</div>
+              {employee.Stanowisko}
+            </div>
+            {workedHours !== null ? <Badge>{workedHours}</Badge> : null}
           </div>
-          {workedHours !== null ? <Badge>{workedHours}</Badge> : null}
         </Accordion.Header>
         <Accordion.Body>
           <div style={{ overflow: "hidden" }}>{children}</div>

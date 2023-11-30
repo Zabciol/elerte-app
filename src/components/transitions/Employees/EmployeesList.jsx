@@ -13,8 +13,14 @@ const EmployeesList = React.memo((props) => {
             employee={employee}
             date={date}
             key={`${dept}-${index}`}
-            showWorkedHours={showWorkedHours}
-          />
+            showWorkedHours={showWorkedHours}>
+            {React.Children.map(children, (child) => {
+              if (React.isValidElement(child)) {
+                return React.cloneElement(child, { employee: employee });
+              }
+              return child;
+            })}
+          </EmployeeListItem>
         ))}
       </Accordion>
     );
