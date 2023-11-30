@@ -6,36 +6,59 @@ import RenderChildren from "../../common/RenderChildren";
 const EmployeesList = React.memo((props) => {
   const { subordinates, date, children, showWorkedHours, dzial } = props;
 
-  const renderEmployees = (employees, dept) => {
-    const employeeItems = employees.map((employee, index) => (
-      <EmployeeListItem
-        employee={employee}
-        date={date}
-        key={`${dept}-${index}`}
-        showWorkedHours={showWorkedHours}>
-        {React.Children.map(children, (child) => {
-          if (React.isValidElement(child)) {
-            return React.cloneElement(child, { employee: employee });
-          }
-          return child;
-        })}
-      </EmployeeListItem>
-    ));
+  const RenderChildren = ({
+    children,
+    employee,
+    date,
+    key,
+    showWorkedHours,
+  }) => {
+    let hasValidChildren = false;
+    const childrenComponents = React.Children.map(children, (child) => {
+      if (React.isValidElement(child)) {
+        hasValidChildren = true;
+        return React.cloneElement(child, { employee: employee });
+      }
+      console.log("dzieci są null");
+      return null;
+    });
 
-    // Filtruj puste elementy
-    const nonEmptyEmployeeItems = employeeItems.filter((item) => !!item);
-
-    return nonEmptyEmployeeItems;
+    return hasValidChildren ? childrenComponents : null;
   };
 
-  const renderDepartment = (department, employees) => {
-    const departmentContent = renderEmployees(employees, department);
+  const renderEmployees = (employees, dept, children) => {
+    return employees
+      .map((employee, index) => {
+        const childrenComponents = RenderChildren({
+          children,
+          employee,
+          date,
+          key: `${dept}-${index}`,
+          showWorkedHours,
+        });
 
-    const hasNonEmptyContent = departmentContent.some((item) => !!item);
+        if (childrenComponents) {
+          return (
+            <EmployeeListItem
+              employee={employee}
+              date={date}
+              key={`${dept}-${index}`}
+              showWorkedHours={showWorkedHours}>
+              {childrenComponents}
+            </EmployeeListItem>
+          );
+        }
 
-    if (!hasNonEmptyContent) {
-      return null; // Jeśli nie ma niepustych elementów, nie renderuj department
-    }
+        return null;
+      })
+      .filter((item) => item !== null); // Filtruje pracowników, którzy nie mają ważnych dzieci
+  };
+
+  const renderDepartment = (department, employees, children) => {
+    const departmentContent = renderEmployees(employees, department, children);
+
+    if (departmentContent.length === 0) return null;
+
     return (
       <Accordion.Item eventKey={department} key={department}>
         <Accordion.Header>{department}</Accordion.Header>
