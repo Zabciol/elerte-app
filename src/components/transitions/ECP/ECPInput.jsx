@@ -54,7 +54,9 @@ const ECPInput = (props) => {
         setECPStates(`00:00`, `00:00`, 0, reason);
       }
     } else {
-      setECPStates(employee.Od, employee.Do, properHours, null);
+      if (importECP.hours > 0 && importECP.hours < 8) {
+        setECPStates(importECP.Od, importECP.Do, importECP.hours, reason);
+      } else setECPStates(employee.Od, employee.Do, properHours, null);
     }
     setChecked(!checked);
   };
@@ -87,9 +89,9 @@ const ECPInput = (props) => {
 
   useEffect(() => {
     const newHours = calculateHoursWorked(Od, Do);
-    if (newHours < properHours && !checked) {
+    if (newHours < properHours && reason === null) {
       setReason(1);
-    } else if (!checked) {
+    } else if (!checked && newHours >= properHours) {
       setReason(null);
     }
     setHours(newHours);

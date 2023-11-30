@@ -8,6 +8,6 @@ module.exports = {
     timezone: "Europe/Warsaw",
   },
   protocol: "http",
-  port: 8000,
-  api: `http://localhost:8000`,
+  port: 7999,
+  api: `http://localhost:7999`,
 };

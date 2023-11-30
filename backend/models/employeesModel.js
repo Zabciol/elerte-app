@@ -311,7 +311,7 @@ const updateEmployee = async (employeeData) => {
     const currentDataEmployee = await getEmployeeInf(ID);
     if (
       currentDataEmployee &&
-      (currentDataEmployee.DzialID !== departmentID ||
+      (currentDataEmployee.Dzial_ID !== departmentID ||
         currentDataEmployee.Imie !== name ||
         currentDataEmployee.Nazwisko !== lastname ||
         currentDataEmployee.NrTelefonu !== phoneNumber ||

@@ -17,7 +17,7 @@ const getDepartments = () => {
 
 const addDepartment = async (name) => {
   try {
-    const query = `INSERT INTO Dzialy (nazwa) VALUES (?)`;
+    const query = `INSERT INTO Dzialy (Nazwa) VALUES (?)`;
     await queryDatabasePromise(query, name);
     return { success: true, message: "Dodano dział." };
   } catch (error) {

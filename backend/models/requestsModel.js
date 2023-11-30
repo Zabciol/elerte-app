@@ -23,8 +23,8 @@ const transporter = nodemailer.createTransport({
 const sentMail = async (request, token) => {
   try {
     const reciver = config.useHttps
-      ? (reciver = await employeeModel.getEmployeeCasualInf(request.reciverID))
-      : (reciver = { Mail: "jan.zaborowicz@elerte.pl" });
+      ? await employeeModel.getEmployeeCasualInf(request.reciverID)
+      : { Mail: "jan.zaborowicz@elerte.pl" };
     const sender = await employeeModel.getEmployeeCasualInf(request.senderID);
     const reason = await reasonsModel.getReasonByID(request.reasonID);
     const API_URL = config.useHttps
