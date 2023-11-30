@@ -14,7 +14,6 @@ const Presence = ({ user, date }) => {
   const getInf = async () => {
     try {
       const data = await hoursWorkedApi(user.ID, date);
-      console.log(data);
       if (data[0]) {
         setWorkedHours(data[0].SumaGodzin);
       } else {
@@ -29,7 +28,6 @@ const Presence = ({ user, date }) => {
 
   const getWorkingDaysInMonth = async () => {
     const holidays = await holidaysApi(date);
-    console.log(holidays);
     const count = calculateWorkingDays(date, holidays);
     console.log(count);
     setWorkingHoursInMonth(count * 8);
