@@ -20,6 +20,7 @@ const EmployeesList = React.memo((props) => {
               }
               return child;
             })}
+            {React.Children.count(children) === 0 ? <h3>Brak danych</h3> : null}
           </EmployeeListItem>
         ))}
       </Accordion>
