@@ -202,10 +202,13 @@ const generateDateRange = (startDate, endDate) => {
   let dates = [];
   let currentDate = new Date(startDate);
   let end = new Date(endDate);
+  // Konwersja na UTC
+  currentDate.setUTCHours(0, 0, 0, 0);
+  end.setUTCHours(0, 0, 0, 0);
 
   while (currentDate <= end) {
     dates.push(currentDate.toISOString().split("T")[0]);
-    currentDate.setDate(currentDate.getDate() + 1);
+    currentDate.setUTCDate(currentDate.getUTCDate() + 1);
   }
 
   return dates;
@@ -233,9 +236,11 @@ const fillECPforDeletedEmployee = async (
     const dates = generateDateRange(startDate, endDate);
     const editDate = formatDate(new Date());
 
-    const query = `INSERT INTO ECP (Data, Od_godz, Do_godz, Pracownik_ID,
-     Powod_ID, IloscGodzin, DataZapisu, ID_Edytora) VALUES ?`;
+    const query =
+      "INSERT INTO ECP (Data, Od_godz, Do_godz, Pracownik_ID, " +
+      "Powod_ID, IloscGodzin, DataZapisu, ID_Edytora) VALUES ?";
 
+    console.log(dates);
     const values = dates.map((date) => [
       date,
       "00:00",

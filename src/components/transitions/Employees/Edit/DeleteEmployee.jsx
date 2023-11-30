@@ -14,7 +14,7 @@ const DeleteEmployee = ({ show, setShow, hide, employee, user }) => {
   const confirm = async () => {
     setShow(false);
     const data = {
-      startDate: getNextWorkDay(),
+      startDate: getNextWorkDay() <= date ? getNextWorkDay() : date,
       endDate: date,
       employeeID: employee.ID,
       editEmployeeID: user.ID,

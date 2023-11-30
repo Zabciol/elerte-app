@@ -1,6 +1,7 @@
 import React from "react";
 import Accordion from "react-bootstrap/Accordion";
 import EmployeeListItem from "./EmployeeListItem";
+import RenderChildren from "../../common/RenderChildren";
 
 const EmployeesList = React.memo((props) => {
   const { subordinates, date, children, showWorkedHours, dzial } = props;
@@ -8,21 +9,22 @@ const EmployeesList = React.memo((props) => {
   const renderEmployees = (employees, dept) => {
     return (
       <Accordion defaultActiveKey='0'>
-        {employees.map((employee, index) => (
-          <EmployeeListItem
-            employee={employee}
-            date={date}
-            key={`${dept}-${index}`}
-            showWorkedHours={showWorkedHours}>
-            {React.Children.map(children, (child) => {
-              if (React.isValidElement(child)) {
-                return React.cloneElement(child, { employee: employee });
-              }
-              return child;
-            })}
-            {React.Children.count(children) === 0 ? <h3>Brak danych</h3> : null}
-          </EmployeeListItem>
-        ))}
+        <RenderChildren>
+          {employees.map((employee, index) => (
+            <EmployeeListItem
+              employee={employee}
+              date={date}
+              key={`${dept}-${index}`}
+              showWorkedHours={showWorkedHours}>
+              {React.Children.map(children, (child) => {
+                if (React.isValidElement(child)) {
+                  return React.cloneElement(child, { employee: employee });
+                }
+                return child;
+              })}
+            </EmployeeListItem>
+          ))}
+        </RenderChildren>
       </Accordion>
     );
   };

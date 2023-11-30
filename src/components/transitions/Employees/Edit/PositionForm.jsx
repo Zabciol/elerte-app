@@ -21,7 +21,7 @@ const PositionForm = (props) => {
     workingTime,
     setWorkingTime,
   } = props;
-  const { setShowPopUpLogout, setMessage } = useAuth();
+  const { setShowPopUpLogout, setMessage, setShowPopUp } = useAuth();
   const [departments, setDepartments] = useState([]);
   const [positions, setPositions] = useState([]);
   const [supervisors, setSupervisors] = useState([]);
@@ -61,7 +61,16 @@ const PositionForm = (props) => {
   }, []);
 
   useEffect(() => {
-    fetchData(positionApi, department || 1).then(setPositions);
+    fetchData(positionApi, department || 1).then((data) => {
+      if (Array.isArray(data) && data.length > 0) {
+        setPositions(data);
+      } else {
+        setDepartment(1);
+        setMessage("Do tego działu nie zostały utworzone stanowiska.");
+        setShowPopUp(true);
+        console.warn("Pobrane dane są pustą tablicą");
+      }
+    });
   }, [department]);
 
   useEffect(() => {
