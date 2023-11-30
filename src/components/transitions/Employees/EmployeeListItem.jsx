@@ -33,6 +33,10 @@ const EmployeeListItem = React.memo(
     }, [date, employee]);
     const employeeEventKey = `emp-${employee.ID}`;
 
+    if (!showWorkedHours && !workedHours) {
+      //console.log("powinno nie być pokazane");
+      return <div data-should-not-render></div>;
+    }
     return (
       <>
         {showWorkedHours || workedHours ? (

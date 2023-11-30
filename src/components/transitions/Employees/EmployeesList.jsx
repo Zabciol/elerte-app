@@ -7,7 +7,8 @@ const EmployeesList = React.memo((props) => {
   const { subordinates, date, children, showWorkedHours, dzial } = props;
 
   const renderEmployees = (employees, dept) => {
-    const employeeItems = employees.map((employee, index) => (
+    // ... (istniejąca logika tworzenia employeeItems)
+    return employees.map((employee, index) => (
       <EmployeeListItem
         employee={employee}
         date={date}
@@ -21,21 +22,29 @@ const EmployeesList = React.memo((props) => {
         })}
       </EmployeeListItem>
     ));
-
-    // Filtruj puste elementy
-    const nonEmptyEmployeeItems = employeeItems.filter((item) => !!item);
-
-    return nonEmptyEmployeeItems;
   };
-
   const renderDepartment = (department, employees) => {
     const departmentContent = renderEmployees(employees, department);
 
-    const hasNonEmptyContent = departmentContent.some((item) => !!item);
+    const shouldRenderDepartment = departmentContent.some((item) => {
+      // Konwersja dzieci na tablicę
+      const childrenArray = React.Children.toArray(item.props.children);
+      console.log(childrenArray);
+      // Sprawdź, czy jakiekolwiek dziecko nie jest specjalnym divem z atrybutem 'data-should-not-render'
+      return childrenArray.some((child) => {
+        return !(
+          child.type === "div" &&
+          child.props &&
+          child.props["data-should-not-render"]
+        );
+      });
+    });
 
-    if (!hasNonEmptyContent) {
-      return null; // Jeśli nie ma niepustych elementów, nie renderuj department
+    if (!shouldRenderDepartment) {
+      return null; // Jeśli wszystkie elementy to specjalne divy, nie renderuj działu
     }
+
+    // Normalne renderowanie działu
     return (
       <Accordion.Item eventKey={department} key={department}>
         <Accordion.Header>{department}</Accordion.Header>
