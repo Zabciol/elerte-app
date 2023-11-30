@@ -1,19 +1,16 @@
 import React from "react";
 
 const RenderChildren = (props) => {
-  console.log("sprawdzam czy ma dzieci");
-  const hasNonNullChildren = React.Children.toArray(props.children).some(
-    (child) => {
-      return child !== null && child !== undefined;
-    }
+  const nonNullChildren = React.Children.toArray(props.children).filter(
+    (child) => child !== null && child !== undefined
   );
-  hasNonNullChildren ? console.log("Ma dzieci") : console.log("Nie ma dzieci");
 
-  if (hasNonNullChildren) {
-    return <>{props.children}</>;
-  } else {
-    return <h3>Brak zawartości.</h3>;
+  if (nonNullChildren.length === 0) {
+    console.log("nie ma dzieci");
+    return <h3>Brak danych</h3>; // Jeśli wszystkie dzieci są null, nie renderuj niczego
   }
+
+  return <>{nonNullChildren}</>;
 };
 
 export default RenderChildren;

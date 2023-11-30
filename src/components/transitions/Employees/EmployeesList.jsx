@@ -7,34 +7,43 @@ const EmployeesList = React.memo((props) => {
   const { subordinates, date, children, showWorkedHours, dzial } = props;
 
   const renderEmployees = (employees, dept) => {
-    return (
-      <Accordion defaultActiveKey='0'>
-        <RenderChildren>
-          {employees.map((employee, index) => (
-            <EmployeeListItem
-              employee={employee}
-              date={date}
-              key={`${dept}-${index}`}
-              showWorkedHours={showWorkedHours}>
-              {React.Children.map(children, (child) => {
-                if (React.isValidElement(child)) {
-                  return React.cloneElement(child, { employee: employee });
-                }
-                return child;
-              })}
-            </EmployeeListItem>
-          ))}
-        </RenderChildren>
-      </Accordion>
-    );
+    const employeeItems = employees.map((employee, index) => (
+      <EmployeeListItem
+        employee={employee}
+        date={date}
+        key={`${dept}-${index}`}
+        showWorkedHours={showWorkedHours}>
+        {React.Children.map(children, (child) => {
+          if (React.isValidElement(child)) {
+            return React.cloneElement(child, { employee: employee });
+          }
+          return child;
+        })}
+      </EmployeeListItem>
+    ));
+
+    // Filtruj puste elementy
+    const nonEmptyEmployeeItems = employeeItems.filter((item) => !!item);
+
+    console.log("nonEmptyEmployeeItems:", nonEmptyEmployeeItems); // Dodaj to debugowanie
+
+    return nonEmptyEmployeeItems;
   };
 
   const renderDepartment = (department, employees) => {
+    const departmentContent = renderEmployees(employees, department);
+
+    const hasNonEmptyContent = departmentContent.some((item) => !!item);
+
+    if (!hasNonEmptyContent) {
+      return null; // Jeśli nie ma niepustych elementów, nie renderuj department
+    }
+    console.log(hasNonEmptyContent);
     return (
       <Accordion.Item eventKey={department} key={department}>
         <Accordion.Header>{department}</Accordion.Header>
         <Accordion.Body>
-          {renderEmployees(employees, department)}
+          <Accordion defaultActiveKey='0'>{departmentContent}</Accordion>
         </Accordion.Body>
       </Accordion.Item>
     );
