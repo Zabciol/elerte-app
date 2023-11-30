@@ -1,12 +1,35 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import Accordion from "react-bootstrap/Accordion";
 import EmployeeListItem from "./EmployeeListItem";
 import RenderChildren from "../../common/RenderChildren";
 
 const EmployeesList = React.memo((props) => {
   const { subordinates, date, children, showWorkedHours, dzial } = props;
+  const [departmentsWithItems, setDepartmentsWithItems] = useState({});
+
+  const handleItemRendered = useCallback((department, hasItems) => {
+    console.log("wywoluje");
+    setDepartmentsWithItems((prev) => ({
+      ...prev,
+      [department]: prev[department] || hasItems,
+    }));
+  }, []);
+
+  useEffect(() => {
+    if (dzial !== "Każdy") {
+      setDepartmentsWithItems({ [dzial]: true });
+    } else if (typeof subordinates === "object") {
+      Object.keys(subordinates).forEach((dept) => {
+        setDepartmentsWithItems((prev) => ({ ...prev, [dept]: false }));
+      });
+    }
+  }, [dzial, subordinates]);
 
   const renderEmployees = (employees, dept) => {
+    if (employees.length === 0) {
+      return null;
+    }
+
     return (
       <Accordion defaultActiveKey='0'>
         <RenderChildren>
@@ -15,7 +38,8 @@ const EmployeesList = React.memo((props) => {
               employee={employee}
               date={date}
               key={`${dept}-${index}`}
-              showWorkedHours={showWorkedHours}>
+              showWorkedHours={showWorkedHours}
+              onItemRendered={handleItemRendered}>
               {React.Children.map(children, (child) => {
                 if (React.isValidElement(child)) {
                   return React.cloneElement(child, { employee: employee });
@@ -30,6 +54,9 @@ const EmployeesList = React.memo((props) => {
   };
 
   const renderDepartment = (department, employees) => {
+    if (departmentsWithItems[department] === false) {
+      return null;
+    }
     return (
       <Accordion.Item eventKey={department} key={department}>
         <Accordion.Header>{department}</Accordion.Header>
