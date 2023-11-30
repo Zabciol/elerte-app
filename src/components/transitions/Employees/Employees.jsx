@@ -3,7 +3,7 @@ import { SelectDzial } from "../../layout/Menu/MenuForms";
 import Tab from "react-bootstrap/Tab";
 import Tabs from "react-bootstrap/Tabs";
 import Form from "react-bootstrap/Form";
-import EmployeesList from "./EmployeesList";
+import EmployeesList from "./RenderList/EmployeesList";
 import EmployeeInf from "./EmployeeInf";
 import ExportExcel from "./ExportExcel";
 import EmployeeAbsenceInf from "./EmployeeAbsenceInf";

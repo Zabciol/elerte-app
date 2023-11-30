@@ -1,11 +1,11 @@
 import React, { Children, useState } from "react";
-import UserCard from "../../common/UserCard";
+import UserCard from "../../../common/UserCard";
 import Accordion from "react-bootstrap/Accordion";
 import Badge from "react-bootstrap/Badge";
 import { useEffect } from "react";
-import { hoursWorkedApi } from "../../../api/employeesApi";
-import { getAbsenceCountAPI } from "../../../api/ecpApi";
-import { useAuth } from "../Login/AuthContext";
+import { hoursWorkedApi } from "../../../../api/employeesApi";
+import { getAbsenceCountAPI } from "../../../../api/ecpApi";
+import { useAuth } from "../../Login/AuthContext";
 
 const EmployeeListItem = React.memo(
   ({ employee, date, children, showWorkedHours }) => {
