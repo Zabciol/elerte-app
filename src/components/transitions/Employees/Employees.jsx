@@ -74,16 +74,16 @@ const Employees = ({ user, setMenuItems, subordinates }) => {
     fetchEmployees();
   }, [user, subordinates]);
 
-  const noweDzialy = useMemo(
+  const dzialy = useMemo(
     () => Array.from(new Set(employees.map((e) => e.Dzial))),
     [employees]
   );
 
   useEffect(() => {
-    if (noweDzialy.length > 0) {
-      setDzial(noweDzialy[0]);
+    if (dzialy.length > 0) {
+      setDzial(dzialy[0]);
     }
-  }, [noweDzialy]);
+  }, [dzialy]);
 
   useEffect(() => {
     const timeoutId = setTimeout(() => {
@@ -96,6 +96,7 @@ const Employees = ({ user, setMenuItems, subordinates }) => {
   const filteredSubordinates = useMemo(() => {
     let result = employees;
 
+    // Filtruje pracowników na podstawie imienia i nazwiska
     if (delayedSearchValue) {
       result = result.filter(
         (employee) =>
@@ -108,10 +109,20 @@ const Employees = ({ user, setMenuItems, subordinates }) => {
       );
     }
 
-    if (dzial !== "Każdy") {
+    // Grupuje pracowników według działu jeśli dzial === 'Każdy', w przeciwnym razie filtruje według wybranego działu
+    if (dzial === "Każdy") {
+      result = result.reduce((acc, current) => {
+        const dept = current.Dzial;
+        if (!acc[dept]) {
+          acc[dept] = [];
+        }
+        acc[dept].push(current);
+        return acc;
+      }, {});
+    } else {
       result = result.filter((e) => e.Dzial === dzial);
     }
-
+    console.log(result);
     return result;
   }, [dzial, employees, delayedSearchValue]);
 
@@ -123,7 +134,7 @@ const Employees = ({ user, setMenuItems, subordinates }) => {
     setMenuItems(
       <MenuItems
         dzial={dzial}
-        dzialy={noweDzialy}
+        dzialy={dzialy}
         setDzial={setDzial}
         date={date}
         setDate={changeDate}
@@ -132,7 +143,7 @@ const Employees = ({ user, setMenuItems, subordinates }) => {
         setSearchValue={setSearchValue}
       />
     );
-  }, [dzial, date, noweDzialy, key, searchValue, setMenuItems]);
+  }, [dzial, date, dzialy, key, searchValue, setMenuItems]);
 
   return (
     <Tabs
@@ -144,6 +155,7 @@ const Employees = ({ user, setMenuItems, subordinates }) => {
         <EmployeesList
           subordinates={filteredSubordinates}
           dzial={dzial}
+          dzialy={dzialy}
           user={user}
           date={date}
           showWorkedHours={true}>

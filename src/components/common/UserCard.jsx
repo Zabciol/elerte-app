@@ -1,23 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Accordion from "react-bootstrap/Accordion";
 import Badge from "react-bootstrap/Badge";
-
 const UserCard = (props) => {
   const { employee, reasons, date, children, inf } = props;
-  const { ID, Imie, Nazwisko, Stanowisko, Od, Do } = employee;
+  const { ID, Imie, Nazwisko, Stanowisko } = employee;
+
   return (
-    <Accordion.Item eventKey={ID}>
-      <Accordion.Header>
-        <div className='person'>
-          <div className='ms-2 me-auto'>
-            <div className='fw-bold'>{`${Imie} ${Nazwisko}`}</div>
-            {Stanowisko}
-          </div>
-          {inf !== null ? <Badge>{inf}</Badge> : null}
-        </div>
-      </Accordion.Header>
-      <Accordion.Body style={{ overflow: "hidden" }}>{children}</Accordion.Body>
-    </Accordion.Item>
+    <div>
+      <div style={{ overflow: "hidden" }}>{children}</div>
+    </div>
   );
 };
 

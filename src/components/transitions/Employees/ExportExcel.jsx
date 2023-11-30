@@ -19,7 +19,21 @@ const ExportExcel = (props) => {
   };
 
   useEffect(() => {
-    const IDs = props.subordinates.map((employee) => employee.ID);
+    let IDs;
+
+    if (Array.isArray(props.subordinates)) {
+      // Jeśli subordinates jest tablicą
+      IDs = props.subordinates.map((employee) => employee.ID);
+    } else if (typeof props.subordinates === "object") {
+      // Jeśli subordinates jest obiektem (działy)
+      IDs = Object.values(props.subordinates)
+        .flat()
+        .map((employee) => employee.ID);
+    } else {
+      // W przypadku, gdy subordinates jest innego typu lub nie jest zdefiniowane
+      IDs = [];
+    }
+
     setEmployeesID(IDs);
   }, [props]);
   return (
