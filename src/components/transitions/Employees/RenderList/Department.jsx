@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useState, useCallback } from "react";
 import Accordion from "react-bootstrap/Accordion";
 import EmployeeListItem from "./EmployeeListItem";
 
@@ -10,6 +10,11 @@ const Department = ({
   showWorkedHours,
 }) => {
   const [shouldRender, setShouldRender] = useState(true);
+
+  const handleWorkedHoursChange = useCallback((hasWorkedHours) => {
+    setShouldRender(hasWorkedHours);
+  }, []);
+
   const employeeElements = useMemo(() => {
     return employees.map((employee, index) => (
       <EmployeeListItem
@@ -17,7 +22,7 @@ const Department = ({
         employee={employee}
         date={date}
         showWorkedHours={showWorkedHours}
-        setShouldRender={setShouldRender}>
+        setShouldRender={handleWorkedHoursChange}>
         {React.Children.map(children, (child) => {
           if (React.isValidElement(child)) {
             return React.cloneElement(child, { employee: employee });
@@ -28,16 +33,10 @@ const Department = ({
     ));
   }, [employees, date, showWorkedHours, children]);
 
-  // Sprawdź, czy wszystkie elementy pracowników są null
-  const shouldRenderDepartment = employeeElements.some(
-    (element) => element !== null
-  );
-  //console.log(shouldRenderDepartment);
-
   return (
     <>
       {" "}
-      {!shouldRender ? (
+      {shouldRender ? (
         <Accordion.Item eventKey={department}>
           <Accordion.Header>{department}</Accordion.Header>
           <Accordion.Body>

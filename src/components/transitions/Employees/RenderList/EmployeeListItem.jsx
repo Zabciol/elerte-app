@@ -9,7 +9,7 @@ import { useAuth } from "../../Login/AuthContext";
 
 const EmployeeListItem = React.memo(
   ({ employee, date, children, showWorkedHours, setShouldRender }) => {
-    const [workedHours, setWorkedHours] = useState(null);
+    const [workedHours, setWorkedHours] = useState(0);
 
     const { setShowPopUpLogout, setMessage } = useAuth();
     const getWorkedHours = async () => {
@@ -34,9 +34,11 @@ const EmployeeListItem = React.memo(
     }, [date, employee]);
 
     useEffect(() => {
-      if (showWorkedHours || workedHours) setShouldRender(false);
-    }, [showWorkedHours, workedHours]);
-    const employeeEventKey = `emp-${employee.ID}`;
+      if (workedHours > 0 || showWorkedHours) {
+        console.log("Powinno pokazać");
+        setShouldRender(true);
+      } else setShouldRender(false);
+    }, [workedHours, setShouldRender, employee]);
 
     return (
       <>
