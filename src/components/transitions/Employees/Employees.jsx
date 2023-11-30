@@ -170,7 +170,8 @@ const Employees = ({ user, setMenuItems, subordinates }) => {
           subordinates={filteredSubordinates}
           date={date}
           dzial={dzial}
-          dzialy={dzialy}>
+          dzialy={dzialy}
+          showWorkedHours={false}>
           <EmployeeAbsenceInf date={date} menukey={key} />
         </EmployeesList>
       </Tab>
