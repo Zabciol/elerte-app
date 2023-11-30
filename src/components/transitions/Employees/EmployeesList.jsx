@@ -25,8 +25,6 @@ const EmployeesList = React.memo((props) => {
     // Filtruj puste elementy
     const nonEmptyEmployeeItems = employeeItems.filter((item) => !!item);
 
-    console.log("nonEmptyEmployeeItems:", nonEmptyEmployeeItems); // Dodaj to debugowanie
-
     return nonEmptyEmployeeItems;
   };
 
@@ -38,7 +36,6 @@ const EmployeesList = React.memo((props) => {
     if (!hasNonEmptyContent) {
       return null; // Jeśli nie ma niepustych elementów, nie renderuj department
     }
-    console.log(hasNonEmptyContent);
     return (
       <Accordion.Item eventKey={department} key={department}>
         <Accordion.Header>{department}</Accordion.Header>
