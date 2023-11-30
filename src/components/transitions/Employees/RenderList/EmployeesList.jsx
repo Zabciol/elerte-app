@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import Accordion from "react-bootstrap/Accordion";
 import Department from "./Department"; // Zakładam, że masz już komponent Department
 import EmployeeListItem from "./EmployeeListItem";
 
 const EmployeesList = React.memo((props) => {
   const { subordinates, date, children, showWorkedHours, dzial } = props;
+  const [shouldRender, setShouldRender] = useState(true);
 
   const renderDepartments = () => {
     return Object.entries(subordinates).map(([dept, employees]) => (
@@ -25,8 +26,14 @@ const EmployeesList = React.memo((props) => {
         key={`${dzial}-${index}`}
         employee={employee}
         date={date}
-        showWorkedHours={showWorkedHours}>
-        {children}
+        showWorkedHours={showWorkedHours}
+        setShouldRender={setShouldRender}>
+        {React.Children.map(children, (child) => {
+          if (React.isValidElement(child)) {
+            return React.cloneElement(child, { employee: employee });
+          }
+          return child;
+        })}
       </EmployeeListItem>
     ));
   };

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useMemo, useState } from "react";
 import Accordion from "react-bootstrap/Accordion";
 import EmployeeListItem from "./EmployeeListItem";
 
@@ -9,39 +9,43 @@ const Department = ({
   children,
   showWorkedHours,
 }) => {
-  const [visible, setVisible] = useState(false);
+  const [shouldRender, setShouldRender] = useState(true);
+  const employeeElements = useMemo(() => {
+    return employees.map((employee, index) => (
+      <EmployeeListItem
+        key={`${department}-${index}`}
+        employee={employee}
+        date={date}
+        showWorkedHours={showWorkedHours}
+        setShouldRender={setShouldRender}>
+        {React.Children.map(children, (child) => {
+          if (React.isValidElement(child)) {
+            return React.cloneElement(child, { employee: employee });
+          }
+          return child;
+        })}
+      </EmployeeListItem>
+    ));
+  }, [employees, date, showWorkedHours, children]);
 
-  useEffect(() => {
-    const hasVisibleEmployees = employees.some((employee) => {
-      // Tutaj logika, która określa, czy pracownik powinien być widoczny
-      // Może to być na przykład sprawdzenie, czy EmployeeListItem dla tego pracownika zwracałby JSX
-      return true; // Zastąp tą logiką
-    });
-
-    setVisible(hasVisibleEmployees);
-  }, [employees, date, showWorkedHours]);
-
-  if (!visible) {
-    return null;
-  }
+  // Sprawdź, czy wszystkie elementy pracowników są null
+  const shouldRenderDepartment = employeeElements.some(
+    (element) => element !== null
+  );
+  //console.log(shouldRenderDepartment);
 
   return (
-    <Accordion.Item eventKey={department} key={department}>
-      <Accordion.Header>{department}</Accordion.Header>
-      <Accordion.Body>
-        <Accordion defaultActiveKey='0'>
-          {employees.map((employee, index) => (
-            <EmployeeListItem
-              key={`${department}-${index}`}
-              employee={employee}
-              date={date}
-              showWorkedHours={showWorkedHours}>
-              {children}
-            </EmployeeListItem>
-          ))}
-        </Accordion>
-      </Accordion.Body>
-    </Accordion.Item>
+    <>
+      {" "}
+      {!shouldRender ? (
+        <Accordion.Item eventKey={department}>
+          <Accordion.Header>{department}</Accordion.Header>
+          <Accordion.Body>
+            <Accordion defaultActiveKey='0'>{employeeElements}</Accordion>
+          </Accordion.Body>
+        </Accordion.Item>
+      ) : null}
+    </>
   );
 };
 

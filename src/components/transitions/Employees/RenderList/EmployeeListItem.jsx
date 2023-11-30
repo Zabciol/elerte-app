@@ -8,8 +8,9 @@ import { getAbsenceCountAPI } from "../../../../api/ecpApi";
 import { useAuth } from "../../Login/AuthContext";
 
 const EmployeeListItem = React.memo(
-  ({ employee, date, children, showWorkedHours }) => {
+  ({ employee, date, children, showWorkedHours, setShouldRender }) => {
     const [workedHours, setWorkedHours] = useState(null);
+
     const { setShowPopUpLogout, setMessage } = useAuth();
     const getWorkedHours = async () => {
       if (employee.ID && date) {
@@ -31,6 +32,10 @@ const EmployeeListItem = React.memo(
     useEffect(() => {
       getWorkedHours();
     }, [date, employee]);
+
+    useEffect(() => {
+      if (showWorkedHours || workedHours) setShouldRender(false);
+    }, [showWorkedHours, workedHours]);
     const employeeEventKey = `emp-${employee.ID}`;
 
     return (
