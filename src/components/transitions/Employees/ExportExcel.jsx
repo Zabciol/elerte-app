@@ -10,7 +10,7 @@ const ExportExcel = (props) => {
 
   const download = async () => {
     try {
-      await exportECPAPI(props.date, employeesID);
+      await exportECPAPI(props.date, employeesID, props.dzial);
     } catch (error) {
       console.error(error);
       setMessage(error.message);

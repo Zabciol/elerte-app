@@ -45,11 +45,17 @@ router.get("/export", verifyToken, async (req, res) => {
   try {
     const date = req.query.date;
     const employeesID = req.query.employeesID;
+    const fileName = req.query.fileName;
     if (!date) {
       return res.status(400).send("Brak wymaganych parametrów: data");
     }
 
-    const result = await ecpModel.exportECPForMonth(date, employeesID, res);
+    const result = await ecpModel.exportECPForMonth(
+      date,
+      employeesID,
+      fileName,
+      res
+    );
     res.json(result);
   } catch (error) {
     console.error(error);

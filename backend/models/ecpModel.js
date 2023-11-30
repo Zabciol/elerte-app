@@ -123,10 +123,10 @@ const getECPForMonth = async (date, employeesID) => {
   return await queryDatabasePromise(query, [employeesID, year, month]);
 };
 
-const exportECPForMonth = async (date, employeesID, res) => {
+const exportECPForMonth = async (date, employeesID, fileName, res) => {
   try {
     const workbook = new ExcelJS.Workbook();
-    const worksheet = workbook.addWorksheet("ECP");
+    const worksheet = workbook.addWorksheet(`${fileName}`);
     const ecp = await getECPForMonth(date, employeesID);
 
     worksheet.columns = [
@@ -163,7 +163,10 @@ const exportECPForMonth = async (date, employeesID, res) => {
       "Content-Type",
       "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
     );
-    res.setHeader("Content-Disposition", "attachment; filename=ECP.xlsx");
+    res.setHeader(
+      "Content-Disposition",
+      `attachment; filename=${fileName}.xlsx`
+    );
 
     await workbook.xlsx.write(res);
     res.end();
