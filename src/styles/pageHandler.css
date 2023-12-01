@@ -28,3 +28,14 @@
 ::-webkit-scrollbar {
   width: 0.1rem; /* Szerokość paska przewijania w Webkit (Chrome, Safari) */
 }
+.loading-page {
+  position: fixed;
+  width: 100%;
+  top: 20%;
+}
+.loading-page > {
+  position: relative;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}

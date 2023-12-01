@@ -109,3 +109,48 @@ export const getLastDayOfThisMonth = () => {
   nextMonth.setHours(12);
   return nextMonth.toISOString().split("T")[0];
 };
+
+export const generateMonthsArray = (yearsBack, yearsForward) => {
+  const today = new Date();
+  const currentYear = today.getFullYear();
+  const currentMonth = today.getMonth();
+  const months = [];
+
+  for (
+    let year = currentYear - yearsBack;
+    year <= currentYear + yearsForward;
+    year++
+  ) {
+    const startMonth = year === currentYear - yearsBack ? currentMonth + 1 : 0;
+    const endMonth = year === currentYear + yearsForward ? currentMonth : 11;
+
+    for (let month = startMonth; month <= endMonth; month++) {
+      const monthDate = new Date(year, month, 1);
+      const monthName = monthDate.toLocaleDateString(undefined, {
+        month: "long",
+      });
+      const formattedYear = year.toString(); // Pobierz dwucyfrowy rok
+      const formattedMonth = (month + 1).toString().padStart(2, "0"); // Pobierz dwucyfrowy miesiąc
+      months.push({
+        value: `${formattedYear}-${formattedMonth}`,
+        label: `${monthName} ${year}`,
+      });
+    }
+  }
+
+  return months;
+};
+export const getCurrentMonthYearInObject = () => {
+  const today = new Date();
+  const currentYear = today.getFullYear();
+  const currentMonth = today.getMonth();
+  const monthDate = new Date(currentYear, currentMonth, 1);
+  const monthName = monthDate.toLocaleDateString(undefined, { month: "long" });
+  const formattedYear = currentYear.toString(); // Pobierz dwucyfrowy rok
+  const formattedMonth = (currentMonth + 1).toString().padStart(2, "0"); // Pobierz dwucyfrowy miesiąc
+
+  return {
+    value: `${formattedYear}-${formattedMonth}`,
+    label: `${monthName} ${currentYear}`,
+  };
+};

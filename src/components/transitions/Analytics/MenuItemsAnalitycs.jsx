@@ -12,6 +12,9 @@ const MenuItemsAnalitycs = React.memo(
     position,
     positions,
     setPosition,
+    allMonths,
+    selectedMonths,
+    setSelectedMonths,
     handleChange,
   }) => {
     const [isMobile, setIsMobile] = useState(window.innerWidth < 1200);
@@ -33,6 +36,24 @@ const MenuItemsAnalitycs = React.memo(
 
     const MenuRender = (
       <div className='analytics-filter'>
+        {selectedMonths ? (
+          <div className='mb-3 select-react-position form-group'>
+            <label
+              htmlFor='monthsSelect'
+              className='form-label select-react-position-label'>
+              Miesiące
+            </label>
+            <Select
+              id='monthsSelect'
+              isMulti={true}
+              options={allMonths}
+              value={selectedMonths}
+              onChange={(selected) =>
+                handleChange(selected, setSelectedMonths, (option) => option)
+              }
+            />
+          </div>
+        ) : null}
         {position ? (
           <div className='mb-3 select-react-position form-group'>
             <label

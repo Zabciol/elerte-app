@@ -1,7 +1,11 @@
 import React, { useState, useCallback, useEffect, useMemo } from "react";
 import { SelectItems } from "../../layout/Menu/MenuForms";
 import Form from "react-bootstrap/Form";
-import { getCurrentDateYearMonth } from "../../common/CommonFunctions";
+import {
+  getCurrentDateYearMonth,
+  generateMonthsArray,
+  getCurrentMonthYearInObject,
+} from "../../common/CommonFunctions";
 import { useAuth } from "../Login/AuthContext";
 import { positionApi } from "../../../api/positionApi";
 import { allEmployeesAPI } from "../../../api/employeesApi";
@@ -28,9 +32,16 @@ const AnalyticsPage = ({ user, subordinates, setMenuItems }) => {
   ]);
   const [allPositions, setAllPositions] = useState([]);
   const [selectedPositions, setSelectedPositions] = useState();
+  const allMonths = generateMonthsArray(2, 0);
+  const [selectedMonths, setSelectedMonths] = useState([
+    getCurrentMonthYearInObject(),
+  ]);
   const [images, setImages] = useState([]);
 
   useEffect(() => {
+    console.log(allMonths);
+    console.log(selectedMonths);
+
     const importAllImages = (r) => {
       return r.keys().map(r);
     };
@@ -74,18 +85,16 @@ const AnalyticsPage = ({ user, subordinates, setMenuItems }) => {
   }, [user]);
 
   useEffect(() => {
-    if (employees.length > 0) {
-      const newDepartments = Array.from(
-        new Set(
-          hasAdminView(user) || hasAdminPermissions
-            ? employees.map((e) => e.Dzial)
-            : subordinates.map((e) => e.Dzial)
-        )
-      );
-      console.log(newDepartments);
-      setDepartments(newDepartments);
-      setSelectedDepartments(newDepartments[0]);
-    }
+    const newDepartments = Array.from(
+      new Set(
+        hasAdminView(user) || hasAdminPermissions
+          ? employees.map((e) => e.Dzial)
+          : subordinates.map((e) => e.Dzial)
+      )
+    );
+    console.log(newDepartments);
+    setDepartments(newDepartments);
+    setSelectedDepartments(newDepartments[0]);
   }, [employees, user, subordinates]);
 
   useEffect(() => {
@@ -93,25 +102,17 @@ const AnalyticsPage = ({ user, subordinates, setMenuItems }) => {
       selectedDepartments.includes(employee.Dzial)
     );
     const uniqueDepartmentIds = [...new Set(deps.map((emp) => emp.Dzial_ID))];
-    if (uniqueDepartmentIds.length > 0 && uniqueDepartmentIds[0]) {
-      Promise.all(
-        uniqueDepartmentIds.map((deptId) => fetchData(positionApi, deptId))
-      ).then((responses) => {
-        const allPositions = responses.flat();
-        setAllPositions(allPositions);
-        if (allPositions.length > 0) {
-          setSelectedPositions([allPositions[0]]);
-        }
-      });
-    } else {
-      fetchData(positionApi, 1).then((fetchedPositions) => {
-        setAllPositions(fetchedPositions);
-        if (fetchedPositions.length > 0) {
-          setSelectedPositions([fetchedPositions[0]]);
-        }
-      });
-    }
-  }, [selectedDepartments, employees, fetchData]);
+
+    Promise.all(
+      uniqueDepartmentIds.map((deptId) => fetchData(positionApi, deptId))
+    ).then((responses) => {
+      const allPositions = responses.flat();
+      setAllPositions(allPositions);
+      if (allPositions.length > 0) {
+        setSelectedPositions([allPositions[0]]);
+      }
+    });
+  }, [selectedDepartments, employees, fetchData, subordinates]);
 
   useEffect(() => {
     if (selectedPositions) {
@@ -145,6 +146,10 @@ const AnalyticsPage = ({ user, subordinates, setMenuItems }) => {
     []
   );
 
+  useEffect(() => {
+    console.log(selectedMonths);
+  }, [selectedMonths]);
+
   const memoizedMenuItems = useMemo(
     () => (
       <MenuItemsAnalitycs
@@ -156,6 +161,9 @@ const AnalyticsPage = ({ user, subordinates, setMenuItems }) => {
         position={selectedPositions}
         positions={allPositions}
         setPosition={setSelectedPositions}
+        selectedMonths={selectedMonths}
+        allMonths={allMonths}
+        setSelectedMonths={setSelectedMonths}
         handleChange={handleMultiSelectChange}
       />
     ),
@@ -167,12 +175,14 @@ const AnalyticsPage = ({ user, subordinates, setMenuItems }) => {
       allPositions,
       changeDate,
       handleMultiSelectChange,
+      selectedMonths,
+      allMonths,
     ]
   );
 
   useEffect(() => {
     setMenuItems(memoizedMenuItems);
-  }, [memoizedMenuItems]);
+  }, [selectedDepartments, selectedMonths, selectedPositions]);
 
   return (
     <div className='analytics w-100 '>

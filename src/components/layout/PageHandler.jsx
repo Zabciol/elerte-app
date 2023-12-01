@@ -11,6 +11,7 @@ import AnalyticsPage from "../transitions/Analytics/AnalyticsPage.jsx";
 import { subordinatesApi } from "../../api/employeesApi";
 import { useAuth } from "../transitions/Login/AuthContext.jsx";
 import Menu from "./Menu/Menu";
+import LoadingPage from "../common/LoadingPage.jsx";
 
 const PageHandler = (props) => {
   const { setShowPopUpLogout, setMessage } = useAuth();
@@ -39,6 +40,7 @@ const PageHandler = (props) => {
   useEffect(() => {
     getSubordinates();
   }, []);
+
   return (
     <Router>
       <Container expand='lg'>
@@ -54,21 +56,29 @@ const PageHandler = (props) => {
             <Route
               path='/ecp'
               element={
-                <ECP
-                  user={user}
-                  setMenuItems={setMenuItems}
-                  subordinates={[user, ...subordinates]}
-                />
+                subordinates.length > 0 ? (
+                  <ECP
+                    user={user}
+                    setMenuItems={setMenuItems}
+                    subordinates={[user, ...subordinates]}
+                  />
+                ) : (
+                  <LoadingPage />
+                )
               }
             />
             <Route
               path='/pracownicy'
               element={
-                <Employees
-                  user={user}
-                  setMenuItems={setMenuItems}
-                  subordinates={subordinates}
-                />
+                subordinates.length > 0 ? (
+                  <Employees
+                    user={user}
+                    setMenuItems={setMenuItems}
+                    subordinates={subordinates}
+                  />
+                ) : (
+                  <LoadingPage />
+                )
               }
             />
             <Route
@@ -94,11 +104,15 @@ const PageHandler = (props) => {
             <Route
               path='/analityka'
               element={
-                <AnalyticsPage
-                  user={user}
-                  subordinates={subordinates}
-                  setMenuItems={setMenuItems}
-                />
+                subordinates.length > 0 ? (
+                  <AnalyticsPage
+                    user={user}
+                    subordinates={subordinates}
+                    setMenuItems={setMenuItems}
+                  />
+                ) : (
+                  <LoadingPage />
+                )
               }
             />
           </Routes>
