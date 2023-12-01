@@ -56,29 +56,21 @@ const PageHandler = (props) => {
             <Route
               path='/ecp'
               element={
-                subordinates.length > 0 ? (
-                  <ECP
-                    user={user}
-                    setMenuItems={setMenuItems}
-                    subordinates={[user, ...subordinates]}
-                  />
-                ) : (
-                  <LoadingPage />
-                )
+                <ECP
+                  user={user}
+                  setMenuItems={setMenuItems}
+                  subordinates={[user, ...subordinates]}
+                />
               }
             />
             <Route
               path='/pracownicy'
               element={
-                subordinates.length > 0 ? (
-                  <Employees
-                    user={user}
-                    setMenuItems={setMenuItems}
-                    subordinates={subordinates}
-                  />
-                ) : (
-                  <LoadingPage />
-                )
+                <Employees
+                  user={user}
+                  setMenuItems={setMenuItems}
+                  subordinates={subordinates}
+                />
               }
             />
             <Route
@@ -97,22 +89,18 @@ const PageHandler = (props) => {
                 <Calender
                   user={user}
                   setMenuItems={setMenuItems}
-                  subordinates={[user, ...subordinates]}
+                  subordinates={subordinates}
                 />
               }
             />
             <Route
               path='/analityka'
               element={
-                subordinates.length > 0 ? (
-                  <AnalyticsPage
-                    user={user}
-                    subordinates={subordinates}
-                    setMenuItems={setMenuItems}
-                  />
-                ) : (
-                  <LoadingPage />
-                )
+                <AnalyticsPage
+                  user={user}
+                  subordinates={[user, ...subordinates]}
+                  setMenuItems={setMenuItems}
+                />
               }
             />
           </Routes>

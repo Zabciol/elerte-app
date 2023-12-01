@@ -85,33 +85,46 @@ const AnalyticsPage = ({ user, subordinates, setMenuItems }) => {
   }, [user]);
 
   useEffect(() => {
-    const newDepartments = Array.from(
-      new Set(
-        hasAdminView(user) || hasAdminPermissions
-          ? employees.map((e) => e.Dzial)
-          : subordinates.map((e) => e.Dzial)
-      )
-    );
-    console.log(newDepartments);
-    setDepartments(newDepartments);
-    setSelectedDepartments(newDepartments[0]);
+    if (subordinates.length > 0 && employees.length > 0) {
+      const newDepartments = Array.from(
+        new Set(
+          hasAdminView(user) || hasAdminPermissions
+            ? employees.map((e) => e.Dzial)
+            : subordinates.map((e) => e.Dzial)
+        )
+      );
+      console.log(newDepartments);
+      setDepartments(newDepartments);
+      setSelectedDepartments(newDepartments[0]);
+    }
   }, [employees, user, subordinates]);
 
   useEffect(() => {
-    const deps = employees.filter((employee) =>
-      selectedDepartments.includes(employee.Dzial)
-    );
-    const uniqueDepartmentIds = [...new Set(deps.map((emp) => emp.Dzial_ID))];
-
-    Promise.all(
-      uniqueDepartmentIds.map((deptId) => fetchData(positionApi, deptId))
-    ).then((responses) => {
-      const allPositions = responses.flat();
-      setAllPositions(allPositions);
-      if (allPositions.length > 0) {
-        setSelectedPositions([allPositions[0]]);
+    if (subordinates.length > 0) {
+      const deps = employees.filter((employee) =>
+        selectedDepartments.includes(employee.Dzial)
+      );
+      const uniqueDepartmentIds = [...new Set(deps.map((emp) => emp.Dzial_ID))];
+      if (uniqueDepartmentIds.length > 0 && uniqueDepartmentIds[0]) {
+        Promise.all(
+          uniqueDepartmentIds.map((deptId) => fetchData(positionApi, deptId))
+        ).then((responses) => {
+          const allPositions = responses.flat();
+          setAllPositions(allPositions);
+          if (allPositions.length > 0) {
+            setSelectedPositions([allPositions[0]]);
+          }
+        });
+      } else {
+        console.log(subordinates);
+        fetchData(positionApi, user.Dzial_ID).then((fetchedPositions) => {
+          setAllPositions(fetchedPositions);
+          if (fetchedPositions.length > 0) {
+            setSelectedPositions([fetchedPositions[0]]);
+          }
+        });
       }
-    });
+    }
   }, [selectedDepartments, employees, fetchData, subordinates]);
 
   useEffect(() => {
