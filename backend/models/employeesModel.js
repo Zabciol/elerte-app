@@ -9,7 +9,6 @@ const getSubordinates = async (id) => {
     " ON Pracownicy.Stanowisko_ID = Stanowisko.ID LEFT JOIN Dzialy ON Stanowisko.Dzial_ID = Dzialy.ID" +
     " LEFT JOIN WymiarPracy ON Pracownicy.WymiarPracy_ID = WymiarPracy.ID WHERE Przelozony_ID = ?";
   const response = await queryDatabasePromise(query, [id]);
-  console.log(response);
   return response;
 };
 
