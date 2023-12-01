@@ -17,17 +17,14 @@ const RenderDepartment = ({
   const handleShow = async () => {
     try {
       const response = await showDepartmentAPI(department);
-      if (!response.success) setshow(false);
-      console.log(response);
+      if (!response.success && !showWorkedHours) setshow(false);
     } catch (error) {
       setMessage(error.message);
       setShowPopUpLogout(true);
     }
   };
   useEffect(() => {
-    console.log(employees);
-    console.log(show);
-    if (!showWorkedHours) handleShow();
+    handleShow();
   }, [department, showWorkedHours, employees]);
 
   return (

@@ -9,7 +9,6 @@ const RenderEmployees = ({
   showWorkedHours,
   children,
 }) => {
-  console.log("renderuje się gdzieś: ", employees);
   return (
     <>
       {employees.map((employee, index) => (

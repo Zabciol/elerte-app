@@ -14,7 +14,11 @@ const EmployeesList = React.memo((props) => {
       {dzial === "Każdy" ? (
         typeof subordinates === "object" ? (
           Object.entries(subordinates).map(([dept, employees]) => (
-            <RenderDepartment department={dept} employees={employees}>
+            <RenderDepartment
+              department={dept}
+              employees={employees}
+              showWorkedHours={showWorkedHours}
+              date={date}>
               {children}
             </RenderDepartment>
           ))
