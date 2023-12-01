@@ -35,7 +35,6 @@ export const addDepartmentApi = async (newDepartment) => {
 
 export const showDepartmentAPI = async (departmentName) => {
   try {
-    console.log(departmentName);
     const token = sessionStorage.getItem("userToken");
     const response = await axios.get(`${API_URL}/show`, {
       headers: {

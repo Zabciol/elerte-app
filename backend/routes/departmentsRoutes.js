@@ -27,7 +27,6 @@ router.post("/add", verifyToken, async (req, res) => {
 router.get("/show", verifyToken, async (req, res) => {
   try {
     const { department } = req.query; // Zmiana z req.params na req.query
-    console.log("router: ", department);
     const result = await departmentsModel.showDepartment(department);
     res.json(result);
   } catch (error) {

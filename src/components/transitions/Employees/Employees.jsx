@@ -122,7 +122,6 @@ const Employees = ({ user, setMenuItems, subordinates }) => {
     } else {
       result = result.filter((e) => e.Dzial === dzial);
     }
-    console.log(result);
     return result;
   }, [dzial, employees, delayedSearchValue]);
 
