@@ -175,7 +175,7 @@ const AnalyticsPage = ({ user, subordinates, setMenuItems }) => {
   }, [memoizedMenuItems]);
 
   return (
-    <div className='analytics w-100 text-white '>
+    <div className='analytics w-100 '>
       <Carousel>
         <Carousel.Item>
           <img
@@ -183,7 +183,7 @@ const AnalyticsPage = ({ user, subordinates, setMenuItems }) => {
             src={images[0]}
             alt='First slide'
           />
-          <Carousel.Caption className=' text-white'>
+          <Carousel.Caption>
             <h3>Liczba pracowników</h3>
           </Carousel.Caption>
           <img src={ElerteFooter} className='background-footer' />
@@ -194,7 +194,7 @@ const AnalyticsPage = ({ user, subordinates, setMenuItems }) => {
             src={images[5]}
             alt='Second slide'
           />
-          <Carousel.Caption className=' text-white'>
+          <Carousel.Caption>
             <h3>Ilość roboczogodzin</h3>
           </Carousel.Caption>
           <img src={ElerteFooter} className='background-footer' />
@@ -205,7 +205,7 @@ const AnalyticsPage = ({ user, subordinates, setMenuItems }) => {
             src={images[3]}
             alt='Third slide'
           />
-          <Carousel.Caption className=' text-white'>
+          <Carousel.Caption>
             <h3>Ilość nadgodzin</h3>
           </Carousel.Caption>
           <img src={ElerteFooter} className='background-footer' />
