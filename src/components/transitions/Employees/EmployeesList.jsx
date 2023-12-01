@@ -18,6 +18,7 @@ const EmployeesList = React.memo((props) => {
               department={dept}
               employees={employees}
               showWorkedHours={showWorkedHours}
+              key={dept}
               date={date}>
               {children}
             </RenderDepartment>
