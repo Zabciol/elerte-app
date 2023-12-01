@@ -95,7 +95,10 @@ const PositionForm = (props) => {
   }, [subordinates, directSupervisors]);
 
   useEffect(() => {
-    setDepartment(department || employee?.DzialID || departments[0]?.ID);
+    console.log(department);
+    console.log(position);
+    console.log(workingTime);
+    setDepartment(department || employee?.Dzial_ID || departments[0]?.ID);
     setPosition(position || employee?.StanowiskoID || positions[0]?.ID);
     setWorkingTime(
       workingTime || employee?.WymiarPracy_ID || workingTimes[0]?.ID

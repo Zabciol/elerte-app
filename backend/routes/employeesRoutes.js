@@ -46,7 +46,6 @@ router.get("/", verifyToken, async (req, res) => {
     }
 
     const subordinates = await getSubordinatesRecursively(id);
-    console.log(subordinates);
     res.status(200).send({
       supervisor: subordinates.length > 0 ? true : false,
       message: "Subordinates found!",
