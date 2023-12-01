@@ -8,7 +8,9 @@ const getSubordinates = async (id) => {
     " FROM Pracownicy LEFT JOIN Hierarchia ON Pracownicy.ID = Hierarchia.Podwladny_ID LEFT JOIN Stanowisko" +
     " ON Pracownicy.Stanowisko_ID = Stanowisko.ID LEFT JOIN Dzialy ON Stanowisko.Dzial_ID = Dzialy.ID" +
     " LEFT JOIN WymiarPracy ON Pracownicy.WymiarPracy_ID = WymiarPracy.ID WHERE Przelozony_ID = ?";
-  return await queryDatabasePromise(query, [id]);
+  const response = await queryDatabasePromise(query, [id]);
+  console.log(response);
+  return response;
 };
 
 const getSupervisors = async () => {
@@ -135,9 +137,9 @@ const addNewEmployee = async (data) => {
       Stanowisko_ID: data.positionID,
       WymiarPracy_ID: data.workingTime,
     });
-    const login = deletePolishChars(
-      data.name + "." + data.lastname
-    ).toLowerCase();
+    const login = deletePolishChars(data.name + "." + data.lastname)
+      .replace(/\s+/g, "") // Usuwa wszystkie spacje
+      .toLowerCase();
 
     await addLoginAndPassword(pracownikID, login);
 

@@ -8,7 +8,7 @@ const ECPListItem = ({ employee, reasons, date }) => {
   const properHours = calculateHoursWorked(Od, Do);
   const [hours, setHours] = useState(properHours);
   return (
-    <UserCard key={employee.ID} employee={employee} inf={hours}>
+    <UserCard employee={employee} inf={hours}>
       <ECPInput
         employee={employee}
         hours={hours}

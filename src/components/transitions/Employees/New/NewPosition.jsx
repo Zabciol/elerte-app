@@ -16,7 +16,7 @@ const NewPosition = ({ show, cancel }) => {
   const getAllDepartments = async () => {
     const data = await departmentsApi();
     setDepartments(data);
-    setDepartment(data[0]);
+    setDepartment(data[0].ID);
   };
   const onChangeDepartment = (event) => {
     setDepartment(event.target.value);
@@ -26,7 +26,7 @@ const NewPosition = ({ show, cancel }) => {
     try {
       const newPosition = {
         name: name.current.value,
-        Dzial_ID: department.ID,
+        Dzial_ID: department,
       };
       const response = await addPositionApi(newPosition);
       setMessage(response.message);

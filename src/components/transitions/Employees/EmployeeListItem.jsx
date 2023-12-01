@@ -1,5 +1,7 @@
 import React, { Children, useState } from "react";
 import UserCard from "../../common/UserCard";
+import Accordion from "react-bootstrap/Accordion";
+import Badge from "react-bootstrap/Badge";
 import { useEffect } from "react";
 import { hoursWorkedApi } from "../../../api/employeesApi";
 import { getAbsenceCountAPI } from "../../../api/ecpApi";
@@ -29,10 +31,16 @@ const EmployeeListItem = React.memo(
     useEffect(() => {
       getWorkedHours();
     }, [date, employee]);
+    const employeeEventKey = `emp-${employee.ID}`;
+
     return (
-      <UserCard key={employee.ID} employee={employee} inf={workedHours}>
-        {children}
-      </UserCard>
+      <>
+        {showWorkedHours || workedHours ? (
+          <UserCard employee={employee} inf={workedHours}>
+            {children}
+          </UserCard>
+        ) : null}
+      </>
     );
   }
 );

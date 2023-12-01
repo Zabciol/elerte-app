@@ -6,26 +6,55 @@ const { verifyToken } = require("../db");
 
 async function getSubordinatesRecursively(id) {
   const subordinates = [];
-  const results = await employeesModel.getSubordinates(id);
+  const visitedIds = new Set(); // Zestaw do przechowywania unikalnych ID
+  const stack = [id];
 
-  for (let i = 0; i < results.length; i++) {
-    subordinates.push(results[i]);
-    const childSubordinates = await getSubordinatesRecursively(results[i].ID);
-    subordinates.push(...childSubordinates);
+  while (stack.length > 0) {
+    try {
+      const currentId = stack.pop();
+
+      // Pomiń, jeśli ID zostało już odwiedzone
+      if (visitedIds.has(currentId)) {
+        continue;
+      }
+
+      const results = await employeesModel.getSubordinates(currentId);
+      visitedIds.add(currentId); // Dodaj obecne ID do odwiedzonych
+
+      for (let i = 0; i < results.length; i++) {
+        const subordinate = results[i];
+
+        // Sprawdź, czy podwładny jest już w zestawie
+        if (!visitedIds.has(subordinate.ID)) {
+          subordinates.push(subordinate);
+          stack.push(subordinate.ID); // Dodaj podwładnego do stosu do dalszego przetwarzania
+        }
+      }
+    } catch (error) {
+      console.error(`Błąd podczas pobierania podwładnych: ${error.message}`);
+    }
   }
+
   return subordinates;
 }
+
 router.get("/", verifyToken, async (req, res) => {
   try {
     const { id } = req.query;
+    if (!id) {
+      return res.status(400).send("Brak parametru 'id'.");
+    }
+
     const subordinates = await getSubordinatesRecursively(id);
+    console.log(subordinates);
     res.status(200).send({
       supervisor: subordinates.length > 0 ? true : false,
       message: "Subordinates found!",
       data: subordinates,
     });
   } catch (error) {
-    res.status(500).send("Wystąpił błąd podczas pobierania danych.");
+    console.error(`Wystąpił błąd: ${error.message}`);
+    res.status(500).send("Wystąpił błąd podczas przetwarzania żądania.");
   }
 });
 

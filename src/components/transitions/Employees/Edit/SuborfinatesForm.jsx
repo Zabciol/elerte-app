@@ -68,8 +68,9 @@ const SubordinatesForm = (props) => {
         directSubordinates.push(employee.ID);
         allSubordinates.push(employee.ID);
       }
-
-      props.updateData(directSubordinates, allSubordinates);
+      console.log("direct:", directSubordinates);
+      console.log("all: ", allSubordinates);
+      props.updateData(directSubordinates);
     },
     [props]
   );

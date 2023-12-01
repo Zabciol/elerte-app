@@ -123,10 +123,10 @@ const getECPForMonth = async (date, employeesID) => {
   return await queryDatabasePromise(query, [employeesID, year, month]);
 };
 
-const exportECPForMonth = async (date, employeesID, res) => {
+const exportECPForMonth = async (date, employeesID, fileName, res) => {
   try {
     const workbook = new ExcelJS.Workbook();
-    const worksheet = workbook.addWorksheet("ECP");
+    const worksheet = workbook.addWorksheet(`${fileName}`);
     const ecp = await getECPForMonth(date, employeesID);
 
     worksheet.columns = [
@@ -163,7 +163,10 @@ const exportECPForMonth = async (date, employeesID, res) => {
       "Content-Type",
       "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
     );
-    res.setHeader("Content-Disposition", "attachment; filename=ECP.xlsx");
+    res.setHeader(
+      "Content-Disposition",
+      `attachment; filename=${fileName}.xlsx`
+    );
 
     await workbook.xlsx.write(res);
     res.end();
@@ -183,8 +186,8 @@ const getAbsenceNotIncludeRequests = async (date, IDs) => {
       "LEFT JOIN PowodyNieobecnosci ON ECP.Powod_ID = PowodyNieobecnosci.ID " +
       "LEFT JOIN Stanowisko ON Pracownicy.Stanowisko_ID = Stanowisko.ID " +
       "LEFT JOIN Dzialy ON Stanowisko.Dzial_ID = Dzialy.ID " +
-      "WHERE ECP.IloscGodzin < 8 AND YEAR(Data) = ? AND Powod_ID != 40 AND Powod_ID != 41 AND Powod_ID != 42 " +
-      "AND MONTH(Data) = ? AND PracowniCY.ID in (?) AND NOT EXISTS ( " +
+      "WHERE ECP.Powod_ID > 0 AND YEAR(Data) = ? AND Powod_ID != 40 AND Powod_ID != 41 AND Powod_ID != 42 " +
+      "AND MONTH(Data) = ? AND Pracownicy.ID in (?) AND NOT EXISTS ( " +
       "SELECT 1 FROM Wnioski W WHERE W.Nadawca_ID = ECP.Pracownik_ID " +
       "AND W.Status = 'Zaakceptowano' AND ECP.Data BETWEEN W.Data_Od AND W.Data_Do)";
     const results = await queryDatabasePromise(query, [year, month, IDs]);
@@ -199,10 +202,13 @@ const generateDateRange = (startDate, endDate) => {
   let dates = [];
   let currentDate = new Date(startDate);
   let end = new Date(endDate);
+  // Konwersja na UTC
+  currentDate.setUTCHours(0, 0, 0, 0);
+  end.setUTCHours(0, 0, 0, 0);
 
   while (currentDate <= end) {
     dates.push(currentDate.toISOString().split("T")[0]);
-    currentDate.setDate(currentDate.getDate() + 1);
+    currentDate.setUTCDate(currentDate.getUTCDate() + 1);
   }
 
   return dates;
@@ -230,9 +236,11 @@ const fillECPforDeletedEmployee = async (
     const dates = generateDateRange(startDate, endDate);
     const editDate = formatDate(new Date());
 
-    const query = `INSERT INTO ECP (Data, Od_godz, Do_godz, Pracownik_ID,
-     Powod_ID, IloscGodzin, DataZapisu, ID_Edytora) VALUES ?`;
+    const query =
+      "INSERT INTO ECP (Data, Od_godz, Do_godz, Pracownik_ID, " +
+      "Powod_ID, IloscGodzin, DataZapisu, ID_Edytora) VALUES ?";
 
+    console.log(dates);
     const values = dates.map((date) => [
       date,
       "00:00",

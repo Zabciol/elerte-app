@@ -21,7 +21,15 @@ const PageHandler = (props) => {
   const getSubordinates = async () => {
     try {
       const data = await subordinatesApi(props.user.ID);
-      setUser({ ...user, supervisor: data.supervisor });
+      console.log(data);
+      setUser({
+        ...user,
+        supervisor:
+          user.Uprawnienia === 5 || user.Uprawnienia === 4
+            ? true
+            : data.supervisor,
+      });
+      console.log(data);
       setSubordinates(data.data);
     } catch (error) {
       console.error(error);

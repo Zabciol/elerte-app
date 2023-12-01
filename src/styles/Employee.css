@@ -16,8 +16,8 @@
 .edit-btn {
   position: absolute;
   padding: 2px 7px !important;
-  top: -20px;
-  right: -10px;
+  top: -5px;
+  right: 0px;
   backdrop-filter: blur(10px);
 }
 .form-floating {
