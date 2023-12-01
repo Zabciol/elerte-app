@@ -137,9 +137,9 @@ const addNewEmployee = async (data) => {
       Stanowisko_ID: data.positionID,
       WymiarPracy_ID: data.workingTime,
     });
-    const login = deletePolishChars(
-      data.name + "." + data.lastname
-    ).toLowerCase();
+    const login = deletePolishChars(data.name + "." + data.lastname)
+      .replace(/\s+/g, "") // Usuwa wszystkie spacje
+      .toLowerCase();
 
     await addLoginAndPassword(pracownikID, login);
 
