@@ -6,20 +6,31 @@ const { verifyToken } = require("../db");
 
 async function getSubordinatesRecursively(id) {
   const subordinates = [];
-  const stack = [id]; // Użyj stosu do śledzenia podwładnych
+  const visitedIds = new Set(); // Zestaw do przechowywania unikalnych ID
+  const stack = [id];
 
   while (stack.length > 0) {
     try {
       const currentId = stack.pop();
+
+      // Pomiń, jeśli ID zostało już odwiedzone
+      if (visitedIds.has(currentId)) {
+        continue;
+      }
+
       const results = await employeesModel.getSubordinates(currentId);
+      visitedIds.add(currentId); // Dodaj obecne ID do odwiedzonych
 
       for (let i = 0; i < results.length; i++) {
         const subordinate = results[i];
-        subordinates.push(subordinate);
-        stack.push(subordinate.ID); // Dodaj podwładnego do stosu do dalszego przetwarzania
+
+        // Sprawdź, czy podwładny jest już w zestawie
+        if (!visitedIds.has(subordinate.ID)) {
+          subordinates.push(subordinate);
+          stack.push(subordinate.ID); // Dodaj podwładnego do stosu do dalszego przetwarzania
+        }
       }
     } catch (error) {
-      // Obsłuż błąd pobierania podwładnych
       console.error(`Błąd podczas pobierania podwładnych: ${error.message}`);
     }
   }
