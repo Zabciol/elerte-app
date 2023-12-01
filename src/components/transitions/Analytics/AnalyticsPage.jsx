@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from "react";
+import React, { useState, useCallback, useEffect, useMemo } from "react";
 import { SelectItems } from "../../layout/Menu/MenuForms";
 import Form from "react-bootstrap/Form";
 import { getCurrentDateYearMonth } from "../../common/CommonFunctions";
@@ -20,50 +20,58 @@ const AnalyticsPage = ({ user, subordinates, setMenuItems }) => {
   const { setShowPopUpLogout, setMessage } = useAuth();
   const [employees, setEmployees] = useState(subordinates);
   const [date, setDate] = useState(getCurrentDateYearMonth());
-  const [allDepartments, setAllDepartments] = useState([]);
-  const [selectedDepartments, setSelectedDepartments] = useState([]);
-  console.log(selectedDepartments);
+  const [departments, setDepartments] = useState(
+    Array.from(new Set(employees.map((e) => e.Dzial)))
+  );
+  const [selectedDepartments, setSelectedDepartments] = useState([
+    departments[0],
+  ]);
   const [allPositions, setAllPositions] = useState([]);
   const [selectedPositions, setSelectedPositions] = useState();
-  //const [filteredEmployees, setFilteredEmployees] = useState(employees);
-
-  const importAllImages = (r) => {
-    return r.keys().map(r);
-  };
-
-  const images = importAllImages(
-    require.context("../../../assets/Carousel", false, /\.(png|jpe?g|svg)$/)
-  );
-
-  const changeDate = useCallback(
-    (event) => {
-      setDate(event.target.value);
-    },
-    [setDate]
-  );
-  const fetchData = async (api, args) => {
-    try {
-      return await api(args);
-    } catch (error) {
-      console.error(error);
-      setMessage(error.message);
-      setShowPopUpLogout(true);
-      return [];
-    }
-  };
-
-  const getEmployees = useCallback(async () => {
-    try {
-      if (hasAdminView(user)) setEmployees(await allEmployeesAPI());
-    } catch (error) {
-      setMessage(error.message);
-      setShowPopUpLogout(true);
-    }
-  }, [user, subordinates]);
+  const [images, setImages] = useState([]);
 
   useEffect(() => {
+    const importAllImages = (r) => {
+      return r.keys().map(r);
+    };
+    const imageContext = require.context(
+      "../../../assets/Carousel",
+      false,
+      /\.(png|jpe?g|svg)$/
+    );
+    const importedImages = importAllImages(imageContext);
+    setImages(importedImages);
+  }, []);
+
+  const changeDate = useCallback((event) => {
+    setDate(event.target.value);
+  }, []);
+
+  const fetchData = useCallback(
+    async (api, args) => {
+      try {
+        return await api(args);
+      } catch (error) {
+        console.error(error);
+        setMessage(error.message);
+        setShowPopUpLogout(true);
+        return [];
+      }
+    },
+    [setMessage, setShowPopUpLogout]
+  );
+
+  useEffect(() => {
+    const getEmployees = async () => {
+      try {
+        if (hasAdminView(user)) setEmployees(await allEmployeesAPI());
+      } catch (error) {
+        setMessage(error.message);
+        setShowPopUpLogout(true);
+      }
+    };
     getEmployees();
-  }, [getEmployees]);
+  }, [user]);
 
   useEffect(() => {
     if (employees.length > 0) {
@@ -74,18 +82,17 @@ const AnalyticsPage = ({ user, subordinates, setMenuItems }) => {
             : subordinates.map((e) => e.Dzial)
         )
       );
-      setAllDepartments(newDepartments);
+      console.log(newDepartments);
+      setDepartments(newDepartments);
       setSelectedDepartments(newDepartments[0]);
     }
-  }, [employees, user]);
+  }, [employees, user, subordinates]);
+
   useEffect(() => {
-    console.log(employees);
     const deps = employees.filter((employee) =>
       selectedDepartments.includes(employee.Dzial)
     );
-    console.log(deps);
     const uniqueDepartmentIds = [...new Set(deps.map((emp) => emp.Dzial_ID))];
-    console.log(uniqueDepartmentIds);
     if (uniqueDepartmentIds.length > 0 && uniqueDepartmentIds[0]) {
       Promise.all(
         uniqueDepartmentIds.map((deptId) => fetchData(positionApi, deptId))
@@ -97,7 +104,6 @@ const AnalyticsPage = ({ user, subordinates, setMenuItems }) => {
         }
       });
     } else {
-      console.log("Nie znaleziono działów o nazwach:", selectedDepartments);
       fetchData(positionApi, 1).then((fetchedPositions) => {
         setAllPositions(fetchedPositions);
         if (fetchedPositions.length > 0) {
@@ -105,13 +111,9 @@ const AnalyticsPage = ({ user, subordinates, setMenuItems }) => {
         }
       });
     }
-  }, [selectedDepartments, employees]);
+  }, [selectedDepartments, employees, fetchData]);
 
   useEffect(() => {
-    //console.log(employees);
-    console.log(selectedDepartments);
-    console.log(selectedPositions);
-    console.log(allPositions);
     if (selectedPositions) {
       let filtered;
       if (selectedPositions.Nazwa === "Każdy") {
@@ -123,33 +125,31 @@ const AnalyticsPage = ({ user, subordinates, setMenuItems }) => {
           (employee) => employee.StanowiskoID === selectedPositions.ID
         );
       }
-      console.log(filtered);
     }
-  }, [selectedPositions]);
+  }, [selectedPositions, employees, selectedDepartments]);
 
   useEffect(() => {
-    setAllDepartments([...new Set(employees.map((e) => e.Dzial))]);
+    setDepartments([...new Set(employees.map((e) => e.Dzial))]);
   }, [employees]);
 
   useEffect(() => {
-    if (allDepartments.length > 0) {
-      setSelectedDepartments([allDepartments[0]]);
+    if (departments.length > 0) {
+      setSelectedDepartments([departments[0]]);
     }
-  }, [allDepartments]);
+  }, [departments]);
 
-  const handleMultiSelectChange = (
-    selectedOptions,
-    setState,
-    mapOptionToState
-  ) => {
-    setState(selectedOptions.map(mapOptionToState));
-  };
+  const handleMultiSelectChange = useCallback(
+    (selectedOptions, setState, mapOptionToState) => {
+      setState(selectedOptions.map(mapOptionToState));
+    },
+    []
+  );
 
-  useEffect(() => {
-    setMenuItems(
+  const memoizedMenuItems = useMemo(
+    () => (
       <MenuItemsAnalitycs
         dzial={selectedDepartments}
-        dzialy={allDepartments}
+        dzialy={departments}
         setDzial={setSelectedDepartments}
         date={date}
         setDate={changeDate}
@@ -158,14 +158,21 @@ const AnalyticsPage = ({ user, subordinates, setMenuItems }) => {
         setPosition={setSelectedPositions}
         handleChange={handleMultiSelectChange}
       />
-    );
-  }, [
-    selectedDepartments,
-    date,
-    allDepartments,
-    selectedPositions,
-    allPositions,
-  ]);
+    ),
+    [
+      selectedDepartments,
+      date,
+      departments,
+      selectedPositions,
+      allPositions,
+      changeDate,
+      handleMultiSelectChange,
+    ]
+  );
+
+  useEffect(() => {
+    setMenuItems(memoizedMenuItems);
+  }, [memoizedMenuItems]);
 
   return (
     <div className='analytics w-100 text-white '>

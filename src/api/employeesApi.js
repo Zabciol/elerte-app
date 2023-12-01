@@ -13,7 +13,6 @@ export const subordinatesApi = async (id) => {
         Authorization: `Bearer ${token}`,
       },
     });
-    console.log(response);
     return response.data;
   } catch (error) {
     console.log(error);
