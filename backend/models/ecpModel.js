@@ -2,6 +2,8 @@ const db = require("../db");
 const { queryDatabase, queryDatabasePromise } = require("../db");
 const ExcelJS = require("exceljs");
 
+const notIncludeInAbsence = [40, 41, 42];
+
 const getRecordsByDateAndEmployeeId = async (date, employeeIds) => {
   return await queryDatabasePromise(
     "SELECT * FROM ECP WHERE Data = ? AND Pracownik_ID IN (?)",
@@ -186,11 +188,16 @@ const getAbsenceNotIncludeRequests = async (date, IDs) => {
       "LEFT JOIN PowodyNieobecnosci ON ECP.Powod_ID = PowodyNieobecnosci.ID " +
       "LEFT JOIN Stanowisko ON Pracownicy.Stanowisko_ID = Stanowisko.ID " +
       "LEFT JOIN Dzialy ON Stanowisko.Dzial_ID = Dzialy.ID " +
-      "WHERE ECP.Powod_ID > 0 AND YEAR(Data) = ? AND Powod_ID != 40 AND Powod_ID != 41 AND Powod_ID != 42 " +
-      "AND MONTH(Data) = ? AND Pracownicy.ID in (?) AND NOT EXISTS ( " +
+      "WHERE ECP.Powod_ID > 0 AND YEAR(Data) = ? AND MONTH(Data) = ? " +
+      "AND Powod_ID NOT IN (?) AND Pracownicy.ID in (?) AND NOT EXISTS ( " +
       "SELECT 1 FROM Wnioski W WHERE W.Nadawca_ID = ECP.Pracownik_ID " +
       "AND W.Status = 'Zaakceptowano' AND ECP.Data BETWEEN W.Data_Od AND W.Data_Do)";
-    const results = await queryDatabasePromise(query, [year, month, IDs]);
+    const results = await queryDatabasePromise(query, [
+      year,
+      month,
+      notIncludeInAbsence,
+      IDs,
+    ]);
     return { success: true, message: "Pozyskano nieobecności", data: results };
   } catch (error) {
     console.error("Wystąpił błąd podczas pozyskiwania nieobecności:", error);
@@ -268,19 +275,22 @@ const fillECPforDeletedEmployee = async (
 const countAbsence = async (employeeID, year, month) => {
   try {
     const query =
-      "SELECT (SELECT COUNT(*) * 8 FROM ECP WHERE Pracownik_ID = ? AND IloscGodzin < 8 AND YEAR(Data) = ? AND MONTH(Data) = ? AND Powod_ID != 40 AND Powod_ID != 41 AND Powod_ID != 42 ) - " +
-      "(SELECT SUM(IloscGodzin) FROM ECP WHERE Pracownik_ID = ? AND IloscGodzin < 8 AND YEAR(Data) = ? AND MONTH(Data) = ? AND Powod_ID != 40 AND Powod_ID != 41 AND Powod_ID != 42) AS SumaGodzin " +
-      "FROM ECP WHERE Pracownik_ID = ? AND IloscGodzin < 8 AND YEAR(Data) = ? AND MONTH(Data) = ? AND Powod_ID != 40 AND Powod_ID != 41 AND Powod_ID != 42;";
+      "SELECT (SELECT COUNT(*) * 8 FROM ECP WHERE Pracownik_ID = ? AND IloscGodzin < 8 AND YEAR(Data) = ? AND MONTH(Data) = ? AND Powod_ID NOT IN (?) ) - " +
+      "(SELECT SUM(IloscGodzin) FROM ECP WHERE Pracownik_ID = ? AND IloscGodzin < 8 AND YEAR(Data) = ? AND MONTH(Data) = ? AND Powod_ID NOT IN (?)) AS SumaGodzin " +
+      "FROM ECP WHERE Pracownik_ID = ? AND IloscGodzin < 8 AND YEAR(Data) = ? AND MONTH(Data) = ? AND Powod_ID NOT IN (?);";
     const values = [
       employeeID,
       year,
       month,
+      notIncludeInAbsence,
       employeeID,
       year,
       month,
+      notIncludeInAbsence,
       employeeID,
       year,
       month,
+      notIncludeInAbsence,
     ];
 
     return await queryDatabasePromise(query, values);
