@@ -24,9 +24,9 @@ const MenuItems = (props) => {
     let newItems = [];
 
     if (user.supervisor || canFillECP(user)) {
-      newItems.push("ECP", "Pracownicy");
+      newItems.push("ECP", "Pracownicy", "Analityka");
     } else if (isAdmin(user) || hasView(user) || canEdit(user)) {
-      newItems.push("Pracownicy");
+      newItems.push("Pracownicy", "Analityka");
     }
     newItems = newItems.concat(nav_items);
     const uniqueItems = Array.from(new Set(newItems));

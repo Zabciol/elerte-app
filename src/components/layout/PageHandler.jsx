@@ -16,8 +16,6 @@ import { useAuth } from "../transitions/Login/AuthContext.jsx";
 import LoadingPage from "../common/LoadingPage.jsx";
 import Menu from "./Menu/Menu";
 
-import LoadingPage from "../common/LoadingPage.jsx";
-
 import {
   hasView,
   isAdmin,
@@ -138,11 +136,15 @@ const PageHandler = (props) => {
             <Route
               path='/analityka'
               element={
-                <AnalyticsPage
-                  user={user}
-                  subordinates={[user, ...subordinates]}
-                  setMenuItems={setMenuItems}
-                />
+                allEmployees.length > 0 ? (
+                  <AnalyticsPage
+                    user={user}
+                    subordinates={[user, ...allEmployees]}
+                    setMenuItems={setMenuItems}
+                  />
+                ) : (
+                  <LoadingPage />
+                )
               }
             />
           </Routes>

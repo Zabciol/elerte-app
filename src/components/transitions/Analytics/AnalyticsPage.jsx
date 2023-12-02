@@ -1,6 +1,4 @@
 import React, { useState, useCallback, useEffect, useMemo } from "react";
-import { SelectItems } from "../../layout/Menu/MenuForms";
-import Form from "react-bootstrap/Form";
 import {
   getCurrentDateYearMonth,
   generateMonthsArray,
@@ -8,24 +6,17 @@ import {
 } from "../../common/CommonFunctions";
 import { useAuth } from "../Login/AuthContext";
 import { positionApi } from "../../../api/positionApi";
-import { allEmployeesAPI } from "../../../api/employeesApi";
-import Select from "react-select";
 import "../../../styles/Analytics.css";
+import { isAdmin, hasView } from "../../common/CommonFunctions";
 import MenuItemsAnalitycs from "./MenuItemsAnalitycs";
 import Carousel from "react-bootstrap/Carousel";
 import ElerteFooter from "../../../assets/Carousel/elerte-bottom.png";
 
-const hasAdminPermissions = (user) =>
-  user.Uprawnienia === 3 || user.Uprawnienia === 4;
-
-const hasAdminView = (user) => user.Uprawnienia === 2 || user.Uprawnienia === 4;
-
 const AnalyticsPage = ({ user, subordinates, setMenuItems }) => {
   const { setShowPopUpLogout, setMessage } = useAuth();
-  const [employees, setEmployees] = useState(subordinates);
   const [date, setDate] = useState(getCurrentDateYearMonth());
   const [departments, setDepartments] = useState(
-    Array.from(new Set(employees.map((e) => e.Dzial)))
+    Array.from(new Set(subordinates.map((e) => e.Dzial)))
   );
   const [selectedDepartments, setSelectedDepartments] = useState([
     departments[0],
@@ -39,9 +30,6 @@ const AnalyticsPage = ({ user, subordinates, setMenuItems }) => {
   const [images, setImages] = useState([]);
 
   useEffect(() => {
-    console.log(allMonths);
-    console.log(selectedMonths);
-
     const importAllImages = (r) => {
       return r.keys().map(r);
     };
@@ -73,35 +61,22 @@ const AnalyticsPage = ({ user, subordinates, setMenuItems }) => {
   );
 
   useEffect(() => {
-    const getEmployees = async () => {
-      try {
-        if (hasAdminView(user)) setEmployees(await allEmployeesAPI());
-      } catch (error) {
-        setMessage(error.message);
-        setShowPopUpLogout(true);
-      }
-    };
-    getEmployees();
-  }, [user]);
-
-  useEffect(() => {
-    if (subordinates.length > 0 && employees.length > 0) {
+    if (subordinates.length > 0) {
       const newDepartments = Array.from(
         new Set(
-          hasAdminView(user) || hasAdminPermissions
-            ? employees.map((e) => e.Dzial)
+          hasView(user) || isAdmin(user)
+            ? subordinates.map((e) => e.Dzial)
             : subordinates.map((e) => e.Dzial)
         )
       );
-      console.log(newDepartments);
       setDepartments(newDepartments);
       setSelectedDepartments(newDepartments[0]);
     }
-  }, [employees, user, subordinates]);
+  }, [subordinates, user]);
 
   useEffect(() => {
     if (subordinates.length > 0) {
-      const deps = employees.filter((employee) =>
+      const deps = subordinates.filter((employee) =>
         selectedDepartments.includes(employee.Dzial)
       );
       const uniqueDepartmentIds = [...new Set(deps.map((emp) => emp.Dzial_ID))];
@@ -116,7 +91,6 @@ const AnalyticsPage = ({ user, subordinates, setMenuItems }) => {
           }
         });
       } else {
-        console.log(subordinates);
         fetchData(positionApi, user.Dzial_ID).then((fetchedPositions) => {
           setAllPositions(fetchedPositions);
           if (fetchedPositions.length > 0) {
@@ -125,26 +99,22 @@ const AnalyticsPage = ({ user, subordinates, setMenuItems }) => {
         });
       }
     }
-  }, [selectedDepartments, employees, fetchData, subordinates]);
+  }, [selectedDepartments, subordinates, user, fetchData]);
 
   useEffect(() => {
     if (selectedPositions) {
       let filtered;
       if (selectedPositions.Nazwa === "Każdy") {
-        filtered = employees.filter(
+        filtered = subordinates.filter(
           (employee) => employee.Dzial === selectedDepartments
         );
       } else {
-        filtered = employees.filter(
+        filtered = subordinates.filter(
           (employee) => employee.StanowiskoID === selectedPositions.ID
         );
       }
     }
-  }, [selectedPositions, employees, selectedDepartments]);
-
-  useEffect(() => {
-    setDepartments([...new Set(employees.map((e) => e.Dzial))]);
-  }, [employees]);
+  }, [selectedPositions, subordinates, selectedDepartments]);
 
   useEffect(() => {
     if (departments.length > 0) {
@@ -152,16 +122,20 @@ const AnalyticsPage = ({ user, subordinates, setMenuItems }) => {
     }
   }, [departments]);
 
+  useEffect(() => {
+    setMenuItems(memoizedMenuItems);
+  }, [selectedDepartments, selectedMonths, selectedPositions]);
+
+  useEffect(() => {
+    console.log(selectedMonths);
+  }, [selectedMonths]);
+
   const handleMultiSelectChange = useCallback(
     (selectedOptions, setState, mapOptionToState) => {
       setState(selectedOptions.map(mapOptionToState));
     },
     []
   );
-
-  useEffect(() => {
-    console.log(selectedMonths);
-  }, [selectedMonths]);
 
   const memoizedMenuItems = useMemo(
     () => (
@@ -192,10 +166,6 @@ const AnalyticsPage = ({ user, subordinates, setMenuItems }) => {
       allMonths,
     ]
   );
-
-  useEffect(() => {
-    setMenuItems(memoizedMenuItems);
-  }, [selectedDepartments, selectedMonths, selectedPositions]);
 
   return (
     <div className='analytics w-100 '>
