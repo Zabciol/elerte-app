@@ -11,13 +11,8 @@ import EmployeeAbsenceInf from "./EmployeeAbsenceInf";
 import NewMain from "./New/NewMain";
 import Search from "../../layout/Menu/Search";
 import { getCurrentDateYearMonth } from "../../common/CommonFunctions";
-import { allEmployeesAPI } from "../../../api/employeesApi";
 import { useAuth } from "../Login/AuthContext";
-
-const hasAdminPermissions = (user) =>
-  user.Uprawnienia === 3 || user.Uprawnienia === 4;
-
-const hasAdminView = (user) => user.Uprawnienia === 2 || user.Uprawnienia === 4;
+import { isAdmin, canEdit, hasView } from "../../common/CommonFunctions";
 
 const MenuItems = React.memo(
   ({
@@ -52,32 +47,12 @@ const Employees = ({ user, setMenuItems, subordinates }) => {
   const [key, setKey] = useState("Lista");
   const [dzial, setDzial] = useState(subordinates[0]?.Dzial || "");
   const [date, setDate] = useState(getCurrentDateYearMonth());
-  const [employees, setEmployees] = useState([]);
   const [searchValue, setSearchValue] = useState("");
   const [delayedSearchValue, setDelayedSearchValue] = useState(searchValue);
 
-  useEffect(() => {
-    const fetchEmployees = async () => {
-      try {
-        let newEmployees;
-        if (hasAdminView(user) || hasAdminPermissions(user)) {
-          newEmployees = await allEmployeesAPI();
-        } else {
-          newEmployees = subordinates;
-        }
-        setEmployees(newEmployees);
-      } catch (error) {
-        setMessage(error.message);
-        setShowPopUpLogout(true);
-      }
-    };
-
-    fetchEmployees();
-  }, [user, subordinates]);
-
   const dzialy = useMemo(
-    () => Array.from(new Set(employees.map((e) => e.Dzial))),
-    [employees]
+    () => Array.from(new Set(subordinates.map((e) => e.Dzial))),
+    [subordinates]
   );
 
   useEffect(() => {
@@ -95,7 +70,7 @@ const Employees = ({ user, setMenuItems, subordinates }) => {
   }, [searchValue]);
 
   const filteredSubordinates = useMemo(() => {
-    let result = employees;
+    let result = subordinates;
 
     // Filtruje pracowników na podstawie imienia i nazwiska
     if (delayedSearchValue) {
@@ -124,7 +99,7 @@ const Employees = ({ user, setMenuItems, subordinates }) => {
       result = result.filter((e) => e.Dzial === dzial);
     }
     return result;
-  }, [dzial, employees, delayedSearchValue]);
+  }, [dzial, subordinates, delayedSearchValue]);
 
   const changeDate = (event) => {
     setDate(event.target.value);
@@ -165,7 +140,7 @@ const Employees = ({ user, setMenuItems, subordinates }) => {
       <Tab
         eventKey='Nieobecnosci'
         title='Nieobecności'
-        disabled={!hasAdminView(user) && !subordinates.length}>
+        disabled={!hasView(user) && !subordinates.length}>
         <EmployeesList
           subordinates={filteredSubordinates}
           date={date}
@@ -178,7 +153,7 @@ const Employees = ({ user, setMenuItems, subordinates }) => {
       <Tab
         eventKey='Excel'
         title='Export'
-        disabled={!hasAdminView(user) && !subordinates.length}>
+        disabled={!hasView(user) && !subordinates.length}>
         <ExportExcel
           subordinates={filteredSubordinates}
           user={user}
@@ -186,7 +161,10 @@ const Employees = ({ user, setMenuItems, subordinates }) => {
           date={date}
         />
       </Tab>
-      <Tab eventKey='Nowy' title='Nowy' disabled={!hasAdminPermissions(user)}>
+      <Tab
+        eventKey='Nowy'
+        title='Nowy'
+        disabled={!isAdmin(user) && !canEdit(user)}>
         <NewMain />
       </Tab>
     </Tabs>

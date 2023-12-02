@@ -65,6 +65,7 @@ export const getNextWorkDay = () => {
   return formattedDate;
 };
 
+// Obsługa błędów
 export const handleError = (error) => {
   console.log("Handle error: ", error);
   if (error.response) {
@@ -153,4 +154,20 @@ export const getCurrentMonthYearInObject = () => {
     value: `${formattedYear}-${formattedMonth}`,
     label: `${monthName} ${currentYear}`,
   };
+};
+
+// Uprawnienia
+export const hasView = (user) => {
+  return user.Uprawnienia === 2 || user.Uprawnienia === 4 ? true : false;
+};
+export const isAdmin = (user) => {
+  return user.Uprawnienia === 4 ? true : false;
+};
+
+export const canEdit = (user) => {
+  return user.Uprawnienia === 3 || user.Uprawnienia === 4 ? true : false;
+};
+
+export const canFillECP = (user) => {
+  return user.Uprawnienia === 5 || user.Uprawnienia === 4 ? true : false;
 };

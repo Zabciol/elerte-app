@@ -5,6 +5,7 @@ import Card from "react-bootstrap/Card";
 import arrow from "../../../assets/arrow2.png";
 import FloatingLabel from "react-bootstrap/FloatingLabel";
 import Form from "react-bootstrap/Form";
+import PasswordInput from "../../common/PasswordInput";
 
 const LoginInput = (props) => {
   const mailRef = useRef("");
@@ -32,18 +33,19 @@ const LoginInput = (props) => {
     setOpenAccordion(!openAccordion);
   };
 
+  const handlePasswordKeyDown = (e) => {
+    if (e.key === "Enter" && passwordRef.current.value !== "") {
+      e.preventDefault();
+      submit();
+    }
+  };
+
   useEffect(() => {
     mailRef.current.addEventListener("keypress", (e) => {
       if (e.key === "Enter" && mailRef.current.value !== "") {
         setOpenAccordion(true);
         e.preventDefault();
         passwordRef.current.focus();
-      }
-    });
-    passwordRef.current.addEventListener("keypress", (e) => {
-      if (e.key === "Enter" && passwordRef.current.value !== "") {
-        e.preventDefault();
-        props.submit(mailRef.current.value, passwordRef.current.value);
       }
     });
 
@@ -78,12 +80,14 @@ const LoginInput = (props) => {
 
       <Accordion.Collapse eventKey='0'>
         <FloatingLabel controlId='floatingPassword' label='Hasło'>
-          <Form.Control
-            ref={passwordRef}
+          <PasswordInput
+            inputRef={passwordRef}
             type='password'
             placeholder='Hasło'
             onChange={changePassword}
+            onKeyDown={handlePasswordKeyDown}
           />
+
           {mailRef.current.value && passwordRef.current.value ? (
             <img
               src={arrow}
