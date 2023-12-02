@@ -29,7 +29,6 @@ const Presence = ({ user, date }) => {
   const getWorkingDaysInMonth = async () => {
     const holidays = await holidaysApi(date);
     const count = calculateWorkingDays(date, holidays);
-    console.log(count);
     setWorkingHoursInMonth(count * 8);
   };
 

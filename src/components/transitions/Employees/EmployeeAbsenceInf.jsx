@@ -76,7 +76,6 @@ const EmployeeAbsenceInf = React.memo(
     const getAbsence = async () => {
       try {
         const data = await getAbsenceAPI(date, employee.ID);
-        console.log(data);
         return data.data;
       } catch (error) {
         setMessage(error.message);

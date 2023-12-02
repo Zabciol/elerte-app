@@ -53,7 +53,6 @@ const PageHandler = (props) => {
       } else {
         data = subordinates;
       }
-      console.log(data);
       setAllEmployees(Array.isArray(data) ? data : []);
     } catch (error) {
       console.error(error);

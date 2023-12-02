@@ -79,10 +79,17 @@ router.put("/changePassword", verifyToken, async (req, res) => {
         message: "Nie znaleziono hasła do twojego profilu.",
       });
     }
+
     if (newPassword !== newPasswordRepeat) {
       return res
         .status(200)
         .send({ succes: false, message: "Nowe hasła nie są takie same" });
+    }
+    if (newPassword === oldPassword) {
+      return res.status(200).send({
+        succes: false,
+        message: "Nowe hasło musi się różnić od starego.",
+      });
     }
     const userPassword = userPasswordData[0];
     bcrypt.compare(oldPassword, userPassword.Haslo, (error, isMatch) => {

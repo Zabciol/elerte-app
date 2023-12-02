@@ -50,7 +50,7 @@
   height: 20px;
   right: 5px;
   top: 5px;
-  --bs-bg-opacity: 0.5 !important;
+  --bs-bg-opacity: 0.8 !important;
 }
 .request-manage_btns {
   display: flex;
