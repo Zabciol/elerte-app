@@ -55,6 +55,7 @@ router.post("/login", async (req, res) => {
           message: "User logged in!",
           user: userData,
           token: token,
+          changePasswordRequired: password === "a" ? true : false,
         });
       } else {
         //res.status(401).send({ message: "Hasło jest niepoprawne!" });
@@ -73,10 +74,15 @@ router.put("/changePassword", verifyToken, async (req, res) => {
   try {
     const userPasswordData = await userModel.findUserPasswordByID(userID);
     if (userPasswordData.length === 0) {
-      return res.status(500).send("Nie znaleziono hasła do twojego profilu.");
+      return res.status(200).send({
+        succes: false,
+        message: "Nie znaleziono hasła do twojego profilu.",
+      });
     }
     if (newPassword !== newPasswordRepeat) {
-      return res.status(500).send("Nowe hasła nie są takie same");
+      return res
+        .status(200)
+        .send({ succes: false, message: "Nowe hasła nie są takie same" });
     }
     const userPassword = userPasswordData[0];
     bcrypt.compare(oldPassword, userPassword.Haslo, (error, isMatch) => {
@@ -91,7 +97,9 @@ router.put("/changePassword", verifyToken, async (req, res) => {
           message: "Zmieniono hasło!",
         });
       } else {
-        res.status(500).send("Stare hasło jest niepoprawne");
+        res
+          .status(200)
+          .send({ succes: false, message: "Stare hasło jest niepoprawne" });
       }
     });
   } catch (error) {

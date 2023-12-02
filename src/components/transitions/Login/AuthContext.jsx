@@ -8,6 +8,7 @@ import React, {
 import { loginApi, verifyTokenApi } from "../../../api/authApi"; // załóżmy, że ścieżka jest poprawna
 import ConfirmPupUp from "../../common/ConfirmPopUp";
 import PopUp from "../../common/PopUp";
+import ChangePassword from "../ChangePassword";
 
 // Tworzenie kontekstu auth
 const AuthContext = createContext(null);
@@ -22,6 +23,7 @@ export const AuthProvider = ({ children }) => {
   const [showPopUp, setShowPopUp] = useState();
   const [reloadPopUp, setReloadPopUp] = useState(false);
   const [message, setMessage] = useState();
+  const [changePasswordRequired, setChangePasswordRequired] = useState(false);
 
   // Funkcja do aktualizacji tokena
   const updateToken = (newToken) => {
@@ -38,6 +40,10 @@ export const AuthProvider = ({ children }) => {
         console.log(data.user);
         setIsLogged(true);
         sessionStorage.setItem("userToken", JSON.stringify(data.token));
+      }
+
+      if (data.changePasswordRequired) {
+        setChangePasswordRequired(true);
       }
     } catch (error) {
       console.error(error || "Login failed. Please try again.");
@@ -107,6 +113,12 @@ export const AuthProvider = ({ children }) => {
         reload={reloadPopUp}
         setReloadPopUp={setReloadPopUp}
         title='Powiadomienie'></PopUp>
+      <ChangePassword
+        user={user}
+        show={changePasswordRequired}
+        setShow={setChangePasswordRequired}
+        title='Wymagana zmiana hasła'
+      />
     </AuthContext.Provider>
   );
 };
