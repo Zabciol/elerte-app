@@ -7,15 +7,28 @@ import Employees from "../transitions/Employees/Employees";
 import Calender from "../transitions/Calender/Calender";
 import Container from "react-bootstrap/Container";
 import Requests from "../transitions/Requests/Requests";
+import { allEmployeesAPI } from "../../api/employeesApi";
 import { subordinatesApi } from "../../api/employeesApi";
 import { useAuth } from "../transitions/Login/AuthContext.jsx";
+import LoadingPage from "../common/LoadingPage.jsx";
 import Menu from "./Menu/Menu";
+import {
+  hasView,
+  isAdmin,
+  canFillECP,
+  canEdit,
+} from "../common/CommonFunctions.js";
 
 const PageHandler = (props) => {
   const { setShowPopUpLogout, setMessage } = useAuth();
   const [menuItems, setMenuItems] = useState();
   const [subordinates, setSubordinates] = useState([]);
-  const [user, setUser] = useState({ ...props.user, supervisor: false });
+  const [allEmployees, setAllEmployees] = useState([]);
+  const [user, setUser] = useState({
+    ...props.user,
+    supervisor: false,
+    admin: false,
+  });
 
   const getSubordinates = async () => {
     try {
@@ -23,10 +36,7 @@ const PageHandler = (props) => {
       console.log(data);
       setUser({
         ...user,
-        supervisor:
-          user.Uprawnienia === 5 || user.Uprawnienia === 4
-            ? true
-            : data.supervisor,
+        supervisor: canFillECP(user) ? true : data.supervisor,
       });
       console.log(data);
       setSubordinates(data.data);
@@ -37,9 +47,30 @@ const PageHandler = (props) => {
     }
   };
 
+  const getAllEmployes = async () => {
+    try {
+      let data;
+      if (hasView(user) || isAdmin(user) || canEdit(user)) {
+        data = await allEmployeesAPI();
+      } else {
+        data = subordinates;
+      }
+      console.log(data);
+      setAllEmployees(Array.isArray(data) ? data : []);
+    } catch (error) {
+      console.error(error);
+      setMessage(error.message);
+      setShowPopUpLogout(true);
+    }
+  };
+
   useEffect(() => {
     getSubordinates();
   }, []);
+
+  useEffect(() => {
+    getAllEmployes();
+  }, [user, subordinates]);
   return (
     <Router>
       <Container expand='lg'>
@@ -55,21 +86,29 @@ const PageHandler = (props) => {
             <Route
               path='/ecp'
               element={
-                <ECP
-                  user={user}
-                  setMenuItems={setMenuItems}
-                  subordinates={[user, ...subordinates]}
-                />
+                subordinates.length > 0 ? (
+                  <ECP
+                    user={user}
+                    setMenuItems={setMenuItems}
+                    subordinates={[user, ...subordinates]}
+                  />
+                ) : (
+                  <LoadingPage />
+                )
               }
             />
             <Route
               path='/pracownicy'
               element={
-                <Employees
-                  user={user}
-                  setMenuItems={setMenuItems}
-                  subordinates={subordinates}
-                />
+                allEmployees.length > 0 ? (
+                  <Employees
+                    user={user}
+                    setMenuItems={setMenuItems}
+                    subordinates={allEmployees}
+                  />
+                ) : (
+                  <LoadingPage />
+                )
               }
             />
             <Route
@@ -88,7 +127,7 @@ const PageHandler = (props) => {
                 <Calender
                   user={user}
                   setMenuItems={setMenuItems}
-                  subordinates={[user, ...subordinates]}
+                  subordinates={[user, ...allEmployees]}
                 />
               }
             />

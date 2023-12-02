@@ -37,7 +37,7 @@ export const AuthProvider = ({ children }) => {
         setUser(data.user);
         console.log(data.user);
         setIsLogged(true);
-        sessionStorage.setItem("userToken", JSON.stringify(data.token)); // Opcjonalnie zapisz token w localStorage
+        sessionStorage.setItem("userToken", JSON.stringify(data.token));
       }
     } catch (error) {
       console.error(error || "Login failed. Please try again.");
