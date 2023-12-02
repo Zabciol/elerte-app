@@ -65,6 +65,7 @@ export const getNextWorkDay = () => {
   return formattedDate;
 };
 
+// Obsługa błędów
 export const handleError = (error) => {
   console.log("Handle error: ", error);
   if (error.response) {
@@ -108,4 +109,20 @@ export const getLastDayOfThisMonth = () => {
   nextMonth.setDate(nextMonth.getDate() - 1);
   nextMonth.setHours(12);
   return nextMonth.toISOString().split("T")[0];
+};
+
+// Uprawnienia
+export const hasView = (user) => {
+  return user.Uprawnienia === 2 || user.Uprawnienia === 4 ? true : false;
+};
+export const isAdmin = (user) => {
+  return user.Uprawnienia === 4 ? true : false;
+};
+
+export const canEdit = (user) => {
+  return user.Uprawnienia === 3 || user.Uprawnienia === 4 ? true : false;
+};
+
+export const canFillECP = (user) => {
+  return user.Uprawnienia === 5 ? true : false;
 };

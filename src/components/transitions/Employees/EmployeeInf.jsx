@@ -5,6 +5,7 @@ import { infApi } from "../../../api/employeesApi";
 import "../../../styles/Employee.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import { useAuth } from "../Login/AuthContext";
+import { isAdmin, canEdit, hasView } from "../../common/CommonFunctions";
 
 const EmployeeInf = React.memo((props) => {
   const [inf, setInf] = useState();
@@ -51,9 +52,7 @@ const EmployeeInf = React.memo((props) => {
           <p></p>
           <p></p>
           <Button
-            disabled={
-              !(props.user.Uprawnienia === 3 || props.user.Uprawnienia === 4)
-            }
+            disabled={!(isAdmin(props.user) || canEdit(props.user))}
             variant='outline-secondary'
             className='edit-btn'
             onClick={() => setShow(true)}>
