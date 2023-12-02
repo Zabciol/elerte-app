@@ -1,7 +1,13 @@
 import React, { useState } from "react";
 import { Form, Button } from "react-bootstrap";
 
-const PasswordInput = ({ inputRef, type, placeholder, onKeyDown }) => {
+const PasswordInput = ({
+  inputRef,
+  type,
+  placeholder,
+  onKeyDown,
+  onChange = () => {},
+}) => {
   const [showPassword, setShowPassword] = useState(false);
 
   const togglePasswordVisibility = () => {
@@ -15,6 +21,7 @@ const PasswordInput = ({ inputRef, type, placeholder, onKeyDown }) => {
         type={showPassword ? "text" : type}
         placeholder={placeholder}
         onKeyDown={onKeyDown}
+        onChange={onChange}
       />
       <Button
         variant='outline-secondary'

@@ -7,6 +7,12 @@ import NavDropdown from "react-bootstrap/NavDropdown";
 import Offcanvas from "react-bootstrap/Offcanvas";
 import { useAuth } from "../../transitions/Login/AuthContext";
 import ChangePassword from "../../transitions/ChangePassword";
+import {
+  canFillECP,
+  isAdmin,
+  hasView,
+  canEdit,
+} from "../../common/CommonFunctions";
 const MenuItems = (props) => {
   const { user, darkMode, handleSwitchTheme, children, show } = props;
   const { logout } = useAuth();
@@ -17,9 +23,9 @@ const MenuItems = (props) => {
   useEffect(() => {
     let newItems = [];
 
-    if (props.user.supervisor) {
+    if (user.supervisor || canFillECP(user)) {
       newItems.push("ECP", "Pracownicy");
-    } else if (props.user.Uprawnienia !== 1) {
+    } else if (isAdmin(user) || hasView(user) || canEdit(user)) {
       newItems.push("Pracownicy");
     }
     newItems = newItems.concat(nav_items);

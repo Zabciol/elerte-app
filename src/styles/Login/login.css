@@ -21,6 +21,7 @@ img {
   bottom: 0;
   right: 0;
   height: 45px;
+  cursor: pointer;
 }
 
 @media (max-width: 450px) {

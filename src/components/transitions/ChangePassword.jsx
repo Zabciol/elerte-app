@@ -25,6 +25,9 @@ const ChangePassword = ({ user, show, setShow, title = "Zmiana hasła" }) => {
         newPasswordRepeatRef.current.value,
         user.ID
       );
+      if (response.succes) {
+        setShow(false);
+      }
       console.log(response.message);
       setMessage(response.message);
       setShowPopUp(true);

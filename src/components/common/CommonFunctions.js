@@ -124,5 +124,5 @@ export const canEdit = (user) => {
 };
 
 export const canFillECP = (user) => {
-  return user.Uprawnienia === 5 ? true : false;
+  return user.Uprawnienia === 5 || user.Uprawnienia === 4 ? true : false;
 };

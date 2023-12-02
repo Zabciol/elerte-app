@@ -84,7 +84,7 @@ const PageHandler = (props) => {
             <Route
               path='/ecp'
               element={
-                subordinates.length > 0 ? (
+                subordinates.length > 0 || canFillECP(user) ? (
                   <ECP
                     user={user}
                     setMenuItems={setMenuItems}
