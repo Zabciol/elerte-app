@@ -52,7 +52,7 @@ const EmployeeInf = React.memo((props) => {
           <p></p>
           <p></p>
           <Button
-            disabled={!isAdmin(props.user && !canEdit(props.user))}
+            disabled={!(isAdmin(props.user) || canEdit(props.user))}
             variant='outline-secondary'
             className='edit-btn'
             onClick={() => setShow(true)}>
