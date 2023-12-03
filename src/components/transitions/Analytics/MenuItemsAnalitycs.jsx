@@ -84,7 +84,10 @@ const MenuItemsAnalitycs = React.memo(
               }))}
               value={
                 Array.isArray(position)
-                  ? position.map((d) => ({ value: d.ID, label: d.Nazwa }))
+                  ? position.map((d) => ({
+                      value: d.ID,
+                      label: d.Nazwa,
+                    }))
                   : []
               }
               onChange={(selected) =>

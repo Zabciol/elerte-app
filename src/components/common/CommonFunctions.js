@@ -141,12 +141,22 @@ export const getCurrentMonthYearInObject = () => {
 };
 
 //Generowanie kolorów
-export const generateHighContrastColor = () => {
-  const hue = Math.floor(Math.random() * 360);
-  const saturation = 90 + Math.floor(Math.random() * 10);
-  const lightness = 50 + Math.floor(Math.random() * 50); // jasność dla ciemnego lub jasnego tła
+export const generateHighContrastColor = (id) => {
+  // Prosta funkcja hashująca
+  let hash = 0;
+  for (let i = 0; i < id.length; i++) {
+    const char = id.charCodeAt(i);
+    hash = (hash << 5) - hash + char;
+    hash = hash & hash; // Konwertuj do 32bitowej liczby całkowitej
+  }
+
+  const hue = Math.abs(hash) % 360; // Użyj wartości hash jako odcienia
+  const saturation = 70 + Math.floor(Math.random() * 10); // Zmniejszona nasycenie
+  const lightness = 40 + Math.floor(Math.random() * 20); // Zmniejszona jasność
+
   return `hsl(${hue}, ${saturation}%, ${lightness}%)`;
 };
+
 export const getTextColorForCurrentThemeColor = () => {
   const theme = document.documentElement.getAttribute("data-bs-theme");
   return theme === "dark" ? "white" : "black";

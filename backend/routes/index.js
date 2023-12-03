@@ -10,6 +10,7 @@ const departmentsRouter = require("./departmentsRoutes");
 const positionRouter = require("./positionRoutes");
 const workingTimeRouter = require("./workingTimeRoutes");
 const requestsRouter = require("./requestRoutes");
+const analiticsRouter = require("./analiticsRoutes");
 
 // Use additional routers
 router.use("/users", usersRouter);
@@ -20,4 +21,6 @@ router.use("/departments", departmentsRouter);
 router.use("/position", positionRouter);
 router.use("/workingtime", workingTimeRouter);
 router.use("/requests", requestsRouter);
+router.use("/analitics", analiticsRouter);
+
 module.exports = router;
