@@ -7,10 +7,10 @@ import {
 import { useAuth } from "../Login/AuthContext";
 import { positionApi } from "../../../api/positionApi";
 import "../../../styles/Analytics.css";
-import { isAdmin, hasView } from "../../common/CommonFunctions";
 import MenuItemsAnalitycs from "./MenuItemsAnalitycs";
 import Carousel from "react-bootstrap/Carousel";
 import ElerteFooter from "../../../assets/Carousel/elerte-bottom.png";
+import CountOfEmployees from "./Cards/CountOfEmployees";
 
 const AnalyticsPage = ({ user, subordinates, setMenuItems }) => {
   const { setShowPopUpLogout, setMessage } = useAuth();
@@ -136,7 +136,11 @@ const AnalyticsPage = ({ user, subordinates, setMenuItems }) => {
             alt='First slide'
           />
           <Carousel.Caption>
-            <h3>Liczba pracowników</h3>
+            <CountOfEmployees
+              selectedDates={selectedMonths}
+              selectedDepartments={selectedDepartments}
+              selectedPositions={selectedPositions}
+            />
           </Carousel.Caption>
           <img src={ElerteFooter} className='background-footer' />
         </Carousel.Item>

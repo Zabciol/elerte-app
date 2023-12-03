@@ -25,6 +25,15 @@ const MenuItemsAnalitycs = React.memo(
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
 
+    const handleDateChange = (selectedOptions, setState, mapOptionToState) => {
+      // Przekształć wybrane opcje i posortuj je
+      const sortedOptions = selectedOptions
+        .map(mapOptionToState)
+        .sort((a, b) => new Date(a.value) - new Date(b.value)); // Zakładając, że `value` to data w formacie 'YYYY-MM'
+
+      setState(sortedOptions);
+    };
+
     useEffect(() => {
       const handleResize = () => {
         setIsMobile(window.innerWidth < 1200);
@@ -49,7 +58,11 @@ const MenuItemsAnalitycs = React.memo(
               options={allMonths}
               value={selectedMonths}
               onChange={(selected) =>
-                handleChange(selected, setSelectedMonths, (option) => option)
+                handleDateChange(
+                  selected,
+                  setSelectedMonths,
+                  (option) => option
+                )
               }
             />
           </div>
