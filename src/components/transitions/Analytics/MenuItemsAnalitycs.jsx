@@ -6,9 +6,9 @@ import Offcanvas from "react-bootstrap/Offcanvas";
 
 const MenuItemsAnalitycs = React.memo(
   ({
-    dzial,
-    dzialy,
-    setDzial,
+    selectedDepartments,
+    departments,
+    setSelectedDepartments,
     position,
     positions,
     setPosition,
@@ -94,17 +94,23 @@ const MenuItemsAnalitycs = React.memo(
           <Select
             id='supervisorSelect'
             isMulti
-            options={dzialy.map((s, index) => ({
-              value: s,
-              label: s,
+            options={departments.map((s, index) => ({
+              value: s.ID,
+              label: s.nazwa,
             }))}
             value={
-              Array.isArray(dzial)
-                ? dzial.map((d) => ({ value: d, label: d }))
+              Array.isArray(selectedDepartments)
+                ? selectedDepartments.map((d) => ({
+                    value: d.ID,
+                    label: d.nazwa,
+                  }))
                 : []
             }
             onChange={(selected) =>
-              handleChange(selected, setDzial, (option) => option.value)
+              handleChange(selected, setSelectedDepartments, (option) => ({
+                ID: option.value,
+                nazwa: option.label,
+              }))
             }
           />
         </div>
