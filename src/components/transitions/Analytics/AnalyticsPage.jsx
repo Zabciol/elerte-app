@@ -19,11 +19,13 @@ const AnalyticsPage = ({ user, subordinates, setMenuItems }) => {
   const [selectedMonths, setSelectedMonths] = useState([
     getCurrentMonthYearInObject(),
   ]);
-  const [departments, setDepartments] = useState(
-    Array.from(
-      new Set(subordinates.map((e) => ({ ID: e.Dzial_ID, nazwa: e.Dzial })))
-    )
-  );
+  const [departments, setDepartments] = useState(() => {
+    const uniqueDepartments = new Map(
+      subordinates.map((e) => [e.Dzial_ID, { ID: e.Dzial_ID, nazwa: e.Dzial }])
+    );
+    return Array.from(uniqueDepartments.values());
+  });
+
   const [selectedDepartments, setSelectedDepartments] = useState([
     departments[0],
   ]);
@@ -63,17 +65,29 @@ const AnalyticsPage = ({ user, subordinates, setMenuItems }) => {
   );
 
   useEffect(() => {
+    const fetchPositions = async () => {
+      const newPositions = [];
+
+      for (const department of selectedDepartments) {
+        try {
+          const data = await fetchData(positionApi, department.ID);
+          newPositions.push(...data);
+        } catch (error) {
+          console.error("Error fetching positions:", error);
+        }
+      }
+      console.log(newPositions);
+      setAllPositions(newPositions);
+    };
+
     if (selectedDepartments.length > 0) {
-      let positions;
-      selectedDepartments.forEach((element) => {
-        fetchData;
-      });
+      fetchPositions();
     }
-  }, [selectedDepartments]);
+  }, [selectedDepartments, fetchData]);
 
   useEffect(() => {
     setMenuItems(memoizedMenuItems);
-  }, [selectedDepartments, selectedMonths, selectedPositions]);
+  }, [selectedDepartments, selectedMonths, selectedPositions, allPositions]);
 
   const handleMultiSelectChange = useCallback(
     (selectedOptions, setState, mapOptionToState) => {

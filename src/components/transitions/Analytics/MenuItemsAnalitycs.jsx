@@ -54,7 +54,7 @@ const MenuItemsAnalitycs = React.memo(
             />
           </div>
         ) : null}
-        {position ? (
+        {positions ? (
           <div className='mb-3 select-react-position form-group'>
             <label
               htmlFor='supervisorSelect'
