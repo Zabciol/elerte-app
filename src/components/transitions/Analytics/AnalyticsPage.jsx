@@ -11,12 +11,14 @@ import MenuItemsAnalitycs from "./MenuItemsAnalitycs";
 import Carousel from "react-bootstrap/Carousel";
 import ElerteFooter from "../../../assets/Carousel/elerte-bottom.png";
 import CountOfEmployees from "./Cards/CountOfEmployees";
+import { getTextColorForCurrentThemeColor } from "../../common/CommonFunctions";
 
 const AnalyticsPage = ({ user, subordinates, setMenuItems }) => {
   const { setShowPopUpLogout, setMessage } = useAuth();
   const [date, setDate] = useState(getCurrentDateYearMonth());
   const allMonths = generateMonthsArray(2, 0);
   const [selectedMonths, setSelectedMonths] = useState([
+    allMonths[0],
     getCurrentMonthYearInObject(),
   ]);
   const [departments, setDepartments] = useState(() => {
@@ -32,6 +34,7 @@ const AnalyticsPage = ({ user, subordinates, setMenuItems }) => {
   const [allPositions, setAllPositions] = useState([]);
   const [selectedPositions, setSelectedPositions] = useState();
   const [images, setImages] = useState([]);
+  const [textColor, setTextColor] = useState(getTextColorForCurrentThemeColor);
 
   useEffect(() => {
     const importAllImages = (r) => {
@@ -96,6 +99,44 @@ const AnalyticsPage = ({ user, subordinates, setMenuItems }) => {
     []
   );
 
+  const options = {
+    scales: {
+      x: {
+        ticks: {
+          color: textColor, // Kolor tekstu etykiet osi X
+          font: {
+            size: 14, // Wielkość czcionki dla etykiet osi X
+          },
+        },
+      },
+      y: {
+        ticks: {
+          color: textColor, // Kolor tekstu etykiet osi Y
+          font: {
+            size: 14, // Wielkość czcionki dla etykiet osi Y
+          },
+        },
+      },
+    },
+  };
+
+  useEffect(() => {
+    const observer = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        if (
+          mutation.type === "attributes" &&
+          mutation.attributeName === "data-bs-theme"
+        ) {
+          setTextColor(getTextColorForCurrentThemeColor);
+        }
+      });
+    });
+
+    observer.observe(document.documentElement, { attributes: true });
+
+    return () => observer.disconnect(); // Odłącz obserwatora przy odmontowywaniu komponentu
+  }, []);
+
   const memoizedMenuItems = useMemo(
     () => (
       <MenuItemsAnalitycs
@@ -140,6 +181,7 @@ const AnalyticsPage = ({ user, subordinates, setMenuItems }) => {
               selectedDates={selectedMonths}
               selectedDepartments={selectedDepartments}
               selectedPositions={selectedPositions}
+              options={options}
             />
           </Carousel.Caption>
           <img src={ElerteFooter} className='background-footer' />

@@ -65,22 +65,6 @@ export const getNextWorkDay = () => {
   return formattedDate;
 };
 
-// Obsługa błędów
-export const handleError = (error) => {
-  console.log("Handle error: ", error);
-  if (error.response) {
-    throw new Error(
-      error.response.data || "Błąd podczas pobierania danych z API"
-    );
-  } else if (error.request) {
-    throw new Error("Brak odpowiedzi od serwera");
-  } else if (error.message) {
-    throw new Error(error.message);
-  } else {
-    throw new Error("API not available");
-  }
-};
-
 export const calculateWorkingDays = (date, holidays) => {
   const dateObj = new Date(date);
   const year = dateObj.getFullYear();
@@ -156,6 +140,18 @@ export const getCurrentMonthYearInObject = () => {
   };
 };
 
+//Generowanie kolorów
+export const generateHighContrastColor = () => {
+  const hue = Math.floor(Math.random() * 360);
+  const saturation = 90 + Math.floor(Math.random() * 10);
+  const lightness = 50 + Math.floor(Math.random() * 50); // jasność dla ciemnego lub jasnego tła
+  return `hsl(${hue}, ${saturation}%, ${lightness}%)`;
+};
+export const getTextColorForCurrentThemeColor = () => {
+  const theme = document.documentElement.getAttribute("data-bs-theme");
+  return theme === "dark" ? "white" : "black";
+};
+
 // Uprawnienia
 export const hasView = (user) => {
   return user.Uprawnienia === 2 || user.Uprawnienia === 4 ? true : false;
@@ -170,4 +166,20 @@ export const canEdit = (user) => {
 
 export const canFillECP = (user) => {
   return user.Uprawnienia === 5 || user.Uprawnienia === 4 ? true : false;
+};
+
+// Obsługa błędów
+export const handleError = (error) => {
+  console.log("Handle error: ", error);
+  if (error.response) {
+    throw new Error(
+      error.response.data || "Błąd podczas pobierania danych z API"
+    );
+  } else if (error.request) {
+    throw new Error("Brak odpowiedzi od serwera");
+  } else if (error.message) {
+    throw new Error(error.message);
+  } else {
+    throw new Error("API not available");
+  }
 };

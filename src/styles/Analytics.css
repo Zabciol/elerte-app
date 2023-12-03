@@ -18,6 +18,17 @@
   padding: 0;
 }
 
+.chart-container {
+  height: 80% !important; /* Ustaw wysokość na 100% wysokości rodzica */
+  position: relative;
+}
+.chart-container > canvas {
+  padding: 0 20px;
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%, 0);
+}
+
 .menu-select {
   width: 200px !important;
 }
