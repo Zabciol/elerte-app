@@ -33,8 +33,8 @@ const ContactForm = ({
       <InputGroup className='mb-3'>
         <Form.Control
           ref={mailRef}
-          placeholder={employee.Mail?.replace("@elerte.pl", "") || ""}
-          aria-label={employee.Mail?.replace("@elerte.pl", "") || "mail"}
+          placeholder={employee.Mail?.replace("@elerte.pl", "")}
+          aria-label={employee.Mail?.replace("@elerte.pl", "")}
           aria-describedby='basic-addon2'
         />
         <InputGroup.Text id='basic-addon2'>@elerte.pl</InputGroup.Text>
