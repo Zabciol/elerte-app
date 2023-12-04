@@ -3,7 +3,10 @@ import { generateHighContrastColor } from "../../../common/CommonFunctions";
 import { Line } from "react-chartjs-2";
 import "chart.js/auto";
 
-import { countOfEmployeesOnPositionApi } from "../../../../api/analiticsApi";
+import {
+  countOfEmployeesOnPositionApi,
+  countOfEmployeesOnDepartmentApi,
+} from "../../../../api/analiticsApi";
 
 const CountOfEmployees = ({
   selectedDates,
@@ -11,22 +14,7 @@ const CountOfEmployees = ({
   selectedPositions,
   options,
 }) => {
-  console.log("Daty: ", selectedDates);
-  //console.log("Działy: ", selectedDepartments);
-  console.log("Stanowiska: ", selectedPositions);
-
-  const [datasets, setDatasets] = useState([
-    {
-      label: "Liczba Pracowników 1",
-      data: [65, 59, 86, 71, 56, 55],
-      fill: false,
-    },
-    {
-      label: "Liczba Pracowników 2",
-      data: [15, 29, 30, 51, 26, 45],
-      fill: false,
-    },
-  ]);
+  const [datasets, setDatasets] = useState([]);
 
   const fetchData = async () => {
     if (Array.isArray(selectedPositions) && selectedPositions.length > 0) {
@@ -49,18 +37,22 @@ const CountOfEmployees = ({
 
       //pobieram dane na pozycje i tak je ustawiam
     } else {
-      setDatasets([
-        {
-          label: "Liczba Pracowników 1",
-          data: [65, 59, 86, 71, 56, 55],
-          fill: false,
-        },
-        {
-          label: "Liczba Pracowników 2",
-          data: [15, 29, 30, 51, 26, 45],
-          fill: false,
-        },
-      ]);
+      let data = [];
+      for (const department of selectedDepartments) {
+        const dates = selectedDates.map((date) => date.value);
+        console.log(department);
+        const response = await countOfEmployeesOnDepartmentApi(
+          department.ID,
+          dates
+        );
+        console.log("Response: ", response);
+        data.push({
+          label: department.nazwa,
+          data: response.map((item) => item.Count),
+        });
+      }
+      console.log("nowe dane: ", data);
+      setDatasets(data);
     }
   };
 

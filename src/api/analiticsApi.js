@@ -21,3 +21,20 @@ export const countOfEmployeesOnPositionApi = async (positionID, dates) => {
     handleError(error);
   }
 };
+export const countOfEmployeesOnDepartmentApi = async (departmentID, dates) => {
+  try {
+    const token = sessionStorage.getItem("userToken");
+    const response = await axios.get(`${API_URL}/countEmployeesOnDepartment`, {
+      params: {
+        departmentID: departmentID,
+        dates: dates,
+      },
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    handleError(error);
+  }
+};

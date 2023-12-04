@@ -27,6 +27,10 @@ const MenuItemsAnalitycs = React.memo(
 
     const handleDateChange = (selectedOptions, setState, mapOptionToState) => {
       // Przekształć wybrane opcje i posortuj je
+      if (selectedOptions.length === 0) {
+        // Jeśli tak, nie rób nic (zignoruj próbę usunięcia wszystkich opcji)
+        return;
+      }
       const sortedOptions = selectedOptions
         .map(mapOptionToState)
         .sort((a, b) => new Date(a.value) - new Date(b.value)); // Zakładając, że `value` to data w formacie 'YYYY-MM'
