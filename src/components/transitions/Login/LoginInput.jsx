@@ -8,18 +8,18 @@ import Form from "react-bootstrap/Form";
 import PasswordInput from "../../common/PasswordInput";
 
 const LoginInput = (props) => {
-  const mailRef = useRef("");
+  const loginRef = useRef("");
   const passwordRef = useRef("");
   const [showToggle, setShowToggle] = useState(false);
   const [openAccordion, setOpenAccordion] = useState(false);
 
   const changeMail = (e) => {
-    if (mailRef.current.value !== "") setShowToggle(true);
+    if (loginRef.current.value !== "") setShowToggle(true);
     else setShowToggle(false);
   };
 
   const changePassword = (e) => {
-    if (mailRef.current.value !== "" && passwordRef.current.value !== "") {
+    if (loginRef.current.value !== "" && passwordRef.current.value !== "") {
       setShowToggle(false);
     } else {
       setShowToggle(true);
@@ -27,7 +27,7 @@ const LoginInput = (props) => {
   };
 
   const submit = () => {
-    props.submit(mailRef.current.value, passwordRef.current.value);
+    props.submit(loginRef.current.value, passwordRef.current.value);
   };
   const toggleAccordion = () => {
     setOpenAccordion(!openAccordion);
@@ -41,8 +41,8 @@ const LoginInput = (props) => {
   };
 
   useEffect(() => {
-    mailRef.current.addEventListener("keypress", (e) => {
-      if (e.key === "Enter" && mailRef.current.value !== "") {
+    loginRef.current.addEventListener("keypress", (e) => {
+      if (e.key === "Enter" && loginRef.current.value !== "") {
         setOpenAccordion(true);
         e.preventDefault();
         passwordRef.current.focus();
@@ -50,8 +50,8 @@ const LoginInput = (props) => {
     });
 
     return () => {
-      if (mailRef.current) {
-        mailRef.current.removeEventListener("keypress", this);
+      if (loginRef.current) {
+        loginRef.current.removeEventListener("keypress", this);
       }
     };
   }, []);
@@ -60,12 +60,12 @@ const LoginInput = (props) => {
     <Accordion activeKey={openAccordion ? "0" : null} data-bs-theme='light'>
       <FloatingLabel
         controlId='floatingInput'
-        label='Adres email'
+        label='Login'
         data-bs-theme='light'
         className='mb-3'>
         <Form.Control
-          ref={mailRef}
-          type='email'
+          ref={loginRef}
+          type='text'
           placeholder='name@example.com'
           onChange={changeMail}
         />
@@ -88,7 +88,7 @@ const LoginInput = (props) => {
             onKeyDown={handlePasswordKeyDown}
           />
 
-          {mailRef.current.value && passwordRef.current.value ? (
+          {loginRef.current.value && passwordRef.current.value ? (
             <img
               src={arrow}
               alt='arrow'

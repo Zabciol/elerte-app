@@ -38,7 +38,9 @@ const SubordinatesForm = (props) => {
       }
       setEmployees(data);
       const supervisorsData = await mySupervisorsAPI(props.employee.ID);
-      setSupervisors(supervisorsData.data.length ? supervisorsData.data : []);
+      setSupervisors(
+        Array.isArray(supervisorsData.data) ? supervisorsData.data : []
+      );
     } catch (error) {
       setMessage(error.message);
       setShowPopUpLogout(true);
