@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { generateHighContrastColor } from "../../../common/CommonFunctions";
-import { Line } from "react-chartjs-2";
+import { Line, Bar } from "react-chartjs-2";
 import "chart.js/auto";
 
 import {
@@ -81,7 +81,7 @@ const CountOfEmployees = ({
   return (
     <div className='chart-container'>
       <h2>Liczba Pracowników</h2>
-      <Line data={data} options={options} />
+      <Bar data={data} options={options} />
     </div>
   );
 };
