@@ -10,7 +10,6 @@ const ContactForm = ({
   mailRef,
   phoneNumberRef,
 }) => {
-  console.log(employee);
   return (
     <Form>
       <InputGroup className='mb-3'>

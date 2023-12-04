@@ -55,7 +55,7 @@ const FormPopUp = ({ show, setShow, employee, user }) => {
         urlopWykorzystane.current?.value || employee.urlopWykorzystane,
       leavesOutstanding: urlopZalegly.current?.value || employee.urlopZalegly,
     };
-    console.log(employeeData);
+
     try {
       const response = await updateEmployeeApi(employeeData);
       if (shouldShowPopUp) {
@@ -88,7 +88,6 @@ const FormPopUp = ({ show, setShow, employee, user }) => {
     try {
       const data = await subordinatesApi(employee.ID);
       const subordinatesID = data.data.map((employee) => employee.ID);
-      console.log("subordinatesApi: ", subordinatesID);
       setSubordinates(subordinatesID);
     } catch (error) {
       console.error(error);
@@ -101,7 +100,6 @@ const FormPopUp = ({ show, setShow, employee, user }) => {
     try {
       const data = await myDirectSubordinatesAPI(employee.ID);
       const directSubordinatesID = data.map((employee) => employee.ID);
-      console.log("directApi:", directSubordinatesID);
       setDirectSubordinates(directSubordinatesID);
     } catch (error) {
       console.error(error.message);
