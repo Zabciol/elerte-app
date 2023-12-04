@@ -23,8 +23,8 @@ const FormPopUp = ({ show, setShow, employee, user }) => {
   const urlopMax = useRef(employee.urlopMaxIloscDni);
   const urlopWykorzystane = useRef(employee.urlopWykorzystane);
   const urlopZalegly = useRef(employee.urlopZalegly);
-  const [department, setDepartment] = useState();
-  const [position, setPosition] = useState();
+  const [department, setDepartment] = useState(employee.Dzial_ID);
+  const [position, setPosition] = useState(employee.StanowiskoID);
   const [directSupervisors, setDirectSupervisors] = useState(
     employee.przelozeni
   );
