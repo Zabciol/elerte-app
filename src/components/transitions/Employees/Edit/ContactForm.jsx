@@ -10,6 +10,7 @@ const ContactForm = ({
   mailRef,
   phoneNumberRef,
 }) => {
+  console.log(employee);
   return (
     <Form>
       <InputGroup className='mb-3'>
@@ -33,8 +34,8 @@ const ContactForm = ({
       <InputGroup className='mb-3'>
         <Form.Control
           ref={mailRef}
-          placeholder={employee.Mail.replace("@elerte.pl", "")}
-          aria-label={employee.Mail.replace("@elerte.pl", "")}
+          placeholder={employee.Mail?.replace("@elerte.pl", "") || ""}
+          aria-label={employee.Mail?.replace("@elerte.pl", "") || "mail"}
           aria-describedby='basic-addon2'
         />
         <InputGroup.Text id='basic-addon2'>@elerte.pl</InputGroup.Text>

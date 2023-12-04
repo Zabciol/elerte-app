@@ -16,9 +16,9 @@ import { useAuth } from "../../Login/AuthContext";
 const FormPopUp = ({ show, setShow, employee, user }) => {
   const { setShowPopUp, setReloadPopUp, setShowPopUpLogout, setMessage } =
     useAuth();
-  const nameRef = useRef();
-  const lastNameRef = useRef();
-  const mailRef = useRef();
+  const nameRef = useRef(employee.Imie);
+  const lastNameRef = useRef(employee.Nazwisko);
+  const mailRef = useRef("");
   const phoneNumberRef = useRef();
   const urlopMax = useRef(employee.urlopMaxIloscDni);
   const urlopWykorzystane = useRef(employee.urlopWykorzystane);
@@ -55,6 +55,7 @@ const FormPopUp = ({ show, setShow, employee, user }) => {
         urlopWykorzystane.current?.value || employee.urlopWykorzystane,
       leavesOutstanding: urlopZalegly.current?.value || employee.urlopZalegly,
     };
+    console.log(employeeData);
     try {
       const response = await updateEmployeeApi(employeeData);
       if (shouldShowPopUp) {
