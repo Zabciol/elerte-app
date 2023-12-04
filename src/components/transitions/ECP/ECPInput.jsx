@@ -5,6 +5,7 @@ import calculateHoursWorked from "./scripts";
 import { checkECPForEmployeeOnDate } from "../../../api/ecpApi";
 import { useGetData } from "./ECPDataContext";
 import { useAuth } from "../Login/AuthContext";
+import isWeekend from "date-fns/isWeekend";
 
 const ECPInput = (props) => {
   const { setShowPopUpLogout, setMessage } = useAuth();
@@ -89,7 +90,11 @@ const ECPInput = (props) => {
 
   useEffect(() => {
     const newHours = calculateHoursWorked(Od, Do);
-    if (newHours < properHours && reason === null) {
+    if (
+      newHours < properHours &&
+      reason === null &&
+      !isWeekend(new Date(date))
+    ) {
       setReason(1);
     } else if (!checked && newHours >= properHours) {
       setReason(null);
