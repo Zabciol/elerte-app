@@ -26,6 +26,7 @@ const MenuItems = React.memo(
 );
 
 const ECP = ({ user, setMenuItems, subordinates }) => {
+  console.log(subordinates);
   const dzialy = Array.from(new Set(subordinates.map((item) => item.Dzial)));
   const [dzial, setDzial] = useState(dzialy[0]);
   const [date, setDate] = useState(getCurrentDateYearMonthDay());

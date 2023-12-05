@@ -246,8 +246,6 @@ const fillECPforDeletedEmployee = async (
     const query =
       "INSERT INTO ECP (Data, Od_godz, Do_godz, Pracownik_ID, " +
       "Powod_ID, IloscGodzin, DataZapisu, ID_Edytora) VALUES ?";
-
-    console.log(dates);
     const values = dates.map((date) => [
       date,
       "00:00",

@@ -87,7 +87,9 @@ const PageHandler = (props) => {
                   <ECP
                     user={user}
                     setMenuItems={setMenuItems}
-                    subordinates={[user, ...subordinates]}
+                    subordinates={[user, ...subordinates].filter(
+                      (employee) => employee.Aktywny === "Tak"
+                    )}
                   />
                 ) : (
                   <LoadingPage />

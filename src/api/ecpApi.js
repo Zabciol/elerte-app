@@ -111,7 +111,6 @@ export const getAbsenceAPI = async (data, employeesID) => {
 
 export const fillECPforDeletedEmployeeApi = async (data) => {
   try {
-    console.log("FROM API: ", data);
     const token = sessionStorage.getItem("userToken");
     const response = await axios.post(
       `${API_URL}/fillECPforDeletedEmployee`,
